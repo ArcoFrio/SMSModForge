@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8C8B79A1-5CFA-4B12-9C57-7CD45B0E6FCE}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SMSModForge.PackPlugin</RootNamespace>
+    <AssemblyName>SMSModForge.PackPlugin</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <!--
+      Library path: the plugin shares the same DLL family as SMSAndroidsCore
+      (BepInEx, base game assemblies, Unity, GC2). We point at the sibling
+      SMSAndroids checkout's Libraries folder rather than copying binaries
+      into this repo — see SMSAndroids/SMSAndroidsCore.csproj for the canonical
+      list. If a contributor doesn't have SMSAndroids checked out, this
+      project won't compile (the editor still does).
+    -->
+    <SmsLibs>..\..\SMSAndroids\Libraries\</SmsLibs>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>false</Optimize>
+    <!--
+      Debug builds drop into the same local install BepInEx folder as
+      SMSAndroidsCore. Change this path on your machine if you install the
+      game elsewhere.
+    -->
+    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E\BepInEx\plugins\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E\BepInEx\plugins\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Plugin.cs" />
+    <Compile Include="BustFactory.cs" />
+    <Compile Include="PlaceFactory.cs" />
+    <Compile Include="PlaceRegistry.cs" />
+    <Compile Include="NavigatorRuntime.cs" />
+    <Compile Include="NavigatorButtonClick.cs" />
+    <Compile Include="NavigatorButtonHover.cs" />
+    <Compile Include="NavigatorGridLayout.cs" />
+    <Compile Include="NavigatorGridSetup.cs" />
+    <Compile Include="RadialButtonRuntime.cs" />
+    <Compile Include="ButtonConditionSet.cs" />
+    <Compile Include="PackArchive.cs" />
+    <Compile Include="PackManifest.cs" />
+    <Compile Include="TextPlaceholders.cs" />
+    <Compile Include="VanillaSaveSlot.cs" />
+    <Compile Include="PackManualSaveSync.cs" />
+    <Compile Include="PackSpin.cs" />
+    <Compile Include="PackMover.cs" />
+    <Compile Include="PackVariableStore.cs" />
+    <Compile Include="ActorRegistry.cs" />
+    <Compile Include="RuntimeActorFactory.cs" />
+    <Compile Include="SpeechColorApplier.cs" />
+    <Compile Include="ConditionEvaluator.cs" />
+    <Compile Include="ActionRuntime.cs" />
+    <Compile Include="GameVariableBridge.cs" />
+    <Compile Include="PackCondition.cs" />
+    <Compile Include="DialogueBuilder.cs" />
+    <Compile Include="DialogueDispatcher.cs" />
+    <Compile Include="SceneRegistry.cs" />
+    <Compile Include="SceneFactory.cs" />
+    <Compile Include="WallpaperRegistry.cs" />
+    <Compile Include="WallpaperFactory.cs" />
+    <Compile Include="MusicFactory.cs" />
+    <Compile Include="SfxRegistry.cs" />
+    <Compile Include="SfxFactory.cs" />
+    <Compile Include="GameAudio.cs" />
+    <Compile Include="PackComponents.cs" />
+    <Compile Include="UpdateRulesRegistry.cs" />
+    <Compile Include="UpdateRulesFactory.cs" />
+    <Compile Include="TransformExtensions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <!--
+    Ship the vanilla scene frame catalog next to the plugin DLL. The PNGs
+    are sourced from the editor's Resources\VanillaFrames\ folder (the
+    editor's csproj has its own Content include for the same files;
+    these two stay in lockstep — same filenames in both places). At
+    runtime SceneFactory looks for them in <dll-dir>\VanillaFrames\.
+  -->
+  <ItemGroup>
+    <Content Include="..\SMSModForge\Resources\VanillaFrames\*.png;..\SMSModForge\Resources\VanillaFrames\*.PNG">
+      <Link>VanillaFrames\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="BepInEx">
+      <HintPath>$(SmsLibs)BepInEx.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="0Harmony">
+      <HintPath>$(SmsLibs)0Harmony.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>$(SmsLibs)Newtonsoft.Json.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>$(SmsLibs)Assembly-CSharp.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>$(SmsLibs)Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GameCreator.Runtime.Core">
+      <HintPath>$(SmsLibs)GameCreator.Runtime.Core.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="GameCreator.Runtime.Dialogue">
+      <HintPath>$(SmsLibs)GameCreator.Runtime.Dialogue.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="Unity.TextMeshPro">
+      <HintPath>$(SmsLibs)Unity.TextMeshPro.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>$(SmsLibs)UnityEngine.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>$(SmsLibs)UnityEngine.CoreModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>$(SmsLibs)UnityEngine.UI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIModule">
+      <HintPath>$(SmsLibs)UnityEngine.UIModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UIElementsModule">
+      <HintPath>$(SmsLibs)UnityEngine.UIElementsModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>$(SmsLibs)UnityEngine.ImageConversionModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.ParticleSystemModule">
+      <HintPath>$(SmsLibs)UnityEngine.ParticleSystemModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>$(SmsLibs)UnityEngine.TextRenderingModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteMaskModule">
+      <HintPath>$(SmsLibs)UnityEngine.SpriteMaskModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.SpriteShapeModule">
+      <HintPath>$(SmsLibs)UnityEngine.SpriteShapeModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AudioModule">
+      <HintPath>$(SmsLibs)UnityEngine.AudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>$(SmsLibs)UnityEngine.InputLegacyModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestModule">
+      <HintPath>$(SmsLibs)UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.UnityWebRequestAudioModule">
+      <HintPath>$(SmsLibs)UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <!-- .smspack reader: ZipArchive lives in this assembly on .NET Framework 4.8. -->
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.IO.Compression.FileSystem" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

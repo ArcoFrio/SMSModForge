@@ -1,0 +1,169 @@
+<Window x:Class="SMSModForge.View.MaskEditorWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Mask Editor"
+        Width="1180" Height="820"
+        WindowStartupLocation="CenterOwner"
+        FocusManager.FocusedElement="{Binding ElementName=CanvasHost}"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing"
+        KeyDown="Window_KeyDown">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Undo" Executed="Undo_Executed" CanExecute="UndoRedo_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Redo" Executed="Redo_Executed" CanExecute="UndoRedo_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Save" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="260"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- LEFT: layers -->
+        <DockPanel Grid.Column="0" Margin="8">
+            <TextBlock Text="Layers" FontWeight="Bold" DockPanel.Dock="Top" Margin="0,0,0,6"/>
+            <StackPanel DockPanel.Dock="Top">
+                <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,0,0,4" Padding="4" Background="#222">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton x:Name="ShowDiffuseToggle" IsChecked="True"
+                                      Width="22" Height="22" Click="ShowDiffuse_Click"
+                                      ToolTip="Show diffuse reference">
+                            <TextBlock Text="●" FontSize="14"/>
+                        </ToggleButton>
+                        <TextBlock Text="Reference (locked)" Margin="6,0,0,0"
+                                   VerticalAlignment="Center" Foreground="LightGray"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#A33" BorderThickness="1" Margin="0,0,0,4" Padding="4"
+                        x:Name="LayerR" Background="#220000">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton x:Name="ShowRToggle" IsChecked="True"
+                                      Width="22" Height="22" Click="ShowR_Click"
+                                      ToolTip="Show Bounce channel">
+                            <TextBlock Text="●" FontSize="14" Foreground="#F66"/>
+                        </ToggleButton>
+                        <RadioButton GroupName="ActiveChannel" x:Name="ActiveR" IsChecked="True"
+                                     Margin="8,0,0,0" VerticalAlignment="Center"
+                                     Checked="ActiveR_Checked"
+                                     Content="Bounce (R) — 1" Foreground="White"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#3A3" BorderThickness="1" Margin="0,0,0,4" Padding="4"
+                        x:Name="LayerG" Background="#002200">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton x:Name="ShowGToggle" IsChecked="True"
+                                      Width="22" Height="22" Click="ShowG_Click"
+                                      ToolTip="Show Sway channel">
+                            <TextBlock Text="●" FontSize="14" Foreground="#6F6"/>
+                        </ToggleButton>
+                        <RadioButton GroupName="ActiveChannel" x:Name="ActiveG"
+                                     Margin="8,0,0,0" VerticalAlignment="Center"
+                                     Checked="ActiveG_Checked"
+                                     Content="Sway (G) — 2" Foreground="White"/>
+                    </StackPanel>
+                </Border>
+                <Border BorderBrush="#36A" BorderThickness="1" Margin="0,0,0,4" Padding="4"
+                        x:Name="LayerB" Background="#000033">
+                    <StackPanel Orientation="Horizontal">
+                        <ToggleButton x:Name="ShowBToggle" IsChecked="True"
+                                      Width="22" Height="22" Click="ShowB_Click"
+                                      ToolTip="Show Wave channel">
+                            <TextBlock Text="●" FontSize="14" Foreground="#69F"/>
+                        </ToggleButton>
+                        <RadioButton GroupName="ActiveChannel" x:Name="ActiveB"
+                                     Margin="8,0,0,0" VerticalAlignment="Center"
+                                     Checked="ActiveB_Checked"
+                                     Content="Wave (B) — 3" Foreground="White"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+            <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                <Button Content="Clear active channel" Click="ClearChannel_Click" Margin="0,2" Height="26"/>
+                <Button Content="Fill active channel"  Click="FillChannel_Click"  Margin="0,2" Height="26"/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- CENTER: canvas -->
+        <Border Grid.Column="1" Background="#1a1a1a" Padding="8">
+            <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
+                  x:Name="CanvasHost" Width="512" Height="512"
+                  Background="Transparent" Focusable="True"
+                  MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove"
+                  MouseUp="Canvas_MouseUp" MouseLeave="Canvas_MouseLeave"
+                  MouseEnter="Canvas_MouseEnter"
+                  Cursor="None">
+                <Image x:Name="MaskImage" Stretch="Fill" SnapsToDevicePixels="True"
+                       RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+                <Canvas x:Name="OverlayCanvas" IsHitTestVisible="False">
+                    <Ellipse x:Name="BrushCursor" Width="0" Height="0"
+                             Stroke="White" StrokeThickness="1" Visibility="Hidden"/>
+                    <Ellipse x:Name="BrushCursorHard" Width="0" Height="0"
+                             Stroke="White" StrokeThickness="1"
+                             StrokeDashArray="2,2" Opacity="0.6" Visibility="Hidden"/>
+                </Canvas>
+            </Grid>
+        </Border>
+
+        <!-- RIGHT: tools -->
+        <DockPanel Grid.Column="2" Margin="8">
+            <TextBlock Text="Tools" FontWeight="Bold" DockPanel.Dock="Top" Margin="0,0,0,6"/>
+            <StackPanel DockPanel.Dock="Top">
+                <UniformGrid Columns="2" Margin="0,0,0,8">
+                    <ToggleButton x:Name="ToolBrushBtn" IsChecked="True"
+                                  Content="Brush (B)" Click="ToolBrush_Click"
+                                  Margin="0,0,2,0" Height="32"/>
+                    <ToggleButton x:Name="ToolEraserBtn"
+                                  Content="Eraser (E)" Click="ToolEraser_Click"
+                                  Margin="2,0,0,0" Height="32"/>
+                </UniformGrid>
+
+                <TextBlock Text="Size"/>
+                <DockPanel Margin="0,2,0,0">
+                    <TextBlock DockPanel.Dock="Right" Width="46" Margin="6,0,0,0"
+                               TextAlignment="Right"
+                               Text="{Binding ElementName=SizeSlider, Path=Value, StringFormat=F0}"/>
+                    <Slider x:Name="SizeSlider" Minimum="1" Maximum="80" Value="20"
+                            SmallChange="1" LargeChange="5"
+                            ValueChanged="BrushParamChanged"/>
+                </DockPanel>
+
+                <TextBlock Text="Hardness" Margin="0,8,0,0"/>
+                <DockPanel Margin="0,2,0,0">
+                    <TextBlock DockPanel.Dock="Right" Width="46" Margin="6,0,0,0"
+                               TextAlignment="Right"
+                               Text="{Binding ElementName=HardnessSlider, Path=Value, StringFormat=P0}"/>
+                    <Slider x:Name="HardnessSlider" Minimum="0" Maximum="1" Value="0.8"
+                            SmallChange="0.05" ValueChanged="BrushParamChanged"/>
+                </DockPanel>
+
+                <TextBlock Text="Opacity" Margin="0,8,0,0"/>
+                <DockPanel Margin="0,2,0,0">
+                    <TextBlock DockPanel.Dock="Right" Width="46" Margin="6,0,0,0"
+                               TextAlignment="Right"
+                               Text="{Binding ElementName=OpacitySlider, Path=Value, StringFormat=P0}"/>
+                    <Slider x:Name="OpacitySlider" Minimum="0.01" Maximum="1" Value="0.2"
+                            SmallChange="0.05"/>
+                </DockPanel>
+
+                <CheckBox x:Name="CapToggle" Content="Cap at opacity" Margin="0,12,0,0"
+                          ToolTip="When checked, the opacity slider becomes a hard ceiling: strokes build up TO it but never past it, and pixels already higher are left alone."/>
+
+                <TextBlock Text="Hotkeys" FontWeight="Bold" Margin="0,16,0,4"/>
+                <TextBlock Foreground="Gray" FontSize="11" TextWrapping="Wrap" LineHeight="16">
+                    <Run Text="B / E"/><Run Text="  brush / eraser"/><LineBreak/>
+                    <Run Text="1 / 2 / 3"/><Run Text="  Bounce / Sway / Wave"/><LineBreak/>
+                    <Run Text="[ / ]"/><Run Text="  smaller / larger brush"/><LineBreak/>
+                    <Run Text="Ctrl+Z / Ctrl+Y"/><Run Text="  undo / redo"/><LineBreak/>
+                    <Run Text="Ctrl+S"/><Run Text="  save mask to file"/>
+                </TextBlock>
+            </StackPanel>
+
+            <StackPanel DockPanel.Dock="Bottom" Margin="0,8,0,0">
+                <TextBlock x:Name="StatusText" Foreground="Gray" FontSize="11" Margin="0,0,0,6" TextWrapping="Wrap"/>
+                <Button Content="Save (Ctrl+S)" Click="SaveBtn_Click" Height="32" Margin="0,2" FontWeight="Bold"/>
+                <Button Content="Close" Click="CloseBtn_Click" Height="28" Margin="0,2"/>
+            </StackPanel>
+        </DockPanel>
+    </Grid>
+</Window>

@@ -1,0 +1,84 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <RootNamespace>SMSModForge</RootNamespace>
+    <AssemblyName>SMSModForge</AssemblyName>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <UseWPF>true</UseWPF>
+    <!-- WinForms is enabled solely for the Win32 ColorDialog used by the
+         actor name-colour picker; the editor's main shell stays pure WPF.
+         ApplicationHighDpiMode is silenced because WPF + the app.manifest's
+         DPI block already handle high-DPI awareness — we don't want WinForms
+         flipping a global mode behind our back. -->
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <!-- Exe icon (File Explorer / taskbar / pinning). The same file is also a
+         WPF Resource below so MainWindow can show it in its title bar. -->
+    <ApplicationIcon>Resources\SMSModForge.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- SFX preview playback. The pack's SFX are OGG Vorbis, which WPF's
+         MediaPlayer can't decode; NAudio.Vorbis (NAudio + NVorbis) decodes OGG
+         and plays it through WaveOut with per-clip volume. Editor-only — the
+         runtime plugin still uses Unity's audio. -->
+    <PackageReference Include="NAudio" Version="2.2.1" />
+    <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- App icon as a WPF Resource so MainWindow can show it in the title bar
+         (Icon="Resources/SMSModForge.ico"). ApplicationIcon above embeds the
+         same file into the exe for the taskbar / File Explorer. -->
+    <Resource Include="Resources\SMSModForge.ico" />
+  </ItemGroup>
+
+  <!--
+    Ship the vanilla bust art alongside the editor exe. The PNGs in
+    Resources/VanillaBustArt/<BustGoName>/ are produced by the Unity-editor
+    script at Tools/UnityEditor/SMSModForgeArtExtractor.cs (run once in
+    the vanilla game's Unity project, output committed here). At build
+    time they're copied to <output>/VanillaBustArt/<BustGoName>/ so the
+    dialogue-node preview can find them at run-time. PreserveNewest keeps
+    incremental builds fast — re-extracting only re-copies changed files.
+  -->
+  <ItemGroup>
+    <Content Include="Resources\VanillaBustArt\**\*.PNG"
+             Exclude="Resources\VanillaBustArt\.gitkeep">
+      <Link>VanillaBustArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!--
+      Ship the vanilla frame catalog alongside the editor exe. The PNGs in
+      Resources/VanillaFrames/ are hand-curated (see VanillaFrames.cs). The
+      pack plugin reads matching filenames from its own bundled
+      VanillaFrames\ folder at runtime — they're the same files in both
+      locations, but each project copies its own. Case-insensitive on the
+      pattern so a contributor-added .PNG (uppercase) or .png both ship.
+    -->
+    <Content Include="Resources\VanillaFrames\*.png;Resources\VanillaFrames\*.PNG">
+      <Link>VanillaFrames\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\VanillaOverlays\*.png;Resources\VanillaOverlays\*.PNG">
+      <Link>VanillaOverlays\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!--
+      Fonts used by the Places preview's navigator-button rendering:
+      Barton.otf for the button number, "Curse Casual.ttf" for the label.
+      Loaded at runtime from the deployed VanillaOverlays\ folder via
+      Fonts.GetFontFamilies (see PlacePreview.cs).
+    -->
+    <Content Include="Resources\VanillaOverlays\*.otf;Resources\VanillaOverlays\*.ttf">
+      <Link>VanillaOverlays\%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
