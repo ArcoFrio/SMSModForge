@@ -343,6 +343,61 @@
             </Setter>
         </Style>
 
+        <!-- ── The ModForge landing tab ──────────────────────────────────
+             Marked out from the content tabs: it's the app's home (issues +
+             help), not a unit editor. Tinted with the theme's own Accent so it
+             reads as "different" in every theme — light and dark alike —
+             rather than hardcoding a colour that would clash with half the
+             catalogue. The fill is faded (Opacity on the Border, not the
+             text) rather than a solid Accent block, which read as too heavy/
+             dark next to the light Chrome headers; fading blends it toward
+             whatever sits behind the tab strip (Theme.Window) so it stays a
+             tint, not a slab, in every theme. Selected state still flips to
+             Surface at full opacity so it matches the pane below it, exactly
+             like every other tab. -->
+        <Style x:Key="HomeTabItem" TargetType="TabItem" BasedOn="{StaticResource {x:Type TabItem}}">
+            <Setter Property="Foreground" Value="{DynamicResource Theme.AccentText}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TabItem">
+                        <Grid>
+                            <Border x:Name="fill" Opacity="0.55" Background="{DynamicResource Theme.Accent}"
+                                    CornerRadius="3,3,0,0" Margin="2,0,0,0"/>
+                            <Border BorderBrush="{DynamicResource Theme.Accent}"
+                                    BorderThickness="1,1,1,0" CornerRadius="3,3,0,0"
+                                    Margin="2,0,0,0" Padding="8,3">
+                                <ContentPresenter ContentSource="Header"
+                                                  HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="fill" Property="Background" Value="{DynamicResource Theme.Surface}"/>
+                                <Setter TargetName="fill" Property="Opacity" Value="1"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsSelected" Value="False"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="fill" Property="Opacity" Value="0.8"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <!-- Selected: same Surface fill as the others (set by the
+                         template trigger above); restore the normal text
+                         colour so it stays readable on that lighter/darker
+                         surface. -->
+                    <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <Style TargetType="TabControl" BasedOn="{StaticResource {x:Type TabControl}}">
             <Setter Property="Background" Value="{DynamicResource Theme.Window}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>

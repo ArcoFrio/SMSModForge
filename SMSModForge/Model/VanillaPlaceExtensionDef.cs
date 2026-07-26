@@ -33,4 +33,15 @@ public sealed class VanillaPlaceExtensionDef
     /// </summary>
     [JsonProperty("navigatorButtons", Order = 2)]
     public List<NavigatorButtonDef> NavigatorButtons { get; set; } = new();
+
+    /// <summary>
+    /// GameObjects layered onto the vanilla source level — the same authored
+    /// shape as <see cref="PlaceDef.GameObjects"/> (sprites, nested children,
+    /// utility components). Built under the vanilla level's transform at scene
+    /// load, so packs can decorate levels they don't own without touching them
+    /// structurally.
+    /// </summary>
+    [JsonProperty("gameObjects", Order = 3)]
+    public List<GameObjectDef> GameObjects { get; set; } = new();
+    public bool ShouldSerializeGameObjects() => GameObjects.Count > 0;
 }

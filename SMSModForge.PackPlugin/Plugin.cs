@@ -382,6 +382,7 @@ namespace SMSModForge.PackPlugin
             _lastSeenSlot = -1;
             VanillaSaveSlot.Reset();
             PlaceRegistry.Reset();
+            WeatherRuntime.Reset();
             NavigatorRuntime.Reset();
             RadialButtonRuntime.Reset();
             NavigatorGridSetup.Reset();
@@ -393,6 +394,8 @@ namespace SMSModForge.PackPlugin
                 c.Wallpapers?.Reset();
                 c.Sfx?.Reset();
                 c.UpdateRules?.Reset();
+                c.DailyChances?.Reset();
+                TimerRuntime.ResetPack(c.PackId);
             }
             _dispatchers.Clear();
             _contexts.Clear();
@@ -461,13 +464,31 @@ namespace SMSModForge.PackPlugin
                 }
                 else
                 {
+                    // Version gate, same trick as the classic mod headers: the
+                    // vanilla menu text ends in the game build ("Build 1.8E"),
+                    // and each pack carries the gameVersion the editor stamped
+                    // at save time. Mismatch → red row + explicit callout.
+                    string vanillaVersion = GetVanillaGameVersion(prototype);
+
                     foreach (var p in packs)
                     {
+                        bool incompatible = p.IsValid &&
+                            !string.IsNullOrEmpty(p.GameVersion) &&
+                            !string.IsNullOrEmpty(vanillaVersion) &&
+                            !string.Equals(p.GameVersion, vanillaVersion, System.StringComparison.OrdinalIgnoreCase);
+
                         // White when the manifest parsed clean, red when it
-                        // failed (broken JSON, missing packId, etc.) so the
-                        // user can spot a bad pack without opening logs.
-                        Color colour = p.IsValid ? Color.white : Color.red;
-                        InjectMenuRow(prototype, menuRoot, row++, "  • " + p.DisplayLabel, colour, 28f);
+                        // failed (broken JSON, missing packId, etc.) or when
+                        // the pack targets a different game version.
+                        Color colour = p.IsValid && !incompatible ? Color.white : Color.red;
+                        string label = "  • " + p.DisplayLabel +
+                                       (incompatible ? " -  Incompatible (" + p.GameVersion + ")" : "");
+                        InjectMenuRow(prototype, menuRoot, row++, label, colour, 28f);
+
+                        if (incompatible)
+                            Logger.LogWarning("[SMSModForge.PackPlugin] Pack '" + p.DisplayLabel +
+                                              "' was authored for game version " + p.GameVersion +
+                                              " but this game is " + vanillaVersion + ".");
                     }
                 }
 
@@ -566,12 +587,33 @@ namespace SMSModForge.PackPlugin
             img.raycastTarget = false; // never swallow menu clicks
         }
 
+        /// <summary>
+        /// The running game's build version, parsed from the vanilla main-menu
+        /// text the banner clones — its last space-separated token ("Build
+        /// 1.8E" → "1.8E"). Same parse the classic SMSAndroids / SMSGallery
+        /// headers used for their red incompatibility tint. Empty string when
+        /// the text can't be read (no marking happens then).
+        /// </summary>
+        private string GetVanillaGameVersion(GameObject prototype)
+        {
+            try
+            {
+                var tmp = FindTmpText(prototype);
+                string text = tmp != null ? tmp.GetType().GetProperty("text")?.GetValue(tmp) as string : null;
+                if (string.IsNullOrEmpty(text)) return "";
+                int lastSpace = text.LastIndexOf(' ');
+                return (lastSpace >= 0 ? text.Substring(lastSpace + 1) : text).Trim();
+            }
+            catch { return ""; }
+        }
+
         /// <summary>One pack's discovered identity for the menu banner.</summary>
         private struct DiscoveredPack
         {
             public string DirName;
             public string PackId;
             public bool IsValid;       // manifest parses + has packId
+            public string GameVersion; // manifest's gameVersion stamp ("" on pre-stamp packs)
             public string DisplayLabel => string.IsNullOrEmpty(PackId) ? DirName : PackId;
         }
 
@@ -607,6 +649,7 @@ namespace SMSModForge.PackPlugin
                         {
                             var json = Newtonsoft.Json.Linq.JObject.Parse(text);
                             entry.PackId = (string)json["packId"] ?? entry.DirName;
+                            entry.GameVersion = (string)json["gameVersion"] ?? "";
                             entry.IsValid = !string.IsNullOrEmpty(entry.PackId);
                         }
                     }
@@ -674,17 +717,52 @@ namespace SMSModForge.PackPlugin
                 TickLevelRefresh();
                 NavigatorRuntime.Tick();
                 RadialButtonRuntime.Tick();
+                // Activate vanilla weather particles on active pack levels that
+                // declared a weatherType (Inside/Outside) — the pack-place
+                // equivalent of the per-level loop vanilla levels get natively.
+                WeatherRuntime.Tick();
+                // Fire per-place onEnter/onExit action groups on level
+                // activation edges — BEFORE the dialogue dispatchers tick, so
+                // variables a hook sets are visible to dialogue conditions on
+                // the same frame the level activates.
+                for (int i = 0; i < _contexts.Count; i++)
+                    LevelHooksRuntime.Tick(_contexts[i]);
                 // Per-frame wallpaper unlock-condition re-evaluation —
                 // each pack's selector buttons appear the moment their
                 // unlock condition flips true.
                 for (int i = 0; i < _contexts.Count; i++)
                     _contexts[i].Wallpapers?.Tick(Logger);
                 for (int i = 0; i < _dispatchers.Count; i++) _dispatchers[i].Tick();
+                // Cross-pack fire: each dispatcher only nominates its best
+                // candidate; the actual start happens here after comparing
+                // Priority across every loaded pack (ties: pack load order).
+                // Without this, an earlier-loaded pack's priority-0 dialogue
+                // would always beat a later pack's priority-100 one.
+                {
+                    DialogueDispatcher fireFrom = null;
+                    DialogueBuilder.BuiltDialogue fireWhat = null;
+                    for (int i = 0; i < _dispatchers.Count; i++)
+                    {
+                        var c = _dispatchers[i].PeekEligible();
+                        if (c != null && (fireWhat == null || c.Priority > fireWhat.Priority))
+                        {
+                            fireWhat = c;
+                            fireFrom = _dispatchers[i];
+                        }
+                    }
+                    if (fireFrom != null) fireFrom.FireEligible(fireWhat);
+                }
                 // After dialogues, run integration rules — any
                 // variable a dialogue node just mutated is visible to
                 // the rule's conditions on the same frame.
                 for (int i = 0; i < _contexts.Count; i++)
                     _contexts[i].UpdateRules?.Tick(_contexts[i], Logger);
+
+                // Then the condition-gated GameObjects, so an object whose
+                // gate reads a variable a rule just wrote settles on the same
+                // frame rather than a frame late.
+                for (int i = 0; i < _contexts.Count; i++)
+                    _contexts[i].Gates?.Tick(_contexts[i], Logger);
 
                 // F12 → dump condition state for every dialogue flagged
                 // "Set for condition debugging" in the editor. Legacy Input
@@ -812,11 +890,39 @@ namespace SMSModForge.PackPlugin
                 // event happened. They'll fire on the next Tick if
                 // their conditions also pass.
                 c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
+                // step 4 — report the new day's DailyChance outcomes. Nothing
+                // is rolled here: the values are derived, so this just prints
+                // what every DailyChance condition in the pack will evaluate
+                // to for the rest of today. Runs after the Day tick-over, so
+                // it reports the day the player is waking into.
+                LogDailyChances(c);
             }
 
             Logger.LogInfo("[SMSModForge.PackPlugin] Player slept (now day " + day +
                            ") — autosave: pack variables committed to slot 1" +
                            (monday ? " (+ Monday backup to slot 2)." : "."));
+        }
+
+        /// <summary>
+        /// Print every DailyChance gate's outcome for the current in-game
+        /// day, mirroring the DailyRandom re-roll lines the variable store
+        /// logs. Uses the same <see cref="ConditionEvaluator.StableRoll"/> the
+        /// conditions call, so what's printed is exactly what they'll compare
+        /// against all day.
+        /// </summary>
+        private void LogDailyChances(PackContext c)
+        {
+            if (c?.DailyChances == null || c.DailyChances.All.Count == 0) return;
+            var inv = System.Globalization.CultureInfo.InvariantCulture;
+            int rollDay = ConditionEvaluator.CurrentRollDay();
+            foreach (var e in c.DailyChances.All)
+            {
+                float roll = ConditionEvaluator.StableRoll(c.PackId, e.Id, rollDay, c.Vars?.RollSeed ?? 0) * 100f;
+                Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId + ": DailyChance " + e.Label +
+                               " (" + e.Percent.ToString("0.##", inv) + "%) — rolled " +
+                               roll.ToString("0.#", inv) + "% → " + (roll < e.Percent ? "PASS" : "fail") +
+                               " for day " + rollDay + ".");
+            }
         }
 
         /// <summary>
@@ -996,10 +1102,13 @@ namespace SMSModForge.PackPlugin
                 refresh?.Invoke(spriteManager, null);
             }
 
-            // Pass 2a — places.
+            // Pass 2a — places. Builds each place's whole GameObject tree,
+            // including the level NPCs nested in it (their jiggle material is
+            // cloned from the same base bust used above, so no shader ships in
+            // the pack).
             foreach (var m in manifests)
             {
-                try { PlaceFactory.BuildAll(m, Logger); }
+                try { PlaceFactory.BuildAll(m, baseBust, Logger); }
                 catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] Places failed in " + m.PackId + ": " + ex); }
             }
 
@@ -1049,7 +1158,16 @@ namespace SMSModForge.PackPlugin
                 Wallpapers = new WallpaperRegistry(),
                 Sfx = new SfxRegistry(),
                 UpdateRules = new UpdateRulesRegistry(),
+                DailyChances = new DailyChanceRegistry(),
+                // Populated during the place build, which ran before this.
+                Gates = GameObjectGateRegistry.ForPack(m.PackId),
             };
+            // Index DailyChance conditions wherever they appear in the
+            // manifest so the day-change hook can report the day's rolls.
+            // Report-only: the conditions themselves derive their result and
+            // don't consult this.
+            try { ctx.DailyChances.CollectFrom(m.Root); }
+            catch (System.Exception ex) { Logger.LogWarning("[SMSModForge.PackPlugin] DailyChance scan failed in " + m.PackId + ": " + ex.Message); }
 
             // Forward this pack's variable-change notifications into
             // the cross-plugin event. Subscribers see (packId, name,

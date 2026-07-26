@@ -22,7 +22,10 @@ namespace SMSModForge.PackPlugin
             public string PackId;
             public GameObject Button;
             public GameObject Display;
-            public JObject UnlockCondition;    // null = always visible
+            /// <summary>Standard condition array (AND semantics, groups) —
+            /// null/empty = always visible. The factory folds the legacy
+            /// single-object form into this.</summary>
+            public JArray UnlockConditions;
             public PackVariableStore Vars;
         }
 
@@ -36,8 +39,8 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>
         /// Re-evaluate each wallpaper button's visibility against its
-        /// <see cref="Entry.UnlockCondition"/>. Called once per frame
-        /// from the plugin's Update; cheap (one condition eval per
+        /// <see cref="Entry.UnlockConditions"/>. Called once per frame
+        /// from the plugin's Update; cheap (one condition-list eval per
         /// pack-authored wallpaper, total).
         /// </summary>
         public void Tick(ManualLogSource log)
@@ -46,9 +49,9 @@ namespace SMSModForge.PackPlugin
             {
                 var e = _entries[i];
                 if (e.Button == null) continue;
-                bool visible = e.UnlockCondition == null
-                    ? true
-                    : ConditionEvaluator.Evaluate(e.UnlockCondition, e.Vars, log, e.PackId);
+                // ConditionEvaluator.All treats null/empty as pass — an
+                // unconditioned wallpaper is always visible.
+                bool visible = ConditionEvaluator.All(e.UnlockConditions, e.Vars, log, e.PackId);
                 if (e.Button.activeSelf != visible)
                     e.Button.SetActive(visible);
             }

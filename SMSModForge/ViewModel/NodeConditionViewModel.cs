@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
@@ -37,11 +38,13 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// </param>
     public NodeConditionViewModel(NodeConditionDef model,
                                    Action<NodeConditionViewModel>? removeCallback = null,
-                                   bool isLocked = false)
+                                   bool isLocked = false,
+                                   ConditionContext context = ConditionContext.Polled)
     {
         Model = model;
         _removeCallback = removeCallback;
         IsLocked = isLocked;
+        Context = context;
         RemoveCommand = new RelayCommand(
             () => _removeCallback?.Invoke(this),
             () => !IsLocked && _removeCallback != null);
@@ -56,7 +59,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         {
             Model.Conditions ??= new List<NodeConditionDef>();
             foreach (var child in Model.Conditions)
-                Children.Add(new NodeConditionViewModel(child, removeCallback: RemoveChild));
+                Children.Add(new NodeConditionViewModel(child, removeCallback: RemoveChild, context: Context));
         }
         AddLeafCommand  = new RelayCommand(() => AddLeaf());
         AddGroupCommand = new RelayCommand(AddGroup);
@@ -99,7 +102,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         Model.Conditions ??= new List<NodeConditionDef>();
         var def = new NodeConditionDef { Type = NodeConditionTypes.VariableEquals };
         Model.Conditions.Add(def);
-        var vm = new NodeConditionViewModel(def, removeCallback: RemoveChild);
+        var vm = new NodeConditionViewModel(def, removeCallback: RemoveChild, context: Context);
         Children.Add(vm);
         OnPropertyChanged(nameof(Display));
         return vm;
@@ -114,7 +117,7 @@ public sealed class NodeConditionViewModel : ObservableObject
             Conditions = new List<NodeConditionDef>(),
         };
         Model.Conditions.Add(def);
-        Children.Add(new NodeConditionViewModel(def, removeCallback: RemoveChild));
+        Children.Add(new NodeConditionViewModel(def, removeCallback: RemoveChild, context: Context));
         OnPropertyChanged(nameof(Display));
     }
 
@@ -143,7 +146,8 @@ public sealed class NodeConditionViewModel : ObservableObject
     private void RebuildParamRows()
     {
         ParamRows.Clear();
-        foreach (var schema in ConditionSchemas.For(Model.Type))
+        var schemas = ConditionSchemas.For(Model.Type);
+        foreach (var schema in schemas)
             ParamRows.Add(new ParamRowViewModel(
                 Model.Params, schema,
                 onValueChanged: () =>
@@ -151,7 +155,17 @@ public sealed class NodeConditionViewModel : ObservableObject
                     OnPropertyChanged(nameof(Display));
                     OnPropertyChanged(nameof(ParamsAsText));
                     OnPropertyChanged(nameof(Level));
-                }));
+                    // A row that gates siblings (Timer's 'randomize') has just
+                    // changed; re-evaluate every row's enabled state.
+                    foreach (var r in ParamRows) r.RefreshEnabled();
+                })
+            {
+                DefaultOf = k =>
+                {
+                    foreach (var s in schemas) if (s.Key == k) return s.DefaultValue;
+                    return "";
+                },
+            });
     }
 
     public string Type
@@ -180,6 +194,48 @@ public sealed class NodeConditionViewModel : ObservableObject
 
     /// <summary>Pseudo type-id shown in the picker for the whole Variable family.</summary>
     public const string VariableFamilyType = "Variable";
+
+    /// <summary>How often this row's host evaluates it. Set at construction
+    /// and inherited by nested group children; decides whether the
+    /// per-evaluation <c>Random</c> gate is offered.</summary>
+    public ConditionContext Context { get; }
+
+    /// <summary>
+    /// The types this row's combo offers. Polled hosts (dialogue start
+    /// conditions, integration rules, button visibility) get the safe list;
+    /// one-shot hosts (dialogue node conditions, level hooks) additionally
+    /// get <c>Random</c>, which is only meaningful when evaluated once.
+    /// The Variable* family is folded into a single "Variable" entry (the
+    /// row exposes Source + Comparison separately).
+    /// </summary>
+    public IReadOnlyList<string> AvailableTypes => Context switch
+    {
+        ConditionContext.OneShot => _oneShotTypes ??= BuildPicker(NodeConditionTypes.AllOneShot),
+        ConditionContext.Rule    => _ruleTypes    ??= BuildPicker(NodeConditionTypes.AllRule),
+        _                        => _polledTypes  ??= BuildPicker(NodeConditionTypes.All),
+    };
+
+    // Built on first use, NOT in a static field initializer: those run in
+    // declaration order, and BuildPicker reads the _variableTypes /
+    // _legacyVariableTypes sets declared further down — which would still be
+    // null, throwing a TypeInitializationException the first time any
+    // condition row was constructed.
+    private static string[]? _polledTypes;
+    private static string[]? _oneShotTypes;
+    private static string[]? _ruleTypes;
+
+    private static string[] BuildPicker(string[] source) => source
+        .Where(t => !_variableTypes.Contains(t) && !_legacyVariableTypes.Contains(t))
+        .Concat(new[] { VariableFamilyType })
+        .OrderBy(t => t, StringComparer.OrdinalIgnoreCase)
+        .ToArray();
+
+    private static readonly HashSet<string> _legacyVariableTypes = new()
+    {
+        NodeConditionTypes.GameVariableEquals, NodeConditionTypes.GameVariableNumberGreaterThan,
+        NodeConditionTypes.GameVariableNumberGreaterOrEqual, NodeConditionTypes.GameVariableNumberLessThan,
+        NodeConditionTypes.GameVariableNumberLessOrEqual,
+    };
 
     public static IReadOnlyList<string> VariableSources { get; } = new[] { "Pack", "Vanilla" };
     public static IReadOnlyList<string> VariableComparisons { get; } =

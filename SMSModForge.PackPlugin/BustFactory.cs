@@ -215,7 +215,7 @@ namespace SMSModForge.PackPlugin
             return tex;
         }
 
-        private static void ApplyJiggle(Material mat, JObject j)
+        internal static void ApplyJiggle(Material mat, JObject j)
         {
             mat.SetFloat("_JiggleSpeed",     (float?)j["speed"]         ?? 3.0f);
             mat.SetFloat("_JiggleStrength",  (float?)j["strength"]      ?? -0.02f);
@@ -227,7 +227,7 @@ namespace SMSModForge.PackPlugin
             if (TryParseHexColor((string)j["tint"], out Color c)) mat.SetColor("_Color", c);
         }
 
-        private static bool TryParseHexColor(string hex, out Color c)
+        internal static bool TryParseHexColor(string hex, out Color c)
         {
             c = Color.white;
             if (string.IsNullOrEmpty(hex)) return false;

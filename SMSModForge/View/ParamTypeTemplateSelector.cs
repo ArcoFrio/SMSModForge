@@ -25,6 +25,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
     public DataTemplate? BoolTemplate { get; set; }
     public DataTemplate? IntTemplate { get; set; }
     public DataTemplate? FloatTemplate { get; set; }
+    public DataTemplate? PercentTemplate { get; set; }
     public DataTemplate? PackVarRefTemplate { get; set; }
     public DataTemplate? ListVarRefTemplate { get; set; }
     public DataTemplate? GameVarRefTemplate { get; set; }
@@ -37,6 +38,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
     public DataTemplate? MusicRefTemplate { get; set; }
     public DataTemplate? SfxRefTemplate { get; set; }
     public DataTemplate? GameObjectPathTemplate { get; set; }
+    public DataTemplate? ChoiceTemplate { get; set; }
 
     public override DataTemplate? SelectTemplate(object item, DependencyObject container)
     {
@@ -48,6 +50,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
             ParamType.Bool => BoolTemplate ?? StringTemplate,
             ParamType.Int => IntTemplate ?? StringTemplate,
             ParamType.Float => FloatTemplate ?? StringTemplate,
+            ParamType.Percent => PercentTemplate ?? IntTemplate ?? StringTemplate,
             ParamType.PackVarRef => PackVarRefTemplate ?? StringTemplate,
             ParamType.ListVarRef => ListVarRefTemplate ?? StringTemplate,
             ParamType.GameVarRef => GameVarRefTemplate ?? StringTemplate,
@@ -60,6 +63,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
             ParamType.MusicRef => MusicRefTemplate ?? StringTemplate,
             ParamType.SfxRef => SfxRefTemplate ?? StringTemplate,
             ParamType.GameObjectPath => GameObjectPathTemplate ?? StringTemplate,
+            ParamType.Choice => ChoiceTemplate ?? StringTemplate,
             _ => StringTemplate,
         };
     }

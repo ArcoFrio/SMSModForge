@@ -71,6 +71,55 @@ public sealed class UpdateRuleDef
     /// </summary>
     [JsonProperty("codeMode", Order = 7, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool CodeMode { get; set; } = false;
+
+    /// <summary>
+    /// Else-if chain. The rule's own <see cref="Conditions"/> +
+    /// <see cref="Actions"/> form the IF; each branch here is tried in
+    /// order when everything before it failed, and the FIRST branch
+    /// whose conditions pass supplies the actions that fire. A branch
+    /// with no conditions always passes — i.e. a plain ELSE. Reuses
+    /// <see cref="LevelHookDef"/>: the same "conditions-gated action
+    /// group" shape the place enter/exit hooks serialize.
+    /// <para/>
+    /// Edge semantics generalize per branch: the runtime tracks WHICH
+    /// branch is selected, and OnRisingEdge fires whenever the selected
+    /// branch changes (a single-branch rule degenerates to the old
+    /// false→true behavior). This is the primitive that lets packs
+    /// express schedule-style cascades ("if slot A → …, else if slot
+    /// B → …, else → …") without one rule per case.
+    /// </summary>
+    [JsonProperty("branches", Order = 8)]
+    public List<LevelHookDef> Branches { get; set; } = new();
+    public bool ShouldSerializeBranches() => Branches.Count > 0;
+
+    /// <summary>
+    /// Optional list of values to run this rule once for, each tick — the
+    /// rule's parameter. Same shape every list-taking param accepts: a literal
+    /// comma-separated string (<c>"A,B,C"</c>), <c>$varName</c> naming a List
+    /// variable, or <c>$varName</c> naming a String variable holding CSV.
+    /// <para/>
+    /// Each value is substituted into every condition and action of the rule
+    /// (including its branches) wherever <c>{<see cref="ForEachAs"/>}</c>
+    /// appears, so one authored rule covers a whole set of subjects — e.g.
+    /// <c>forEach: "$RoamingCharacters"</c> with conditions on
+    /// <c>Location_{char}</c> and actions targeting <c>{char}/Slot</c>.
+    /// Because it is plain text substitution it composes with the rest of the
+    /// vocabulary: <c>$Prefix_{char}</c> dereferences the per-value variable.
+    /// <para/>
+    /// Every value gets its OWN edge state and its own Timer deadlines, so the
+    /// values behave exactly like the separate rules they replace (a Timer's
+    /// <c>stagger</c> is what spreads their first fire apart). Empty = the rule
+    /// runs once, unparameterized.
+    /// </summary>
+    [JsonProperty("forEach", Order = 9, NullValueHandling = NullValueHandling.Ignore)]
+    public string? ForEach { get; set; }
+
+    /// <summary>
+    /// Placeholder name substituted by <see cref="ForEach"/>, written
+    /// <c>{name}</c> in conditions and actions. Defaults to <c>item</c>.
+    /// </summary>
+    [JsonProperty("forEachAs", Order = 10, NullValueHandling = NullValueHandling.Ignore)]
+    public string? ForEachAs { get; set; }
 }
 
 /// <summary>

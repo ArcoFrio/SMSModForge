@@ -101,10 +101,12 @@ namespace SMSModForge.PackPlugin
             {
                 if (!b.DebugConditions) continue;
                 bool all = ConditionEvaluator.All(b.StartConditions, _ctx.Vars, _ctx.Log, _ctx.PackId);
-                bool wouldFire = all && !b.HasPlayed && !IsAnyDialoguePlaying();
+                bool wouldFire = all && !b.HasPlayed && !b.MissedWindow && !IsAnyDialoguePlaying();
                 _ctx.Log?.LogInfo("[CondDebug] ── " + _ctx.PackId + "." + b.Key +
                                   " — conditions " + (all ? "PASS" : "FAIL") +
                                   " | HasPlayed=" + b.HasPlayed + " OneShot=" + b.OneShot +
+                                  " MissedWindow=" + b.MissedWindow + " QueueBehind=" + b.QueueBehind +
+                                  " ArmedForTalk=" + b.ArmedForTalk + " Priority=" + b.Priority +
                                   " dialoguePlaying=" + IsAnyDialoguePlaying() +
                                   " → would fire: " + (wouldFire ? "YES" : "no"));
                 if (b.StartConditions != null)
@@ -174,24 +176,131 @@ namespace SMSModForge.PackPlugin
             // the others get their edges latched in correctly.
             UpdateConditionEdges();
 
-            if (IsAnyDialoguePlaying()) return;
+            // Talk-button consume runs BEFORE the "is anything playing?" gate.
+            // A deliberate Talk-button click is an explicit request to start an
+            // armed dialogue and must NOT be blocked by the vanilla button's
+            // own side effect: its onclick does `SetActive Core[stored-talk]`,
+            // which briefly activates an inert stored dialogue object and trips
+            // IsAnyDialoguePlaying() for ~1s (measured). Gating the consume on
+            // that made the click take ~1s to register. Only our OWN in-flight
+            // start (the fade-lead wait, _pendingStarts>0) defers the consume —
+            // during a real dialogue the Talk button is hidden, so no click
+            // arrives to worry about.
+            if (_pendingStarts == 0 && TryConsumeTalkButton())
+                return;
 
+            if (IsAnyDialoguePlaying())
+            {
+                // Original-mod window semantics: a dialogue whose conditions
+                // pass while another dialogue is playing loses its trigger —
+                // unless it opted into "Queue behind active dialogue". Marked
+                // here (not in the edge pass) so it also covers the case where
+                // both were passing on the same tick and this one lost the
+                // race. MissedWindow clears on the falling edge, so a fresh
+                // conditions cycle can fire it again.
+                foreach (var b in _built)
+                    if (!b.QueueBehind && !b.HasPlayed && b.LastConditionsPassed)
+                        b.MissedWindow = true;
+                return;
+            }
+        }
+
+        /// <summary>
+        /// Collect this pack's armed Talk-button set (disarming any whose start
+        /// conditions have since fallen) and, on a <c>talkbutton-signal</c>
+        /// rising edge, ROTATE to one armed dialogue and start it. Repeat
+        /// clicks alternate between every armed dialogue rather than always
+        /// replaying the first; Talk dialogues are repeatable (they re-arm on
+        /// finish, see <see cref="OnDialogueFinished"/>) so the set never
+        /// exhausts within a visit. Returns true if a dialogue was started.
+        /// <para/>
+        /// Runs ahead of the IsAnyDialoguePlaying gate so the vanilla button's
+        /// own stored-talk activation can't delay the click — see the caller.
+        /// </summary>
+        private bool TryConsumeTalkButton()
+        {
+            _armedScratch.Clear();
+            for (int i = 0; i < _built.Count; i++)
+            {
+                var b = _built[i];
+                if (!b.ArmedForTalk) continue;
+                if (!b.LastConditionsPassed) { b.ArmedForTalk = false; continue; }
+                _armedScratch.Add(b);
+            }
+            if (_armedScratch.Count == 0 || !GameVariableBridge.GetBool("talkbutton-signal"))
+                return false;
+
+            GameVariableBridge.SetBool("talkbutton-signal", false); // consume the click
+            var chosen = _armedScratch[_talkRotation % _armedScratch.Count];
+            _talkRotation++;
+            chosen.ArmedForTalk = false;
+            _ctx.Log.LogInfo("[SMSModForge.PackPlugin] Queued dialogue " + _ctx.PackId + "." +
+                             chosen.Key + " played from Talk button (rotation " +
+                             _talkRotation + "/" + _armedScratch.Count + " armed).");
+            // Play through the SAME path as a non-queued dialogue: emit the
+            // fade, let it play out, THEN start the dialogue. This mirrors the
+            // vanilla roomtalk (e.g. Kitchen), whose parent Trigger fades on
+            // click and starts the dialogue after the fade — so the fade LEADS
+            // the dialogue instead of firing glued to it.
+            StartDialogue(chosen);
+            return true;
+        }
+
+        /// <summary>Round-robin cursor for the Talk-button armed set.</summary>
+        private int _talkRotation;
+        private readonly System.Collections.Generic.List<DialogueBuilder.BuiltDialogue> _armedScratch =
+            new System.Collections.Generic.List<DialogueBuilder.BuiltDialogue>();
+
+        /// <summary>
+        /// This pack's best fire candidate for the current tick: the highest-
+        /// Priority dialogue whose conditions pass and that hasn't played /
+        /// missed its window (ties: manifest order — strictly-greater keeps
+        /// the earlier one). Null while any dialogue is playing or nothing is
+        /// eligible. Selection is split from firing so <see cref="Plugin"/>
+        /// can compare candidates ACROSS packs and fire exactly one — without
+        /// this, pack load order would trump Priority between packs.
+        /// The auto-injected LevelActive start condition is what gates "is the
+        /// player in the right level?", so the gate *is* the conditions list.
+        /// </summary>
+        public DialogueBuilder.BuiltDialogue PeekEligible()
+        {
+            if (IsAnyDialoguePlaying()) return null;
+
+            DialogueBuilder.BuiltDialogue winner = null;
             foreach (var built in _built)
             {
-                if (built.OneShot && built.HasPlayed) continue;
                 if (built.HasPlayed) continue;
                 if (built.Dialogue == null) continue;
-
-                // The auto-injected LevelActive start condition is what
-                // gates "is the player in the right level?", so the gate
-                // *is* the conditions list — no separate roomtalk-active
-                // check up front. Activation of the roomtalk happens
-                // inside StartDialogue when conditions pass.
+                if (built.MissedWindow) continue;
                 if (!built.LastConditionsPassed) continue;
-
-                StartDialogue(built);
-                return; // one per frame is plenty.
+                if (winner == null || built.Priority > winner.Priority) winner = built;
             }
+            return winner;
+        }
+
+        /// <summary>Fire a candidate returned by <see cref="PeekEligible"/> —
+        /// either arming it behind the Talk button (queued) or starting it.</summary>
+        public void FireEligible(DialogueBuilder.BuiltDialogue winner)
+        {
+            if (winner == null) return;
+
+            if (winner.Queued)
+            {
+                // Don't play — park it behind the Talk button. Latch
+                // HasPlayed so the fire loop stops re-selecting it, and
+                // clear any stale click so it needs a fresh press. Mirrors
+                // the original: a queued dialogue is "stored" and the
+                // vanilla button starts it (talkbutton-signal), instead of
+                // Dialogue.Play() firing on arrival.
+                winner.HasPlayed = true;
+                winner.ArmedForTalk = true;
+                GameVariableBridge.SetBool("talkbutton-signal", false);
+                _ctx.Log.LogInfo("[SMSModForge.PackPlugin] Queued dialogue " + _ctx.PackId + "." +
+                                 winner.Key + " armed — waiting for Talk button.");
+                return;
+            }
+
+            StartDialogue(winner);   // one per frame is plenty.
         }
 
         /// <summary>
@@ -214,10 +323,16 @@ namespace SMSModForge.PackPlugin
             foreach (var b in _built)
             {
                 bool nowPassing = ConditionEvaluator.All(b.StartConditions, _ctx.Vars, _ctx.Log, _ctx.PackId);
-                if (b.LastConditionsPassed && !nowPassing && !b.OneShot)
+                if (b.LastConditionsPassed && !nowPassing)
                 {
-                    // Falling edge → arm for the next visit.
-                    b.HasPlayed = false;
+                    // Falling edge → the player left; a queued dialogue that was
+                    // parked behind the Talk button disarms (it re-arms on the
+                    // next visit via the rising edge), a missed window re-arms
+                    // for the next conditions cycle, and non-OneShot dialogues
+                    // clear HasPlayed so they can fire again next time.
+                    b.ArmedForTalk = false;
+                    b.MissedWindow = false;
+                    if (!b.OneShot) b.HasPlayed = false;
                 }
                 b.LastConditionsPassed = nowPassing;
             }
@@ -235,25 +350,28 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static int _pendingStarts;
 
+        /// <summary>Fade-out lead before the dialogue actually starts —
+        /// matches the vanilla roomtalk feel (fade on click, dialogue after
+        /// the fade). Same value for queued and non-queued: once triggered,
+        /// they play identically.</summary>
+        private const float FadeLeadSeconds = 1.0f;
+
         private void StartDialogue(DialogueBuilder.BuiltDialogue built)
         {
-            // Latch + fade first — mirrors the host mod's
-            // StartDialogueSequence: emit FadeUI (gameplay UI fades out),
-            // then start the actual dialogue one second later so the fade
-            // finishes before the speech UI appears.
-            // A "queued" dialogue eases in instead: it skips the FadeUI
-            // cinematic fade and waits a little longer, mirroring the host's
-            // StartDialogueSequenceQueue (no jump-scare on arrival).
+            // Latch + fade first — mirrors the vanilla roomtalk Trigger:
+            // emit FadeUI (gameplay UI fades out), then start the actual
+            // dialogue after the fade so the fade LEADS the speech UI rather
+            // than firing simultaneously with it. Queued (Talk-button) and
+            // non-queued (auto-condition) dialogues share this path — the
+            // only difference between them is what triggers the start.
             built.HasPlayed = true;
             _ctx.RequestStop = false;
-            if (!built.Queued)
-                ActionRuntime.EmitSignal("FadeUI", _ctx);
+            ActionRuntime.EmitSignal("FadeUI", _ctx);
 
-            float delay = built.Queued ? 2.0f : 1.0f;
             if (_ctx.Plugin != null)
             {
                 _pendingStarts++;
-                _ctx.Plugin.StartCoroutine(PlayAfterFade(built, delay));
+                _ctx.Plugin.StartCoroutine(PlayAfterFade(built, FadeLeadSeconds));
             }
             else
             {
@@ -312,9 +430,13 @@ namespace SMSModForge.PackPlugin
             // Per-node visuals: switch outfit (if the node sets one), then
             // route the bust + expression for the declared speaker. Done
             // first so the visual is up before any OnStart actions read state.
+            // The outfit accepts a $varName, so a node can pick the outfit
+            // dynamically from a pack variable's current value (a literal bust
+            // GO name passes through Deref unchanged); an empty resolution keeps
+            // whatever bust the actor is already wearing.
             string actor = (string)nj["actor"];
             string expression = (string)nj["expression"];
-            string outfit = (string)nj["outfit"];
+            string outfit = ActionRuntime.Deref((string)nj["outfit"] ?? "", _ctx);
             if (!string.IsNullOrEmpty(actor))
                 _ctx.Actors.ApplyNodeVisuals(actor, expression, outfit);
 
@@ -369,6 +491,14 @@ namespace SMSModForge.PackPlugin
             // natural completion and EndDialogue-action stops, since
             // Dialogue.Stop also raises EventFinish.
             ActionRuntime.EmitSignal("FadeUI", _ctx);
+
+            // Talk-button dialogues are repeatable within a visit: re-arm on
+            // finish (unless OneShot) so the next click can replay it — the
+            // consume pass re-checks conditions and disarms a stale arm on its
+            // own. Any click made WHILE the dialogue played is discarded so
+            // finishing doesn't instantly chain into another Talk dialogue.
+            if (built.Queued && !built.OneShot) built.ArmedForTalk = true;
+            GameVariableBridge.SetBool("talkbutton-signal", false);
 
             // Clear any dialogue-wide sprite focus so the cast returns to its
             // resting sorting orders. Covers both natural completion and

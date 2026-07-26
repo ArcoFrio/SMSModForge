@@ -46,13 +46,32 @@ namespace SMSModForge.PackPlugin
 
             string frameRoot = ResolvePluginFrameRoot();
 
+            // SpriteManager only lays out GameObjects in its serialized
+            // targetObjects list — that's what shifts concurrently-active
+            // scenes apart by their slot instead of stacking them at the
+            // prototype's position. Every built scene must be ADDED to that
+            // list (RefreshCache alone only re-caches renderers of objects
+            // already in it). Mirrors the original CreateNewPicScene:
+            // `SpriteManager.targetObjects.Add(newPicScene)`.
+            var spriteManager = cgManager.GetComponent("SpriteManager");
+            System.Collections.IList targetObjects = null;
+            if (spriteManager != null)
+                targetObjects = spriteManager.GetType().GetField("targetObjects")
+                    ?.GetValue(spriteManager) as System.Collections.IList;
+            if (targetObjects == null)
+                logger.LogWarning("[SMSModForge.PackPlugin] Scenes: SpriteManager.targetObjects not reachable — pack scenes won't auto-arrange.");
+
             int built = 0;
             foreach (var s in scenes)
             {
                 try
                 {
-                    if (BuildOne((JObject)s, pack, registry, cgManager, prototype, frameRoot, logger))
+                    var go = BuildOne((JObject)s, pack, registry, cgManager, prototype, frameRoot, logger);
+                    if (go != null)
+                    {
+                        targetObjects?.Add(go);
                         built++;
+                    }
                 }
                 catch (System.Exception ex)
                 {
@@ -63,10 +82,8 @@ namespace SMSModForge.PackPlugin
 
             if (built > 0)
             {
-                // RefreshCache picks up the new GOs so SpriteManager's batching
-                // includes them. Mirrors what the host mod does after building
-                // all scenes.
-                var spriteManager = cgManager.GetComponent("SpriteManager");
+                // RefreshCache picks up the new list entries so SpriteManager's
+                // renderer cache + layout include them.
                 if (spriteManager != null)
                 {
                     var refresh = spriteManager.GetType().GetMethod("RefreshCache");
@@ -76,14 +93,16 @@ namespace SMSModForge.PackPlugin
             }
         }
 
-        private static bool BuildOne(JObject s, PackManifest pack, SceneRegistry registry,
+        /// <summary>Builds one scene; returns the built GameObject (for
+        /// SpriteManager targetObjects registration) or null when skipped.</summary>
+        private static GameObject BuildOne(JObject s, PackManifest pack, SceneRegistry registry,
             Transform cgManager, GameObject prototype, string frameRoot, ManualLogSource logger)
         {
             string key = (string)s["key"];
             if (string.IsNullOrEmpty(key))
             {
                 logger.LogWarning("[SMSModForge.PackPlugin] Scene in " + pack.PackId + " has no key — skipping.");
-                return false;
+                return null;
             }
 
             // Scene art is an archive-relative path. The legacy
@@ -94,7 +113,7 @@ namespace SMSModForge.PackPlugin
             if (string.IsNullOrEmpty(sceneRel) || !pack.Has(sceneRel))
             {
                 logger.LogWarning("[SMSModForge.PackPlugin] Scene '" + key + "' in " + pack.PackId + " missing sprite '" + sceneRel + "' in archive — skipping.");
-                return false;
+                return null;
             }
 
             // Clone the prototype. The resulting GO is named "pack:<id>.<key>"
@@ -165,7 +184,7 @@ namespace SMSModForge.PackPlugin
             }
 
             registry.Register(key, scene, activationSignal);
-            return true;
+            return scene;
         }
 
         /// <summary>

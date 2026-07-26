@@ -55,11 +55,15 @@ public sealed class DialogueDef
     public bool OneShot { get; set; } = false;
 
     /// <summary>
-    /// Queued-on-arrival: start the dialogue <em>without</em> the FadeUI
-    /// cinematic fade-to-black and after a slightly longer delay, so it eases
-    /// in on level entry instead of jump-scaring the player. Mirrors the host
-    /// mod's <c>StartDialogueSequenceQueue</c> (identical to a normal start but
-    /// it doesn't emit FadeUI).
+    /// "Wait for Talk button (no auto-play)": instead of auto-starting when its
+    /// conditions pass on level entry, the dialogue <em>parks behind the vanilla
+    /// Talk button</em> and the player starts it by clicking. It then plays
+    /// exactly like a normal dialogue — the cinematic FadeUI fade leads, then
+    /// the speech UI appears (see <c>DialogueDispatcher.StartDialogue</c>).
+    /// Repeatable within a visit (re-arms on finish, rotates between several
+    /// armed dialogues). This is the Talk-button flag; it is unrelated to
+    /// <see cref="QueueBehind"/> (queue-behind-an-active-dialogue), which is a
+    /// separate field.
     /// </summary>
     [JsonProperty("queued", Order = 7, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool Queued { get; set; } = false;
@@ -72,6 +76,25 @@ public sealed class DialogueDef
     /// </summary>
     [JsonProperty("debugConditions", Order = 10, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool DebugConditions { get; set; } = false;
+
+    /// <summary>
+    /// When true, a dialogue whose start conditions pass while another
+    /// dialogue is playing stays latched and starts right after that one
+    /// ends. When false (default — the original mod's behavior), it misses
+    /// that window: it only fires when its conditions trigger again while
+    /// no dialogue is playing.
+    /// </summary>
+    [JsonProperty("queueBehind", Order = 11, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool QueueBehind { get; set; } = false;
+
+    /// <summary>
+    /// Tie-breaker when several dialogues become eligible on the same tick:
+    /// the highest priority starts first; equal priorities fall back to
+    /// manifest order. Default 0.
+    /// </summary>
+    [JsonProperty("priority", Order = 12, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    [System.ComponentModel.DefaultValue(0)]
+    public int Priority { get; set; } = 0;
 
     /// <summary>
     /// All nodes in the dialogue, indexed by stable id. Order is preserved

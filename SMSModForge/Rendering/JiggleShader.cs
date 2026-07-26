@@ -55,10 +55,25 @@ public static class JiggleShader
         byte[] baseTex, byte[] maskTex,
         JiggleParams p, (float r, float g, float b, float a) tint, float time,
         byte[] output, bool superSample = true)
+        => Render(baseTex, maskTex, Size, Size, p, tint, time, output, RenderSize, RenderSize, superSample);
+
+    /// <summary>
+    /// Size-parameterised jiggle pass. <paramref name="baseTex"/> /
+    /// <paramref name="maskTex"/> are <paramref name="srcW"/>×<paramref name="srcH"/>
+    /// BGRA buffers; <paramref name="output"/> is <paramref name="outW"/>×<paramref name="outH"/>.
+    /// The bust preview uses the fixed 256→512 overload above; the NPC preview
+    /// calls this with the pose's real (non-square) resolution so a 1024-px pose
+    /// isn't crushed to 256² before display.
+    /// </summary>
+    public static void Render(
+        byte[] baseTex, byte[] maskTex, int srcW, int srcH,
+        JiggleParams p, (float r, float g, float b, float a) tint, float time,
+        byte[] output, int outW, int outH, bool superSample = true)
     {
-        if (baseTex.Length != Stride * Size) throw new ArgumentException("baseTex bad size", nameof(baseTex));
-        if (maskTex.Length != Stride * Size) throw new ArgumentException("maskTex bad size", nameof(maskTex));
-        if (output.Length  != RenderStride * RenderSize) throw new ArgumentException("output bad size",  nameof(output));
+        int srcStride = srcW * 4, outStride = outW * 4;
+        if (baseTex.Length != srcStride * srcH) throw new ArgumentException("baseTex bad size", nameof(baseTex));
+        if (maskTex.Length != srcStride * srcH) throw new ArgumentException("maskTex bad size", nameof(maskTex));
+        if (output.Length  != outStride * outH) throw new ArgumentException("output bad size",  nameof(output));
 
         // Sin term depends only on time, hoist it.
         float sinTime = MathF.Sin(time * p.Speed);
@@ -93,10 +108,10 @@ public static class JiggleShader
         float sampleWeight = superSample ? 0.25f : 1f;
 
         // Parallel over rows of the OUTPUT grid (denser than the source).
-        Parallel.For(0, RenderSize, y =>
+        Parallel.For(0, outH, y =>
         {
-            int row = y * RenderStride;
-            for (int x = 0; x < RenderSize; x++)
+            int row = y * outStride;
+            for (int x = 0; x < outW; x++)
             {
                 // Accumulators for the sub-samples (kept in straight alpha so
                 // the average is colour-correct; premultiply once at
@@ -120,16 +135,16 @@ public static class JiggleShader
                 // closure captures are stack-local like here.
                 void SampleAt(float sx, float sy)
                 {
-                    float u = sx / RenderSize;
-                    float v = 1.0f - sy / RenderSize;
+                    float u = sx / outW;
+                    float v = 1.0f - sy / outH;
 
                     float du = u, dv = v;
                     if (useJiggle || useNoise)
                     {
                         // Mask sample at (u,v) — point filter, as the game does.
-                        int mx = (int)(u * Size); if (mx >= Size) mx = Size - 1;
-                        int my = (int)((1.0f - v) * Size); if (my >= Size) my = Size - 1;
-                        int mi = my * Stride + mx * 4;
+                        int mx = (int)(u * srcW); if (mx >= srcW) mx = srcW - 1;
+                        int my = (int)((1.0f - v) * srcH); if (my >= srcH) my = srcH - 1;
+                        int mi = my * srcStride + mx * 4;
                         float ma = maskTex[mi + 3] / 255f;
 
                         if (useJiggle)
@@ -159,7 +174,7 @@ public static class JiggleShader
                     if (du < 0f || du >= 1f || dv < 0f || dv >= 1f)
                         return; // contributes (0,0,0,0) — sums unchanged
 
-                    SamplePoint(baseTex, du, dv,
+                    SamplePoint(baseTex, du, dv, srcW, srcH,
                         out float cr, out float cg, out float cb, out float ca);
 
                     // Apply tint.
@@ -235,17 +250,17 @@ public static class JiggleShader
     /// pixel-art-style games like this one use for their sprites so the
     /// art stays crisp at non-integer screen scales.
     /// </summary>
-    private static void SamplePoint(byte[] tex, float u, float v,
+    private static void SamplePoint(byte[] tex, float u, float v, int w, int h,
         out float r, out float g, out float b, out float a)
     {
-        // Map UV to integer pixel coordinates. The +0.5 implicit in (u*Size)
+        // Map UV to integer pixel coordinates. The +0.5 implicit in (u*w)
         // → floor lands on the texel whose centre is nearest to the UV.
-        int x = (int)(u * Size);
-        int y = (int)((1.0f - v) * Size);
-        if (x < 0) x = 0; else if (x >= Size) x = Size - 1;
-        if (y < 0) y = 0; else if (y >= Size) y = Size - 1;
+        int x = (int)(u * w);
+        int y = (int)((1.0f - v) * h);
+        if (x < 0) x = 0; else if (x >= w) x = w - 1;
+        if (y < 0) y = 0; else if (y >= h) y = h - 1;
 
-        int i = y * Stride + x * 4;
+        int i = y * w * 4 + x * 4;
         b = tex[i    ] / 255f;
         g = tex[i + 1] / 255f;
         r = tex[i + 2] / 255f;

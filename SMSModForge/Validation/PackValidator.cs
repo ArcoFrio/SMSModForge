@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SMSModForge.Model;
 
 namespace SMSModForge.Validation;
@@ -74,6 +75,11 @@ public static class PackValidator
         var placeKeysInPack = new HashSet<string>();
         foreach (var p in pack.Places) placeKeysInPack.Add(p.Key);
 
+        // NPC keys placements reference.
+        var npcKeysInPack = new HashSet<string>();
+        foreach (var n in pack.Npcs)
+            if (!string.IsNullOrWhiteSpace(n.Key)) npcKeysInPack.Add(n.Key);
+
         foreach (var place in pack.Places)
         {
             var pWhere = $"places[{place.Key}]";
@@ -96,10 +102,36 @@ public static class PackValidator
 
             foreach (var btn in place.NavigatorButtons)
                 ValidateNavigatorButton(btn, pWhere, placeKeysInPack, issues);
+
+            // NPC placements: reference an existing NPC, and each GameObject
+            // name must be unique within this level (two same-named NPCs would
+            // collide in the hierarchy and SetGameObjectActive couldn't tell
+            // them apart). Placements live anywhere in the place's GameObject
+            // tree, so collect them across the whole hierarchy.
+            var placements = new List<(NpcPlacementDef Placement, string Path)>();
+            CollectPlacements(place.GameObjects, "", placements);
+            var seenPlacementNames = new HashSet<string>();
+            for (int pi = 0; pi < placements.Count; pi++)
+            {
+                var pl = placements[pi].Placement;
+                var plWhere = $"{pWhere}.{placements[pi].Path}.npcs[{pi}]";
+                if (string.IsNullOrWhiteSpace(pl.Npc))
+                    issues.Add(new(Severity.Error, plWhere, "NPC placement has no npc key"));
+                else if (!npcKeysInPack.Contains(pl.Npc))
+                    issues.Add(new(Severity.Error, plWhere,
+                        $"NPC placement references unknown NPC '{pl.Npc}'"));
+
+                string effName = string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name;
+                if (!string.IsNullOrWhiteSpace(effName) && !seenPlacementNames.Add(effName))
+                    issues.Add(new(Severity.Warning, plWhere,
+                        $"Two NPC placements resolve to the same GameObject name '{effName}' in this level — " +
+                        "give one an explicit Name so they don't collide"));
+            }
         }
 
         // ── Vanilla extensions ───────────────────────────────────
         var seenExtensionSources = new HashSet<string>();
+        // (see CollectPlacements below for the tree walk placements use)
         for (int i = 0; i < pack.VanillaExtensions.Count; i++)
         {
             var ext = pack.VanillaExtensions[i];
@@ -123,6 +155,32 @@ public static class PackValidator
 
             foreach (var btn in ext.NavigatorButtons)
                 ValidateNavigatorButton(btn, eWhere, placeKeysInPack, issues);
+        }
+
+        // ── NPCs ──────────────────────────────────────────────────
+        var seenNpcKeys = new HashSet<string>();
+        for (int i = 0; i < pack.Npcs.Count; i++)
+        {
+            var npc = pack.Npcs[i];
+            var nWhere = $"npcs[{i}:{npc.Key}]";
+            if (string.IsNullOrWhiteSpace(npc.Key))
+                issues.Add(new(Severity.Error, nWhere, "NPC key is required"));
+            else if (!seenNpcKeys.Add(npc.Key))
+                issues.Add(new(Severity.Error, nWhere, $"Duplicate NPC key '{npc.Key}'"));
+
+            if (string.IsNullOrWhiteSpace(npc.Sprite))
+                issues.Add(new(Severity.Error, $"{nWhere}.sprite", "NPC sprite path is required"));
+            else
+                CheckFile(packRoot, npc.Sprite, $"{nWhere}.sprite", issues);
+
+            if (!string.IsNullOrWhiteSpace(npc.Mask))
+                CheckFile(packRoot, npc.Mask, $"{nWhere}.mask", issues);
+            if (!string.IsNullOrWhiteSpace(npc.Blink.Sprite))
+                CheckFile(packRoot, npc.Blink.Sprite, $"{nWhere}.blink.sprite", issues);
+
+            if (npc.Blink.MaxWait < npc.Blink.MinWait)
+                issues.Add(new(Severity.Warning, $"{nWhere}.blink",
+                    $"Blink max wait ({npc.Blink.MaxWait}) is below min ({npc.Blink.MinWait})"));
         }
 
         // ── Map buttons (World Map radial entries) ────────────────
@@ -342,13 +400,36 @@ public static class PackValidator
                             $"Jump target tag '{n.Jump.TargetTag}' isn't a tag on any node in this dialogue"));
                 }
 
+                // A node's own conditions are evaluated once, when GC2 reaches
+                // the node — unlike the dialogue's start conditions above,
+                // which the dispatcher polls every frame.
                 foreach (var c in n.Conditions)
-                    ValidateNodeCondition(c, nWhere, packVarNames, issues);
+                    ValidateNodeCondition(c, nWhere, packVarNames, issues, ConditionContext.OneShot);
                 foreach (var act in n.ActionsOnStart)
                     ValidateNodeAction(act, $"{nWhere}.actionsOnStart", packVarNames, actorKeysInPack, issues);
                 foreach (var act in n.ActionsOnFinish)
                     ValidateNodeAction(act, $"{nWhere}.actionsOnFinish", packVarNames, actorKeysInPack, issues);
             }
+        }
+
+        // Wallpaper unlock conditions — the standard condition list, polled
+        // per frame by the runtime's visibility tick.
+        foreach (var w in pack.Wallpapers)
+            foreach (var c in w.UnlockConditions)
+                ValidateNodeCondition(c, $"wallpapers.{w.Key}.unlockConditions", packVarNames, issues);
+
+        // Integration rules — the IF conditions plus every else-if branch.
+        // These carry the Rule context, the one host where a Timer's interval
+        // actually restarts.
+        foreach (var r in pack.IntegrationRules)
+        {
+            var rWhere = $"integrationRules.{r.Key}";
+            foreach (var c in r.Conditions)
+                ValidateNodeCondition(c, $"{rWhere}.conditions", packVarNames, issues, ConditionContext.Rule);
+            for (int i = 0; i < r.Branches.Count; i++)
+                foreach (var c in r.Branches[i].Conditions)
+                    ValidateNodeCondition(c, $"{rWhere}.branches[{i}].conditions", packVarNames,
+                                          issues, ConditionContext.Rule);
         }
 
         return issues;
@@ -360,8 +441,15 @@ public static class PackValidator
     /// variables exist, etc.). Unknown types are errors so a typo can't
     /// silently produce a no-op condition at runtime.
     /// </summary>
+    /// <summary>Accepted <c>ListCount</c> comparison labels. Read off the schema
+    /// so the validator can't drift from what the editor's dropdown offers.</summary>
+    private static readonly string[] ListComparisons =
+        ConditionSchemas.For(NodeConditionTypes.ListCount)
+                        .First(s => s.Key == "comparison").FixedOptions;
+
     private static void ValidateNodeCondition(NodeConditionDef c, string whereParent,
-        HashSet<string> packVarNames, List<ValidationIssue> issues)
+        HashSet<string> packVarNames, List<ValidationIssue> issues,
+        ConditionContext context = ConditionContext.Polled)
     {
         var cWhere = $"{whereParent}.{c.Type}";
         if (string.IsNullOrEmpty(c.Type))
@@ -369,7 +457,19 @@ public static class PackValidator
             issues.Add(new(Severity.Error, cWhere, "Condition type is required"));
             return;
         }
-        if (System.Array.IndexOf(NodeConditionTypes.All, c.Type) < 0)
+        // AND/OR groups carry nested children instead of params. They're not in
+        // AllRecognized (they're not leaf types, and the Type combo excludes
+        // them), so check them before the unknown-type guard and recurse —
+        // otherwise a perfectly valid group reads as an unknown type, and its
+        // children escape validation entirely.
+        if (NodeConditionTypes.IsGroup(c.Type))
+        {
+            if (c.Conditions != null)
+                foreach (var child in c.Conditions)
+                    ValidateNodeCondition(child, cWhere, packVarNames, issues, context);
+            return;
+        }
+        if (System.Array.IndexOf(NodeConditionTypes.AllRecognized, c.Type) < 0)
         {
             issues.Add(new(Severity.Error, cWhere, $"Unknown condition type '{c.Type}'"));
             return;
@@ -394,7 +494,7 @@ public static class PackValidator
                         issues.Add(new(Severity.Warning, cWhere,
                             $"Vanilla variable '{n}' isn't in the 1.8E catalog"));
                 }
-                else if (!packVarNames.Contains(n))
+                else if (!IsTemplated(n) && !packVarNames.Contains(n))
                     issues.Add(new(Severity.Warning, cWhere,
                         $"Variable '{n}' isn't declared in this pack — condition will read the default"));
                 if (c.Type != NodeConditionTypes.VariableExists &&
@@ -412,12 +512,125 @@ public static class PackValidator
             case NodeConditionTypes.GameObjectActive:
                 if (!c.Params.ContainsKey("path")) issues.Add(new(Severity.Error, cWhere, "Param 'path' is required"));
                 break;
+            case NodeConditionTypes.VariableStartsWith:
+            {
+                bool vanillaPfx = c.Params.TryGetValue("source", out var psrc) &&
+                                  string.Equals(psrc, "vanilla", System.StringComparison.OrdinalIgnoreCase);
+                if (!c.Params.TryGetValue("name", out var pn) || string.IsNullOrWhiteSpace(pn))
+                    issues.Add(new(Severity.Error, cWhere, "Param 'name' is required"));
+                else if (vanillaPfx)
+                {
+                    if (!VanillaGameVariables.Contains(pn))
+                        issues.Add(new(Severity.Warning, cWhere,
+                            $"Vanilla variable '{pn}' isn't in the 1.8E catalog"));
+                }
+                else if (!IsTemplated(pn) && !packVarNames.Contains(pn))
+                    issues.Add(new(Severity.Warning, cWhere,
+                        $"Variable '{pn}' isn't declared in this pack — condition will read the default"));
+
+                // An empty prefix would match everything, so the runtime refuses
+                // it; that's almost always a half-filled row rather than intent.
+                if (!c.Params.TryGetValue("value", out var pv) || string.IsNullOrEmpty(pv))
+                    issues.Add(new(Severity.Warning, cWhere,
+                        "Param 'value' (the prefix) is empty — this condition never passes"));
+                break;
+            }
+            case NodeConditionTypes.ListContains:
+            case NodeConditionTypes.ListCount:
+            {
+                if (!c.Params.TryGetValue("list", out var ln) || string.IsNullOrWhiteSpace(ln))
+                    issues.Add(new(Severity.Error, cWhere, "Param 'list' is required"));
+                else if (!IsTemplated(ln) && !packVarNames.Contains(ln))
+                    issues.Add(new(Severity.Warning, cWhere,
+                        $"Variable '{ln}' isn't declared in this pack — the condition will read an empty list"));
+
+                if (c.Type == NodeConditionTypes.ListContains)
+                {
+                    if (!c.Params.TryGetValue("value", out var lv) || string.IsNullOrEmpty(lv))
+                        issues.Add(new(Severity.Warning, cWhere,
+                            "Param 'value' is empty — this will never match an entry"));
+                }
+                else
+                {
+                    if (!c.Params.TryGetValue("value", out var cv) ||
+                        !float.TryParse(cv, System.Globalization.NumberStyles.Float,
+                                        System.Globalization.CultureInfo.InvariantCulture, out _))
+                        issues.Add(new(Severity.Error, cWhere, "Param 'value' must be a number"));
+
+                    // Unknown comparison silently falls back to "equals" at
+                    // runtime, which is a quiet wrong answer — flag the typo.
+                    if (c.Params.TryGetValue("comparison", out var cmp) && !string.IsNullOrEmpty(cmp) &&
+                        System.Array.IndexOf(ListComparisons, cmp) < 0)
+                        issues.Add(new(Severity.Error, cWhere,
+                            $"Unknown comparison '{cmp}' — expected one of: {string.Join(", ", ListComparisons)}"));
+                }
+                break;
+            }
+            case NodeConditionTypes.Timer:
+            {
+                // Only an integration rule has a "fired" event to restart the
+                // interval on. Anywhere else the timer elapses once and then
+                // stays permanently true — silently a no-op, so flag it.
+                if (context != ConditionContext.Rule)
+                    issues.Add(new(Severity.Warning, cWhere,
+                        "'Timer' only restarts when an integration rule fires. In this " +
+                        "host there's no fire event, so it elapses once and then passes " +
+                        "forever. Move it to an integration rule."));
+
+                bool randomized = c.Params.TryGetValue("randomize", out var rz) &&
+                                  string.Equals(rz, "true", System.StringComparison.OrdinalIgnoreCase);
+                var inv = System.Globalization.CultureInfo.InvariantCulture;
+                var num = System.Globalization.NumberStyles.Float;
+
+                if (randomized)
+                {
+                    bool okMin = c.Params.TryGetValue("minSeconds", out var mn) &&
+                                 float.TryParse(mn, num, inv, out var mnV) && mnV >= 0;
+                    bool okMax = c.Params.TryGetValue("maxSeconds", out var mx) &&
+                                 float.TryParse(mx, num, inv, out var mxV) && mxV >= 0;
+                    if (!okMin) issues.Add(new(Severity.Error, cWhere,
+                        "Param 'minSeconds' must be a number >= 0 when Randomize is on"));
+                    if (!okMax) issues.Add(new(Severity.Error, cWhere,
+                        "Param 'maxSeconds' must be a number >= 0 when Randomize is on"));
+                    if (okMin && okMax &&
+                        float.TryParse(c.Params["minSeconds"], num, inv, out var a) &&
+                        float.TryParse(c.Params["maxSeconds"], num, inv, out var b) && b < a)
+                        issues.Add(new(Severity.Warning, cWhere,
+                            $"'maxSeconds' ({b}) is below 'minSeconds' ({a}) — the runtime " +
+                            "swaps them, but the range is probably backwards."));
+                }
+                else if (!c.Params.TryGetValue("seconds", out var sec) ||
+                         !float.TryParse(sec, num, inv, out var secV) || secV < 0)
+                {
+                    issues.Add(new(Severity.Error, cWhere, "Param 'seconds' must be a number >= 0"));
+                }
+                break;
+            }
             case NodeConditionTypes.Random:
+                // Fine in a one-shot host (node conditions, level hooks) — it's
+                // rolled exactly once there. In a polled host it re-rolls every
+                // frame, so the authored chance is meaningless: flag those.
+                if (context == ConditionContext.Polled)
+                    issues.Add(new(Severity.Warning, cWhere,
+                        "'Random' re-rolls on every evaluation, and this condition is " +
+                        "re-checked every frame (~60×/sec), so its chance doesn't mean what " +
+                        "it says. Replace with 'DailyChance' (rolls once per in-game day), " +
+                        "or a LevelRandom variable + a numeric comparison (once per visit). " +
+                        "'Random' is fine on a dialogue NODE's conditions or a level hook, " +
+                        "which are evaluated once."));
                 if (!c.Params.TryGetValue("chance", out var ch) ||
                     !float.TryParse(ch, System.Globalization.NumberStyles.Float,
                                     System.Globalization.CultureInfo.InvariantCulture, out var chV) ||
                     chV < 0f || chV > 1f)
                     issues.Add(new(Severity.Warning, cWhere, "Param 'chance' should be a float in [0,1]"));
+                break;
+            case NodeConditionTypes.DailyChance:
+                if (!c.Params.TryGetValue("chance", out var dch) ||
+                    !float.TryParse(dch, System.Globalization.NumberStyles.Float,
+                                    System.Globalization.CultureInfo.InvariantCulture, out var dchV) ||
+                    dchV < 0f || dchV > 100f)
+                    issues.Add(new(Severity.Warning, cWhere,
+                        "Param 'chance' should be a whole percentage in [0,100]"));
                 break;
         }
     }
@@ -480,11 +693,15 @@ public static class PackValidator
                         issues.Add(new(Severity.Warning, aWhere,
                             $"Vanilla variable '{n}' isn't in the 1.8E catalog"));
                 }
-                else if (!packVarNames.Contains(n))
+                else if (!IsTemplated(n) && !packVarNames.Contains(n))
                     issues.Add(new(Severity.Warning, aWhere,
                         $"Variable '{n}' isn't declared in this pack"));
+                // An explicit empty value is legitimate — it clears the variable.
+                // Only a wholly ABSENT key reads as an unfilled row.
                 if (a.Type == NodeActionTypes.SetVariable && !a.Params.ContainsKey("value"))
-                    issues.Add(new(Severity.Warning, aWhere, "Param 'value' is required"));
+                    issues.Add(new(Severity.Warning, aWhere,
+                        "Param 'value' is required — leave the field blank to clear the " +
+                        "variable and it will be stored as an explicit empty value"));
                 if (a.Type == NodeActionTypes.IncrementVariable && !a.Params.ContainsKey("delta"))
                     issues.Add(new(Severity.Warning, aWhere, "Param 'delta' is required"));
                 break;
@@ -518,6 +735,39 @@ public static class PackValidator
                     sv < 0f)
                     issues.Add(new(Severity.Error, aWhere, "Param 'seconds' must be a non-negative float"));
                 break;
+        }
+    }
+
+    /// <summary>
+    /// True when a name carries a <c>{placeholder}</c> — a parameterized rule's
+    /// per-value substitution (see <see cref="UpdateRuleDef.ForEach"/>). The real
+    /// name only exists at runtime, so "is this variable declared?" can't be
+    /// answered here and the check is skipped rather than reported as a miss.
+    /// </summary>
+    private static bool IsTemplated(string name)
+        => !string.IsNullOrEmpty(name) && name.IndexOf('{') >= 0 && name.IndexOf('}') > name.IndexOf('{');
+
+    /// <summary>
+    /// Every NPC placement in a GameObject tree, paired with the slash path of
+    /// the node it hangs under — placements live wherever they're nested, so
+    /// per-level checks (unknown NPC key, colliding names) walk the hierarchy.
+    /// </summary>
+    private static void CollectPlacements(List<GameObjectDef> nodes, string prefix,
+        List<(NpcPlacementDef Placement, string Path)> into)
+    {
+        if (nodes == null) return;
+        foreach (var n in nodes)
+        {
+            string name = string.IsNullOrWhiteSpace(n.Name) ? "(unnamed)" : n.Name;
+            string path = string.IsNullOrEmpty(prefix) ? name : prefix + "/" + name;
+            foreach (var pl in n.Npcs)
+            {
+                into.Add((pl, path));
+                // An NPC's own children are GameObjects that may host NPCs too.
+                string plName = string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name;
+                CollectPlacements(pl.Children, path + "/" + plName, into);
+            }
+            CollectPlacements(n.Children, path, into);
         }
     }
 

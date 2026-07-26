@@ -21,10 +21,19 @@ namespace SMSModForge.PackPlugin
     /// </summary>
     public static class PlaceFactory
     {
-        public static void BuildAll(PackManifest pack, ManualLogSource logger)
+        public static void BuildAll(PackManifest pack, GameObject baseBust, ManualLogSource logger)
         {
             var places = pack.Places;
             if (places == null || places.Count == 0) return;
+
+            // The scene is rebuilt on every CoreGameScene load, so drop the
+            // previous run's condition gates before they're re-registered
+            // against the new GameObjects.
+            GameObjectGateRegistry.ResetPack(pack.PackId);
+
+            // NPC placements are nodes in each place's GameObject tree, so the
+            // tree walk below builds them inline — no separate NPC pass.
+            var npcCtx = NpcFactory.CreateContext(pack, baseBust);
 
             var level5 = GameObject.Find("5_Levels")?.transform;
             var navigator = GameObject.Find("9_MainCanvas")?.transform.Find("Navigator");
@@ -46,7 +55,7 @@ namespace SMSModForge.PackPlugin
             {
                 try
                 {
-                    if (BuildOne((JObject)p, pack, level5, mapButtons, roomTalkRoot, beachLevel, beachButton, beachRoomTalk, logger))
+                    if (BuildOne((JObject)p, pack, level5, mapButtons, roomTalkRoot, beachLevel, beachButton, beachRoomTalk, npcCtx, logger))
                         built++;
                 }
                 catch (System.Exception ex)
@@ -63,7 +72,7 @@ namespace SMSModForge.PackPlugin
         private static bool BuildOne(JObject p, PackManifest pack,
             Transform level5, Transform mapButtons, Transform roomTalkRoot,
             GameObject beachLevel, GameObject beachButton, GameObject beachRoomTalk,
-            ManualLogSource logger)
+            NpcFactory.Context npcCtx, ManualLogSource logger)
         {
             string key = (string)p["key"];
             string internalName = (string)p["internalName"];
@@ -99,9 +108,10 @@ namespace SMSModForge.PackPlugin
             GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel, parallax, keepAudio, keepSeagulls);
             DestroyComponentByName(level, "Trigger"); // the prototype carries a Trigger we don't want
 
-            // Extra sprite overlays layered onto the level (Sky / Flash /
-            // props, a cameo, …) — authored per place.
-            BuildOverlays(p, pack, level, logger);
+            // The place's whole GameObject hierarchy: layered sprite objects,
+            // containers, the level's own NPCs object, and the NPC placements
+            // nested under it — one authored tree, one build pass.
+            BuildGameObjectList(p["gameObjects"] as JArray, pack, level, key, logger, npcCtx);
 
             // No per-place map button here. Navigation buttons are owned by
             // NavigatorRuntime, which creates one per authored
@@ -114,7 +124,8 @@ namespace SMSModForge.PackPlugin
             // RoomTalk
             GameObject roomTalk = CloneRoomTalk(beachRoomTalk, roomTalkRoot, internalName);
 
-            PlaceRegistry.RegisterPackPlace(pack.PackId, key ?? internalName, absoluteIndex, level, roomTalk, weatherStr);
+            PlaceRegistry.RegisterPackPlace(pack.PackId, key ?? internalName, absoluteIndex, level, roomTalk, weatherStr,
+                                            p["onEnter"] as JArray, p["onExit"] as JArray);
             return true;
         }
 
@@ -187,66 +198,137 @@ namespace SMSModForge.PackPlugin
         // ─────────────────────────────── Overlay construction ──────────
 
         /// <summary>
-        /// Instantiate each authored Extra GameObject under <paramref name="level"/>,
-        /// recursing into nested <c>children</c> so the authored hierarchy is
-        /// rebuilt as a real transform hierarchy. Mirrors the host mod's level
-        /// setup: clone the level's secondary-sprite child (a SpriteRenderer +
-        /// ParallaxMouseEffect), swap in the sprite, then apply position /
-        /// sorting / parallax / alpha and name it so dialogue actions can target it.
+        /// Public entry point for building an authored <c>gameObjects</c> tree
+        /// onto ANY level — used both by pack places and by the vanilla-extension
+        /// pass (via <see cref="NavigatorRuntime"/>) to decorate levels the pack
+        /// doesn't own. <paramref name="ownerLabel"/> is log-only (the place key,
+        /// or the extension's source token). Pass <paramref name="npcCtx"/> to
+        /// allow NPC placements in the tree; null skips them.
         /// </summary>
-        private static void BuildOverlays(JObject p, PackManifest pack, GameObject level, ManualLogSource logger)
+        public static void BuildGameObjectList(JArray nodes, PackManifest pack, GameObject level,
+                                               string ownerLabel, ManualLogSource logger,
+                                               NpcFactory.Context npcCtx = null,
+                                               Transform parentOverride = null, bool localPos = false)
         {
-            var overlays = p["overlays"] as JArray;
-            if (overlays == null || overlays.Count == 0) return;
+            if (nodes == null || nodes.Count == 0 || level == null) return;
 
             // The secondary sprite child is the cleanest prototype (plain sprite
             // + parallax, no level-mask material clone); fall back to the level
-            // root if a place somehow has no secondary child.
+            // root if a level somehow has no second child. Vanilla levels share
+            // this layout — pack places are clones of one.
             Transform proto = level.transform.childCount > 1
                 ? level.transform.GetChild(1)
                 : level.transform;
 
-            string placeKey = (string)p["key"];
-            foreach (var o in overlays)
-                BuildOverlayRecursive((JObject)o, pack, level.transform, proto, placeKey, logger);
+            Transform parent = parentOverride != null ? parentOverride : level.transform;
+            foreach (var o in nodes)
+                BuildNodeRecursive((JObject)o, pack, parent, proto, level, ownerLabel, logger, npcCtx, localPos);
         }
 
         /// <summary>
-        /// Build one Extra GameObject under <paramref name="parent"/>, then its
-        /// nested children under it (recursively). Components are applied after
-        /// children exist, so a RandomChildActivator can see them.
+        /// Build one GameObject under <paramref name="parent"/>, then its nested
+        /// children and NPC placements under it (recursively). Components are
+        /// applied last, once children exist, so a RandomChildActivator can see
+        /// them. A blank sprite makes a pure container GameObject (no
+        /// SpriteRenderer).
+        /// <para/>
+        /// The node whose <c>role</c> is <c>npcRoot</c> is special: instead of
+        /// creating a GameObject it GRAFTS onto the level's built-in <c>NPCs</c>
+        /// object (applying its transform and components to what's already
+        /// there), and its whole subtree switches to LOCAL positioning so
+        /// containers compose down the chain the way a Unity hierarchy does.
+        /// Ordinary objects keep WORLD positioning (what MoveGameObject works in).
         /// </summary>
-        private static void BuildOverlayRecursive(JObject ov, PackManifest pack, Transform parent,
-                                                   Transform proto, string placeKey, ManualLogSource logger)
+        private static void BuildNodeRecursive(JObject ov, PackManifest pack, Transform parent,
+                                               Transform proto, GameObject level, string placeKey,
+                                               ManualLogSource logger, NpcFactory.Context npcCtx,
+                                               bool localPos = false)
         {
             GameObject go = null;
+            bool isNpcRoot = (string)ov["role"] == "npcRoot";
+            if (isNpcRoot) localPos = true;   // the NPCs subtree composes locally
+            bool bind = (bool?)ov["bind"] ?? false;
+
             try
             {
                 string name = (string)ov["name"];
-                if (string.IsNullOrEmpty(name)) name = "Overlay";
+                if (string.IsNullOrEmpty(name)) name = "GameObject";
                 string spriteRel = (string)ov["sprite"];
-                if (string.IsNullOrEmpty(spriteRel) || !pack.Has(spriteRel))
+                bool hasSprite = !string.IsNullOrEmpty(spriteRel) && pack.Has(spriteRel);
+
+                if (isNpcRoot)
                 {
-                    logger.LogWarning("[SMSModForge.PackPlugin] Extra GameObject '" + name + "' on place '" +
-                        placeKey + "' missing sprite in archive — skipping (its children too).");
-                    return;
+                    // The level already owns its NPCs container — adopt it rather
+                    // than adding a second one.
+                    go = NpcFactory.FindOrMakeContainer(level.transform, "NPCs").gameObject;
+                }
+                else if (bind)
+                {
+                    // Bind: the object is claimed to exist already (a vanilla
+                    // level's own furniture, typically). Resolve it under this
+                    // node's parent — bare name or path — and apply only the
+                    // authored delta below. Never create: a miss means the
+                    // target moved or was renamed, and quietly adding a
+                    // look-alike would hide that.
+                    go = TransformExtensions.FindDescendantIncludingInactive(parent, name);
+                    if (go == null)
+                    {
+                        logger.LogWarning("[SMSModForge.PackPlugin] '" + placeKey +
+                            "': bound GameObject '" + name + "' not found under '" +
+                            parent.name + "' — skipping it and its children.");
+                        return;
+                    }
+                }
+                else if (hasSprite)
+                {
+                    go = Object.Instantiate(proto.gameObject, parent);
+                    go.name = name;
+                    // Strip any children that rode along on the prototype clone.
+                    for (int i = go.transform.childCount - 1; i >= 0; i--)
+                        Object.Destroy(go.transform.GetChild(i).gameObject);
+                }
+                else
+                {
+                    // Pure container — a plain empty GameObject (no SpriteRenderer).
+                    go = new GameObject(name);
+                    go.transform.SetParent(parent, false);
                 }
 
-                go = Object.Instantiate(proto.gameObject, parent);
-                go.name = name;
-                // Strip any children that rode along on the prototype clone.
-                for (int i = go.transform.childCount - 1; i >= 0; i--)
-                    Object.Destroy(go.transform.GetChild(i).gameObject);
+                // A bound object keeps everything about itself unless the author
+                // explicitly opted into overriding it — otherwise merely listing
+                // an existing object in order to hang a child off it would snap
+                // it to the origin at native scale.
+                bool applyTransform = !bind || ((bool?)ov["overrideTransform"] ?? false);
 
-                // World position (x,y) — same convention the host mod used
-                // (transform.position), and what the pan's MoveGameObject works
-                // in. Setting world position after parenting means a nested child
-                // is placed in world space but still rides along with its parent.
-                float x = (float?)ov["x"] ?? 0f;
-                float y = (float?)ov["y"] ?? 0f;
-                go.transform.position = new Vector3(x, y, go.transform.position.z);
+                if (applyTransform)
+                {
+                    // Position: LOCAL inside the NPCs subtree (composes into a
+                    // chain) and for a bound object (that's what "this object's
+                    // transform" means in a hierarchy it already lives in);
+                    // WORLD for level objects (same convention the host mod
+                    // used, and what MoveGameObject works in).
+                    float x = (float?)ov["x"] ?? 0f;
+                    float y = (float?)ov["y"] ?? 0f;
+                    if (localPos || bind) go.transform.localPosition = new Vector3(x, y, 0f);
+                    else go.transform.position = new Vector3(x, y, go.transform.position.z);
 
-                var sr = go.GetComponent<SpriteRenderer>();
+                    // Full transforms — apply rotation / scale (defaults leave it
+                    // unrotated at native size).
+                    float rotZ = (float?)ov["rotationZ"] ?? 0f;
+                    if (rotZ != 0f)
+                        go.transform.localEulerAngles = new Vector3(0f, 0f, rotZ);
+                    float scaleX = (float?)ov["scaleX"] ?? 1f;
+                    float scaleY = (float?)ov["scaleY"] ?? 1f;
+                    if (scaleX != 1f || scaleY != 1f)
+                    {
+                        var s = go.transform.localScale;
+                        go.transform.localScale = new Vector3(scaleX, scaleY, s.z);
+                    }
+                }
+
+                // Renderer properties belong to the existing object too, so a
+                // bound node never touches them (it has no sprite of its own).
+                var sr = bind ? null : go.GetComponent<SpriteRenderer>();
                 if (sr != null)
                 {
                     sr.sprite = LoadOverlaySprite(pack, spriteRel);
@@ -268,19 +350,35 @@ namespace SMSModForge.PackPlugin
                     }
                 }
 
-                bool parallaxDisabled = (bool?)ov["parallaxDisabled"] ?? true;
+                // Parallax belongs to the existing object as well — a bound node
+                // shouldn't silently disable the vanilla level's own effect.
+                bool parallaxDisabled = !bind && ((bool?)ov["parallaxDisabled"] ?? true);
                 if (parallaxDisabled)
                 {
                     var pe = go.GetComponent("ParallaxMouseEffect");
                     if (pe is Behaviour b) b.enabled = false;
                 }
 
-                bool startActive = (bool?)ov["startActive"] ?? true;
-                go.SetActive(startActive);
+                // Same opt-in rule as the transform: listing an existing object
+                // must not switch it on/off unless that was the point.
+                if (!bind || ((bool?)ov["overrideActive"] ?? false))
+                {
+                    bool startActive = (bool?)ov["startActive"] ?? true;
+                    go.SetActive(startActive);
+                }
+
+                // Authored activation conditions: the object's active state is
+                // driven by them from here on (evaluated per frame), instead of
+                // staying at whatever startActive said. Registering is enough —
+                // the first tick puts it in the right state.
+                if (ov["activeConditions"] is JArray gateConds && gateConds.Count > 0)
+                    GameObjectGateRegistry.ForPack(pack.PackId).Register(
+                        go, gateConds, (bool?)ov["deactivateWhenUnmet"] ?? true,
+                        placeKey + "/" + name);
             }
             catch (System.Exception ex)
             {
-                logger.LogWarning("[SMSModForge.PackPlugin] Extra GameObject build failed on place '" +
+                logger.LogWarning("[SMSModForge.PackPlugin] GameObject build failed on place '" +
                     placeKey + "': " + ex.Message);
             }
 
@@ -289,7 +387,31 @@ namespace SMSModForge.PackPlugin
             // Children first (so components like RandomChildActivator see them)…
             if (ov["children"] is JArray kids)
                 foreach (var k in kids)
-                    BuildOverlayRecursive((JObject)k, pack, go.transform, proto, placeKey, logger);
+                    BuildNodeRecursive((JObject)k, pack, go.transform, proto, level, placeKey, logger, npcCtx, localPos);
+
+            // …then the NPC placements parented at this node (also children, so
+            // they must exist before components run)…
+            if (ov["npcs"] is JArray npcs && npcs.Count > 0)
+            {
+                if (npcCtx == null)
+                {
+                    logger.LogWarning("[SMSModForge.PackPlugin] '" + placeKey + "' has NPC placements under '" +
+                        go.name + "' but this build path has no NPC context — skipping them.");
+                }
+                else
+                {
+                    foreach (var nTok in npcs)
+                    {
+                        if (!(nTok is JObject pl)) continue;
+                        try { NpcFactory.BuildPlacement(pl, npcCtx, go.transform, level, logger); }
+                        catch (System.Exception ex)
+                        {
+                            logger.LogError("[SMSModForge.PackPlugin] NPC build failed for '" +
+                                (string)pl["npc"] + "' on place '" + placeKey + "': " + ex.Message);
+                        }
+                    }
+                }
+            }
 
             // …then attach + configure this object's utility components.
             if (ov["components"] is JArray comps)
@@ -298,7 +420,7 @@ namespace SMSModForge.PackPlugin
                     try { PackComponentFactory.Apply(go, (JObject)c, logger); }
                     catch (System.Exception ex)
                     {
-                        logger.LogWarning("[SMSModForge.PackPlugin] Component on Extra GameObject '" +
+                        logger.LogWarning("[SMSModForge.PackPlugin] Component on GameObject '" +
                             go.name + "' failed: " + ex.Message);
                     }
                 }

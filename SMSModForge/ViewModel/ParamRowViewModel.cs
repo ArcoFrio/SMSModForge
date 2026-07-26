@@ -46,8 +46,47 @@ public sealed class ParamRowViewModel : ObservableObject
     public string Label => Schema.Label;
     /// <inheritdoc cref="ParamSchema.Type"/>
     public ParamType Type => Schema.Type;
+
+    /// <summary>Re-read <see cref="Value"/> from the underlying params dict.
+    /// Needed when something rewrites the model behind the row's back — a
+    /// variable rename rewriting every reference, for instance — since the
+    /// getter reads the dict live but bindings only refresh on notification.</summary>
+    public void Refresh() => OnPropertyChanged(nameof(Value));
     /// <inheritdoc cref="ParamSchema.Tooltip"/>
     public string Tooltip => Schema.Tooltip;
+    /// <summary>Options for a <see cref="ParamType.Choice"/> param's dropdown.</summary>
+    public string[] FixedOptions => Schema.FixedOptions;
+
+    /// <summary>
+    /// False when <see cref="ParamSchema.EnabledWhen"/> names a sibling param
+    /// that doesn't currently hold <see cref="ParamSchema.EnabledWhenValue"/>.
+    /// Bound to the editor's IsEnabled so a param that doesn't apply in the
+    /// current mode is greyed out rather than silently ignored.
+    /// <para/>
+    /// Reads the shared params dict live, so <see cref="RefreshEnabled"/> is
+    /// all a sibling's write needs to trigger to update this row.
+    /// </summary>
+    public bool IsEnabled
+    {
+        get
+        {
+            if (string.IsNullOrEmpty(Schema.EnabledWhen)) return true;
+            _params.TryGetValue(Schema.EnabledWhen, out var gate);
+            // Fall back to the controlling param's own default when it hasn't
+            // been written yet, so an untouched row starts in the right state.
+            if (string.IsNullOrEmpty(gate)) gate = DefaultOf(Schema.EnabledWhen);
+            return string.Equals(gate, Schema.EnabledWhenValue,
+                                 System.StringComparison.OrdinalIgnoreCase);
+        }
+    }
+
+    /// <summary>Default of a sibling param, looked up through the owner's
+    /// schema list. Set by the parent when it builds the rows.</summary>
+    internal System.Func<string, string> DefaultOf { get; set; } = _ => "";
+
+    /// <summary>Re-evaluate <see cref="IsEnabled"/>. Called on sibling rows
+    /// when any row in the same params dict is written.</summary>
+    public void RefreshEnabled() => OnPropertyChanged(nameof(IsEnabled));
 
     /// <summary>
     /// The current value as a string. Missing keys fall back to
@@ -64,10 +103,25 @@ public sealed class ParamRowViewModel : ObservableObject
         set
         {
             string newValue = value ?? "";
+            // A percentage is a whole number in [0,100]: reject anything else
+            // rather than storing it. That keeps the field from holding "0.3"
+            // (which reads as 0.3% at runtime — the exact confusion the %
+            // suffix exists to prevent) or an out-of-range 101+. Rejecting on
+            // the way in means intermediate typing still works: "1" → "10" →
+            // "100" are all valid, only the "101" keystroke bounces. The
+            // snap-back to the last good value is the OnPropertyChanged here.
+            if (Schema.Type == ParamType.Percent && newValue.Length > 0 &&
+                (!System.Text.RegularExpressions.Regex.IsMatch(newValue, @"^\d{1,3}$") ||
+                 int.Parse(newValue, System.Globalization.CultureInfo.InvariantCulture) > 100))
+            { OnPropertyChanged(); return; }
+
             // Don't write the default back into the dict — empty keys are
             // implicit, and clearing back to the default should round-trip
-            // identically to "never set in the first place".
-            if (string.IsNullOrEmpty(newValue))
+            // identically to "never set in the first place". The exception is a
+            // param where empty is itself a value (clearing a variable): there
+            // the key is kept holding "", so "deliberately cleared" stays
+            // distinguishable from "never filled in".
+            if (string.IsNullOrEmpty(newValue) && !Schema.EmptyIsAValue)
                 _params.Remove(Schema.Key);
             else
                 _params[Schema.Key] = newValue;

@@ -5,7 +5,7 @@ namespace SMSModForge.ViewModel;
 
 /// <summary>
 /// INPC wrapper for one <see cref="ComponentDef"/> attached to an overlay
-/// (Extra GameObject). Exposes the component <see cref="Type"/> plus every
+/// (GameObject). Exposes the component <see cref="Type"/> plus every
 /// config field; the <c>Is*</c> flags let the editor show only the fields the
 /// chosen type actually uses (same conditional-visibility idea as the node
 /// action rows).

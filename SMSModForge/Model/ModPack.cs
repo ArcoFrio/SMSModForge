@@ -30,6 +30,24 @@ public sealed class ModPack
     [JsonProperty("packId", Order = 1)]
     public string PackId { get; set; } = "Untitled";
 
+    /// <summary>
+    /// The game version the editor targets. Hardcoded and manually bumped
+    /// whenever ModForge is made compatible with a new game build; stamped
+    /// into <see cref="GameVersion"/> on every save so each pack records
+    /// what it was authored against. The runtime's menu banner compares a
+    /// pack's stamp to the version in the vanilla main-menu header and
+    /// paints mismatches red.
+    /// </summary>
+    public const string CurrentGameVersion = "1.8E";
+
+    /// <summary>Game version this pack was authored against (see
+    /// <see cref="CurrentGameVersion"/>). Written automatically on save —
+    /// not user-editable. Empty on packs saved by older editors.</summary>
+    [JsonProperty("gameVersion", Order = 1)]
+    public string GameVersion { get; set; } = "";
+
+    public bool ShouldSerializeGameVersion() => !string.IsNullOrEmpty(GameVersion);
+
     [JsonProperty("characters", Order = 2)]
     public List<CharacterDef> Characters { get; set; } = new();
 
@@ -167,4 +185,58 @@ public sealed class ModPack
     public List<VariableFolderDef> VariableFolders { get; set; } = new();
 
     public bool ShouldSerializeVariableFolders() => VariableFolders != null && VariableFolders.Count > 0;
+
+    /// <summary>
+    /// Editor-only cosmetic grouping of integration rules into (nestable)
+    /// folders for the Integration-tab tree. The runtime ignores this key — it
+    /// only affects how the editor displays the flat
+    /// <see cref="IntegrationRules"/> list. Omitted from JSON when empty.
+    /// See <see cref="IntegrationFolderDef"/>.
+    /// </summary>
+    [JsonProperty("integrationFolders", Order = 17)]
+    public List<IntegrationFolderDef> IntegrationFolders { get; set; } = new();
+
+    public bool ShouldSerializeIntegrationFolders() => IntegrationFolders != null && IntegrationFolders.Count > 0;
+
+    // ── Shared-shape unit folders (editor-only, one list per tab) ─────────
+    // Same idea as the three trees above, but through the generic
+    // UnitFolderDef / UnitTreeController infrastructure. The runtime ignores
+    // all of these keys.
+
+    [JsonProperty("actorFolders", Order = 18)]
+    public List<UnitFolderDef> ActorFolders { get; set; } = new();
+    public bool ShouldSerializeActorFolders() => ActorFolders != null && ActorFolders.Count > 0;
+
+    [JsonProperty("placeFolders", Order = 19)]
+    public List<UnitFolderDef> PlaceFolders { get; set; } = new();
+    public bool ShouldSerializePlaceFolders() => PlaceFolders != null && PlaceFolders.Count > 0;
+
+    [JsonProperty("sceneFolders", Order = 20)]
+    public List<UnitFolderDef> SceneFolders { get; set; } = new();
+    public bool ShouldSerializeSceneFolders() => SceneFolders != null && SceneFolders.Count > 0;
+
+    [JsonProperty("wallpaperFolders", Order = 21)]
+    public List<UnitFolderDef> WallpaperFolders { get; set; } = new();
+    public bool ShouldSerializeWallpaperFolders() => WallpaperFolders != null && WallpaperFolders.Count > 0;
+
+    [JsonProperty("musicFolders", Order = 22)]
+    public List<UnitFolderDef> MusicFolders { get; set; } = new();
+    public bool ShouldSerializeMusicFolders() => MusicFolders != null && MusicFolders.Count > 0;
+
+    [JsonProperty("sfxFolders", Order = 23)]
+    public List<UnitFolderDef> SfxFolders { get; set; } = new();
+    public bool ShouldSerializeSfxFolders() => SfxFolders != null && SfxFolders.Count > 0;
+
+    /// <summary>
+    /// Level NPC definitions (the NPCs tab). Reusable pose/outfit variants;
+    /// where each appears is authored per-place via
+    /// <see cref="PlaceDef.Npcs"/>.
+    /// </summary>
+    [JsonProperty("npcs", Order = 24)]
+    public List<NpcDef> Npcs { get; set; } = new();
+    public bool ShouldSerializeNpcs() => Npcs != null && Npcs.Count > 0;
+
+    [JsonProperty("npcFolders", Order = 25)]
+    public List<UnitFolderDef> NpcFolders { get; set; } = new();
+    public bool ShouldSerializeNpcFolders() => NpcFolders != null && NpcFolders.Count > 0;
 }

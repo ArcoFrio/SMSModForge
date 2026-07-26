@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using GameCreator.Runtime.Common.UnityUI; // ButtonInstructions
 using TMPro;
 using UnityEngine;
@@ -94,12 +95,16 @@ namespace SMSModForge.PackPlugin
         {
             if (saveSlot.GetComponent<OverwriteSlotMarker>() != null) return;
 
-            // The slot number is shown in SaveSlots(Clone) > Right > Save 0001
+            // The slot number is shown in SaveSlots(Clone) > Right > Save 0001.
+            // The label reads "Save XXXX" in vanilla, but translation mods
+            // replace the prefix (e.g. "保存 1"), so extract the first run of
+            // digits instead of anchoring on the English word. The GO name
+            // ("Save 0001") is not localised, only the TMP text is.
             var label = saveSlot.Find("Right/Save 0001")?.GetComponent<TextMeshProUGUI>();
             if (label == null) { Log("Overwrite slot label not found."); return; }
-            string text = label.text;
-            if (!text.StartsWith("Save ") ||
-                !int.TryParse(text.Substring("Save ".Length).Trim(), out int targetSlot))
+            string text = label.text ?? "";
+            Match digits = Regex.Match(text, @"\d+");
+            if (!digits.Success || !int.TryParse(digits.Value, out int targetSlot))
             {
                 Log("Could not parse slot number from '" + text + "'.");
                 return;

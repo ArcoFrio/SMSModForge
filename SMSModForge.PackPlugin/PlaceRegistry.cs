@@ -26,17 +26,42 @@ namespace SMSModForge.PackPlugin
             public GameObject Level;     // may be null for vanilla entries (we don't need it for navigation)
             public GameObject RoomTalk;  // may be null for vanilla entries — vanilla TransferScene activates roomtalk by itself
             public string WeatherType;   // "None", "Inside", or "Outside" — drives vanilla weather system activation
+
+            /// <summary>Owning pack id (pack entries only) — lets per-pack
+            /// runtimes (level hooks) find their own entries.</summary>
+            public string PackId;
+
+            /// <summary>Authored enter/exit action groups (raw manifest JSON;
+            /// null when the place declares none). Executed edge-triggered by
+            /// <see cref="LevelHooksRuntime"/>.</summary>
+            public Newtonsoft.Json.Linq.JArray OnEnterHooks;
+            public Newtonsoft.Json.Linq.JArray OnExitHooks;
+
+            /// <summary>Edge-detection state for the hook runtime.</summary>
+            public bool HooksWasActive;
         }
 
         private static readonly Dictionary<string, Entry> _byKey = new Dictionary<string, Entry>();
 
         public static void Reset() => _byKey.Clear();
 
-        public static void RegisterPackPlace(string packId, string placeKey, int absoluteIndex, GameObject level, GameObject roomTalk, string weatherType = "None")
+        public static void RegisterPackPlace(string packId, string placeKey, int absoluteIndex, GameObject level, GameObject roomTalk, string weatherType = "None",
+                                             Newtonsoft.Json.Linq.JArray onEnterHooks = null, Newtonsoft.Json.Linq.JArray onExitHooks = null)
             => _byKey["pack:" + packId + "." + placeKey] = new Entry
             {
                 AbsoluteSiblingIndex = absoluteIndex, Level = level, RoomTalk = roomTalk, WeatherType = weatherType ?? "None",
+                PackId = packId, OnEnterHooks = onEnterHooks, OnExitHooks = onExitHooks,
+                HooksWasActive = level != null && level.activeSelf,
             };
+
+        /// <summary>Every registered pack place (vanilla entries excluded).
+        /// Consumed by the weather runtime, which activates the vanilla
+        /// weather particles per each pack level's declared WeatherType.</summary>
+        public static IEnumerable<Entry> AllPackPlaces()
+        {
+            foreach (var kv in _byKey)
+                if (kv.Key.StartsWith("pack:")) yield return kv.Value;
+        }
 
         public static Entry Resolve(string token, string thisPackId, Transform level5Root)
         {

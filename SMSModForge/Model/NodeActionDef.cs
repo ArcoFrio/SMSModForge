@@ -228,6 +228,14 @@ public static class NodeActionTypes
     public const string CountList = "CountList";
 
     /// <summary>
+    /// Change today's weather. Params: <c>weather</c> — <c>Rain</c>,
+    /// <c>Snow</c>, or <c>Clear</c>. Writes the vanilla <c>rainy-day</c> /
+    /// <c>snowy-day</c> game variables and immediately refreshes the
+    /// weather particle systems for whatever level is active.
+    /// </summary>
+    public const string SetWeather = "SetWeather";
+
+    /// <summary>
     /// Weighted one-of-N picker ("dice roll"): rolls once and executes exactly
     /// one of its <see cref="NodeActionDef.Branches"/>, chosen by percentage
     /// chance. The editor enforces the chances summing to exactly 100. No
@@ -262,7 +270,7 @@ public static class NodeActionTypes
         SwitchMusic, PlaySFX,
         EndDialogue, Wait,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
-        DiceRoll,
+        DiceRoll, SetWeather,
         ActivateScene, DeactivateAllScenes,
     };
 }

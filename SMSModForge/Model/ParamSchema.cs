@@ -32,6 +32,12 @@ public enum ParamType
     /// targets, increment deltas, etc.</summary>
     Float,
 
+    /// <summary>Whole-number percentage, rendered as a TextBox with a
+    /// trailing <c>%</c> and stored as the plain number (<c>"30"</c> = 30%).
+    /// Authors think in percentages, so a probability reads better as
+    /// <c>30 %</c> than as <c>0.3</c>; the runtime divides by 100.</summary>
+    Percent,
+
     /// <summary>Name of a pack variable declared on the Variables tab.
     /// Combobox bound to <c>MainViewModel.VariableNameOptions</c>; editable
     /// so the user can still reference a not-yet-declared variable.</summary>
@@ -90,6 +96,11 @@ public enum ParamType
     /// <summary>Free-text scene-graph path (e.g. <c>5_Levels/MyScene</c>).
     /// Rendered as a wider TextBox so deep paths stay readable.</summary>
     GameObjectPath,
+
+    /// <summary>Fixed set of options declared on the schema itself
+    /// (<see cref="ParamSchema.FixedOptions"/>). Rendered as a
+    /// non-editable ComboBox — the value is always one of the options.</summary>
+    Choice,
 }
 
 /// <summary>
@@ -126,13 +137,50 @@ public sealed class ParamSchema
     /// <summary>Optional hover tooltip shown on the editor row.</summary>
     public string Tooltip { get; }
 
+    /// <summary>The selectable values for a <see cref="ParamType.Choice"/>
+    /// param. Ignored by every other type.</summary>
+    public string[] FixedOptions { get; }
+
+    /// <summary>
+    /// Optional key of a sibling param that gates this row: when set, the row's
+    /// editor is disabled unless that sibling's value equals
+    /// <see cref="EnabledWhenValue"/>. Purely a UI affordance — the value stays
+    /// in the params dict and the runtime is unaffected, so toggling the gate
+    /// off and back on doesn't lose what was typed.
+    /// <para/>
+    /// Used for params that only apply in one mode, e.g. the Timer condition's
+    /// min/max seconds, which mean nothing unless <c>randomize</c> is checked.
+    /// </summary>
+    public string EnabledWhen { get; }
+
+    /// <summary>Value <see cref="EnabledWhen"/>'s param must hold for this row
+    /// to be enabled. Compared case-insensitively.</summary>
+    public string EnabledWhenValue { get; }
+
+    /// <summary>
+    /// True when an EMPTY string is a meaningful value for this param rather
+    /// than "not set" — clearing a variable with <c>SetVariable</c>, say. The
+    /// editor normally drops a param whose value is emptied, so the key simply
+    /// disappears and the row reads as unfilled; for these params it writes the
+    /// empty string instead, which keeps "deliberately cleared" distinguishable
+    /// from "never filled in" both on disk and to the validator.
+    /// </summary>
+    public bool EmptyIsAValue { get; }
+
     public ParamSchema(string key, string label, ParamType type,
-                       string defaultValue = "", string tooltip = "")
+                       string defaultValue = "", string tooltip = "",
+                       string[] fixedOptions = null,
+                       string enabledWhen = null, string enabledWhenValue = "true",
+                       bool emptyIsAValue = false)
     {
         Key = key;
         Label = label;
         Type = type;
         DefaultValue = defaultValue;
         Tooltip = tooltip;
+        FixedOptions = fixedOptions ?? System.Array.Empty<string>();
+        EnabledWhen = enabledWhen;
+        EnabledWhenValue = enabledWhenValue;
+        EmptyIsAValue = emptyIsAValue;
     }
 }

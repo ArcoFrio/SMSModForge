@@ -66,6 +66,91 @@ namespace SMSModForge.PackPlugin
                 case "AlwaysTrue":
                     return true;
 
+                // ── List reads ────────────────────────────────────────────
+                // Pack-only: GC2 globals have no list type, so there's no
+                // 'source' toggle on either of these. A missing / non-List
+                // variable reads as an empty list (GetList's own fallback),
+                // so Contains is false and Count is 0 rather than throwing.
+                case "ListContains":
+                    {
+                        string list = (string)p["list"];
+                        if (string.IsNullOrEmpty(list) || vars == null) return false;
+                        string needle = DerefValue((string)p["value"] ?? "", vars);
+                        var items = vars.GetList(list);
+                        for (int i = 0; i < items.Count; i++)
+                            if (string.Equals(items[i], needle, System.StringComparison.Ordinal))
+                                return true;
+                        return false;
+                    }
+
+                case "ListCount":
+                    {
+                        string list = (string)p["list"];
+                        if (string.IsNullOrEmpty(list) || vars == null) return false;
+                        int count = vars.GetList(list).Count;
+                        if (!float.TryParse((string)p["value"] ?? "0", NumberStyles.Float,
+                                            CultureInfo.InvariantCulture, out var target))
+                            return false;
+                        switch ((string)p["comparison"] ?? "equals")
+                        {
+                            case "greater than":     return count >  target;
+                            case "greater or equal": return count >= target;
+                            case "less than":        return count <  target;
+                            case "less or equal":    return count <= target;
+                            default:                 return count == target;
+                        }
+                    }
+
+                // Real-time cooldown on an integration rule. Pure read: the
+                // interval is restarted by UpdateRulesRegistry when the rule
+                // FIRES, not here, so probing the branch cascade doesn't
+                // consume the pulse and an elapsed timer stays hot until the
+                // rule's other conditions let it through. See TimerRuntime.
+                case "Timer":
+                    return TimerRuntime.IsElapsed(thisPackId, (string)p[TimerRuntime.IdParam], p);
+
+                // Prefix test on a variable's string value. Honours the same
+                // pack/vanilla 'source' toggle as the other Variable*
+                // conditions. Exists because compound identifiers are common —
+                // a "<Room><Slot>" location means "which room is she in" is a
+                // prefix test, not an equality test, and expressing it as a
+                // pile of negated equals doesn't survive adding a location.
+                case "VariableStartsWith":
+                    {
+                        string name = (string)p["name"];
+                        if (string.IsNullOrEmpty(name)) return false;
+                        string prefix = DerefValue((string)p["value"] ?? "", vars);
+                        // An empty prefix matches everything, which is almost
+                        // certainly an unfinished row rather than an intent.
+                        if (prefix.Length == 0) return false;
+
+                        string actual;
+                        if (IsVanilla(p))
+                        {
+                            object g = GameVariableBridge.Get(name);
+                            actual = g?.ToString() ?? "";
+                        }
+                        else
+                        {
+                            actual = vars?.GetString(name) ?? "";
+                        }
+
+                        bool ignoreCase = (bool?)p["ignoreCase"] ?? false;
+                        return actual.StartsWith(prefix, ignoreCase
+                            ? System.StringComparison.OrdinalIgnoreCase
+                            : System.StringComparison.Ordinal);
+                    }
+
+                // Current weather, read from the vanilla rainy-day / snowy-day
+                // game variables. 'negate' (handled by Evaluate) gives "clear".
+                case "Weather":
+                    switch ((string)p["state"] ?? "BadWeather")
+                    {
+                        case "Raining": return WeatherRuntime.IsRaining;
+                        case "Snowing": return WeatherRuntime.IsSnowing;
+                        default:        return WeatherRuntime.IsBadWeather;
+                    }
+
                 // ── Logical groups (parentheses) ──────────────────────────
                 // A group carries a nested `conditions` array instead of
                 // `params`. `negate` (handled in Evaluate) inverts the whole
@@ -82,7 +167,7 @@ namespace SMSModForge.PackPlugin
                 case "VariableEquals":
                     {
                         string name = (string)p["name"];
-                        string value = (string)p["value"] ?? "";
+                        string value = DerefValue((string)p["value"] ?? "", vars);
                         if (string.IsNullOrEmpty(name)) return false;
                         if (IsVanilla(p))
                         {
@@ -129,7 +214,7 @@ namespace SMSModForge.PackPlugin
                 case "GameVariableEquals":
                     {
                         string name = (string)p["name"];
-                        string value = (string)p["value"] ?? "";
+                        string value = DerefValue((string)p["value"] ?? "", vars);
                         object got = GameVariableBridge.Get(name);
                         if (got == null) return false;
                         return string.Equals(got.ToString(), value, System.StringComparison.Ordinal);
@@ -182,13 +267,79 @@ namespace SMSModForge.PackPlugin
                     }
                 case "Random":
                     {
+                        // Deprecated — re-rolls on every evaluation. Kept so packs
+                        // authored before DailyChance keep working; the editor no
+                        // longer offers it (see NodeConditionTypes.Random).
                         if (!float.TryParse((string)p["chance"] ?? "0", NumberStyles.Float, CultureInfo.InvariantCulture, out var chance))
                             chance = 0f;
                         return Random.value < chance;
                     }
+                case "DailyChance":
+                    {
+                        // 'chance' is a whole percentage (0..100) — the editor
+                        // renders it with a trailing % and stores the bare number.
+                        if (!float.TryParse((string)p["chance"] ?? "0", NumberStyles.Float, CultureInfo.InvariantCulture, out var dpercent))
+                            dpercent = 0f;
+                        float dchance = dpercent / 100f;
+                        if (dchance <= 0f) return false;
+                        if (dchance >= 1f) return true;
+                        // Derived, not stored: the roll is a pure function of
+                        // (pack, roll id, in-game day), so it's identical for
+                        // every evaluation on that day — safe to poll
+                        // per-frame — and it survives scene reloads and
+                        // save/reload (no save-scumming) while changing at each
+                        // day roll-over. The id is stamped onto the condition at
+                        // load by DailyChanceRegistry from its position in the
+                        // manifest, so each gate rolls independently without the
+                        // author naming anything.
+                        return StableRoll(thisPackId, (string)p[DailyChanceRegistry.IdParam] ?? "",
+                                          CurrentRollDay(), vars?.RollSeed ?? 0) < dchance;
+                    }
                 default:
                     log?.LogWarning("[SMSModForge.PackPlugin] Unknown condition type '" + type + "' — treating as false");
                     return false;
+            }
+        }
+
+        /// <summary>The in-game day a DailyChance roll is keyed to.
+        /// <c>DaysPassed</c> (monotonic), not <c>Day</c> (the 1-7 weekday),
+        /// which would repeat the same roll every Monday.</summary>
+        internal static int CurrentRollDay() => (int)GameVariableBridge.GetNumber("DaysPassed");
+
+        /// <summary>
+        /// Deterministic pseudo-random value in [0,1) derived from
+        /// (save seed, pack, roll id, day) via an FNV-1a hash. Deterministic
+        /// on purpose: the same inputs always give the same number, so a
+        /// DailyChance returns one stable answer for the whole in-game day no
+        /// matter how often it's polled, needs nothing persisted per-roll, and
+        /// can't be re-rolled by reloading a save.
+        /// <para/>
+        /// <paramref name="saveSeed"/> is what keeps that determinism from
+        /// becoming a fixed calendar: it's minted at random per save (see
+        /// <see cref="PackVariableStore.RollSeed"/>), so two playthroughs pass
+        /// on entirely different days even though each is internally stable.
+        /// <para/>
+        /// Internal rather than private so the day-change reporter can show
+        /// the exact value the condition will compare against — a separate
+        /// implementation there could drift from this one.
+        /// </summary>
+        internal static float StableRoll(string packId, string key, int day, int saveSeed)
+        {
+            unchecked
+            {
+                const uint prime = 16777619u;
+                uint h = 2166136261u;
+                string s = saveSeed.ToString(CultureInfo.InvariantCulture) + "|" +
+                           (packId ?? "") + "|" + (key ?? "") + "|" +
+                           day.ToString(CultureInfo.InvariantCulture);
+                for (int i = 0; i < s.Length; i++) { h ^= s[i]; h *= prime; }
+                // Avalanche (xorshift finisher) — FNV alone leaves adjacent
+                // day numbers highly correlated in the low bits, which would
+                // make consecutive days' rolls track each other.
+                h ^= h >> 16; h *= 2246822507u;
+                h ^= h >> 13; h *= 3266489909u;
+                h ^= h >> 16;
+                return (h & 0xFFFFFF) / (float)0x1000000;   // 24 bits → [0,1)
             }
         }
 
@@ -221,5 +372,25 @@ namespace SMSModForge.PackPlugin
         /// GC2 GlobalNameVariable store rather than the per-pack store.</summary>
         private static bool IsVanilla(JObject p)
             => string.Equals((string)p["source"], "vanilla", System.StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Resolves a <c>$varName</c> reference in a comparison VALUE to that
+        /// variable's current value; anything else is returned verbatim.
+        /// <para/>
+        /// Mirrors the action side, so "is this list holding the value this
+        /// other variable currently has" is expressible as a condition rather
+        /// than only as an action. Without it a rule can compare against
+        /// literals only, which is what forces the awkward "one negated equals
+        /// per possible value" shape.
+        /// <para/>
+        /// <c>$$</c> escapes a literal dollar; an unknown variable resolves to
+        /// empty, matching the stores' own reads.
+        /// </summary>
+        private static string DerefValue(string raw, PackVariableStore vars)
+        {
+            if (string.IsNullOrEmpty(raw) || raw[0] != '$') return raw;
+            if (raw.Length > 1 && raw[1] == '$') return raw.Substring(1);
+            return vars?.GetString(raw.Substring(1)) ?? "";
+        }
     }
 }

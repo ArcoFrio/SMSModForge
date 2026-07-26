@@ -24,18 +24,87 @@ public sealed class UpdateRuleViewModel : ObservableObject
     public ObservableCollection<NodeConditionViewModel> Conditions { get; }
     public ObservableCollection<NodeActionViewModel> Actions { get; }
 
+    /// <summary>Else-if chain rows. Same conditions+actions group VM the
+    /// place hooks use; first branch whose conditions pass wins when the
+    /// main conditions fail (empty conditions = plain Else).</summary>
+    public ObservableCollection<LevelHookViewModel> Branches { get; }
+
     public UpdateRuleViewModel(UpdateRuleDef model)
     {
         Model = model;
         Conditions = new ObservableCollection<NodeConditionViewModel>(
-            model.Conditions.Select(c => new NodeConditionViewModel(c, RemoveCondition)));
+            model.Conditions.Select(c => new NodeConditionViewModel(c, RemoveCondition, context: ConditionContext.Rule)));
         Actions = new ObservableCollection<NodeActionViewModel>(
             model.Actions.Select(a => new NodeActionViewModel(a, RemoveAction)));
+        Branches = new ObservableCollection<LevelHookViewModel>(
+            model.Branches.Select(b => new LevelHookViewModel(b, RemoveBranch)));
+        AddBranchCommand = new RelayCommand(AddBranch);
 
         // Initialise the code-mode buffer from the current model. The
         // textbox stays in sync with the model in picker mode, and the
         // model updates from the textbox when the user commits.
         _codeText = SerializeCurrentModel();
+
+        // Per-list copy/paste/overwrite — same clipboard slots the dialogue
+        // node editor uses, so conditions/actions travel freely between
+        // dialogues, integration rules, and level hooks.
+        CopyConditionsCommand      = new RelayCommand(() => Services.EditorClipboard.SetConditions(Model.Conditions),
+                                                      () => Model.Conditions.Count > 0);
+        PasteConditionsCommand     = new RelayCommand(() => PasteConditions(overwrite: false),
+                                                      () => Services.EditorClipboard.HasConditions);
+        OverwriteConditionsCommand = new RelayCommand(() => PasteConditions(overwrite: true),
+                                                      () => Services.EditorClipboard.HasConditions);
+        CopyActionsCommand         = new RelayCommand(() => Services.EditorClipboard.SetActions(Model.Actions),
+                                                      () => Model.Actions.Count > 0);
+        PasteActionsCommand        = new RelayCommand(() => PasteActions(overwrite: false),
+                                                      () => Services.EditorClipboard.HasActions);
+        OverwriteActionsCommand    = new RelayCommand(() => PasteActions(overwrite: true),
+                                                      () => Services.EditorClipboard.HasActions);
+    }
+
+    public RelayCommand CopyConditionsCommand { get; }
+    public RelayCommand PasteConditionsCommand { get; }
+    public RelayCommand OverwriteConditionsCommand { get; }
+    public RelayCommand CopyActionsCommand { get; }
+    public RelayCommand PasteActionsCommand { get; }
+    public RelayCommand OverwriteActionsCommand { get; }
+    public RelayCommand AddBranchCommand { get; }
+
+    public void AddBranch()
+    {
+        var def = new LevelHookDef();
+        Model.Branches.Add(def);
+        Branches.Add(new LevelHookViewModel(def, RemoveBranch));
+    }
+
+    public void RemoveBranch(LevelHookViewModel b)
+    {
+        Model.Branches.Remove(b.Model);
+        Branches.Remove(b);
+    }
+
+    private void PasteConditions(bool overwrite)
+    {
+        var src = Services.EditorClipboard.Conditions;
+        if (src == null || src.Count == 0) return;
+        if (overwrite) { Model.Conditions.Clear(); Conditions.Clear(); }
+        foreach (var def in Services.EditorClipboard.Clone(src))
+        {
+            Model.Conditions.Add(def);
+            Conditions.Add(new NodeConditionViewModel(def, RemoveCondition, context: ConditionContext.Rule));
+        }
+    }
+
+    private void PasteActions(bool overwrite)
+    {
+        var src = Services.EditorClipboard.Actions;
+        if (src == null || src.Count == 0) return;
+        if (overwrite) { Model.Actions.Clear(); Actions.Clear(); }
+        foreach (var def in Services.EditorClipboard.Clone(src))
+        {
+            Model.Actions.Add(def);
+            Actions.Add(new NodeActionViewModel(def, RemoveAction));
+        }
     }
 
     public string Key
@@ -76,6 +145,30 @@ public sealed class UpdateRuleViewModel : ObservableObject
     {
         get => Model.TriggerMode;
         set { Model.TriggerMode = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Values to repeat the rule for — a literal CSV or <c>$ListVar</c>.
+    /// Blank = the rule runs once.</summary>
+    public string ForEach
+    {
+        get => Model.ForEach ?? "";
+        set
+        {
+            Model.ForEach = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Placeholder name substituted per value, written <c>{name}</c>.
+    /// Blank stores null and the runtime defaults to <c>item</c>.</summary>
+    public string ForEachAs
+    {
+        get => Model.ForEachAs ?? "";
+        set
+        {
+            Model.ForEachAs = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+            OnPropertyChanged();
+        }
     }
 
     /// <summary>
@@ -161,7 +254,7 @@ public sealed class UpdateRuleViewModel : ObservableObject
     {
         var def = new NodeConditionDef { Type = NodeConditionTypes.VariableEquals };
         Model.Conditions.Add(def);
-        var vm = new NodeConditionViewModel(def, RemoveCondition);
+        var vm = new NodeConditionViewModel(def, RemoveCondition, context: ConditionContext.Rule);
         Conditions.Add(vm);
         return vm;
     }
@@ -171,7 +264,7 @@ public sealed class UpdateRuleViewModel : ObservableObject
     {
         var def = new NodeConditionDef { Type = NodeConditionTypes.GroupAll, Conditions = new() };
         Model.Conditions.Add(def);
-        var vm = new NodeConditionViewModel(def, RemoveCondition);
+        var vm = new NodeConditionViewModel(def, RemoveCondition, context: ConditionContext.Rule);
         Conditions.Add(vm);
         return vm;
     }
@@ -209,6 +302,7 @@ public sealed class UpdateRuleViewModel : ObservableObject
             triggerMode = Model.TriggerMode.ToString(),
             conditions = Model.Conditions,
             actions = Model.Actions,
+            branches = Model.Branches,
         };
         return JsonConvert.SerializeObject(snapshot, Formatting.Indented);
     }
@@ -232,6 +326,9 @@ public sealed class UpdateRuleViewModel : ObservableObject
             var actTok = obj["actions"];
             if (actTok != null && actTok.Type != JTokenType.Array)
                 throw new JsonReaderException("'actions' must be an array");
+            var brTok = obj["branches"];
+            if (brTok != null && brTok.Type != JTokenType.Array)
+                throw new JsonReaderException("'branches' must be an array");
             CodeError = "";
         }
         catch (System.Exception ex)
@@ -261,18 +358,23 @@ public sealed class UpdateRuleViewModel : ObservableObject
                 Model.TriggerMode = parsed;
             }
 
-            // conditions + actions: replace wholesale.
+            // conditions + actions + branches: replace wholesale.
             var newConditions = obj["conditions"]?.ToObject<System.Collections.Generic.List<NodeConditionDef>>()
                 ?? new System.Collections.Generic.List<NodeConditionDef>();
             var newActions = obj["actions"]?.ToObject<System.Collections.Generic.List<NodeActionDef>>()
                 ?? new System.Collections.Generic.List<NodeActionDef>();
+            var newBranches = obj["branches"]?.ToObject<System.Collections.Generic.List<LevelHookDef>>()
+                ?? new System.Collections.Generic.List<LevelHookDef>();
             Model.Conditions.Clear(); Model.Conditions.AddRange(newConditions);
             Model.Actions.Clear();    Model.Actions.AddRange(newActions);
+            Model.Branches.Clear();   Model.Branches.AddRange(newBranches);
 
             Conditions.Clear();
-            foreach (var c in Model.Conditions) Conditions.Add(new NodeConditionViewModel(c, RemoveCondition));
+            foreach (var c in Model.Conditions) Conditions.Add(new NodeConditionViewModel(c, RemoveCondition, context: ConditionContext.Rule));
             Actions.Clear();
             foreach (var a in Model.Actions) Actions.Add(new NodeActionViewModel(a, RemoveAction));
+            Branches.Clear();
+            foreach (var b in Model.Branches) Branches.Add(new LevelHookViewModel(b, RemoveBranch));
 
             OnPropertyChanged(nameof(TriggerMode));
             return true;

@@ -1,3 +1,5 @@
+using System.Collections.ObjectModel;
+using System.Linq;
 using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
@@ -7,13 +9,69 @@ namespace SMSModForge.ViewModel;
 /// Wallpapers tab. Both <see cref="SpritePath"/> (pack-relative) and
 /// <see cref="ExternalSpritePath"/> (transitional absolute path) are
 /// exposed so authors can move between bundled and external sources
-/// without losing the other slot.
+/// without losing the other slot. Unlock conditions use the standard
+/// condition rows (same editor as dialogues / rules / hooks).
 /// </summary>
 public sealed class WallpaperViewModel : ObservableObject
 {
     public WallpaperDef Model { get; }
 
-    public WallpaperViewModel(WallpaperDef model) { Model = model; }
+    public ObservableCollection<NodeConditionViewModel> UnlockConditions { get; }
+
+    public WallpaperViewModel(WallpaperDef model)
+    {
+        Model = model;
+        // Polled context: the runtime re-evaluates unlock conditions every
+        // frame, so the per-evaluation Random gate is not offered here.
+        UnlockConditions = new ObservableCollection<NodeConditionViewModel>(
+            model.UnlockConditions.Select(c => new NodeConditionViewModel(c, RemoveUnlockCondition)));
+
+        AddUnlockConditionCommand = new RelayCommand(() =>
+        {
+            var def = new NodeConditionDef { Type = NodeConditionTypes.VariableEquals };
+            Model.UnlockConditions.Add(def);
+            UnlockConditions.Add(new NodeConditionViewModel(def, RemoveUnlockCondition));
+        });
+        AddUnlockConditionGroupCommand = new RelayCommand(() =>
+        {
+            var def = new NodeConditionDef { Type = NodeConditionTypes.GroupAll, Conditions = new() };
+            Model.UnlockConditions.Add(def);
+            UnlockConditions.Add(new NodeConditionViewModel(def, RemoveUnlockCondition));
+        });
+        CopyUnlockConditionsCommand = new RelayCommand(
+            () => Services.EditorClipboard.SetConditions(Model.UnlockConditions),
+            () => Model.UnlockConditions.Count > 0);
+        PasteUnlockConditionsCommand = new RelayCommand(
+            () => PasteUnlockConditions(overwrite: false),
+            () => Services.EditorClipboard.HasConditions);
+        OverwriteUnlockConditionsCommand = new RelayCommand(
+            () => PasteUnlockConditions(overwrite: true),
+            () => Services.EditorClipboard.HasConditions);
+    }
+
+    public RelayCommand AddUnlockConditionCommand { get; }
+    public RelayCommand AddUnlockConditionGroupCommand { get; }
+    public RelayCommand CopyUnlockConditionsCommand { get; }
+    public RelayCommand PasteUnlockConditionsCommand { get; }
+    public RelayCommand OverwriteUnlockConditionsCommand { get; }
+
+    public void RemoveUnlockCondition(NodeConditionViewModel c)
+    {
+        Model.UnlockConditions.Remove(c.Model);
+        UnlockConditions.Remove(c);
+    }
+
+    private void PasteUnlockConditions(bool overwrite)
+    {
+        var src = Services.EditorClipboard.Conditions;
+        if (src == null || src.Count == 0) return;
+        if (overwrite) { Model.UnlockConditions.Clear(); UnlockConditions.Clear(); }
+        foreach (var def in Services.EditorClipboard.Clone(src))
+        {
+            Model.UnlockConditions.Add(def);
+            UnlockConditions.Add(new NodeConditionViewModel(def, RemoveUnlockCondition));
+        }
+    }
 
     public string Key
     {
@@ -67,63 +125,6 @@ public sealed class WallpaperViewModel : ObservableObject
             string? normalised = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
             if (Model.ExternalSpritePath == normalised) return;
             Model.ExternalSpritePath = normalised;
-            OnPropertyChanged();
-        }
-    }
-
-    /// <summary>
-    /// Unlock condition's <c>params.name</c> — the variable name the
-    /// runtime checks (e.g. <c>Event_SeenAnisMall01</c>). Stored in
-    /// <see cref="WallpaperDef.UnlockCondition"/> as a
-    /// <c>VariableEquals</c> condition with this name. Lazily creates
-    /// the condition object on first edit so the JSON doesn't carry
-    /// an empty stub for wallpapers that should always be visible.
-    /// </summary>
-    public string UnlockVariableName
-    {
-        get => Model.UnlockCondition?.Params != null
-            && Model.UnlockCondition.Params.TryGetValue("name", out var n) ? n : "";
-        set
-        {
-            string normalised = (value ?? "").Trim();
-            if (string.IsNullOrEmpty(normalised))
-            {
-                if (Model.UnlockCondition == null) return;
-                Model.UnlockCondition = null;
-            }
-            else
-            {
-                if (Model.UnlockCondition == null)
-                    Model.UnlockCondition = new NodeConditionDef
-                    {
-                        Type = NodeConditionTypes.VariableEquals,
-                        Params = new System.Collections.Generic.Dictionary<string, string>
-                        {
-                            ["name"] = normalised,
-                            ["value"] = UnlockVariableValue,
-                        },
-                    };
-                else
-                    Model.UnlockCondition.Params["name"] = normalised;
-            }
-            OnPropertyChanged();
-        }
-    }
-
-    /// <summary>
-    /// The expected value of <see cref="UnlockVariableName"/>. Defaults
-    /// to <c>"true"</c> — the most common case is gating wallpapers on
-    /// an <c>Event_Seen*</c> bool flipping true.
-    /// </summary>
-    public string UnlockVariableValue
-    {
-        get => Model.UnlockCondition?.Params != null
-            && Model.UnlockCondition.Params.TryGetValue("value", out var v) ? v : "true";
-        set
-        {
-            string normalised = (value ?? "true").Trim();
-            if (Model.UnlockCondition != null)
-                Model.UnlockCondition.Params["value"] = normalised;
             OnPropertyChanged();
         }
     }

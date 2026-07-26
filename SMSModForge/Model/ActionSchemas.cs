@@ -30,7 +30,11 @@ public static class ActionSchemas
                 "Pack variable to set."),
             new ParamSchema("value", "Value", ParamType.String, "",
                 "New value. Strings round-trip as-is; use 'true' / 'false' for booleans, " +
-                "and numbers in invariant-culture form (e.g. '3.14')."),
+                "and numbers in invariant-culture form (e.g. '3.14'). '$varName' copies " +
+                "that variable's current value instead ('$$' escapes a literal dollar). " +
+                "Leave it blank to CLEAR the variable to an empty string — that's kept as " +
+                "a real value, not treated as an unfilled row.",
+                emptyIsAValue: true),
         },
         [NodeActionTypes.IncrementVariable] = new[]
         {
@@ -47,7 +51,9 @@ public static class ActionSchemas
                 "Pack-local actor key whose bust slot you're swapping."),
             new ParamSchema("bustKey", "Bust GO", ParamType.BustRef, "",
                 "Bust GameObject name. Dropdown lists busts declared on actors " +
-                "in this pack; type any other GO name (vanilla or pack) to override."),
+                "in this pack; type any other GO name (vanilla or pack) to override. " +
+                "Type $variableName to set the outfit dynamically from a pack " +
+                "variable's current value."),
         },
         [NodeActionTypes.SetActorExpression] = new[]
         {
@@ -175,15 +181,24 @@ public static class ActionSchemas
             new ParamSchema("source", "Source", ParamType.String, "",
                 "Either a comma-separated literal ('A,B,C'), or '$varName' " +
                 "to read from a String or List pack variable."),
+            new ParamSchema("excluding", "Excluding", ParamType.String, "",
+                "Optional. Entries to remove from Source before picking — same three " +
+                "shapes as Source ('$varName' is the usual one). This is how you claim " +
+                "a slot nobody else holds: pick from all slots excluding the occupied list."),
             new ParamSchema("target", "Target", ParamType.PackVarRef, "",
                 "Pack variable receiving the picked element."),
+            new ParamSchema("fallback", "If none left", ParamType.String, "",
+                "Value written to Target when Source is empty or everything was excluded. " +
+                "Use it for an overflow destination with unlimited capacity. Accepts " +
+                "'$varName'. Left blank, Target is cleared (the original behaviour)."),
         },
         [NodeActionTypes.AddToList] = new[]
         {
             new ParamSchema("list", "List", ParamType.ListVarRef, "",
                 "List-typed pack variable to append to."),
             new ParamSchema("value", "Value", ParamType.String, "",
-                "Value to append."),
+                "Value to append. '$varName' appends that variable's current value " +
+                "instead of the literal text."),
             new ParamSchema("unique", "Only if absent", ParamType.Bool, "false",
                 "When checked, the value is appended only if it isn't already in the list (no duplicates)."),
         },
@@ -192,7 +207,8 @@ public static class ActionSchemas
             new ParamSchema("list", "List", ParamType.ListVarRef, "", ""),
             new ParamSchema("value", "Value", ParamType.String, "",
                 "First matching entry is removed; the action is a no-op when " +
-                "the value isn't present."),
+                "the value isn't present. '$varName' removes that variable's current " +
+                "value — how you free the slot a character is standing on."),
         },
         [NodeActionTypes.ClearList] = new[]
         {
@@ -209,6 +225,16 @@ public static class ActionSchemas
                 "List-typed pack variable whose entry count is written."),
             new ParamSchema("name", "Target", ParamType.PackVarRef, "",
                 "Pack variable (Int) receiving the number of entries."),
+        },
+
+        // ── Weather ────────────────────────────────────────────────────
+        [NodeActionTypes.SetWeather] = new[]
+        {
+            new ParamSchema("weather", "Weather", ParamType.Choice, "Rain",
+                "Sets today's weather: writes the vanilla rainy-day / snowy-day game " +
+                "variables and refreshes the weather particles on the active level " +
+                "immediately. Clear stops both.",
+                new[] { "Rain", "Snow", "Clear" }),
         },
 
         // ── Scenes ─────────────────────────────────────────────────────

@@ -7,7 +7,7 @@ namespace SMSModForge.ViewModel;
 /// every keystroke. Direct field exposure is fine — we don't need transforms,
 /// the binding pipes value changes straight back to the POCO.
 /// </summary>
-public sealed class OutfitViewModel : ObservableObject
+public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode
 {
     public OutfitDef Model { get; }
 
@@ -149,4 +149,27 @@ public sealed class OutfitViewModel : ObservableObject
         get => _liveMaskRevision;
         set { _liveMaskRevision = value; OnPropertyChanged(); }
     }
+
+    // ── Sidebar search (IFilterableTreeNode) ──────────────────────────────
+    private bool _isFilteredIn = true;
+    public bool IsFilteredIn
+    {
+        get => _isFilteredIn;
+        set { if (_isFilteredIn == value) return; _isFilteredIn = value; OnPropertyChanged(); }
+    }
+
+    private bool _isExpanded = true;
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set { if (_isExpanded == value) return; _isExpanded = value; OnPropertyChanged(); }
+    }
+
+    private bool _expandedBeforeFilter = true;
+    public void StashExpansion() => _expandedBeforeFilter = IsExpanded;
+    public void RestoreExpansion() => IsExpanded = _expandedBeforeFilter;
+
+    public string FilterKey => Display;
+    public System.Collections.Generic.IEnumerable<IFilterableTreeNode> FilterChildren
+        => System.Linq.Enumerable.Empty<IFilterableTreeNode>();
 }

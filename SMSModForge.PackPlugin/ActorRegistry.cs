@@ -364,13 +364,19 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
-        /// The bust's main sprite root. Named <c>MBase1</c> on every bust
-        /// we've seen, but the host mod's own per-line code used
-        /// <c>GetChild(0)</c> (<c>OnDialogueLineStart</c>), so fall back to
-        /// the first child when the name lookup misses.
+        /// The bust's main sprite root — the parent of the Blink / Expressions /
+        /// Mouth / Leave branches. Named <c>MBase1</c> on most busts, but other
+        /// rigs use a different base child name (e.g. <c>D1Base</c>), so we fall
+        /// back to the first child when the <c>MBase1</c> lookup misses — the
+        /// same convention the host mod's per-line code used
+        /// (<c>GetChild(0)</c> in <c>OnDialogueLineStart</c>). Shared by every
+        /// bust-child lookup (focus, expressions, leave) so they all handle
+        /// non-<c>MBase1</c> busts identically. Internal so the action runtime
+        /// can reuse it. Null only for a childless / null bust.
         /// </summary>
-        private static Transform FindMBase(GameObject bust)
+        internal static Transform FindMBase(GameObject bust)
         {
+            if (bust == null) return null;
             var t = bust.transform.Find("MBase1");
             if (t == null && bust.transform.childCount > 0) t = bust.transform.GetChild(0);
             return t;
@@ -443,7 +449,10 @@ namespace SMSModForge.PackPlugin
 
         private void RouteExpression(GameObject bust, ActorEntry entry, string expressionKey)
         {
-            var expressions = bust.transform.Find("MBase1/Expressions");
+            // Resolve the base child (MBase1, else first child) so expression
+            // switching works on non-MBase busts too — see FindMBase.
+            var mbase = FindMBase(bust);
+            var expressions = mbase != null ? mbase.Find("Expressions") : null;
             if (expressions == null) return;
 
             // Deactivate every standard expression first so we end up with at

@@ -172,15 +172,20 @@ namespace SMSModForge.PackPlugin
             buttonGo.SetActive(false);
 
             // Register so the per-frame visibility check can flip it on
-            // when its unlock condition is satisfied.
-            var unlock = w["unlockCondition"] as JObject;
+            // when its unlock conditions are satisfied. New packs author the
+            // "unlockConditions" array; the legacy single "unlockCondition"
+            // object is wrapped into a one-element array so old exports keep
+            // gating identically.
+            var unlocks = w["unlockConditions"] as JArray;
+            if (unlocks == null && w["unlockCondition"] is JObject legacy)
+                unlocks = new JArray(legacy);
             registry.Register(new WallpaperRegistry.Entry
             {
                 Key = key,
                 PackId = pack.PackId,
                 Button = buttonGo,
                 Display = wallpaperGo,
-                UnlockCondition = unlock,
+                UnlockConditions = unlocks,
                 Vars = vars,
             });
             return true;

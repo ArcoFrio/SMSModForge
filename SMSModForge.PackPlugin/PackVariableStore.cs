@@ -106,6 +106,44 @@ namespace SMSModForge.PackPlugin
             // first write in case the player hasn't actually saved there
             // yet (matching the host mod's SaveManager.EnsureSaveDirectoryExists
             // semantics).
+
+            // Intrinsic, not manifest-authored: every store has the roll seed
+            // so DailyChance works regardless of what the pack declares.
+            Declare(RollSeedName, PackVariableType.Int, "0", persisted: true);
+        }
+
+        /// <summary>Internal seed variable. Underscored so
+        /// <see cref="EnumerateNames"/> keeps it out of the public surface —
+        /// it's plumbing, not pack state an author or host mod should see.</summary>
+        private const string RollSeedName = "__rollSeed";
+
+        /// <summary>
+        /// Per-SAVE random seed mixed into every <c>DailyChance</c> roll.
+        /// <para/>
+        /// Without it the rolls would be a pure function of (pack, condition,
+        /// day) — identical for every player and every new game, i.e. a fixed
+        /// calendar rather than a random gate. The seed is generated ONCE, the
+        /// first time a save has no value for it, and then persists with that
+        /// save: so a given playthrough keeps a stable calendar (reloading
+        /// can't re-roll it), while a different save — anyone's, in any slot —
+        /// gets a completely independent one. It is NOT derived from the slot
+        /// number; slot 1 of two different playthroughs seeds differently.
+        /// </summary>
+        public int RollSeed =>
+            _values.TryGetValue(RollSeedName, out var s) &&
+            int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v) ? v : 0;
+
+        /// <summary>Mint a seed when the freshly-bound save doesn't carry one.
+        /// Called after the disk load so an existing save's seed always wins.</summary>
+        private void EnsureRollSeed()
+        {
+            if (RollSeed != 0) return;
+            int seed = UnityEngine.Random.Range(int.MinValue, int.MaxValue);
+            if (seed == 0) seed = 1;   // 0 is the "unset" sentinel
+            _values[RollSeedName] = seed.ToString(CultureInfo.InvariantCulture);
+            _log?.LogInfo("[SMSModForge.PackPlugin] " + PackId +
+                          ": minted a new DailyChance seed for this save (" + seed +
+                          ") — its daily rolls are unique to this playthrough.");
         }
 
         /// <summary>
@@ -142,6 +180,9 @@ namespace SMSModForge.PackPlugin
                                         "SMSModForge_" + PackId + ".json");
             ResetAllToDefaults();
             LoadFromDisk();
+            // After the load, so a save that already has a seed keeps it and
+            // only a genuinely fresh save mints one.
+            EnsureRollSeed();
         }
 
         /// <summary>
@@ -545,7 +586,14 @@ namespace SMSModForge.PackPlugin
         /// <see cref="Set"/> writes are not enumerated (they're an
         /// authoring escape hatch, not part of the public schema).
         /// </summary>
-        public IEnumerable<string> EnumerateNames() => _decls.Keys;
+        /// <summary>Every pack-authored variable name. Runtime-internal
+        /// declarations (underscored, e.g. the DailyChance seed) are hidden —
+        /// host mods and the debug dumps should only see authored state.</summary>
+        public IEnumerable<string> EnumerateNames()
+        {
+            foreach (var k in _decls.Keys)
+                if (!k.StartsWith("__", StringComparison.Ordinal)) yield return k;
+        }
 
         public string GetString(string name)
             => _values.TryGetValue(name, out var v) ? v : (_decls.TryGetValue(name, out var d) ? d.DefaultValue : "");

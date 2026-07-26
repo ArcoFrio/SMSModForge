@@ -4,7 +4,7 @@ using Newtonsoft.Json.Converters;
 namespace SMSModForge.Model;
 
 /// <summary>
-/// The generic utility components a pack can attach to an Extra GameObject
+/// The generic utility components a pack can attach to a GameObject
 /// (overlay). Each mirrors a vanilla game component by name and maps to a
 /// reusable MonoBehaviour in the plugin runtime.
 /// </summary>
@@ -21,7 +21,7 @@ public enum PackComponentType
 }
 
 /// <summary>
-/// One generic utility component attached to an <see cref="OverlayDef"/>. The
+/// One generic utility component attached to a <see cref="GameObjectDef"/>. The
 /// union of fields below covers every <see cref="PackComponentType"/>; the
 /// <c>ShouldSerialize*</c> gates keep the JSON to just the fields the chosen
 /// type actually uses, and the editor shows the same subset. At runtime the

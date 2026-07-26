@@ -89,14 +89,48 @@ public sealed class PlaceDef
     public List<NavigatorButtonDef> NavigatorButtons { get; set; } = new();
 
     /// <summary>
-    /// Extra sprite GameObjects layered onto this place's level at runtime
-    /// (backdrops, props, animated overlays). Each is instantiated under the
-    /// level and named so dialogue actions can show/hide/fade/move/spin it.
+    /// The place's whole scene hierarchy: a tree of <see cref="GameObjectDef"/>
+    /// nodes built under the level at runtime. Top-level entries are the layered
+    /// sprite objects (backdrops, props, animated overlays) plus the single
+    /// forced NPCs-root node (<see cref="GameObjectDef.RoleNpcRoot"/>) whose
+    /// container subtree hosts the NPC placements. Each node is named so
+    /// dialogue actions can show/hide/fade/move/spin it.
     /// </summary>
-    [JsonProperty("overlays", Order = 12)]
-    public List<OverlayDef> Overlays { get; set; } = new();
+    [JsonProperty("gameObjects", Order = 12)]
+    public List<GameObjectDef> GameObjects { get; set; } = new();
 
-    public bool ShouldSerializeOverlays() => Overlays.Count > 0;
+    /// <summary>
+    /// Action groups run once each time this place's level flips
+    /// inactive→active. Each group's conditions are evaluated at that
+    /// moment; passing groups execute their actions. Re-entering the level
+    /// runs them again (gate with variables for one-time effects).
+    /// </summary>
+    [JsonProperty("onEnter", Order = 13)]
+    public List<LevelHookDef> OnEnter { get; set; } = new();
+
+    /// <summary>Same as <see cref="OnEnter"/>, on the active→inactive edge.</summary>
+    [JsonProperty("onExit", Order = 14)]
+    public List<LevelHookDef> OnExit { get; set; } = new();
+
+    public bool ShouldSerializeGameObjects() => GameObjects.Count > 0;
+    public bool ShouldSerializeOnEnter() => OnEnter.Count > 0;
+    public bool ShouldSerializeOnExit() => OnExit.Count > 0;
+}
+
+/// <summary>
+/// One conditions-gated action group on a place's enter/exit edge — the same
+/// conditions + actions vocabulary dialogue nodes and integration rules use.
+/// </summary>
+public sealed class LevelHookDef
+{
+    /// <summary>All must pass (at the moment the edge fires) for the group's actions to run.</summary>
+    [JsonProperty("conditions", Order = 1)]
+    public List<NodeConditionDef> Conditions { get; set; } = new();
+
+    [JsonProperty("actions", Order = 2)]
+    public List<NodeActionDef> Actions { get; set; } = new();
+
+    public bool ShouldSerializeConditions() => Conditions.Count > 0;
 }
 
 /// <summary>

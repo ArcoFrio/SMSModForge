@@ -65,6 +65,17 @@
       <Link>VanillaFrames\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!--
+      Vanilla level art + hierarchy catalog, produced by the Unity-editor
+      script at Tools/UnityEditor/SMSModForgeLevelExtractor.cs. The PNGs back
+      the vanilla-extension preview; vanilla_levels.json is the baseline the
+      save-time delta pass compares against, so an extension stores only what
+      it actually changes.
+    -->
+    <Content Include="Resources\VanillaLevelArt\**\*.PNG;Resources\VanillaLevelArt\**\*.png;Resources\VanillaLevelArt\vanilla_levels.json">
+      <Link>VanillaLevelArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\VanillaOverlays\*.png;Resources\VanillaOverlays\*.PNG">
       <Link>VanillaOverlays\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

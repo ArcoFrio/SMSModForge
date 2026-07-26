@@ -223,18 +223,22 @@ namespace SMSModForge.PackPlugin
                 }
             }
 
-            // Set up Unity Button + ColorTint feedback. Matches the values
-            // the host mod uses on its a place button radial button.
+            // Set up Unity Button + ColorTint feedback, mirroring the vanilla
+            // radial buttons exactly (verified against a ButtonInstructions
+            // dump of Seaside/Beach): the tint target is the child LABEL, not
+            // the circle image — hovering turns the TEXT pink while the
+            // button image stays white. Targeting the image (the old code)
+            // made the whole circle grey out on hover instead.
             var button = btn.GetComponent<Button>();
             if (button == null) button = btn.AddComponent<Button>();
-            var targetImage = btn.GetComponent<Image>();
-            if (targetImage != null) button.targetGraphic = targetImage;
+            var labelGraphic = textTMP != null ? textTMP.GetComponent<TextMeshProUGUI>() as Graphic : null;
+            button.targetGraphic = labelGraphic != null ? labelGraphic : btn.GetComponent<Image>();
             var colors = button.colors;
             colors.normalColor = Color.white;
-            colors.highlightedColor = new Color(0.9f, 0.9f, 0.9f, 1f);
-            colors.pressedColor = new Color(0.8f, 0.8f, 0.8f, 1f);
-            colors.selectedColor = Color.white;
-            colors.disabledColor = new Color(0.5f, 0.5f, 0.5f, 0.5f);
+            colors.highlightedColor = new Color(1f, 0.278f, 0.501f, 1f);   // vanilla pink
+            colors.pressedColor = new Color(0.784f, 0.784f, 0.784f, 1f);
+            colors.selectedColor = new Color(0.961f, 0.961f, 0.961f, 1f);
+            colors.disabledColor = new Color(0.784f, 0.784f, 0.784f, 0.502f);
             colors.colorMultiplier = 1f;
             colors.fadeDuration = 0.1f;
             button.colors = colors;

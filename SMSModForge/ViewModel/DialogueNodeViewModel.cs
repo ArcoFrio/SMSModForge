@@ -37,8 +37,12 @@ public sealed class DialogueNodeViewModel : ObservableObject
             model.ActionsOnStart .Select(a => new NodeActionViewModel(a,    removeCallback: RemoveActionOnStart)));
         ActionsOnFinish = new ObservableCollection<NodeActionViewModel>(
             model.ActionsOnFinish.Select(a => new NodeActionViewModel(a,    removeCallback: RemoveActionOnFinish)));
+        // OneShot: GC2 evaluates a node's conditions when it reaches the node
+        // (via PackCondition), not every frame — so a single Random roll is
+        // well-defined here and the picker offers it.
         Conditions      = new ObservableCollection<NodeConditionViewModel>(
-            model.Conditions    .Select(c => new NodeConditionViewModel(c, removeCallback: RemoveCondition)));
+            model.Conditions    .Select(c => new NodeConditionViewModel(c, removeCallback: RemoveCondition,
+                                                                        context: ConditionContext.OneShot)));
 
         // Per-list copy/paste/overwrite (cross-dialogue, type-safe via the
         // clipboard's separate action/condition slots).
@@ -94,7 +98,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
         foreach (var def in Services.EditorClipboard.Clone(src))
         {
             Model.Conditions.Add(def);
-            Conditions.Add(new NodeConditionViewModel(def, removeCallback: RemoveCondition));
+            Conditions.Add(new NodeConditionViewModel(def, removeCallback: RemoveCondition,
+                                                      context: ConditionContext.OneShot));
         }
     }
 
@@ -109,8 +114,56 @@ public sealed class DialogueNodeViewModel : ObservableObject
     public string Actor
     {
         get => Model.Actor;
-        set { Model.Actor = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            Model.Actor = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Display));
+            OnPropertyChanged(nameof(ActorTintBrush));
+        }
     }
+
+    // ── Speaker tint ──────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Resolves an actor key to the colour authored on the Actors tab, or null
+    /// when the actor has none / isn't found. Set once by the MainViewModel —
+    /// the node VM has only the actor KEY, and reaching the actor list from
+    /// here would couple every node to the whole pack.
+    /// </summary>
+    public static System.Func<string, System.Windows.Media.Color?>? ActorColorProvider;
+
+    /// <summary>Re-read the tint. Called by the MainViewModel when an actor's
+    /// colour changes — pushed rather than a static event the nodes subscribe
+    /// to, because node VMs churn and would leak into it.</summary>
+    public void RefreshActorTint() => OnPropertyChanged(nameof(ActorTintBrush));
+
+    /// <summary>
+    /// Faint wash of the speaking actor's colour, so a change of speaker reads
+    /// at a glance down the node list. Transparent when the node has no actor
+    /// or the actor has no colour, which leaves the row's normal background.
+    /// <para/>
+    /// The alpha is deliberately low: these sit behind selection highlighting
+    /// and the tag chip, and a saturated fill would fight both.
+    /// </summary>
+    public System.Windows.Media.Brush ActorTintBrush
+    {
+        get
+        {
+            if (string.IsNullOrWhiteSpace(Actor) || ActorColorProvider == null)
+                return System.Windows.Media.Brushes.Transparent;
+            var c = ActorColorProvider(Actor);
+            if (c == null) return System.Windows.Media.Brushes.Transparent;
+            var tint = System.Windows.Media.Color.FromArgb(
+                ActorTintAlpha, c.Value.R, c.Value.G, c.Value.B);
+            var brush = new System.Windows.Media.SolidColorBrush(tint);
+            brush.Freeze();   // shared per row, never mutated
+            return brush;
+        }
+    }
+
+    /// <summary>Alpha applied to an actor's colour for the node-row wash.</summary>
+    private const byte ActorTintAlpha = 56;
 
     public string Expression
     {
@@ -138,7 +191,12 @@ public sealed class DialogueNodeViewModel : ObservableObject
     public string Tag
     {
         get => Model.Tag ?? "";
-        set { Model.Tag = string.IsNullOrEmpty(value) ? null : value; OnPropertyChanged(); }
+        set
+        {
+            Model.Tag = string.IsNullOrEmpty(value) ? null : value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasTag));
+        }
     }
 
     /// <summary>How this line advances (Until Interaction / Timeout).</summary>
@@ -235,9 +293,15 @@ public sealed class DialogueNodeViewModel : ObservableObject
             string preview = System.Text.RegularExpressions.Regex.Replace(raw, @"\s+", " ").Trim();
             if (preview.Length == 0) preview = "(no text)";
             string speaker = string.IsNullOrEmpty(Actor) ? "" : "[" + Actor + "] ";
-            return "#" + Id + " " + speaker + preview;
+            // The node id is bookkeeping the author never types — jumps target a
+            // Tag, not an id — so the row shows the line, not the number.
+            return speaker + preview;
         }
     }
+
+    /// <summary>Whether this node carries a jump Tag, i.e. something else can
+    /// jump to it. Drives the tag chip on the node row.</summary>
+    public bool HasTag => !string.IsNullOrWhiteSpace(Tag);
 
     private bool _isChoiceChild;
     /// <summary>True for a direct child of a Choice node — i.e. an answer button
@@ -296,7 +360,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
     {
         var def = new NodeConditionDef { Type = NodeConditionTypes.VariableEquals };
         Model.Conditions.Add(def);
-        var vm = new NodeConditionViewModel(def, removeCallback: RemoveCondition);
+        var vm = new NodeConditionViewModel(def, removeCallback: RemoveCondition,
+                                            context: ConditionContext.OneShot);
         Conditions.Add(vm);
         return vm;
     }
@@ -306,7 +371,8 @@ public sealed class DialogueNodeViewModel : ObservableObject
     {
         var def = new NodeConditionDef { Type = NodeConditionTypes.GroupAll, Conditions = new() };
         Model.Conditions.Add(def);
-        var vm = new NodeConditionViewModel(def, removeCallback: RemoveCondition);
+        var vm = new NodeConditionViewModel(def, removeCallback: RemoveCondition,
+                                            context: ConditionContext.OneShot);
         Conditions.Add(vm);
         return vm;
     }

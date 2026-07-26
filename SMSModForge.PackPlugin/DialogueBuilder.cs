@@ -35,6 +35,37 @@ namespace SMSModForge.PackPlugin
             public bool DisableVanillaTrigger;
             /// <summary>Author opted this dialogue into the F12 condition-state dump.</summary>
             public bool DebugConditions;
+
+            /// <summary>
+            /// Runtime-only: a queued dialogue whose conditions have passed but
+            /// which is waiting for the player to press the vanilla Talk button
+            /// (a <c>talkbutton-signal</c> rising edge) before it actually
+            /// plays. Set by the dispatcher's fire loop, cleared when it plays
+            /// or when its conditions fall.
+            /// </summary>
+            public bool ArmedForTalk;
+
+            /// <summary>
+            /// When true, this dialogue stays latched if its conditions pass
+            /// while another dialogue is playing, and starts right after that
+            /// one ends. When false (default — the original mod behavior), the
+            /// dispatcher marks it <see cref="MissedWindow"/> instead.
+            /// </summary>
+            public bool QueueBehind;
+
+            /// <summary>Highest wins when several dialogues are eligible on
+            /// the same tick; ties fall back to build (manifest) order.</summary>
+            public int Priority;
+
+            /// <summary>
+            /// Runtime-only: the conditions passed while another dialogue was
+            /// playing and this one doesn't <see cref="QueueBehind"/> — the
+            /// trigger is spent. Cleared on the falling edge so a fresh
+            /// conditions cycle can fire it again. Kept separate from
+            /// <see cref="HasPlayed"/> so a missed OneShot isn't permanently
+            /// consumed without ever playing.
+            /// </summary>
+            public bool MissedWindow;
             public Dialogue Dialogue;
             public GameObject GameObject;
             public Transform RoomTalkParent;
@@ -132,6 +163,8 @@ namespace SMSModForge.PackPlugin
                 Key = key,
                 OneShot = (bool?)manifest["oneShot"] ?? false,
                 Queued = (bool?)manifest["queued"] ?? false,
+                QueueBehind = (bool?)manifest["queueBehind"] ?? false,
+                Priority = (int?)manifest["priority"] ?? 0,
                 DebugConditions = (bool?)manifest["debugConditions"] ?? false,
                 DisableVanillaTrigger = (bool?)manifest["disableVanillaTrigger"] ?? false,
                 Dialogue = dlg,

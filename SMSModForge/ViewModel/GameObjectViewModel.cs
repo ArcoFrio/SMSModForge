@@ -1,0 +1,293 @@
+using System;
+using System.Collections.ObjectModel;
+using System.Linq;
+using SMSModForge.Model;
+
+namespace SMSModForge.ViewModel;
+
+/// <summary>
+/// Wraps a <see cref="GameObjectDef"/> with INPC for the Places editor's unified
+/// GameObjects tree. One node type covers everything: a sprite object, a
+/// sprite-less container, or the forced NPCs-root node. Two-way bound by the
+/// per-row editor (name, sprite path, transform, sorting, flags), and owns its
+/// nested child GameObjects and NPC placements so one tree renders recursively.
+/// </summary>
+public sealed class GameObjectViewModel : ObservableObject
+{
+    private readonly Action<GameObjectViewModel>? _removeCallback;
+    private readonly bool _parentInNpcSubtree;
+
+    public GameObjectDef Model { get; }
+
+    public GameObjectViewModel(GameObjectDef model, Action<GameObjectViewModel>? removeCallback = null,
+                               bool parentInNpcSubtree = false)
+    {
+        Model = model;
+        _removeCallback = removeCallback;
+        _parentInNpcSubtree = parentInNpcSubtree;
+        RemoveCommand = new RelayCommand(
+            () => _removeCallback?.Invoke(this),
+            () => _removeCallback != null && !IsNpcRoot);
+        Components = new ObservableCollection<ComponentRowViewModel>(
+            model.Components.Select(c => new ComponentRowViewModel(c, RemoveComponent)));
+        AddComponentCommand = new RelayCommand(() => AddComponent());
+        Children = new ObservableCollection<GameObjectViewModel>(
+            model.Children.Select(c => new GameObjectViewModel(c, RemoveChild, IsInNpcSubtree)));
+        AddChildCommand = new RelayCommand(() => AddChild());
+        Npcs = new ObservableCollection<NpcPlacementViewModel>(
+            model.Npcs.Select(n => new NpcPlacementViewModel(n, RemoveNpc)));
+        AddNpcCommand = new RelayCommand(() => AddNpc());
+        // Polled every frame by the runtime, so a one-shot Random roll here
+        // would re-roll constantly — same context the integration rules use.
+        ActiveConditions = new ObservableCollection<NodeConditionViewModel>(
+            model.ActiveConditions.Select(c => new NodeConditionViewModel(
+                c, RemoveActiveCondition, context: ConditionContext.Rule)));
+        AddActiveConditionCommand = new RelayCommand(() => AddActiveCondition());
+    }
+
+    // ── Activation conditions ─────────────────────────────────────────────
+    /// <summary>Conditions driving whether this GameObject is active. Empty =
+    /// it just keeps <see cref="StartActive"/> forever.</summary>
+    public ObservableCollection<NodeConditionViewModel> ActiveConditions { get; }
+    public RelayCommand AddActiveConditionCommand { get; }
+
+    public NodeConditionViewModel AddActiveCondition()
+    {
+        var def = new NodeConditionDef { Type = NodeConditionTypes.VariableEquals };
+        Model.ActiveConditions.Add(def);
+        var vm = new NodeConditionViewModel(def, RemoveActiveCondition, context: ConditionContext.Rule);
+        ActiveConditions.Add(vm);
+        OnPropertyChanged(nameof(HasActiveConditions));
+        RefreshVanillaChange();
+        return vm;
+    }
+
+    public void RemoveActiveCondition(NodeConditionViewModel vm)
+    {
+        Model.ActiveConditions.Remove(vm.Model);
+        ActiveConditions.Remove(vm);
+        OnPropertyChanged(nameof(HasActiveConditions));
+        RefreshVanillaChange();
+    }
+
+    /// <summary>True once the object is condition-gated — the "switch back off"
+    /// choice only means anything then.</summary>
+    public bool HasActiveConditions => ActiveConditions.Count > 0;
+
+    /// <summary>Switch the object back off when the conditions stop passing
+    /// (continuous gating), vs latching it on the first time they pass.</summary>
+    public bool DeactivateWhenUnmet
+    {
+        get => Model.DeactivateWhenUnmet;
+        set { Model.DeactivateWhenUnmet = value; OnPropertyChanged(); }
+    }
+
+    // ── Bind to an existing object ────────────────────────────────────────
+
+    /// <summary>Reach an object that already exists in the scene instead of
+    /// creating one — the way a pack modifies a level it doesn't own.</summary>
+    public bool Bind
+    {
+        get => Model.Bind;
+        set
+        {
+            if (Model.Bind == value) return;
+            Model.Bind = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsCreated));
+            RefreshVanillaChange();
+        }
+    }
+
+    /// <summary>Inverse of <see cref="Bind"/> — the sprite / sorting / parallax
+    /// fields only mean something for an object this pack actually creates.</summary>
+    public bool IsCreated => !Model.Bind;
+
+    /// <summary>
+    /// True while this node actually changes the vanilla object it's bound to.
+    /// Compared live against the seeded baseline — the override flags are only
+    /// computed at save, so relying on those would leave the row unmarked until
+    /// you saved. False for objects the pack creates: those are additions, not
+    /// changes to the game's own scene.
+    /// </summary>
+    public bool HasVanillaChange => VanillaDelta.IsLiveVanillaChange(Model);
+
+    /// <summary>Re-read <see cref="HasVanillaChange"/>. Called from every edit
+    /// that can flip it, so the row's highlight tracks typing.</summary>
+    public void RefreshVanillaChange() => OnPropertyChanged(nameof(HasVanillaChange));
+
+    public bool OverrideTransform
+    {
+        get => Model.OverrideTransform;
+        set { Model.OverrideTransform = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public bool OverrideActive
+    {
+        get => Model.OverrideActive;
+        set { Model.OverrideActive = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    /// <summary>True for the NPCs-root node and everything nested under it —
+    /// the part of the tree whose transforms compose locally and where NPC
+    /// placements belong.</summary>
+    public bool IsInNpcSubtree => IsNpcRoot || _parentInNpcSubtree;
+
+    /// <summary>Only nodes inside the NPCs subtree offer "+ Add NPC child".</summary>
+    public bool CanHostNpcs => IsInNpcSubtree;
+
+    /// <summary>Removes this GameObject row from its parent (place or parent node).
+    /// Disabled for the forced NPCs-root node.</summary>
+    public RelayCommand RemoveCommand { get; }
+
+    /// <summary>True for the forced NPCs-container node — its name is locked and
+    /// it can't be removed, but it still carries a transform, components, and
+    /// children.</summary>
+    public bool IsNpcRoot => Model.IsNpcRoot;
+
+    /// <summary>False for the forced NPCs-root node (name locked to <c>NPCs</c>).</summary>
+    public bool CanEditIdentity => !IsNpcRoot;
+
+    // ── Nested child GameObjects (hierarchy) ──────────────────────────────
+    /// <summary>GameObjects nested under this one. Same VM type, so the editor
+    /// renders them recursively with the full set of controls.</summary>
+    public ObservableCollection<GameObjectViewModel> Children { get; }
+    public RelayCommand AddChildCommand { get; }
+
+    public GameObjectViewModel AddChild()
+    {
+        var def = new GameObjectDef();
+        Model.Children.Add(def);
+        var vm = new GameObjectViewModel(def, RemoveChild, IsInNpcSubtree);
+        Children.Add(vm);
+        return vm;
+    }
+
+    public void RemoveChild(GameObjectViewModel vm)
+    {
+        Model.Children.Remove(vm.Model);
+        Children.Remove(vm);
+    }
+
+    // ── NPC placements parented here ──────────────────────────────────────
+    /// <summary>NPC placements hung directly under this GameObject.</summary>
+    public ObservableCollection<NpcPlacementViewModel> Npcs { get; }
+    public RelayCommand AddNpcCommand { get; }
+
+    public NpcPlacementViewModel AddNpc()
+    {
+        var def = new NpcPlacementDef();
+        Model.Npcs.Add(def);
+        var vm = new NpcPlacementViewModel(def, RemoveNpc);
+        Npcs.Add(vm);
+        RefreshVanillaChange();
+        return vm;
+    }
+
+    public void RemoveNpc(NpcPlacementViewModel vm)
+    {
+        Model.Npcs.Remove(vm.Model);
+        Npcs.Remove(vm);
+        RefreshVanillaChange();
+    }
+
+    // ── Utility components ────────────────────────────────────────────────
+    public ObservableCollection<ComponentRowViewModel> Components { get; }
+    public RelayCommand AddComponentCommand { get; }
+
+    public ComponentRowViewModel AddComponent()
+    {
+        var def = new ComponentDef();
+        Model.Components.Add(def);
+        var vm = new ComponentRowViewModel(def, RemoveComponent);
+        Components.Add(vm);
+        RefreshVanillaChange();
+        return vm;
+    }
+
+    public void RemoveComponent(ComponentRowViewModel vm)
+    {
+        Model.Components.Remove(vm.Model);
+        Components.Remove(vm);
+        RefreshVanillaChange();
+    }
+
+    public string Name
+    {
+        get => Model.Name;
+        set { Model.Name = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+    }
+
+    public string Sprite
+    {
+        get => Model.Sprite;
+        set { Model.Sprite = value; OnPropertyChanged(); OnPropertyChanged(nameof(PreviewSprite)); }
+    }
+
+    /// <summary>What the preview draws — the pack's sprite, else this object's
+    /// extracted vanilla art (see <see cref="GameObjectDef.VanillaArtPath"/>).</summary>
+    public string PreviewSprite => Model.PreviewSprite;
+
+    public float X
+    {
+        get => Model.X;
+        set { Model.X = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public float Y
+    {
+        get => Model.Y;
+        set { Model.Y = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public float RotationZ
+    {
+        get => Model.RotationZ;
+        set { Model.RotationZ = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public float ScaleX
+    {
+        get => Model.ScaleX;
+        set { Model.ScaleX = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public float ScaleY
+    {
+        get => Model.ScaleY;
+        set { Model.ScaleY = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public int SortingOrder
+    {
+        get => Model.SortingOrder;
+        set { Model.SortingOrder = value; OnPropertyChanged(); }
+    }
+
+    public bool ParallaxDisabled
+    {
+        get => Model.ParallaxDisabled;
+        set { Model.ParallaxDisabled = value; OnPropertyChanged(); }
+    }
+
+    public bool StartActive
+    {
+        get => Model.StartActive;
+        set { Model.StartActive = value; OnPropertyChanged(); RefreshVanillaChange(); }
+    }
+
+    public float StartAlpha
+    {
+        get => Model.StartAlpha;
+        set { Model.StartAlpha = value; OnPropertyChanged(); }
+    }
+
+    public string Mask
+    {
+        get => Model.Mask;
+        set { Model.Mask = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Short label for headers / tooltips.</summary>
+    public string Display => string.IsNullOrWhiteSpace(Name) ? "(unnamed GameObject)" : Name;
+}

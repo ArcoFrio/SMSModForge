@@ -46,8 +46,8 @@ public sealed class PreviewQualityDef : ObservableObject
 public static class PreviewQualityManager
 {
     // Catalogue, best → cheapest. "Ultra" reproduces the original uncapped-ish
-    // 60 Hz + 4× behaviour; "High" is the default — same per-frame fidelity,
-    // just a 30 fps cap, which roughly halves CPU versus Ultra.
+    // 60 Hz + 4× behaviour; "Medium" is the default — a lighter baseline now
+    // that the NPC preview can render much larger surfaces than the bust one.
     public static IReadOnlyList<PreviewQualityDef> All { get; } = new[]
     {
         new PreviewQualityDef { Name = "Ultra",  MaxFps = 60, SuperSample = true,  Description = "60 fps, 4× anti-aliasing. Smoothest motion, highest CPU." },
@@ -56,8 +56,8 @@ public static class PreviewQualityManager
         new PreviewQualityDef { Name = "Low",    MaxFps = 20, SuperSample = false, Description = "20 fps, no anti-aliasing. Lightest; choppier motion." },
     };
 
-    // Index 1 ("High") is the default + fallback.
-    private static readonly PreviewQualityDef Default = All[1];
+    // Index 2 ("Medium") is the default + fallback.
+    private static readonly PreviewQualityDef Default = All[2];
 
     public static PreviewQualityDef Current { get; private set; } = Default;
 

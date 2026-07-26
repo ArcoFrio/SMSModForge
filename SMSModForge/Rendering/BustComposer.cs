@@ -91,6 +91,78 @@ public static class BustComposer
         }
     }
 
+    /// <summary>
+    /// Decodes a PNG to a BGRA32 buffer at its native resolution, capped so the
+    /// longer side is at most <paramref name="maxSide"/> (aspect preserved).
+    /// Used by the NPC preview so a 1024-px pose renders near its real detail
+    /// instead of being squashed to 256² first. Returns a 1×1 transparent buffer
+    /// on failure.
+    /// </summary>
+    public static (byte[] pixels, int w, int h) LoadPngNative(string absPath, int maxSide)
+    {
+        if (string.IsNullOrEmpty(absPath) || !File.Exists(absPath))
+            return (new byte[4], 1, 1);
+
+        using var stream = File.OpenRead(absPath);
+        var decoder = new PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+        var frame = decoder.Frames[0];
+        int nw = frame.PixelWidth, nh = frame.PixelHeight;
+        double scale = System.Math.Min(1.0, maxSide / (double)System.Math.Max(nw, nh));
+        int w = System.Math.Max(1, (int)System.Math.Round(nw * scale));
+        int h = System.Math.Max(1, (int)System.Math.Round(nh * scale));
+        return (LoadInto(frame, w, h), w, h);
+    }
+
+    /// <summary>Decodes a PNG scaled to exactly <paramref name="w"/>×<paramref name="h"/>
+    /// BGRA — used to load the mask / blink at the same grid as the base.</summary>
+    public static byte[] LoadPngAt(string absPath, int w, int h)
+    {
+        if (string.IsNullOrEmpty(absPath) || !File.Exists(absPath))
+            return new byte[w * h * 4];
+        using var stream = File.OpenRead(absPath);
+        var decoder = new PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
+        return LoadInto(decoder.Frames[0], w, h);
+    }
+
+    private static byte[] LoadInto(BitmapFrame frame, int w, int h)
+    {
+        var converted = new FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
+        BitmapSource src = converted;
+        if (converted.PixelWidth != w || converted.PixelHeight != h)
+            src = new TransformedBitmap(converted, new System.Windows.Media.ScaleTransform(
+                w / (double)converted.PixelWidth, h / (double)converted.PixelHeight));
+        var buf = new byte[w * h * 4];
+        src.CopyPixels(buf, w * 4, 0);
+        return buf;
+    }
+
+    /// <summary>Same-size premultiplied source-over: composite a straight-alpha
+    /// <paramref name="overlayStraight"/> onto <paramref name="destPremul"/> when
+    /// both are the identical <paramref name="w"/>×<paramref name="h"/> grid (the
+    /// NPC preview loads blink at the base's resolution, so no rescale is needed).</summary>
+    public static void CompositeSame(byte[] destPremul, byte[] overlayStraight, int w, int h)
+    {
+        int n = w * h * 4;
+        if (destPremul.Length != n || overlayStraight.Length != n) return;
+        for (int i = 0; i < n; i += 4)
+        {
+            float a = overlayStraight[i + 3] / 255f;
+            if (a <= 0f) continue;
+            // Premultiply the overlay, then source-over. Everything stays in the
+            // 0..1 domain and is scaled to bytes once at write time — mixing a
+            // 0..1 premultiplied colour with a 0..255 dest term (the earlier
+            // bug) crushed the overlay to black.
+            float ob = overlayStraight[i    ] / 255f * a;
+            float og = overlayStraight[i + 1] / 255f * a;
+            float or = overlayStraight[i + 2] / 255f * a;
+            float invA = 1f - a;
+            destPremul[i    ] = (byte)((ob + destPremul[i    ] / 255f * invA) * 255f);
+            destPremul[i + 1] = (byte)((og + destPremul[i + 1] / 255f * invA) * 255f);
+            destPremul[i + 2] = (byte)((or + destPremul[i + 2] / 255f * invA) * 255f);
+            destPremul[i + 3] = (byte)((a + destPremul[i + 3] / 255f * invA) * 255f);
+        }
+    }
+
     public static (float r, float g, float b, float a) ParseTint(string hex)
     {
         if (string.IsNullOrEmpty(hex)) return (1, 1, 1, 1);

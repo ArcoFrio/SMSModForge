@@ -37,24 +37,94 @@ public sealed class PackVariableViewModel : ObservableObject
                 (string.IsNullOrWhiteSpace(Model.DefaultValue) || !Model.DefaultValue.TrimStart().StartsWith("[")))
             {
                 Model.DefaultValue = "[]";
-                OnPropertyChanged(nameof(DefaultValue));
+            }
+            // Coerce the carried-over default into the new type's domain so
+            // the type-specific editors never show an impossible value:
+            // Bool → "true"/"false", Int → whole number (numeric leftovers
+            // truncate), Float → number; unparsable leftovers become the
+            // type's zero value.
+            switch (value)
+            {
+                case PackVariableType.Bool:
+                    if (!bool.TryParse(Model.DefaultValue, out _))
+                        Model.DefaultValue = "false";
+                    break;
+                case PackVariableType.Int:
+                    Model.DefaultValue = double.TryParse(Model.DefaultValue,
+                            System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture, out var dInt)
+                        ? ((long)dInt).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        : "0";
+                    break;
+                case PackVariableType.Float:
+                    Model.DefaultValue = double.TryParse(Model.DefaultValue,
+                            System.Globalization.NumberStyles.Float,
+                            System.Globalization.CultureInfo.InvariantCulture, out var dFloat)
+                        ? dFloat.ToString(System.Globalization.CultureInfo.InvariantCulture)
+                        : "0";
+                    break;
             }
             RebuildInitialValuesFromModel();
             OnPropertyChanged();
+            OnPropertyChanged(nameof(DefaultValue));
+            OnPropertyChanged(nameof(DefaultBool));
             OnPropertyChanged(nameof(IsNumeric));
             OnPropertyChanged(nameof(IsList));
+            OnPropertyChanged(nameof(IsBool));
+            OnPropertyChanged(nameof(IsScalarText));
         }
     }
 
     public string DefaultValue
     {
         get => Model.DefaultValue;
-        set { Model.DefaultValue = value; OnPropertyChanged(); }
+        set
+        {
+            var v = value ?? "";
+            // Type-aware input limiting: numeric variables only accept text
+            // that is (or is on its way to becoming) a number — a lone "-"
+            // or a trailing "." are allowed as in-progress states. Anything
+            // else is rejected and the textbox snaps back via the
+            // PropertyChanged we raise without committing.
+            if (Type == PackVariableType.Int &&
+                !System.Text.RegularExpressions.Regex.IsMatch(v, @"^-?\d*$"))
+            { OnPropertyChanged(); return; }
+            if (Type == PackVariableType.Float &&
+                !System.Text.RegularExpressions.Regex.IsMatch(v, @"^-?\d*\.?\d*$"))
+            { OnPropertyChanged(); return; }
+            Model.DefaultValue = v;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(DefaultBool));
+        }
+    }
+
+    /// <summary>Checkbox editor surface for Bool variables — the only two
+    /// values a bool default can hold. Writes normalize the stored string
+    /// to lowercase "true"/"false".</summary>
+    public bool DefaultBool
+    {
+        get => string.Equals(Model.DefaultValue?.Trim(), "true", StringComparison.OrdinalIgnoreCase);
+        set
+        {
+            Model.DefaultValue = value ? "true" : "false";
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(DefaultValue));
+        }
     }
 
     /// <summary>True for <see cref="PackVariableType.List"/> — drives the
     /// initial-values editor (vs. the scalar default-value box).</summary>
     public bool IsList => Type == PackVariableType.List;
+
+    /// <summary>True for <see cref="PackVariableType.Bool"/> — swaps the
+    /// scalar default textbox for a checkbox.</summary>
+    public bool IsBool => Type == PackVariableType.Bool;
+
+    /// <summary>The plain default-value textbox shows for every type that
+    /// isn't handled by a dedicated editor (bool → checkbox, list → rows).
+    /// Int/Float share it but get numeric-only input filtering in the
+    /// <see cref="DefaultValue"/> setter.</summary>
+    public bool IsScalarText => !IsList && !IsBool;
 
     // ── List initial values ──────────────────────────────────────────
     // For a List variable the default is a JSON array; this collection is the
@@ -150,14 +220,37 @@ public sealed class PackVariableViewModel : ObservableObject
     public string MinValue
     {
         get => Model.MinValue ?? "";
-        set { Model.MinValue = string.IsNullOrWhiteSpace(value) ? null : value.Trim(); OnPropertyChanged(); }
+        set
+        {
+            if (!IsValidNumericInput(value)) { OnPropertyChanged(); return; }
+            Model.MinValue = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+            OnPropertyChanged();
+        }
     }
 
     /// <summary>Optional upper clamp (numeric variables only).</summary>
     public string MaxValue
     {
         get => Model.MaxValue ?? "";
-        set { Model.MaxValue = string.IsNullOrWhiteSpace(value) ? null : value.Trim(); OnPropertyChanged(); }
+        set
+        {
+            if (!IsValidNumericInput(value)) { OnPropertyChanged(); return; }
+            Model.MaxValue = string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>Same in-progress-number filter the default-value box uses —
+    /// Int variables reject decimal points, Float allows one. Non-numeric
+    /// types accept anything (the boxes are disabled for them anyway).</summary>
+    private bool IsValidNumericInput(string? v)
+    {
+        v ??= "";
+        if (Type == PackVariableType.Int)
+            return System.Text.RegularExpressions.Regex.IsMatch(v, @"^-?\d*$");
+        if (Type == PackVariableType.Float)
+            return System.Text.RegularExpressions.Regex.IsMatch(v, @"^-?\d*\.?\d*$");
+        return true;
     }
 
     /// <summary>

@@ -49,7 +49,8 @@ namespace SMSModForge.PackPlugin
                 case "SetVariable":
                     {
                         string name = (string)p["name"];
-                        string value = (string)p["value"] ?? "";
+                        // $varName copies another variable's current value.
+                        string value = DerefParam(p, "value", ctx);
                         // Vanilla writes go to the GC2 GlobalNameVariable store and
                         // don't touch the pack store, so they never need a flush.
                         if (IsVanilla(p)) { SetGameVar(name, value); return false; }
@@ -69,7 +70,10 @@ namespace SMSModForge.PackPlugin
                     }
 
                 case "SetActorBust":
-                    ctx.Actors.SetBust((string)p["actor"] ?? "", (string)p["bustKey"] ?? "");
+                    // bustKey accepts a $varName, so an action can pick the
+                    // outfit dynamically from a pack variable (literal names
+                    // pass through Deref unchanged).
+                    ctx.Actors.SetBust((string)p["actor"] ?? "", DerefParam(p, "bustKey", ctx));
                     return false;
 
                 case "SetActorExpression":
@@ -100,13 +104,16 @@ namespace SMSModForge.PackPlugin
                 case "LeaveBust":
                     {
                         // Trigger the bust's vanilla fade-out animation by
-                        // activating the MBase1/Leave child (which carries a
-                        // FadeInSprite + Trigger that handle the staged exit
-                        // + eventual parent deactivation). If the bust GO
-                        // doesn't have a Leave child (e.g. a pack-built
-                        // bust without that prefab branch), we fall back to
-                        // an immediate SetActive(false) so the author still
-                        // gets the bust off-stage.
+                        // activating the base child's Leave branch (which
+                        // carries a FadeInSprite + Trigger that handle the
+                        // staged exit + eventual parent deactivation). The base
+                        // child is MBase1 on most busts but e.g. D1Base on
+                        // others, so we resolve it the same way sprite-focus
+                        // does (FindMBase: MBase1, else first child) rather than
+                        // hardcoding the name. If the bust has no Leave branch
+                        // (e.g. a pack-built bust without that prefab), fall
+                        // back to an immediate SetActive(false) so the author
+                        // still gets the bust off-stage.
                         var bust = ctx.Actors.GetCurrentBustGo((string)p["actor"] ?? "");
                         if (bust == null)
                         {
@@ -114,7 +121,8 @@ namespace SMSModForge.PackPlugin
                                                 (string)p["actor"] + "'");
                             return false;
                         }
-                        var leave = bust.transform.Find("MBase1/Leave");
+                        var mbase = ActorRegistry.FindMBase(bust);
+                        var leave = mbase != null ? mbase.Find("Leave") : null;
                         if (leave != null)
                             leave.gameObject.SetActive(true);
                         else
@@ -131,8 +139,15 @@ namespace SMSModForge.PackPlugin
                         // 'target' is canonical; 'path'/'scene' are read as legacy
                         // fallbacks so pre-unify packs keep working.
                         string kind = (string)p["kind"] ?? "";
-                        string target = (string)p["target"] ?? (string)p["path"] ?? (string)p["scene"] ?? "";
+                        // target / overlayLevel accept a $varName, so a rule can act on
+                        // whichever GameObject a variable currently names — e.g. hiding
+                        // "the one that was showing" without listing every candidate.
+                        string target = Deref((string)p["target"] ?? (string)p["path"] ?? (string)p["scene"] ?? "", ctx);
                         bool.TryParse((string)p["active"] ?? "true", out var active);
+
+                        // A variable that hasn't been set yet resolves to empty; that
+                        // means "nothing to act on", not a missing object.
+                        if (string.IsNullOrEmpty(target)) return false;
 
                         if (kind == "Scene")
                         {
@@ -150,7 +165,7 @@ namespace SMSModForge.PackPlugin
                             GameObject levelGo = null;
                             if (IsOverlayKind(kind))
                             {
-                                string overlayLevel = (string)p["overlayLevel"] ?? "";
+                                string overlayLevel = Deref((string)p["overlayLevel"] ?? "", ctx);
                                 if (!string.IsNullOrEmpty(overlayLevel))
                                 {
                                     var level5 = GameObject.Find("5_Levels")?.transform;
@@ -390,47 +405,40 @@ namespace SMSModForge.PackPlugin
                         string target = (string)p["target"] ?? (string)p["name"] ?? "";
                         if (string.IsNullOrEmpty(target)) return false;
 
-                        var items = new System.Collections.Generic.List<string>();
                         // 'fromList' (Variable operation) names a List variable
                         // directly — no '$' prefix. The standalone 'source' param
                         // accepts a literal CSV, '$varName', or a bare list name.
                         string fromList = (string)p["fromList"];
                         string source = !string.IsNullOrEmpty(fromList) ? fromList : ((string)p["source"] ?? "");
-                        string varRef = source.StartsWith("$") ? source.Substring(1)
-                                      : !string.IsNullOrEmpty(fromList) ? fromList : null;
+                        var items = ReadListParam(source, ctx, treatBareAsVarName: !string.IsNullOrEmpty(fromList));
+                        // 'excluding' subtracts a second list before picking —
+                        // the set-difference-then-pick that "claim a free slot
+                        // nobody else is standing on" needs. Same three shapes
+                        // as 'source'. Comparison is exact + ordinal, matching
+                        // ListContains.
+                        int beforeExcluded = items.Count;
+                        string excluding = (string)p["excluding"] ?? "";
+                        if (!string.IsNullOrEmpty(excluding))
+                        {
+                            foreach (var taken in ReadListParam(excluding, ctx))
+                                items.RemoveAll(i => string.Equals(i, taken, System.StringComparison.Ordinal));
+                        }
 
-                        if (varRef != null && ctx.Vars != null)
-                        {
-                            // Prefer the List variable's JSON array; fall back to a
-                            // CSV string variable of the same name.
-                            var listItems = ctx.Vars.GetList(varRef);
-                            if (listItems.Count > 0)
-                                items.AddRange(listItems);
-                            else
-                                foreach (var part in (ctx.Vars.GetString(varRef) ?? "").Split(','))
-                                {
-                                    var trimmed = part.Trim();
-                                    if (!string.IsNullOrEmpty(trimmed)) items.Add(trimmed);
-                                }
-                        }
-                        else
-                        {
-                            foreach (var part in source.Split(','))
-                            {
-                                var trimmed = part.Trim();
-                                if (!string.IsNullOrEmpty(trimmed)) items.Add(trimmed);
-                            }
-                        }
                         if (items.Count == 0)
                         {
-                            ctx.Log?.LogInfo("[SMSModForge.PackPlugin] Random-from-list: source '" +
-                                             source + "' is empty — " + target + " = \"\"");
-                            ctx.Vars?.Set(target, "");
+                            // 'fallback' is what to write when nothing survives —
+                            // an overflow slot with unlimited capacity, say.
+                            // Absent, the old behaviour (clear the target) stands.
+                            string fallback = DerefParam(p, "fallback", ctx);
+                            ctx.Log?.LogInfo("[SMSModForge.PackPlugin] Random-from-list: source '" + source +
+                                             "' had " + beforeExcluded + " item(s), none left after excluding '" +
+                                             excluding + "' — " + target + " = '" + fallback + "'");
+                            ctx.Vars?.Set(target, fallback);
                             return false;
                         }
                         string picked = items[UnityEngine.Random.Range(0, items.Count)];
                         ctx.Log?.LogInfo("[SMSModForge.PackPlugin] Random-from-list: " + target + " = '" +
-                                         picked + "' (picked from " + items.Count + ": " +
+                                         picked + "' (picked from " + items.Count + " of " + beforeExcluded + ": " +
                                          string.Join(", ", items.ToArray()) + ")");
                         ctx.Vars?.Set(target, picked);
                         return false;
@@ -439,7 +447,7 @@ namespace SMSModForge.PackPlugin
                 case "AddToList":
                     {
                         string listName = (string)p["list"] ?? "";
-                        string value = (string)p["value"] ?? "";
+                        string value = DerefParam(p, "value", ctx);
                         bool unique = bool.TryParse((string)p["unique"], out var u) && u;
                         if (unique)
                         {
@@ -453,7 +461,7 @@ namespace SMSModForge.PackPlugin
                 case "RemoveFromList":
                     {
                         string listName = (string)p["list"] ?? "";
-                        string value = (string)p["value"] ?? "";
+                        string value = DerefParam(p, "value", ctx);
                         ctx.Vars?.ListRemove(listName, value);
                         return false;
                     }
@@ -507,6 +515,16 @@ namespace SMSModForge.PackPlugin
                             return ExecuteOne(chosen, ctx);
                         }
                         return false; // unreachable when chances are sane
+                    }
+
+                case "SetWeather":
+                    {
+                        string weather = (string)p["weather"] ?? "Clear";
+                        WeatherRuntime.Apply(weather);
+                        ctx.Log?.LogInfo("[SMSModForge.PackPlugin] SetWeather: " + weather +
+                                         " (rainy-day=" + WeatherRuntime.IsRaining +
+                                         ", snowy-day=" + WeatherRuntime.IsSnowing + ")");
+                        return false;
                     }
 
                 case "CountList":
@@ -651,6 +669,88 @@ namespace SMSModForge.PackPlugin
             => string.Equals((string)p["source"], "vanilla", System.StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
+        /// Resolves a <c>$varName</c> reference in a *value* param to that
+        /// variable's current value; anything else is returned verbatim.
+        /// <para/>
+        /// The <c>$</c> convention already existed on
+        /// <c>PickRandomFromList.source</c>; this generalises it to the value
+        /// params of the list and variable actions, which is what lets a rule
+        /// say "take the slot this character is standing on out of the occupied
+        /// list" (<c>RemoveFromList value=$Location_Anis</c>) instead of only
+        /// ever handling literals.
+        /// <para/>
+        /// Escape a literal dollar sign by doubling it (<c>$$</c>), so authored
+        /// text that genuinely starts with '$' is still expressible. An unknown
+        /// variable resolves to empty, matching how the stores read undeclared
+        /// names elsewhere.
+        /// </summary>
+        internal static string Deref(string raw, PackContext ctx)
+        {
+            if (string.IsNullOrEmpty(raw) || raw[0] != '$') return raw;
+            if (raw.Length > 1 && raw[1] == '$') return raw.Substring(1);   // "$$x" → literal "$x"
+            string name = raw.Substring(1);
+            if (ctx?.Vars == null) return "";
+            return ctx.Vars.GetString(name) ?? "";
+        }
+
+        /// <summary>Reads a param and dereferences a <c>$varName</c> in it.</summary>
+        private static string DerefParam(JObject p, string key, PackContext ctx)
+            => Deref((string)p[key] ?? "", ctx);
+
+        /// <summary>
+        /// Reads a list-shaped param into its items. Accepts the three shapes
+        /// <c>PickRandomFromList.source</c> has always taken, so <c>excluding</c>
+        /// behaves identically:
+        /// <list type="number">
+        ///   <item>a literal CSV — <c>"A,B,C"</c></item>
+        ///   <item><c>$varName</c> — a List variable (JSON array), or a String
+        ///   variable holding CSV as a fallback</item>
+        ///   <item>a bare variable name, when <paramref name="treatBareAsVarName"/>
+        ///   is set (the Variable action's <c>fromList</c> operation)</item>
+        /// </list>
+        /// Returns an empty list rather than null for anything unresolvable.
+        /// </summary>
+        internal static System.Collections.Generic.List<string> ReadListParam(
+            string spec, PackContext ctx, bool treatBareAsVarName = false)
+        {
+            var items = new System.Collections.Generic.List<string>();
+            if (string.IsNullOrEmpty(spec)) return items;
+
+            string varRef = spec.StartsWith("$") ? spec.Substring(1)
+                          : treatBareAsVarName ? spec : null;
+
+            if (varRef != null && ctx?.Vars != null)
+            {
+                // Prefer the List variable's JSON array; fall back to a CSV
+                // string variable of the same name.
+                var listItems = ctx.Vars.GetList(varRef);
+                if (listItems.Count > 0) { items.AddRange(listItems); return items; }
+
+                spec = ctx.Vars.GetString(varRef) ?? "";
+                // An EMPTY List variable stores the literal "[]", and CSV-splitting
+                // that yields one bogus item spelled "[]" — which then gets picked
+                // and written to the target. Recognise a JSON array as an empty
+                // list instead. This matters much more now that 'excluding' can
+                // legitimately empty a source, and the 'fallback' path depends on
+                // actually reaching zero items.
+                string trimmed = spec.Trim();
+                if (trimmed.Length >= 2 && trimmed[0] == '[' && trimmed[trimmed.Length - 1] == ']')
+                    return items;
+            }
+            else if (varRef != null)
+            {
+                return items;   // '$ref' with no store to resolve against
+            }
+
+            foreach (var part in spec.Split(','))
+            {
+                var trimmed = part.Trim();
+                if (!string.IsNullOrEmpty(trimmed)) items.Add(trimmed);
+            }
+            return items;
+        }
+
+        /// <summary>
         /// Write a vanilla GC2 global by name, inferring the stored type from the
         /// authored string: <c>true</c>/<c>false</c> → bool, a parseable number →
         /// double, anything else → string. Mirrors how the editor's value box is
@@ -725,17 +825,18 @@ namespace SMSModForge.PackPlugin
         /// Accepts the legacy "Level Overlay" token so packs authored before the
         /// rename still resolve.</summary>
         private static bool IsOverlayKind(string kind)
-            => kind == "Extra GameObjects" || kind == "Level Overlay";
+            => kind == "GameObjects" || kind == "Level Overlay";
 
         private static GameObject ResolveByKind(JObject p, PackContext ctx)
         {
-            string target = (string)p["target"] ?? (string)p["path"] ?? "";
+            // Same $varName support as the Set-Active path above.
+            string target = Deref((string)p["target"] ?? (string)p["path"] ?? "", ctx);
             if (string.IsNullOrEmpty(target)) return null;
 
             string kind = (string)p["kind"] ?? "";
             if (IsOverlayKind(kind))
             {
-                string overlayLevel = (string)p["overlayLevel"] ?? "";
+                string overlayLevel = Deref((string)p["overlayLevel"] ?? "", ctx);
                 if (!string.IsNullOrEmpty(overlayLevel))
                 {
                     var level5 = GameObject.Find("5_Levels")?.transform;
@@ -837,6 +938,13 @@ namespace SMSModForge.PackPlugin
         public WallpaperRegistry Wallpapers;
         public SfxRegistry Sfx;
         public UpdateRulesRegistry UpdateRules;
+
+        /// <summary>GameObjects whose active state is driven by authored
+        /// <c>activeConditions</c>. Populated by <see cref="PlaceFactory"/>.</summary>
+        public GameObjectGateRegistry Gates;
+        /// <summary>Index of the pack's DailyChance conditions — report-only,
+        /// so the day-change hook can log the day's outcomes.</summary>
+        public DailyChanceRegistry DailyChances;
         public ManualLogSource Log;
         public MonoBehaviour Plugin;
 

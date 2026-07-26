@@ -4,7 +4,7 @@ using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
 
-public sealed class CharacterViewModel : ObservableObject
+public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 {
     public CharacterDef Model { get; }
     public ObservableCollection<OutfitViewModel> Outfits { get; }
@@ -46,4 +46,26 @@ public sealed class CharacterViewModel : ObservableObject
         Model.Outfits.Remove(vm.Model);
         Outfits.Remove(vm);
     }
+
+    // ── Sidebar search (IFilterableTreeNode) ──────────────────────────────
+    private bool _isFilteredIn = true;
+    public bool IsFilteredIn
+    {
+        get => _isFilteredIn;
+        set { if (_isFilteredIn == value) return; _isFilteredIn = value; OnPropertyChanged(); }
+    }
+
+    private bool _isExpanded = true;
+    public bool IsExpanded
+    {
+        get => _isExpanded;
+        set { if (_isExpanded == value) return; _isExpanded = value; OnPropertyChanged(); }
+    }
+
+    private bool _expandedBeforeFilter = true;
+    public void StashExpansion() => _expandedBeforeFilter = IsExpanded;
+    public void RestoreExpansion() => IsExpanded = _expandedBeforeFilter;
+
+    public string FilterKey => $"{Name} {DisplayName}";
+    public System.Collections.Generic.IEnumerable<IFilterableTreeNode> FilterChildren => Outfits;
 }

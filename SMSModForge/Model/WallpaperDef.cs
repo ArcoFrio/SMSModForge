@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -49,11 +50,35 @@ public sealed class WallpaperDef
     public string? ExternalSpritePath { get; set; }
 
     /// <summary>
-    /// Optional gate for the selector button's visibility. The runtime
-    /// re-evaluates this each frame; while the condition fails the
-    /// button is hidden (matches the host mod's <c>SetActive(Event_Seen…)</c>
-    /// pattern). Empty / null = always visible.
+    /// Legacy single-condition gate. Older packs carried one condition
+    /// object here; on load it's folded into <see cref="UnlockConditions"/>
+    /// (see the deserialize hook below) and the field is nulled so writes
+    /// always emit the list form. Never authored anymore.
     /// </summary>
     [JsonProperty("unlockCondition", Order = 5, NullValueHandling = NullValueHandling.Ignore)]
     public NodeConditionDef? UnlockCondition { get; set; }
+
+    /// <summary>
+    /// Gate for the selector button's visibility — the standard condition
+    /// list (AND semantics, group support, same vocabulary as everywhere
+    /// else). Re-evaluated each frame by the runtime; while it fails the
+    /// button is hidden (matches the host mod's <c>SetActive(Event_Seen…)</c>
+    /// pattern). Empty = always visible.
+    /// </summary>
+    [JsonProperty("unlockConditions", Order = 6)]
+    public List<NodeConditionDef> UnlockConditions { get; set; } = new();
+    public bool ShouldSerializeUnlockConditions() => UnlockConditions.Count > 0;
+
+    [System.Runtime.Serialization.OnDeserialized]
+    internal void OnDeserializedMigrateUnlock(System.Runtime.Serialization.StreamingContext _)
+    {
+        // Promote the legacy single condition to the list so the rest of
+        // the editor sees one canonical field; drop the legacy slot so a
+        // re-save emits only the list form.
+        if (UnlockCondition != null)
+        {
+            UnlockConditions.Insert(0, UnlockCondition);
+            UnlockCondition = null;
+        }
+    }
 }

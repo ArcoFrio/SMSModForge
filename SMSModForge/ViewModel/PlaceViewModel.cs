@@ -22,8 +22,23 @@ public sealed class PlaceViewModel : ObservableObject
     public PlaceDef Model { get; }
     public ObservableCollection<NavigatorButtonViewModel> NavigatorButtons { get; }
 
-    /// <summary>Extra sprite overlays layered onto this place's level.</summary>
-    public ObservableCollection<OverlayViewModel> Overlays { get; }
+    /// <summary>The place's whole GameObject tree — layered sprite objects,
+    /// sprite-less containers, and the forced NPCs-root node, with NPC placements
+    /// nested under them. One recursive editor renders the lot.</summary>
+    public ObservableCollection<GameObjectViewModel> GameObjects { get; }
+
+    /// <summary>Conditions-gated action groups run once on level activation / deactivation.</summary>
+    public ObservableCollection<LevelHookViewModel> OnEnterHooks { get; }
+    public ObservableCollection<LevelHookViewModel> OnExitHooks { get; }
+
+    /// <summary>The forced NPCs-container node (always present). "Add NPC" hangs
+    /// new placements under it by default.</summary>
+    public GameObjectViewModel NpcsNode { get; }
+
+    public RelayCommand AddEnterHookCommand { get; }
+    public RelayCommand AddExitHookCommand { get; }
+    public RelayCommand AddGameObjectCommand { get; }
+    public RelayCommand AddNpcCommand { get; }
 
     public PlaceViewModel(PlaceDef model)
     {
@@ -32,8 +47,72 @@ public sealed class PlaceViewModel : ObservableObject
             model.NavigatorButtons.Select(b =>
                 new NavigatorButtonViewModel(b, removeCallback: RemoveNavigatorButton,
                                                 moveCallback: MoveNavigatorButton)));
-        Overlays = new ObservableCollection<OverlayViewModel>(
-            model.Overlays.Select(o => new OverlayViewModel(o, RemoveOverlay)));
+
+        // Every place has exactly one forced NPCs-root node. Migrated/loaded
+        // packs already carry it; a freshly created place gets one here so the
+        // NPCs hierarchy always has a home.
+        var npcsDef = model.GameObjects.FirstOrDefault(g => g.IsNpcRoot);
+        if (npcsDef == null)
+        {
+            npcsDef = new GameObjectDef { Name = "NPCs", Role = GameObjectDef.RoleNpcRoot };
+            model.GameObjects.Add(npcsDef);
+        }
+        GameObjects = new ObservableCollection<GameObjectViewModel>(
+            model.GameObjects.Select(g => new GameObjectViewModel(g, RemoveGameObject)));
+        NpcsNode = GameObjects.First(g => g.IsNpcRoot);
+
+        OnEnterHooks = new ObservableCollection<LevelHookViewModel>(
+            model.OnEnter.Select(h => new LevelHookViewModel(h, RemoveEnterHook)));
+        OnExitHooks = new ObservableCollection<LevelHookViewModel>(
+            model.OnExit.Select(h => new LevelHookViewModel(h, RemoveExitHook)));
+        AddEnterHookCommand = new RelayCommand(() =>
+        {
+            var def = new LevelHookDef();
+            Model.OnEnter.Add(def);
+            OnEnterHooks.Add(new LevelHookViewModel(def, RemoveEnterHook));
+        });
+        AddExitHookCommand = new RelayCommand(() =>
+        {
+            var def = new LevelHookDef();
+            Model.OnExit.Add(def);
+            OnExitHooks.Add(new LevelHookViewModel(def, RemoveExitHook));
+        });
+        AddGameObjectCommand = new RelayCommand(() => AddGameObject());
+        // New NPCs hang under the forced NPCs-root node (the runtime home for
+        // the NPC hierarchy), next to the "Add GameObject" button.
+        AddNpcCommand = new RelayCommand(() => NpcsNode.AddNpc());
+    }
+
+    /// <summary>Adds a top-level GameObject (a sprite object or a container),
+    /// inserted before the forced NPCs node so it stays last.</summary>
+    public GameObjectViewModel AddGameObject()
+    {
+        var def = new GameObjectDef();
+        int idx = Model.GameObjects.FindIndex(g => g.IsNpcRoot);
+        if (idx < 0) idx = Model.GameObjects.Count;
+        Model.GameObjects.Insert(idx, def);
+        var vm = new GameObjectViewModel(def, RemoveGameObject);
+        GameObjects.Insert(idx, vm);
+        return vm;
+    }
+
+    public void RemoveGameObject(GameObjectViewModel g)
+    {
+        if (g.IsNpcRoot) return;   // the NPCs node is forced
+        Model.GameObjects.Remove(g.Model);
+        GameObjects.Remove(g);
+    }
+
+    private void RemoveEnterHook(LevelHookViewModel vm)
+    {
+        Model.OnEnter.Remove(vm.Model);
+        OnEnterHooks.Remove(vm);
+    }
+
+    private void RemoveExitHook(LevelHookViewModel vm)
+    {
+        Model.OnExit.Remove(vm.Model);
+        OnExitHooks.Remove(vm);
     }
 
     /// <summary>True while there's room for another navigator button.</summary>
@@ -149,20 +228,5 @@ public sealed class PlaceViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(CanAddNavigatorButton));
         OnPropertyChanged(nameof(NavigatorButtonCountLabel));
-    }
-
-    public OverlayViewModel AddOverlay()
-    {
-        var def = new OverlayDef();
-        Model.Overlays.Add(def);
-        var vm = new OverlayViewModel(def, RemoveOverlay);
-        Overlays.Add(vm);
-        return vm;
-    }
-
-    public void RemoveOverlay(OverlayViewModel overlay)
-    {
-        Model.Overlays.Remove(overlay.Model);
-        Overlays.Remove(overlay);
     }
 }

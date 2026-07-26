@@ -95,13 +95,54 @@ namespace SMSModForge.PackPlugin
         /// scoped to one subtree — used to resolve a level overlay <em>within</em>
         /// a specific level so a same-named GameObject in another (e.g. the
         /// previous) level isn't picked by mistake.
+        /// <para/>
+        /// A bare name matches the first descendant with that name. When the
+        /// name contains slashes it is treated as a PATH instead
+        /// (<c>Bedleft/Anis/Default</c>), which is how you address a node whose
+        /// own name repeats within the level — the pose-variant containers under
+        /// each NPC slot all being called <c>Default</c> / <c>Swim</c>, say. The
+        /// path is anchored at the first descendant matching its first segment,
+        /// so it can be written relative to the level without naming every
+        /// intermediate ancestor.
         /// </summary>
         public static GameObject FindDescendantIncludingInactive(Transform root, string name)
         {
             if (root == null || string.IsNullOrEmpty(name)) return null;
-            if (root.name == name) return root.gameObject;
-            foreach (var t in root.GetComponentsInChildren<Transform>(true))
-                if (t.name == name) return t.gameObject;
+            // The editor's target dropdown lists hierarchy paths as "A > B > C"
+            // because that reads better in a combo; accept that spelling as well
+            // as plain slashes so what the author picked is what resolves.
+            if (name.IndexOf('>') >= 0)
+                name = name.Replace(" > ", "/").Replace(">", "/");
+            if (name.IndexOf('/') < 0)
+            {
+                if (root.name == name) return root.gameObject;
+                foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                    if (t.name == name) return t.gameObject;
+                return null;
+            }
+
+            var segments = name.Split('/');
+            // Anchor on the first segment anywhere in the subtree, then walk the
+            // remaining segments as direct children. Several anchors can match
+            // (the same slot name in two rooms can't, but be safe), so try each
+            // until one resolves the whole path.
+            foreach (var anchor in root.GetComponentsInChildren<Transform>(true))
+            {
+                if (anchor.name != segments[0]) continue;
+                Transform cur = anchor;
+                for (int i = 1; i < segments.Length && cur != null; i++)
+                {
+                    if (string.IsNullOrEmpty(segments[i])) continue;
+                    Transform next = null;
+                    for (int c = 0; c < cur.childCount; c++)
+                    {
+                        var child = cur.GetChild(c);
+                        if (child.name == segments[i]) { next = child; break; }
+                    }
+                    cur = next;
+                }
+                if (cur != null) return cur.gameObject;
+            }
             return null;
         }
 

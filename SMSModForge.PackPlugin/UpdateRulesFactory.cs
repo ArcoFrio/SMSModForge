@@ -29,13 +29,42 @@ namespace SMSModForge.PackPlugin
                                     "in pack " + pack.PackId + " — skipped.");
                     continue;
                 }
+                string forEachAs = (string)ro["forEachAs"];
                 var entry = new UpdateRulesRegistry.Entry
                 {
                     Key = key,
+                    Mode = ParseMode((string)ro["triggerMode"]),
+                    // Optional parameterization: run the rule once per value.
+                    ForEach = (string)ro["forEach"] ?? "",
+                    ForEachAs = string.IsNullOrEmpty(forEachAs) ? "item" : forEachAs,
+                };
+                // Branch 0 = the rule's own conditions + actions (the IF);
+                // the optional "branches" array is the else-if chain, tried
+                // in order — first passing branch wins. See the registry's
+                // Tick for the selection/edge semantics.
+                entry.Branches.Add(new UpdateRulesRegistry.Branch
+                {
                     Conditions = ro["conditions"] as JArray ?? new JArray(),
                     Actions = ro["actions"] as JArray ?? new JArray(),
-                    Mode = ParseMode((string)ro["triggerMode"]),
-                };
+                });
+                if (ro["branches"] is JArray branches)
+                    foreach (var b in branches)
+                        if (b is JObject bo)
+                            entry.Branches.Add(new UpdateRulesRegistry.Branch
+                            {
+                                Conditions = bo["conditions"] as JArray ?? new JArray(),
+                                Actions = bo["actions"] as JArray ?? new JArray(),
+                            });
+
+                // Give every Timer condition in the rule a stable identity so
+                // its deadline survives across frames. In-memory edit of the
+                // parsed manifest — the pack file is never written back.
+                for (int bi = 0; bi < entry.Branches.Count; bi++)
+                {
+                    int ordinal = 0;
+                    TimerRuntime.StampIds(entry.Branches[bi].Conditions, key, bi, ref ordinal);
+                }
+
                 registry.Register(entry);
                 built++;
             }

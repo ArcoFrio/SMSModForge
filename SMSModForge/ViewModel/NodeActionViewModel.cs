@@ -111,7 +111,8 @@ public sealed class NodeActionViewModel : ObservableObject
     private void RebuildParamRows()
     {
         ParamRows.Clear();
-        foreach (var schema in ActionSchemas.For(Model.Type))
+        var schemas = ActionSchemas.For(Model.Type);
+        foreach (var schema in schemas)
             ParamRows.Add(new ParamRowViewModel(
                 Model.Params, schema,
                 onValueChanged: () =>
@@ -125,7 +126,18 @@ public sealed class NodeActionViewModel : ObservableObject
                     OnPropertyChanged(nameof(BustKey));
                     OnPropertyChanged(nameof(Expression));
                     OnPropertyChanged(nameof(Scene));
-                }));
+                    // Mirror the condition rows: a write may flip a sibling's
+                    // EnabledWhen gate. No action schema declares one today,
+                    // but wiring it here means adding one just works.
+                    foreach (var r in ParamRows) r.RefreshEnabled();
+                })
+            {
+                DefaultOf = k =>
+                {
+                    foreach (var s in schemas) if (s.Key == k) return s.DefaultValue;
+                    return "";
+                },
+            });
     }
 
     // ── Typed shortcuts for well-known param keys ────────────────────
@@ -228,7 +240,7 @@ public sealed class NodeActionViewModel : ObservableObject
     // NormalizeSetActive so the rest of this class only deals with the canonical form.
 
     public const string CatBust    = "Bust";
-    public const string CatOverlay = "Extra GameObjects";
+    public const string CatOverlay = "GameObjects";
     public const string CatScene   = "Scene";
     public const string CatPath    = "Direct Path";
 
@@ -386,6 +398,19 @@ public sealed class NodeActionViewModel : ObservableObject
     /// never collides with the Pack/Vanilla <c>source</c> toggle.</summary>
     public string VarFromList { get => GetParam("fromList"); set { SetParam("fromList", value); OnPropertyChanged(); } }
 
+    /// <summary>True only for the random PICK — <see cref="IsRandomFromList"/> also
+    /// covers List count, which has no candidate set to filter and nothing to fall
+    /// back to. Gates the Excluding / If-none-left rows.</summary>
+    public bool IsPickRandomOnly => Model.Type == NodeActionTypes.PickRandomFromList;
+
+    /// <summary>Entries removed from <see cref="VarFromList"/> before the pick —
+    /// usually <c>$SomeOccupiedList</c>. Empty means no filtering.</summary>
+    public string VarExcluding { get => GetParam("excluding"); set { SetParam("excluding", value); OnPropertyChanged(); } }
+
+    /// <summary>Written to the target when nothing survives the exclusion. Empty
+    /// clears the target, which is the original behaviour.</summary>
+    public string VarFallback { get => GetParam("fallback"); set { SetParam("fallback", value); OnPropertyChanged(); } }
+
     /// <summary>Pack (default) vs Vanilla GC2 global, stored in the 'source' param.</summary>
     public string VarSource
     {
@@ -451,8 +476,21 @@ public sealed class NodeActionViewModel : ObservableObject
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(OverlayOptions));
+            OnPropertyChanged(nameof(IsOverlayTargetEnabled));
         }
     }
+
+    /// <summary>Levels offered in the Set-Active row's Level dropdown — only
+    /// ones that actually carry GameObjects (pack places + vanilla
+    /// extensions). Same provider as the Fade/Move/Spin family.</summary>
+    public IEnumerable<NavigatorTargetOption> OverlayLevelOptions =>
+        OverlayLevelProvider?.Invoke() ?? Array.Empty<NavigatorTargetOption>();
+
+    /// <summary>Target combo enable gate for the Set-Active row: the Extra
+    /// GameObjects target list is level-scoped, so it's disabled until a
+    /// Level is chosen. Other categories always enabled.</summary>
+    public bool IsOverlayTargetEnabled =>
+        Category != CatOverlay || !string.IsNullOrEmpty(OverlayLevel);
 
     /// <summary>
     /// Resolves a level token to its overlay GameObject names (empty token →
@@ -463,17 +501,33 @@ public sealed class NodeActionViewModel : ObservableObject
     public static Func<string, IEnumerable<string>>? OverlayProvider;
 
     /// <summary>
+    /// Strict variant of <see cref="OverlayProvider"/>: exactly the given
+    /// level's overlay names, empty for an empty/unknown token — no
+    /// whole-pack fallback. Backs the Set-Active GameObjects target,
+    /// which is disabled until a level is chosen, so it must never offer
+    /// names that can't resolve inside the chosen level.
+    /// </summary>
+    public static Func<string, IEnumerable<string>>? StrictOverlayProvider;
+
+    /// <summary>Level tokens that actually carry GameObjects — feeds
+    /// the Set-Active row's level dropdown. Set once by the MainViewModel.</summary>
+    public static Func<IEnumerable<NavigatorTargetOption>>? OverlayLevelProvider;
+
+    /// <summary>
     /// The selected node's inferred level — the overlay-list fallback when an
     /// action's <see cref="OverlayLevel"/> isn't set yet. Maintained by the
     /// MainViewModel on each selected-node change.
     /// </summary>
     public static string InferredOverlayLevel = "";
 
-    /// <summary>Overlay names for the Level Overlay target dropdown: the chosen
-    /// <see cref="OverlayLevel"/>, or the node's inferred level when none is set.</summary>
+    /// <summary>Overlay names for the Set-Active GameObjects target
+    /// dropdown — STRICTLY the chosen <see cref="OverlayLevel"/>'s (the combo
+    /// is disabled until one is picked, see <see cref="IsOverlayTargetEnabled"/>,
+    /// so no inferred-level or whole-pack fallback applies here).</summary>
     public IEnumerable<string> OverlayOptions =>
-        OverlayProvider?.Invoke(string.IsNullOrEmpty(OverlayLevel) ? InferredOverlayLevel : OverlayLevel)
-        ?? Array.Empty<string>();
+        string.IsNullOrEmpty(OverlayLevel)
+            ? Array.Empty<string>()
+            : StrictOverlayProvider?.Invoke(OverlayLevel) ?? Array.Empty<string>();
 
     // ── Category + Target for GameObject-targeting actions ────────────────
     //
@@ -503,6 +557,8 @@ public sealed class NodeActionViewModel : ObservableObject
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsGoOverlayCategory));
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(GoOverlayLevelOptions));
+            OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
             OnPropertyChanged(nameof(Display));
         }
     }
@@ -532,13 +588,28 @@ public sealed class NodeActionViewModel : ObservableObject
             else Model.Params["overlayLevel"] = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
         }
     }
 
-    /// <summary>Overlay names for the Level Overlay category (level-scoped, same source as Set-Active).</summary>
+    /// <summary>Overlay names for the GameObjects target dropdown —
+    /// STRICTLY the chosen level's (no whole-pack fallback; the combo is
+    /// disabled until a level is picked, see <see cref="IsGoOverlayTargetEnabled"/>).</summary>
     public IEnumerable<string> GoOverlayOptions =>
-        OverlayProvider?.Invoke(string.IsNullOrEmpty(GoOverlayLevel) ? InferredOverlayLevel : GoOverlayLevel)
-        ?? Array.Empty<string>();
+        string.IsNullOrEmpty(GoOverlayLevel)
+            ? Array.Empty<string>()
+            : StrictOverlayProvider?.Invoke(GoOverlayLevel) ?? Array.Empty<string>();
+
+    /// <summary>Levels offered in the Set-Active row's level dropdown — only
+    /// ones that actually carry GameObjects.</summary>
+    public IEnumerable<NavigatorTargetOption> GoOverlayLevelOptions =>
+        OverlayLevelProvider?.Invoke() ?? Array.Empty<NavigatorTargetOption>();
+
+    /// <summary>The target combo is a dead end for the GameObjects
+    /// category until a level is chosen (targets are level-scoped), so it's
+    /// disabled then. Every other category keeps it enabled.</summary>
+    public bool IsGoOverlayTargetEnabled =>
+        !IsGoOverlayCategory || !string.IsNullOrEmpty(GoOverlayLevel);
 
     /// <summary>Switch the action into the unified Set-Active form for
     /// <paramref name="category"/>, keeping the existing target and clearing any
@@ -564,6 +635,8 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(Active));
         OnPropertyChanged(nameof(OverlayLevel));
         OnPropertyChanged(nameof(OverlayOptions));
+        OnPropertyChanged(nameof(OverlayLevelOptions));
+        OnPropertyChanged(nameof(IsOverlayTargetEnabled));
         OnPropertyChanged(nameof(Display));
         NotifySetActiveFamily();
     }
@@ -590,6 +663,8 @@ public sealed class NodeActionViewModel : ObservableObject
         OnPropertyChanged(nameof(GoTarget));
         OnPropertyChanged(nameof(GoOverlayLevel));
         OnPropertyChanged(nameof(GoOverlayOptions));
+        OnPropertyChanged(nameof(GoOverlayLevelOptions));
+        OnPropertyChanged(nameof(IsGoOverlayTargetEnabled));
     }
 
     public Dictionary<string, string> Params => Model.Params;

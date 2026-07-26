@@ -22,6 +22,15 @@ namespace SMSModForge.ViewModel;
 /// selected node.</summary>
 public enum NodePastePosition { Sibling, Child, Root }
 
+/// <summary>
+/// Where a dragged node lands relative to the row it was dropped on.
+/// The node list picks this from the cursor's position within the target
+/// row — top/bottom edge bands mean "sibling before/after", the middle
+/// band means "make it a child". Same convention as Unity's hierarchy,
+/// the VS Code explorer and Explorer's folder tree.
+/// </summary>
+public enum NodeDropMode { Before, After, Into }
+
 public sealed class DialogueViewModel : ObservableObject
 {
     public DialogueDef Model { get; }
@@ -117,6 +126,18 @@ public sealed class DialogueViewModel : ObservableObject
     {
         get => Model.DebugConditions;
         set { Model.DebugConditions = value; OnPropertyChanged(); }
+    }
+
+    public bool QueueBehind
+    {
+        get => Model.QueueBehind;
+        set { Model.QueueBehind = value; OnPropertyChanged(); }
+    }
+
+    public int Priority
+    {
+        get => Model.Priority;
+        set { Model.Priority = value; OnPropertyChanged(); }
     }
 
     public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : DisplayName;
@@ -305,6 +326,124 @@ public sealed class DialogueViewModel : ObservableObject
         return null;
     }
 
+    // ── Drag / drop reparenting ───────────────────────────────────────
+
+    /// <summary>
+    /// Re-homes <paramref name="dragged"/> relative to <paramref name="target"/>.
+    /// <see cref="NodeDropMode.Into"/> appends it to the target's children;
+    /// Before/After splice it into the target's own sibling list (the root
+    /// list when the target is a root). A null target drops it at the end of
+    /// the root list, which is what dropping into the empty space below the
+    /// list means.
+    /// <para/>
+    /// The node keeps its whole subtree — only the one edge from its old
+    /// parent is rewritten, so children ride along for free.
+    /// <para/>
+    /// Returns false (changing nothing) for the two no-op/illegal cases:
+    /// dropping a node onto itself, and dropping it somewhere inside its own
+    /// subtree — the latter would both create a cycle and strand every node
+    /// between the two.
+    /// </summary>
+    public bool MoveNode(DialogueNodeViewModel dragged, DialogueNodeViewModel? target, NodeDropMode mode)
+    {
+        if (dragged == null) return false;
+        int id = dragged.Id;
+
+        if (target == null)
+        {
+            Detach(id);
+            Model.RootNodeIds.Add(id);
+            AfterStructureChanged();
+            return true;
+        }
+
+        if (!CanMoveNode(dragged, target, mode)) return false;
+
+        Detach(id);
+
+        if (mode == NodeDropMode.Into)
+        {
+            target.Model.Children.Add(id);
+        }
+        else
+        {
+            // Sibling list of the target: its parent's children, or the root
+            // list. Detach ran first, so indices here are already correct even
+            // when the node is moving within its current parent.
+            int? parentId = FindParentId(target.Id);
+            var siblings = parentId.HasValue
+                ? Model.Nodes.First(n => n.Id == parentId.Value).Children
+                : Model.RootNodeIds;
+
+            int at = siblings.IndexOf(target.Id);
+            // An orphan target isn't in any sibling list; appending to the
+            // roots is the only sane landing spot.
+            if (at < 0) siblings.Add(id);
+            else siblings.Insert(mode == NodeDropMode.After ? at + 1 : at, id);
+        }
+
+        AfterStructureChanged();
+        return true;
+    }
+
+    /// <summary>
+    /// Whether <see cref="MoveNode"/> would actually do something. Split out so
+    /// the drag preview can grey out an illegal drop instead of letting the
+    /// user commit a move that silently no-ops.
+    /// <para/>
+    /// A null target (the empty space under the list) is always legal — it
+    /// means "make this a trailing root".
+    /// </summary>
+    public bool CanMoveNode(DialogueNodeViewModel dragged, DialogueNodeViewModel? target, NodeDropMode mode)
+    {
+        if (dragged == null) return false;
+        if (target == null) return true;
+        if (target.Id == dragged.Id) return false;
+        // Dropping a node into its own subtree would create a cycle and strand
+        // everything between the two.
+        if (IsInSubtreeOf(target.Id, dragged.Id)) return false;
+        return true;
+    }
+
+    /// <summary>True when <paramref name="candidateId"/> is <paramref name="ancestorId"/>
+    /// itself or sits anywhere beneath it. Iterative + visited-guarded so a
+    /// pre-existing cycle in the data can't hang the editor.</summary>
+    private bool IsInSubtreeOf(int candidateId, int ancestorId)
+    {
+        if (candidateId == ancestorId) return true;
+        var stack = new Stack<int>();
+        var seen = new HashSet<int>();
+        stack.Push(ancestorId);
+        while (stack.Count > 0)
+        {
+            int cur = stack.Pop();
+            if (!seen.Add(cur)) continue;
+            var def = Model.Nodes.FirstOrDefault(n => n.Id == cur);
+            if (def == null) continue;
+            foreach (var c in def.Children)
+            {
+                if (c == candidateId) return true;
+                stack.Push(c);
+            }
+        }
+        return false;
+    }
+
+    /// <summary>Removes every inbound edge to <paramref name="id"/> — the one
+    /// parent that lists it as a child, plus the root list. Mirrors what
+    /// <see cref="RemoveNode"/> scrubs, minus deleting the node itself.</summary>
+    private void Detach(int id)
+    {
+        foreach (var n in Model.Nodes) n.Children.RemoveAll(c => c == id);
+        Model.RootNodeIds.RemoveAll(r => r == id);
+    }
+
+    private void AfterStructureChanged()
+    {
+        OnPropertyChanged(nameof(RootsSummary));
+        RecomputeDepths();
+    }
+
     /// <summary>
     /// Walks the tree in DFS preorder from <see cref="DialogueDef.RootNodeIds"/>,
     /// assigning each <see cref="DialogueNodeViewModel.Depth"/>. Nodes that
@@ -316,27 +455,70 @@ public sealed class DialogueViewModel : ObservableObject
     {
         var depths = new Dictionary<int, int>();
         var choiceChildren = new HashSet<int>();
+        var order = new List<int>();
         foreach (var rootId in Model.RootNodeIds)
-            AssignDepth(rootId, 0, depths, choiceChildren);
+            AssignDepth(rootId, 0, depths, choiceChildren, order);
 
         foreach (var nodeVm in Nodes)
         {
             nodeVm.Depth = depths.TryGetValue(nodeVm.Id, out var d) ? d : 0;
             nodeVm.IsChoiceChild = choiceChildren.Contains(nodeVm.Id);
         }
+
+        ReorderToTreeOrder(order);
     }
 
-    private void AssignDepth(int id, int depth, Dictionary<int, int> depths, HashSet<int> choiceChildren)
+    private void AssignDepth(int id, int depth, Dictionary<int, int> depths,
+                             HashSet<int> choiceChildren, List<int> order)
     {
         if (depths.ContainsKey(id)) return; // cycle / shared-child guard
         depths[id] = depth;
+        order.Add(id);
         var def = Model.Nodes.FirstOrDefault(n => n.Id == id);
         if (def == null) return;
         // A Choice node's direct children are answer buttons.
         if (def.Kind == DialogueNodeKind.Choice)
             foreach (var childId in def.Children) choiceChildren.Add(childId);
         foreach (var childId in def.Children)
-            AssignDepth(childId, depth + 1, depths, choiceChildren);
+            AssignDepth(childId, depth + 1, depths, choiceChildren, order);
+    }
+
+    /// <summary>
+    /// Rewrites the node list into DFS preorder — the order the rows are
+    /// actually indented to look like. Indentation alone used to be the only
+    /// tree cue while list position stayed at "whenever the node was added",
+    /// so a child could render far away from its parent. Deriving position
+    /// from the tree is what makes drag-and-drop legible: dropping between
+    /// two rows now lands exactly where the preview line shows.
+    /// <para/>
+    /// Nodes unreachable from any root keep their relative order and go last,
+    /// at depth 0 — they stay visible (and conspicuously un-indented) rather
+    /// than silently disappearing.
+    /// </summary>
+    private void ReorderToTreeOrder(List<int> order)
+    {
+        var rank = new Dictionary<int, int>();
+        for (int i = 0; i < order.Count; i++) rank[order[i]] = i;
+
+        var desired = Nodes.Where(n => rank.ContainsKey(n.Id)).OrderBy(n => rank[n.Id])
+                           .Concat(Nodes.Where(n => !rank.ContainsKey(n.Id)))
+                           .ToList();
+
+        // In-place Move only. Clear()+re-add would null the ListBox's bound
+        // SelectedItem, and the TwoWay binding writes that null straight back
+        // into SelectedNode — the same hazard that was silently wiping fields
+        // elsewhere in the editor.
+        for (int i = 0; i < desired.Count; i++)
+        {
+            int cur = Nodes.IndexOf(desired[i]);
+            if (cur != i) Nodes.Move(cur, i);
+        }
+
+        // Mirror into the model so saved JSON reads top-to-bottom the way the
+        // editor shows it. Runtime resolves nodes by id, so array order is
+        // presentation-only and safe to normalise.
+        Model.Nodes.Clear();
+        Model.Nodes.AddRange(desired.Select(n => n.Model));
     }
 
     // ── Start condition ops ───────────────────────────────────────────

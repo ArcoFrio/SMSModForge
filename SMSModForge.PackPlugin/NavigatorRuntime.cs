@@ -115,6 +115,15 @@ namespace SMSModForge.PackPlugin
 
                     WireButtons(extObj["navigatorButtons"] as JArray, sourceEntry.Level,
                                 pack.PackId, mapButtons, beachButton, level5, logger);
+
+                    // GameObjects layered onto the vanilla level — same builder as
+                    // pack places (sprites, nesting, utility components), so
+                    // decorating a level you don't own is authored identically to
+                    // decorating your own. The scene (and everything built here)
+                    // is recreated on every CoreGameScene load, so there's no
+                    // duplication concern.
+                    PlaceFactory.BuildGameObjectList(extObj["gameObjects"] as JArray, pack,
+                                                     sourceEntry.Level, source, logger);
                 }
             }
         }

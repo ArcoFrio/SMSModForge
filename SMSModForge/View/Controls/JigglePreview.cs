@@ -186,8 +186,10 @@ public sealed class JigglePreview : Image
         //     30 FPS.
         // We hook on Loaded and unhook on Unloaded so a hidden tab isn't
         // burning CPU on shader passes nobody can see.
-        Loaded += (_, _) => HookRendering();
-        Unloaded += (_, _) => UnhookRendering();
+        // Gate on real visibility, not just Loaded: an unselected tab keeps its
+        // content loaded-but-hidden, and we don't want the shader running for a
+        // preview nobody can see.
+        IsVisibleChanged += (_, _) => { if (IsVisible) HookRendering(); else UnhookRendering(); };
 
         // Hard-pin the size. Width/Height alone aren't enough when a parent
         // layout (e.g. a DockPanel that wants to fill remaining space) tries
@@ -408,6 +410,7 @@ public sealed class JigglePreview : Image
 
     private void OnCompositionRendering(object? sender, EventArgs e)
     {
+        if (!IsVisible) return;
         if (Breathing)
         {
             double t = (DateTime.Now - _startTime).TotalSeconds;

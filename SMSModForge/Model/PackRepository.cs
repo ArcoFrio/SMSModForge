@@ -61,9 +61,24 @@ public static class PackRepository
     /// </summary>
     public static void Save(ModPack pack, string packRoot)
     {
+        // Stamp the game version this editor targets — every saved pack
+        // records what it was authored against, and the runtime banner flags
+        // packs whose stamp doesn't match the running game.
+        pack.GameVersion = ModPack.CurrentGameVersion;
+
         Directory.CreateDirectory(packRoot);
         var manifest = Path.Combine(packRoot, ManifestFileName);
-        var json = JsonConvert.SerializeObject(pack, JsonSettings);
+
+        // Vanilla extensions are authored against the real level hierarchy, so
+        // most of their nodes just mirror what the game already has. Reduce
+        // them to the actual delta for the write — swapped in around the
+        // serialize and restored after, so what's on screen is never rewritten.
+        // Deliberately NOT in Serialize(): that also backs undo snapshots, and
+        // pruning there would drop bound nodes on undo.
+        var restore = VanillaDelta.PrepareForSave(pack);
+        string json;
+        try { json = JsonConvert.SerializeObject(pack, JsonSettings); }
+        finally { restore(); }
         // Atomic-ish write: write to temp, then move.
         var tmp = manifest + ".tmp";
         File.WriteAllText(tmp, json);
@@ -81,6 +96,21 @@ public static class PackRepository
     /// detection, so the comparison is apples-to-apples with <see cref="Save"/>.
     /// </summary>
     public static string Serialize(ModPack pack) => JsonConvert.SerializeObject(pack, JsonSettings);
+
+    /// <summary>
+    /// Exactly what <see cref="Save"/> would write — i.e. with vanilla-extension
+    /// deltas reduced. Use this for "does the file differ?" comparisons: the
+    /// editor fills every extension's tree in from the vanilla catalog just to
+    /// make it editable, and those mirror nodes are dropped on save, so
+    /// comparing the RAW form would report unsaved changes for merely opening a
+    /// pack. <see cref="Serialize"/> stays lossless for undo snapshots.
+    /// </summary>
+    public static string SerializeAsSaved(ModPack pack)
+    {
+        var restore = VanillaDelta.PrepareForSave(pack);
+        try { return JsonConvert.SerializeObject(pack, JsonSettings); }
+        finally { restore(); }
+    }
 
     /// <summary>Inverse of <see cref="Serialize"/> — rebuilds a pack from an
     /// in-memory snapshot (used by undo/redo). Returns null on malformed JSON.</summary>
