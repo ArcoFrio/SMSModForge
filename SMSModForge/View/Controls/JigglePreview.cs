@@ -231,9 +231,22 @@ public sealed class JigglePreview : Image
         ReloadTextures();
     }
 
+    /// <summary>Bumped whenever the inputs change, so a shader pass started
+    /// against the previous outfit can't paint its result over the new one.</summary>
+    private int _renderGeneration;
+
     private void ReloadTextures()
     {
-        if (Outfit == null || PackRoot == null) return;
+        _renderGeneration++;
+        if (Outfit == null || PackRoot == null)
+        {
+            // Clear the cached buffers too: leaving them set is what let a
+            // half-configured bust keep showing its predecessor's sprites.
+            _base = _mask = _blink = null;
+            for (int i = 1; i <= 4; i++) _mouth[i] = null;
+            _expressions.Clear();
+            return;
+        }
         var m = Outfit.Model;
         _base = LoadIfExists(Path.Combine(PackRoot, Normalize(m.BaseSprite)));
         _mask = LoadIfExists(Path.Combine(PackRoot, Normalize(m.MaskSprite)));
@@ -323,12 +336,45 @@ public sealed class JigglePreview : Image
         return 0;
     }
 
+    /// <summary>All-zero mask: alpha 0 everywhere, so every displacement term
+    /// falls out and the base renders undistorted. Shared and never written.</summary>
+    private static readonly byte[] NoMask = new byte[JiggleShader.Stride * JiggleShader.Size];
+
+    private bool _bitmapCleared;
+
+    /// <summary>Blank the preview. The bitmap holds the last frame written to
+    /// it, so a bust with nothing to draw has to be actively cleared or the
+    /// PREVIOUS bust stays on screen looking like the current one.</summary>
+    private void ClearBitmap()
+    {
+        if (_bitmapCleared) return;
+        _bitmap.Lock();
+        try
+        {
+            _bitmap.WritePixels(
+                new Int32Rect(0, 0, JiggleShader.RenderSize, JiggleShader.RenderSize),
+                new byte[JiggleShader.RenderStride * JiggleShader.RenderSize],
+                JiggleShader.RenderStride, 0);
+        }
+        finally { _bitmap.Unlock(); }
+        _bitmapCleared = true;
+    }
+
     private void Render()
     {
+        // Nothing to draw yet — an outfit whose base sprite isn't set. Checked
+        // before the in-flight guard so switching to an empty bust blanks
+        // immediately instead of waiting on the outgoing one's shader pass.
+        if (Outfit == null || _base == null)
+        {
+            _renderGeneration++;      // discard whatever is in flight
+            ClearBitmap();
+            return;
+        }
+
         // Skip this tick if the previous shader pass hasn't finished yet —
         // keeps the UI thread free even when the shader runs slower than vsync.
         if (_renderInFlight) return;
-        if (Outfit == null || _base == null) return;
 
         // Respect the preview-quality frame cap (read live, so switching
         // presets takes effect on the next tick). Below the cap interval we
@@ -340,8 +386,10 @@ public sealed class JigglePreview : Image
 
         // The mask editor publishes its in-progress buffer through the VM —
         // prefer it when set so unsaved brush strokes appear immediately.
-        byte[]? mask = Outfit.LiveMaskBgra ?? _mask;
-        if (mask == null) return;
+        // A missing mask means "no jiggle", not "don't draw" — the base should
+        // appear the moment it's set, with each further sprite layering in as
+        // it's filled rather than the whole preview waiting on the last one.
+        byte[] mask = Outfit.LiveMaskBgra ?? _mask ?? NoMask;
 
         // Snapshot every input on the UI thread before handing off. Field
         // assignments here are local refs, so a subsequent ReloadTextures()
@@ -361,6 +409,10 @@ public sealed class JigglePreview : Image
 
         _uiScheduler ??= TaskScheduler.FromCurrentSynchronizationContext();
         _renderInFlight = true;
+        // Which outfit this pass belongs to. A shader pass outlives a fast
+        // outfit switch, and without this its result would land on screen after
+        // the switch — the old bust reappearing over the new one.
+        int generation = _renderGeneration;
 
         Task.Run(() =>
         {
@@ -373,7 +425,7 @@ public sealed class JigglePreview : Image
         {
             try
             {
-                if (t.IsCompletedSuccessfully)
+                if (t.IsCompletedSuccessfully && generation == _renderGeneration)
                 {
                     _bitmap.Lock();
                     try
@@ -383,6 +435,7 @@ public sealed class JigglePreview : Image
                             output, JiggleShader.RenderStride, 0);
                     }
                     finally { _bitmap.Unlock(); }
+                    _bitmapCleared = false;
                 }
             }
             finally { _renderInFlight = false; }

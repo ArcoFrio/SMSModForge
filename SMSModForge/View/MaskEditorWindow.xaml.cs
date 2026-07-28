@@ -127,6 +127,16 @@ public partial class MaskEditorWindow : Window
             case Key.OemCloseBrackets:
                 SizeSlider.Value = Math.Min(SizeSlider.Maximum, SizeSlider.Value + 2); e.Handled = true; break;
 
+            // ── Brush opacity ───────────────────────────────────────
+            // Next to the size keys, since they're the pair you reach for
+            // together. Shift takes the coarse step, for crossing the range
+            // rather than nudging within it.
+            case Key.OemComma:  NudgeOpacity(-1); e.Handled = true; break;
+            case Key.OemPeriod: NudgeOpacity(+1); e.Handled = true; break;
+
+            // ── View ────────────────────────────────────────────────
+            case Key.Home: ResetView(); e.Handled = true; break;
+
             // ── Channel fill / clear ────────────────────────────────
             case Key.F: _mask.ClearChannel(_activeChannel); UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1); _dirty = true; UpdateStatus(); e.Handled = true; break;
             case Key.C: var chFill = _mask.Channel(_activeChannel); _history.Snapshot(_activeChannel, chFill, _mask.A); Array.Fill(chFill, (byte)255); UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1); _dirty = true; UpdateStatus(); e.Handled = true; break;
@@ -144,6 +154,17 @@ public partial class MaskEditorWindow : Window
             case Key.S when (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control:
                 Save(); e.Handled = true; break;
         }
+    }
+
+    /// <summary>Step the brush opacity by one notch in <paramref name="direction"/>,
+    /// coarse while Shift is held. Clamped to the slider's own range so the
+    /// keys and the slider can't disagree.</summary>
+    private void NudgeOpacity(int direction)
+    {
+        bool coarse = (Keyboard.Modifiers & ModifierKeys.Shift) == ModifierKeys.Shift;
+        double step = coarse ? 0.20 : 0.05;
+        OpacitySlider.Value = Math.Clamp(OpacitySlider.Value + direction * step,
+                                         OpacitySlider.Minimum, OpacitySlider.Maximum);
     }
 
     private bool IsCanvasFocused()
@@ -222,8 +243,45 @@ public partial class MaskEditorWindow : Window
         return (p.X / sx * MaskBuffer.Size, p.Y / sy * MaskBuffer.Size);
     }
 
+    // ───────────────────────── panning
+    //
+    // Zooming past the viewport used to put the edges of the mask out of reach,
+    // since the canvas is centred in its border with no scroll host. Wheel-drag
+    // pans, which keeps the left button free for painting and matches what the
+    // wheel already does here (zoom).
+
+    private bool _panning;
+    private Point _panStart;
+    private double _panStartX, _panStartY;
+
+    /// <summary>Put the view back to 100% centred. Panning has no scrollbars to
+    /// hint at where the canvas went, so there has to be a way home.</summary>
+    private void ResetView()
+    {
+        _zoom = 1.0;
+        CanvasHost.Width = CanvasHost.Height = MaskBuffer.Size;
+        PanTransform.X = PanTransform.Y = 0;
+        UpdateZoomDisplay();
+    }
+
     private void Canvas_MouseDown(object sender, MouseButtonEventArgs e)
     {
+        if (e.MiddleButton == MouseButtonState.Pressed)
+        {
+            // Anchor on the parent: CanvasHost itself moves as we pan, so
+            // measuring against it would feed the delta back into itself.
+            _panning = true;
+            _panStart = e.GetPosition(CanvasHost.Parent as IInputElement);
+            _panStartX = PanTransform.X;
+            _panStartY = PanTransform.Y;
+            CanvasHost.CaptureMouse();
+            CanvasHost.Cursor = Cursors.SizeAll;
+            BrushCursor.Visibility = Visibility.Hidden;
+            BrushCursorHard.Visibility = Visibility.Hidden;
+            e.Handled = true;
+            return;
+        }
+
         if (e.LeftButton != MouseButtonState.Pressed) return;
         CanvasHost.Focus();
 
@@ -248,6 +306,15 @@ public partial class MaskEditorWindow : Window
 
     private void Canvas_MouseMove(object sender, MouseEventArgs e)
     {
+        if (_panning)
+        {
+            if (e.MiddleButton != MouseButtonState.Pressed) { EndPan(); return; }
+            var now = e.GetPosition(CanvasHost.Parent as IInputElement);
+            PanTransform.X = _panStartX + (now.X - _panStart.X);
+            PanTransform.Y = _panStartY + (now.Y - _panStart.Y);
+            return;
+        }
+
         var p = e.GetPosition(CanvasHost);
         UpdateBrushCursor(p);
 
@@ -274,8 +341,22 @@ public partial class MaskEditorWindow : Window
         }
     }
 
+    private void EndPan()
+    {
+        _panning = false;
+        CanvasHost.ReleaseMouseCapture();
+        CanvasHost.Cursor = Cursors.None;   // back to the drawn brush ring
+    }
+
     private void Canvas_MouseUp(object sender, MouseButtonEventArgs e)
     {
+        if (_panning && e.ChangedButton == MouseButton.Middle)
+        {
+            EndPan();
+            UpdateBrushCursor(e.GetPosition(CanvasHost));
+            return;
+        }
+
         if (_drawing)
         {
             _drawing = false;

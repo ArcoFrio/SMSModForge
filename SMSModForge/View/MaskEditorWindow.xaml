@@ -96,6 +96,13 @@
                   MouseUp="Canvas_MouseUp" MouseLeave="Canvas_MouseLeave"
                   MouseEnter="Canvas_MouseEnter" MouseWheel="Canvas_MouseWheel"
                   Cursor="None">
+                <!-- Pan offset. A render transform rather than a layout change so
+                     it costs no re-measure while dragging, and so GetPosition
+                     against this Grid keeps returning texture-space coordinates
+                     — the brush keeps landing where the cursor is. -->
+                <Grid.RenderTransform>
+                    <TranslateTransform x:Name="PanTransform"/>
+                </Grid.RenderTransform>
                 <Image x:Name="MaskImage" Stretch="Fill" SnapsToDevicePixels="True"
                        RenderOptions.BitmapScalingMode="NearestNeighbor"/>
                 <Canvas x:Name="OverlayCanvas" IsHitTestVisible="False">
@@ -165,9 +172,12 @@
                     <Run Text="1 / 2 / 3"/><Run Text="  Bounce / Sway / Wave"/><LineBreak/>
                     <Run Text="R / G / D"/><Run Text="  toggle channel / diffuse"/><LineBreak/>
                     <Run Text="[ / ]"/><Run Text="  smaller / larger brush"/><LineBreak/>
+                    <Run Text=", / ."/><Run Text="  less / more opacity (+Shift: coarse)"/><LineBreak/>
                     <Run Text="C / F"/><Run Text="  clear / fill channel"/><LineBreak/>
                     <Run Text="Ctrl+Z / Ctrl+Y"/><Run Text="  undo / redo"/><LineBreak/>
-                    <Run Text="Ctrl+S"/><Run Text="  save mask to file"/>
+                    <Run Text="Ctrl+S"/><Run Text="  save mask to file"/><LineBreak/>
+                    <Run Text="wheel-drag"/><Run Text="  pan the canvas"/><LineBreak/>
+                    <Run Text="Home"/><Run Text="  reset zoom and pan"/>
                 </TextBlock>
             </StackPanel>
 

@@ -62,6 +62,10 @@ public sealed class MainViewModel : ObservableObject
         // — otherwise reverting a Places-tab edit would jump away and look broken.
         string? placeKey = SelectedPlace?.Key;
         string? npcKey = SelectedNpc?.Key;
+        // Busts too: RebindAll drops the selection onto the first character's
+        // first outfit, so without this an undo on the Busts tab throws you onto
+        // a different bust than the one you were editing.
+        string? outfitKey = SelectedOutfit?.Key;
 
         Undo.Suspended = true;
         try
@@ -93,6 +97,11 @@ public sealed class MainViewModel : ObservableObject
         {
             var n = Npcs.FirstOrDefault(x => x.Key == npcKey);
             if (n != null) SelectedNpc = n;
+        }
+        if (outfitKey != null)
+        {
+            var o = Characters.SelectMany(c => c.Outfits).FirstOrDefault(x => x.Key == outfitKey);
+            if (o != null) SelectedOutfit = o;
         }
     }
 

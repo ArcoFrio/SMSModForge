@@ -119,10 +119,16 @@ public partial class MainWindow : Window
         // edited wouldn't have committed yet. Flush first for anything that
         // reads/persists the model. (Menu clicks already move focus, so they're
         // fine without this.)
+        //
+        // Deliberately NOT a RelayCommand: RelayCommand.Executing is static and
+        // the undo service subscribes to it, so wrapping one command in another
+        // fired the checkpoint twice per keypress. On Ctrl+Z that meant pushing
+        // the current state and immediately undoing back to it — the first
+        // press appeared to do nothing at all.
         void BindFlush(RelayCommand command, Key key, ModifierKeys modifiers)
             => InputBindings.Add(new KeyBinding(
-                new RelayCommand(() => { CommitPendingEdits(); command.Execute(null); },
-                                 () => command.CanExecute(null)),
+                new PassThroughCommand(() => { CommitPendingEdits(); command.Execute(null); },
+                                       () => command.CanExecute(null)),
                 key, modifiers));
 
         Bind(vm.NewPackCommand,      Key.N,  ModifierKeys.Control);
@@ -278,6 +284,33 @@ public partial class MainWindow : Window
     /// binding is NOT the view-model one — the binding lives on the ComboBox's
     /// own Text property, so committing the inner box alone would be a no-op.
     /// </summary>
+    /// <summary>
+    /// A plain <see cref="ICommand"/> for input bindings that need to run
+    /// something before delegating. Unlike <see cref="RelayCommand"/> it raises
+    /// no static Executing event, so wrapping a command doesn't duplicate the
+    /// undo checkpoint that event drives.
+    /// </summary>
+    private sealed class PassThroughCommand : ICommand
+    {
+        private readonly Action _execute;
+        private readonly Func<bool> _canExecute;
+
+        public PassThroughCommand(Action execute, Func<bool> canExecute)
+        {
+            _execute = execute;
+            _canExecute = canExecute;
+        }
+
+        public bool CanExecute(object? parameter) => _canExecute();
+        public void Execute(object? parameter) => _execute();
+
+        public event EventHandler? CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
+    }
+
     private static void CommitPendingEdits()
     {
         if (Keyboard.FocusedElement is not DependencyObject focused) return;

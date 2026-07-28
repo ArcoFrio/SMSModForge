@@ -168,14 +168,21 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
         set { if (_isFilteredIn == value) return; _isFilteredIn = value; OnPropertyChanged(); }
     }
 
-    private bool _isExpanded = true;
+    // Collapsed on load. A character's busts are tall editors, and a pack with
+    // a few of them opens to a wall of controls you have to scroll past to
+    // reach the one you want; starting shut makes the list navigable and costs
+    // one click to open. Only the initial state — expansion is remembered
+    // normally from then on.
+    private bool _isExpanded;
     public bool IsExpanded
     {
         get => _isExpanded;
         set { if (_isExpanded == value) return; _isExpanded = value; OnPropertyChanged(); }
     }
 
-    private bool _expandedBeforeFilter = true;
+    // Matches the initial state, so clearing a search doesn't expand busts the
+    // user never opened.
+    private bool _expandedBeforeFilter;
     public void StashExpansion() => _expandedBeforeFilter = IsExpanded;
     public void RestoreExpansion() => IsExpanded = _expandedBeforeFilter;
 
