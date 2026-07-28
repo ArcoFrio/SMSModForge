@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
@@ -216,6 +217,38 @@ public sealed class GameObjectDef
     // is exactly the confusion binding exists to avoid. For an ordinary
     // create-a-GameObject node every one of these is true, so nothing changes.
 
+    /// <summary>
+    /// True only while a MANIFEST WRITE is in flight.
+    /// <para/>
+    /// Reducing a bound node to its delta is right for the file and wrong for
+    /// everything else, because Newtonsoft honours <c>ShouldSerialize*</c> on
+    /// every serialize — including the one behind undo snapshots
+    /// (<see cref="PackRepository.Serialize"/>). Ungated, an undo/redo round-trip
+    /// silently dropped x/y/scale/sprite/sortingOrder/startActive from every
+    /// bound node and restored them as CLR defaults: position 0, scale 1. Same
+    /// for any other in-memory round-trip.
+    /// <para/>
+    /// So the delta is opt-in per serialization, via <see cref="SaveScope"/>.
+    /// Thread-static because it is scoped state, not configuration.
+    /// </summary>
+    [ThreadStatic] private static bool _pruningForSave;
+
+    /// <summary>Mark the enclosing serialization as a manifest write, so bound
+    /// nodes reduce to their delta. Dispose restores the previous state.</summary>
+    public static IDisposable SaveScope() => new DeltaScope();
+
+    private sealed class DeltaScope : IDisposable
+    {
+        private readonly bool _previous;
+        public DeltaScope() { _previous = _pruningForSave; _pruningForSave = true; }
+        public void Dispose() => _pruningForSave = _previous;
+    }
+
+    /// <summary>Whether a bind-gated field may be omitted right now. Outside a
+    /// save the answer is always no — fidelity beats brevity everywhere the
+    /// output is read back into the editor.</summary>
+    private static bool MayOmit(bool isDelta) => !_pruningForSave || isDelta;
+
     /// <summary>True when this node applies its own transform — always for a
     /// created object, opt-in for a bound one.</summary>
     [JsonIgnore]
@@ -227,27 +260,31 @@ public sealed class GameObjectDef
     [JsonIgnore]
     public bool AppliesOwnVisuals => !Bind;
 
-    public bool ShouldSerializeSprite() => AppliesOwnVisuals;
-    public bool ShouldSerializeX() => AppliesTransform;
-    public bool ShouldSerializeY() => AppliesTransform;
-    public bool ShouldSerializeRotationZ() => AppliesTransform && RotationZ != 0f;
-    public bool ShouldSerializeScaleX() => AppliesTransform && ScaleX != 1f;
-    public bool ShouldSerializeScaleY() => AppliesTransform && ScaleY != 1f;
-    public bool ShouldSerializeSortingOrder() => AppliesOwnVisuals;
-    public bool ShouldSerializeParallaxDisabled() => AppliesOwnVisuals;
-    public bool ShouldSerializeStartActive() => !Bind || OverrideActive;
-    public bool ShouldSerializeStartAlpha() => AppliesOwnVisuals;
-    public bool ShouldSerializeMask() => AppliesOwnVisuals && !string.IsNullOrEmpty(Mask);
+    // Bind-gated: omitted only when writing the manifest. See MayOmit.
+    public bool ShouldSerializeSprite() => MayOmit(AppliesOwnVisuals);
+    public bool ShouldSerializeX() => MayOmit(AppliesTransform);
+    public bool ShouldSerializeY() => MayOmit(AppliesTransform);
+    public bool ShouldSerializeRotationZ() => MayOmit(AppliesTransform) && RotationZ != 0f;
+    public bool ShouldSerializeScaleX() => MayOmit(AppliesTransform) && ScaleX != 1f;
+    public bool ShouldSerializeScaleY() => MayOmit(AppliesTransform) && ScaleY != 1f;
+    public bool ShouldSerializeSortingOrder() => MayOmit(AppliesOwnVisuals);
+    public bool ShouldSerializeParallaxDisabled() => MayOmit(AppliesOwnVisuals);
+    public bool ShouldSerializeStartActive() => MayOmit(!Bind || OverrideActive);
+    public bool ShouldSerializeStartAlpha() => MayOmit(AppliesOwnVisuals);
+    public bool ShouldSerializeMask() => MayOmit(AppliesOwnVisuals) && !string.IsNullOrEmpty(Mask);
+    // Value-defaulted: an omitted empty list or empty string reads back as
+    // itself, so these are safe to drop on any serialization.
     public bool ShouldSerializeComponents() => Components.Count > 0;
     public bool ShouldSerializeChildren() => Children.Count > 0;
     public bool ShouldSerializeNpcs() => Npcs.Count > 0;
     public bool ShouldSerializeRole() => !string.IsNullOrEmpty(Role);
     public bool ShouldSerializeActiveConditions() => ActiveConditions.Count > 0;
     // Only meaningful alongside conditions — keeps unconditioned objects clean.
-    public bool ShouldSerializeDeactivateWhenUnmet() => ActiveConditions.Count > 0;
+    // Gated too: it defaults to TRUE, so dropping it would flip an unticked box.
+    public bool ShouldSerializeDeactivateWhenUnmet() => MayOmit(ActiveConditions.Count > 0);
     public bool ShouldSerializeBind() => Bind;
     // The override flags mean nothing without Bind, so they stay out of the
     // manifest for the ordinary create-a-GameObject case.
-    public bool ShouldSerializeOverrideTransform() => Bind;
-    public bool ShouldSerializeOverrideActive() => Bind;
+    public bool ShouldSerializeOverrideTransform() => MayOmit(Bind);
+    public bool ShouldSerializeOverrideActive() => MayOmit(Bind);
 }

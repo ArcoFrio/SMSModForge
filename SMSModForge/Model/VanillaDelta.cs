@@ -191,6 +191,47 @@ public static class VanillaDelta
         return TransformDiffers(n, b) || ActiveDiffers(n, b) || HasOwnAdditions(n);
     }
 
+    // ── Re-anchoring (the inverse of the prune) ───────────────────────────
+
+    /// <summary>
+    /// Point a bound node back at its baseline, restoring every field the save
+    /// path is entitled to DROP. The counterpart of <see cref="Prune"/> — they
+    /// have to agree, so they live together.
+    /// <para/>
+    /// A bound node that overrides nothing writes no transform, no active flag
+    /// and no renderer fields: they belong to the vanilla object, not to the
+    /// pack. That means they come back from disk as CLR defaults, and comparing
+    /// THOSE against the baseline reports every untouched node as moved to the
+    /// origin and scaled to 1 — which the next save then bakes in as a real
+    /// override. Attaching a baseline is therefore not enough; the node has to
+    /// be re-anchored to it.
+    /// <para/>
+    /// Anchoring is a no-op semantically: while a node isn't overriding, its own
+    /// transform is never applied to anything. It exists so the comparison, the
+    /// preview and the gizmo all read the object the game actually has.
+    /// </summary>
+    public static void Rebase(GameObjectDef node,
+                              VanillaLevelCatalog.Node baseline,
+                              VanillaLevelCatalog.Level level)
+    {
+        if (node == null || baseline == null) return;
+        node.Baseline = baseline;
+
+        // Preview-only and dropped for every bound node, so always re-derived.
+        node.VanillaArtPath = VanillaLevelCatalog.FindNodeArt(level, baseline);
+        node.SortingOrder = baseline.SpriteRenderer?.SortingOrder ?? 0;
+
+        if (!node.OverrideTransform)
+        {
+            node.X = baseline.X;
+            node.Y = baseline.Y;
+            node.RotationZ = baseline.RotationZ;
+            node.ScaleX = baseline.ScaleX;
+            node.ScaleY = baseline.ScaleY;
+        }
+        if (!node.OverrideActive) node.StartActive = baseline.ActiveSelf;
+    }
+
     private static int CountNodes(List<GameObjectDef> nodes)
     {
         int n = 0;

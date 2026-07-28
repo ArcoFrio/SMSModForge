@@ -122,6 +122,26 @@ public sealed class GameObjectViewModel : ObservableObject
     /// that can flip it, so the row's highlight tracks typing.</summary>
     public void RefreshVanillaChange() => OnPropertyChanged(nameof(HasVanillaChange));
 
+    /// <summary>
+    /// Re-read every field something rewrote on the model behind this VM's back.
+    /// Needed after <see cref="VanillaDelta.Rebase"/>, which anchors a bound node
+    /// to its baseline by assigning the model directly — the property setters
+    /// never run, so nothing would raise <c>PropertyChanged</c> and the boxes,
+    /// the preview and the gizmo would all keep showing the stale defaults.
+    /// </summary>
+    public void RefreshFromModel()
+    {
+        OnPropertyChanged(nameof(X));
+        OnPropertyChanged(nameof(Y));
+        OnPropertyChanged(nameof(RotationZ));
+        OnPropertyChanged(nameof(ScaleX));
+        OnPropertyChanged(nameof(ScaleY));
+        OnPropertyChanged(nameof(StartActive));
+        OnPropertyChanged(nameof(SortingOrder));
+        OnPropertyChanged(nameof(PreviewSprite));
+        RefreshVanillaChange();
+    }
+
     public bool OverrideTransform
     {
         get => Model.OverrideTransform;

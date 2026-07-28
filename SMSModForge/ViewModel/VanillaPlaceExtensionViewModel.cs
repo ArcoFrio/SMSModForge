@@ -120,36 +120,23 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
             if (string.IsNullOrWhiteSpace(b.Name)) continue;
             var existingVm = vms.FirstOrDefault(
                 v => string.Equals(v.Name, b.Name, System.StringComparison.OrdinalIgnoreCase));
-            // An already-authored node still needs its baseline attached, or a
-            // node loaded from the manifest could never report itself changed.
-            if (existingVm != null && existingVm.Model.Bind && existingVm.Model.Baseline == null)
-            {
-                existingVm.Model.Baseline = b;
-                existingVm.RefreshVanillaChange();
-            }
             if (existingVm == null)
             {
-                var def = new GameObjectDef
-                {
-                    Name = b.Name,
-                    Bind = true,
-                    X = b.X, Y = b.Y,
-                    RotationZ = b.RotationZ,
-                    ScaleX = b.ScaleX, ScaleY = b.ScaleY,
-                    StartActive = b.ActiveSelf,
-                    // Extracted art + sorting so the preview draws this object
-                    // the way the game does. Both are suppressed on save for a
-                    // bound node (they belong to the object that's already
-                    // there), so this is preview fidelity at no manifest cost.
-                    VanillaArtPath = VanillaLevelCatalog.FindNodeArt(level, b),
-                    SortingOrder = b.SpriteRenderer?.SortingOrder ?? 0,
-                    // What "unchanged" means for this node, so the editor can
-                    // flag divergence as you edit rather than only at save.
-                    Baseline = b,
-                };
+                // Created bare, then anchored — same call the reloaded path uses,
+                // so a freshly seeded node and one read back off disk can't drift.
+                var def = new GameObjectDef { Name = b.Name, Bind = true };
+                VanillaDelta.Rebase(def, b, level);
                 defs.Add(def);
                 existingVm = new GameObjectViewModel(def, RemoveGameObject);
                 vms.Add(existingVm);
+            }
+            else if (existingVm.Model.Bind)
+            {
+                // A node loaded from the manifest arrives stripped of everything
+                // the save path drops — transform, active flag, sorting, art. Put
+                // it back, or it reads as "moved to the origin" against vanilla.
+                VanillaDelta.Rebase(existingVm.Model, b, level);
+                existingVm.RefreshFromModel();
             }
             SeedInto(existingVm.Model.Children, existingVm.Children, level, b.Children);
         }

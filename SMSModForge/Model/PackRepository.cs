@@ -76,10 +76,13 @@ public static class PackRepository
         // serialize and restored after, so what's on screen is never rewritten.
         // Deliberately NOT in Serialize(): that also backs undo snapshots, and
         // pruning there would drop bound nodes on undo.
-        var restore = VanillaDelta.PrepareForSave(pack);
         string json;
-        try { json = JsonConvert.SerializeObject(pack, JsonSettings); }
-        finally { restore(); }
+        using (GameObjectDef.SaveScope())
+        {
+            var restore = VanillaDelta.PrepareForSave(pack);
+            try { json = JsonConvert.SerializeObject(pack, JsonSettings); }
+            finally { restore(); }
+        }
         // Atomic-ish write: write to temp, then move.
         var tmp = manifest + ".tmp";
         File.WriteAllText(tmp, json);
@@ -108,9 +111,12 @@ public static class PackRepository
     /// </summary>
     public static string SerializeAsSaved(ModPack pack)
     {
-        var restore = VanillaDelta.PrepareForSave(pack);
-        try { return JsonConvert.SerializeObject(pack, JsonSettings); }
-        finally { restore(); }
+        using (GameObjectDef.SaveScope())
+        {
+            var restore = VanillaDelta.PrepareForSave(pack);
+            try { return JsonConvert.SerializeObject(pack, JsonSettings); }
+            finally { restore(); }
+        }
     }
 
     /// <summary>Inverse of <see cref="Serialize"/> — rebuilds a pack from an
