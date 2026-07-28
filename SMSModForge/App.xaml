@@ -286,6 +286,14 @@
             <Setter Property="Background" Value="{DynamicResource Theme.Chrome}"/>
             <Setter Property="Foreground" Value="{DynamicResource Theme.Text}"/>
             <Setter Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
+            <!-- Centred by default, as a button should be — but stated here so
+                 the template below can template-bind it. Hardcoding the
+                 alignment in the ContentPresenter instead made
+                 HorizontalContentAlignment a no-op on every button in the app,
+                 which is how the preview's hierarchy rows ended up centred with
+                 their indentation collapsed. -->
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -293,7 +301,8 @@
                                 BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1"
                                 CornerRadius="2" Padding="{TemplateBinding Padding}"
                                 SnapsToDevicePixels="True">
-                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               RecognizesAccessKey="True"/>
                         </Border>
                         <ControlTemplate.Triggers>

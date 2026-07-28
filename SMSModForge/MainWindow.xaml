@@ -1288,6 +1288,18 @@
                         <Setter Property="BorderBrush" Value="LightGray"/>
                         <Setter Property="BorderThickness" Value="1"/>
                         <Style.Triggers>
+                            <!-- An object of the GAME'S own, not the pack's. A
+                                 seeded extension is mostly these, so they get a
+                                 cool cast to separate them at a glance from the
+                                 few rows the pack actually creates. Alpha-blended
+                                 so it reads on either theme. -->
+                            <DataTrigger Binding="{Binding Bind}" Value="True">
+                                <Setter Property="BorderBrush" Value="#805B8FCB"/>
+                                <Setter Property="Background" Value="#141E5AA8"/>
+                            </DataTrigger>
+                            <!-- Listed second on purpose: a bound node you've
+                                 actually changed is the stronger signal, and the
+                                 later matching trigger wins. -->
                             <DataTrigger Binding="{Binding HasVanillaChange}" Value="True">
                                 <Setter Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
                                 <Setter Property="BorderThickness" Value="2"/>
@@ -1320,6 +1332,14 @@
                              IsEnabled="{Binding CanEditIdentity}"
                              ToolTip="GameObject name dialogue actions target by (keep unique across the pack)."/>
                     <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                        <!-- Names the colour cast, so "this one is the game's"
+                             doesn't rely on spotting a tint. -->
+                        <Border Padding="4,0" Margin="4,0,0,0" CornerRadius="2" VerticalAlignment="Center"
+                                Background="#805B8FCB"
+                                Visibility="{Binding Bind, Converter={StaticResource BoolToVisibility}}"
+                                ToolTip="An object the vanilla level already has. The pack reaches into it rather than creating it, and anything you don't change here is dropped on save.">
+                            <TextBlock Text="vanilla" FontSize="10"/>
+                        </Border>
                         <!-- Says WHY the row is highlighted, and doubles as the
                              cue that this row will actually be saved. -->
                         <Border Padding="4,0" Margin="4,0,0,0" CornerRadius="2" VerticalAlignment="Center"
@@ -1551,10 +1571,16 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <!-- Seven rows for seven sections: NPC, Name, part transforms,
+                         Start active, Components, Active when, Children. An
+                         out-of-range Grid.Row is CLAMPED by WPF rather than
+                         flagged, so a missing definition here draws the last two
+                         sections on top of each other instead of failing. -->
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <TextBlock Text="NPC:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
@@ -1616,8 +1642,8 @@
                         <StackPanel>
                             <DockPanel>
                                 <Button DockPanel.Dock="Right" Content="+ Condition" Padding="6,0"
-                                        Command="{Binding DataContext.AddActiveConditionCommand,
-                                                          RelativeSource={RelativeSource AncestorType=vm:NpcPlacementViewModel}}"/>
+                                        Command="{Binding AddActiveConditionCommand}"
+                                        ToolTip="Gate this NPC on a condition. It switches on while the conditions pass."/>
                                 <TextBlock Text="Active when" FontWeight="SemiBold" VerticalAlignment="Center"/>
                             </DockPanel>
                             <TextBlock Foreground="Gray" FontSize="10" Margin="0,2,0,0" TextWrapping="Wrap"
@@ -2740,6 +2766,9 @@
                                                     Command="{Binding DataContext.AddVanillaExtensionGameObjectCommand,
                                                                       RelativeSource={RelativeSource AncestorType=Window}}"
                                                     Padding="8,2"/>
+                                            <Button Content="+ Add NPC" Margin="6,0,0,0" Padding="8,2"
+                                                    Command="{Binding AddNpcCommand}"
+                                                    ToolTip="Place an NPC under this vanilla level's own NPCs object. To hang it under a specific container instead, use the NPCs section on that container."/>
                                             <Button Content="Fill from vanilla hierarchy" Margin="6,0,0,0" Padding="8,2"
                                                     Command="{Binding SeedFromCatalogCommand}"
                                                     ToolTip="Add a bound node for every object the extracted catalog says this level has, seeded with its real transform. Existing entries are left alone, so it's safe to re-run — it just tops up anything new."/>

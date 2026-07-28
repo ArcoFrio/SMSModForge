@@ -27,6 +27,7 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
         GameObjects = new ObservableCollection<GameObjectViewModel>(
             model.GameObjects.Select(o => new GameObjectViewModel(o, RemoveGameObject)));
         SeedFromCatalogCommand = new RelayCommand(SeedFromCatalog, () => HasCatalogEntry);
+        AddNpcCommand = new RelayCommand(() => NpcsNode().AddNpc());
         // Seed here rather than leaving it to whoever constructs us: an
         // extension loaded from disk already has its Source, so the property
         // setter below never fires for it, and the GameObjects list would come
@@ -238,6 +239,38 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     public GameObjectViewModel AddGameObject()
     {
         var def = new GameObjectDef();
+        Model.GameObjects.Add(def);
+        var vm = new GameObjectViewModel(def, RemoveGameObject);
+        GameObjects.Add(vm);
+        return vm;
+    }
+
+    // ── NPC placements ────────────────────────────────────────────────────
+
+    /// <summary>Place an NPC on this vanilla level, under the level's own NPCs
+    /// object — the same gesture as on a pack place.</summary>
+    public RelayCommand AddNpcCommand { get; private set; } = null!;
+
+    /// <summary>
+    /// The node standing for the level's NPCs object, created on demand.
+    /// <para/>
+    /// Resolved lazily rather than in the constructor because seeding usually
+    /// supplies it: every vanilla level HAS an NPCs object, so the catalog pass
+    /// brings one in as a bound node. Only a level with no catalog entry needs
+    /// one made here, and it's bound rather than created for the same reason —
+    /// the object exists, so claiming to build it would be a lie the runtime
+    /// would have to reconcile.
+    /// <para/>
+    /// Placements are "own additions" to the delta pass, so hanging one on an
+    /// otherwise untouched bound node is what keeps that node in the manifest.
+    /// </summary>
+    private GameObjectViewModel NpcsNode()
+    {
+        var existing = GameObjects.FirstOrDefault(
+            g => g.IsNpcRoot || string.Equals(g.Name, "NPCs", System.StringComparison.OrdinalIgnoreCase));
+        if (existing != null) return existing;
+
+        var def = new GameObjectDef { Name = "NPCs", Bind = true };
         Model.GameObjects.Add(def);
         var vm = new GameObjectViewModel(def, RemoveGameObject);
         GameObjects.Add(vm);

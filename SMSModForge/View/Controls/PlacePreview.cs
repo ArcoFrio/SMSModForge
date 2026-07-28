@@ -1897,14 +1897,13 @@ public sealed class PlacePreview : Grid
 
         foreach (var entry in scene)
         {
-            string indent = new string(' ', entry.Depth * 2);
             if (entry.Node is GameObjectViewModel node)
             {
                 // ◈ the forced NPCs root, ▦ a sprite object, ⌗ a bare container.
                 string icon = node.IsNpcRoot ? "◈" : (string.IsNullOrWhiteSpace(node.Sprite) ? "⌗" : "▦");
                 var n = node; var p = entry.Path;
                 _objectMenuList.Children.Add(MenuRow(
-                    indent + icon + "  " + node.Display,
+                    icon + "  " + node.Display, entry.Depth,
                     ReferenceEquals(_selNode, n),
                     () => SelectNode(n, p)));
             }
@@ -1912,14 +1911,18 @@ public sealed class PlacePreview : Grid
             {
                 var q = pl; var p = entry.Path;
                 _objectMenuList.Children.Add(MenuRow(
-                    indent + "☺  " + pl.Display,
+                    "☺  " + pl.Display, entry.Depth,
                     ReferenceEquals(_selPlacement, q),
                     () => SelectPlacement(q, p)));
             }
         }
     }
 
-    private Button MenuRow(string text, bool selected, System.Action onClick)
+    /// <summary>One clickable hierarchy row, indented by its depth in the tree.
+    /// The indent is real padding rather than leading spaces so it survives
+    /// trimming and stays true in a proportional font — the row has to read as
+    /// a tree or there's no telling whose child is whose.</summary>
+    private Button MenuRow(string text, int depth, bool selected, System.Action onClick)
     {
         var b = new Button
         {
@@ -1928,7 +1931,7 @@ public sealed class PlacePreview : Grid
             // theme) onto this always-dark panel → invisible.
             Content = new TextBlock { Text = text, Foreground = ChipText, TextTrimming = TextTrimming.CharacterEllipsis },
             HorizontalContentAlignment = HorizontalAlignment.Left,
-            Padding = new Thickness(6, 2, 6, 2),
+            Padding = new Thickness(6 + depth * 12, 2, 6, 2),
             Margin = new Thickness(0, 1, 0, 0),
             FontSize = 11,
             Background = selected ? ChipOn : ChipOff,
