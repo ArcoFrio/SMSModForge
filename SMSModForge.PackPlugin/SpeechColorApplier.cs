@@ -1,6 +1,7 @@
 using BepInEx.Logging;
 using GameCreator.Runtime.Dialogue.UnityUI;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
@@ -34,17 +35,62 @@ namespace SMSModForge.PackPlugin
         private static FieldInfo _colorField;
         private static bool _resolved;
 
+        // Remembers the last hierarchy we populated, so the usual case (same
+        // speech UI, same colours) costs one reference compare per node rather
+        // than a rebuild of every colorizer's list.
+        private static Object _appliedFor;
+        private static int _appliedCount = -1;
+
         public static void Apply(RuntimeActorFactory factory, ManualLogSource log)
         {
             if (factory == null) return;
             if (!ResolveTypes(log)) return;
 
-            // The colorizer sits inside the live SpeechUI hierarchy. Find
-            // it via SpeechUI.Current — the static property GC2 sets when
-            // it instantiates the speech prefab on the first node start.
             var speech = SpeechUI.Current;
-            if (speech == null) return;
-            var colorizer = speech.GetComponentInChildren(_colorizerType, true);
+            int colorCount = 0;
+            foreach (var _ in factory.EnumerateColors()) colorCount++;
+            if (colorCount == 0) return;
+            if (ReferenceEquals(_appliedFor, speech) && _appliedCount == colorCount) return;
+
+            foreach (var colorizer in FindColorizers(speech))
+                ApplyTo(colorizer, factory);
+
+            _appliedFor = speech;
+            _appliedCount = colorCount;
+        }
+
+        /// <summary>
+        /// Every colorizer worth populating.
+        /// <para/>
+        /// The speaker label is a GC2 <c>TextReference</c>, so the TMP object it
+        /// resolves to is NOT guaranteed to sit under the SpeechUI component —
+        /// searching only that subtree finds nothing on a skin that keeps the
+        /// actor panel elsewhere, which reads in-game as every name staying the
+        /// colorizer's default white. So the subtree is the fast path and a
+        /// scene-wide sweep is the fallback.
+        /// <para/>
+        /// Populating extra colorizers is harmless: the component matches a
+        /// pair's word against its ENTIRE text, so an actor name can never
+        /// match a line of dialogue.
+        /// </summary>
+        private static IEnumerable<Object> FindColorizers(SpeechUI speech)
+        {
+            var found = new List<Object>();
+            if (speech != null)
+            {
+                foreach (var c in speech.GetComponentsInChildren(_colorizerType, true))
+                    found.Add(c);
+            }
+            if (found.Count == 0)
+            {
+                foreach (var c in Resources.FindObjectsOfTypeAll(_colorizerType))
+                    found.Add(c);
+            }
+            return found;
+        }
+
+        private static void ApplyTo(Object colorizer, RuntimeActorFactory factory)
+        {
             if (colorizer == null) return;
             if (!(_wordColorsField.GetValue(colorizer) is IList list)) return;
 

@@ -356,6 +356,9 @@ namespace SMSModForge.PackPlugin
         {
             Instance = this;
             SceneManager.sceneLoaded += OnSceneLoaded;
+            // Node conditions are answered by us rather than by GC2's cloned
+            // condition runners — patched once here, before any dialogue exists.
+            PackNodeConditions.Install(new HarmonyLib.Harmony("smsmodforge.packplugin"), Logger);
             // Drives the manual-save copy hook (mirrors the host mod's SaveManager
             // NanoSave listeners, but for the pack file). Self-gates until a
             // pack is loaded in CoreGameScene.

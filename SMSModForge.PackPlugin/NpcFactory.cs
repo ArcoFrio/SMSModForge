@@ -146,14 +146,16 @@ namespace SMSModForge.PackPlugin
             sr.sharedMaterial = parentSr.sharedMaterial;   // same jiggle material
             sr.sortingOrder = parentSr.sortingOrder + 1;
 
-            // Reference blink: eyes open for a random 2-5s, closed for ~0.2s.
-            // The generic BlinkingSprite toggles alpha on one interval, so a
-            // faithful "closed then long open" needs the two-phase runner; use
-            // the average interval here (the generic component blinks evenly,
-            // which reads the same at a glance).
+            // Eyes open for a random minWait..maxWait, then shut for hold.
+            // This used to collapse to BlinkingSprite's even pulse at the
+            // average of the two waits, which threw away the authored hold and
+            // left the eyes CLOSED for seconds at a time — the editor preview
+            // has always run the real two-phase cycle, so the two disagreed.
             var comp = go.AddComponent<BlinkingSprite>();
-            float minW = F(blinkDef, "minWait", 2f), maxW = F(blinkDef, "maxWait", 5f);
-            comp.Configure((minW + maxW) * 0.5f, 0f, 1f);
+            comp.ConfigureBlink(F(blinkDef, "minWait", 2f),
+                                F(blinkDef, "maxWait", 5f),
+                                F(blinkDef, "hold", 0.2f),
+                                0f, 1f);
         }
 
         /// <summary>Procedural soft floor shadow — a flat dark circle deformed

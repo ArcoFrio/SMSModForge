@@ -16,7 +16,7 @@ namespace SMSModForge.PackPlugin
     /// passes:
     /// <list type="number">
     ///   <item>Allocate one GC2 <see cref="Node"/> per pack node, attach to <see cref="Content"/>, and record the (pack-id → GC2-id) map.</item>
-    ///   <item>For each node, link its children (using GC2 ids), set the node type / acting / jump / tag, and attach a <see cref="PackCondition"/> for any authored conditions.</item>
+    ///   <item>For each node, link its children (using GC2 ids), set the node type / acting / jump / tag, and register any authored conditions with <see cref="PackNodeConditions"/>.</item>
     /// </list>
     /// Action wiring is <em>not</em> done here — the dispatcher hooks
     /// <see cref="Dialogue.EventStartNext"/> / <see cref="Dialogue.EventFinishNext"/>
@@ -111,7 +111,9 @@ namespace SMSModForge.PackPlugin
         // up-front lookup makes the per-node loop a tight set of field
         // writes rather than a string-keyed dispatch each time.
         private static readonly FieldInfo _fldNodeType   = typeof(Node).GetField("m_NodeType",   BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo _fldConditions = typeof(Node).GetField("m_Conditions", BindingFlags.NonPublic | BindingFlags.Instance);
+        // No handle to Node.m_Conditions: pack conditions are answered by
+        // PackNodeConditions instead of being written into the node, because
+        // GC2 evaluates that list on a clone the binding can't survive.
         private static readonly FieldInfo _fldTag        = typeof(Node).GetField("m_Tag",        BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo _fldJump       = typeof(Node).GetField("m_Jump",       BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo _fldActing     = typeof(Node).GetField("m_Acting",     BindingFlags.NonPublic | BindingFlags.Instance);
@@ -406,21 +408,17 @@ namespace SMSModForge.PackPlugin
                 }
             }
 
-            // Conditions
+            // Conditions.
+            //
+            // Registered with PackNodeConditions rather than written into the
+            // node's own RunConditionsList. GC2 evaluates that list on a pooled
+            // CLONE of each condition, which cannot carry a pack condition's
+            // runtime binding — and every fail-open path in that chain then
+            // reports "passed", so authored conditions were ignored outright.
+            // See PackNodeConditions for the full chain.
             var conditions = nj["conditions"] as JArray;
-            if (conditions != null && conditions.Count > 0 && _fldConditions != null)
-            {
-                // RunConditionsList wraps a Condition[] — we use PackCondition delegates.
-                var conds = new GameCreator.Runtime.VisualScripting.Condition[conditions.Count];
-                for (int i = 0; i < conditions.Count; i++)
-                {
-                    var pc = new PackCondition();
-                    pc.Bind((JObject)conditions[i], ctx);
-                    conds[i] = pc;
-                }
-                var list = new RunConditionsList(conds);
-                _fldConditions.SetValue(node, list);
-            }
+            if (conditions != null && conditions.Count > 0)
+                PackNodeConditions.Register(node, conditions, ctx);
         }
     }
 }

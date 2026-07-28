@@ -130,6 +130,11 @@ namespace SMSModForge.PackPlugin
         public float MinAlpha = 0f;
         public float MaxAlpha = 1f;
 
+        // Two-phase mode: eyes open a random OpenMin..OpenMax, shut for
+        // ClosedHold. Off (ClosedHold <= 0) leaves the even pulse above, which
+        // is what a pack author attaching this as a utility component wants.
+        public float OpenMin, OpenMax, ClosedHold;
+
         private bool _configured;
         private SpriteRenderer _sr;
         private Coroutine _co;
@@ -137,6 +142,25 @@ namespace SMSModForge.PackPlugin
         public void Configure(float blinkInterval, float minAlpha, float maxAlpha)
         {
             BlinkInterval = Mathf.Max(0.01f, blinkInterval); MinAlpha = minAlpha; MaxAlpha = maxAlpha;
+            ClosedHold = 0f;
+            _configured = true;
+            if (isActiveAndEnabled) Restart();
+        }
+
+        /// <summary>
+        /// Configure an actual BLINK rather than a pulse: a long random open
+        /// phase and a brief shut one. An even pulse can't express this — with a
+        /// single interval the eyes stay closed exactly as long as they stay
+        /// open, which at NPC blink timings is seconds at a time.
+        /// </summary>
+        public void ConfigureBlink(float openMin, float openMax, float closedHold,
+                                   float minAlpha, float maxAlpha)
+        {
+            if (openMax < openMin) { var t = openMin; openMin = openMax; openMax = t; }
+            OpenMin = Mathf.Max(0.01f, openMin);
+            OpenMax = Mathf.Max(OpenMin, openMax);
+            ClosedHold = Mathf.Max(0.01f, closedHold);
+            MinAlpha = minAlpha; MaxAlpha = maxAlpha;
             _configured = true;
             if (isActiveAndEnabled) Restart();
         }
@@ -149,13 +173,31 @@ namespace SMSModForge.PackPlugin
         {
             if (_sr == null) _sr = GetComponent<SpriteRenderer>();
             if (_sr == null) yield break;
+
+            if (ClosedHold > 0f)
+            {
+                // Start open, matching the vanilla component's OnEnable.
+                while (true)
+                {
+                    SetAlpha(MinAlpha);
+                    yield return new WaitForSeconds(Random.Range(OpenMin, OpenMax));
+                    SetAlpha(MaxAlpha);
+                    yield return new WaitForSeconds(ClosedHold);
+                }
+            }
+
             bool hi = false;
             while (true)
             {
-                var c = _sr.color; c.a = hi ? MaxAlpha : MinAlpha; _sr.color = c;
+                SetAlpha(hi ? MaxAlpha : MinAlpha);
                 hi = !hi;
                 yield return new WaitForSeconds(BlinkInterval);
             }
+        }
+
+        private void SetAlpha(float a)
+        {
+            var c = _sr.color; c.a = a; _sr.color = c;
         }
     }
 
