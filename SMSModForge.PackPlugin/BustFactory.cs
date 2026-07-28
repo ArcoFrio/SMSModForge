@@ -101,21 +101,22 @@ namespace SMSModForge.PackPlugin
             GameObject mouthGo = mBase.transform.Find("Mouth").gameObject;
             GameObject expressions = mBase.transform.Find("Expressions").gameObject;
 
-            // Per-outfit material clone so shader uniforms / mask are not shared.
-            Material mat = new Material(mBase.GetComponent<SpriteRenderer>().material);
+            // Per-outfit material clone so shader uniforms / mask are not shared
+            // between outfits. Built fully BEFORE being assigned: reading back
+            // .material after assigning re-instantiates, which is how the mask
+            // and jiggle ended up on a copy nothing else could reach.
+            Material mat = new Material(mBase.GetComponent<SpriteRenderer>().sharedMaterial);
 
             ApplySprite(mBase.GetComponent<SpriteRenderer>(), pack, baseRel);
             ApplySprite(blink.GetComponent<SpriteRenderer>(), pack, blinkRel);
 
-            // Mask: bound to the material as _MaskTex. Set the texture once and
-            // re-assign the material so the SpriteRenderer picks up the change.
-            Texture2D maskTex = LoadTexture(pack, maskRel);
+            Texture2D maskTex = LoadTexture(pack, maskRel, linear: true);
             mat.SetTexture("_MaskTex", maskTex);
-            mBase.GetComponent<SpriteRenderer>().material = mat;
-            mBase.GetComponent<SpriteRenderer>().material.SetTexture("_MaskTex", maskTex);
 
             var jiggle = (JObject)o["jiggle"];
-            if (jiggle != null) ApplyJiggle(mBase.GetComponent<SpriteRenderer>().material, jiggle);
+            if (jiggle != null) ApplyJiggle(mat, jiggle);
+
+            mBase.GetComponent<SpriteRenderer>().sharedMaterial = mat;
 
             // Mouth frames — load 1..4 if enabled, otherwise destroy the renderers.
             // The "prefix" carried in the manifest is an archive-relative
@@ -155,6 +156,15 @@ namespace SMSModForge.PackPlugin
                     Object.Destroy(sr);
                 }
             }
+
+            // Every overlay rides the SAME jiggle material as the body, so the
+            // eyes, mouth and expression are displaced with it instead of
+            // sitting still on a moving chest. Only the body was getting it,
+            // which is why the mask appeared not to reach the other sprites.
+            // Sharing one instance is what makes the displacement consistent:
+            // the shader samples _MaskTex in the sprite's own UV space and
+            // these overlays are authored on the body's frame.
+            ShareMaterial(mat, blink, mouthGo, expressions);
 
             // Drop the GC2 Conditions/Trigger components on Expressions so they
             // don't fire vanilla behaviour. Found by name to avoid a hard ref
@@ -206,13 +216,35 @@ namespace SMSModForge.PackPlugin
             sr.sprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
         }
 
-        private static Texture2D LoadTexture(PackManifest pack, string rel)
+        /// <param name="linear">
+        /// True for a DATA texture, false for colour. The jiggle mask is data:
+        /// its channels are displacement amounts the shader multiplies, not a
+        /// colour to look at. Loading it as sRGB puts a gamma curve on those
+        /// amounts under a linear-space project — a painted 0.5 samples as
+        /// about 0.22 — so the effect comes out nothing like the mask that was
+        /// drawn, and nothing like a vanilla mask, whose importer has sRGB off.
+        /// Sprites are genuine colour and stay sRGB.
+        /// </param>
+        private static Texture2D LoadTexture(PackManifest pack, string rel, bool linear = false)
         {
-            var tex = new Texture2D(256, 256, TextureFormat.RGBA32, false);
+            var tex = new Texture2D(256, 256, TextureFormat.RGBA32, false, linear);
             byte[] bytes = pack.ReadBytes(rel);
             if (bytes != null) tex.LoadImage(bytes);
             tex.filterMode = FilterMode.Point;
             return tex;
+        }
+
+        /// <summary>Give every SpriteRenderer at or under <paramref name="roots"/>
+        /// the same material instance. Renderers destroyed above (a disabled
+        /// mouth or expression set) are simply not there to receive it.</summary>
+        private static void ShareMaterial(Material mat, params GameObject[] roots)
+        {
+            foreach (var root in roots)
+            {
+                if (root == null) continue;
+                foreach (var sr in root.GetComponentsInChildren<SpriteRenderer>(true))
+                    sr.sharedMaterial = mat;
+            }
         }
 
         internal static void ApplyJiggle(Material mat, JObject j)

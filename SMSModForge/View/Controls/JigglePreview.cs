@@ -342,6 +342,11 @@ public sealed class JigglePreview : Image
 
     private bool _bitmapCleared;
 
+    /// <summary>Scratch buffer holding the body with its overlays layered on,
+    /// which is what the jiggle pass actually displaces. Reused between frames —
+    /// it's fully overwritten each time.</summary>
+    private byte[] _composed;
+
     /// <summary>Blank the preview. The bitmap holds the last frame written to
     /// it, so a bust with nothing to draw has to be actively cleared or the
     /// PREVIOUS bust stays on screen looking like the current one.</summary>
@@ -414,13 +419,25 @@ public sealed class JigglePreview : Image
         // the switch — the old bust reappearing over the new one.
         int generation = _renderGeneration;
 
+        byte[] composed = _composed ??= new byte[JiggleShader.Stride * JiggleShader.Size];
+
         Task.Run(() =>
         {
-            JiggleShader.Render(baseSnap, maskSnap, jiggle, tint, time, output, superSample);
+            // Layer the overlays onto the body FIRST, then displace the result.
+            //
+            // In game every overlay renderer shares the body's jiggle material,
+            // so the eyes, mouth and expression are displaced along with it.
+            // Compositing after the shader instead left them pinned in place
+            // over a moving chest — the preview's own drift from the game, not
+            // the mask failing to cover them. Same field, same UVs, so one pass
+            // over the composite is equivalent to displacing each separately.
+            Buffer.BlockCopy(baseSnap, 0, composed, 0, composed.Length);
             // Expression composites first (below blink and mouth).
-            if (expression != null) BustComposer.Composite(output, expression);
-            if (blink != null) BustComposer.Composite(output, blink);
-            if (mouth != null) BustComposer.Composite(output, mouth);
+            if (expression != null) BustComposer.CompositeStraight(composed, expression);
+            if (blink != null) BustComposer.CompositeStraight(composed, blink);
+            if (mouth != null) BustComposer.CompositeStraight(composed, mouth);
+
+            JiggleShader.Render(composed, maskSnap, jiggle, tint, time, output, superSample);
         }).ContinueWith(t =>
         {
             try

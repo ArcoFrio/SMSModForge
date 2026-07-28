@@ -183,7 +183,10 @@ namespace SMSModForge.PackPlugin
                 var sr2 = newLevel.transform.GetChild(1).GetComponent<SpriteRenderer>();
                 if (sr2 != null) sr2.sprite = LoadLevelSprite(pack, secondRel, 2048, 1136, FilterMode.Point);
             }
-            var maskTex = new Texture2D(256, 143, TextureFormat.RGBA32, false);
+            // linear: the mask carries displacement amounts, not colour. As sRGB
+            // a painted 0.5 samples as ~0.22 and the effect stops resembling the
+            // authored mask. See BustFactory.LoadTexture.
+            var maskTex = new Texture2D(256, 143, TextureFormat.RGBA32, false, true);
             byte[] maskBytes = pack.ReadBytes(maskRel);
             if (maskBytes != null) maskTex.LoadImage(maskBytes);
             maskTex.filterMode = FilterMode.Point;
@@ -341,7 +344,7 @@ namespace SMSModForge.PackPlugin
                     {
                         // Own material so the mask doesn't bleed to siblings.
                         Material mat = new Material(sr.material);
-                        var maskTex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+                        var maskTex = new Texture2D(2, 2, TextureFormat.RGBA32, false, true);   // linear: data, not colour
                         byte[] mb = pack.ReadBytes(maskRel);
                         if (mb != null) maskTex.LoadImage(mb);
                         maskTex.filterMode = FilterMode.Point;

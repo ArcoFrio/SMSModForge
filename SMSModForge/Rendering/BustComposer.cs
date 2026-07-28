@@ -92,6 +92,50 @@ public static class BustComposer
     }
 
     /// <summary>
+    /// Source-over of one straight-alpha overlay onto a straight-alpha buffer,
+    /// both at <see cref="JiggleShader.Size"/>.
+    /// <para/>
+    /// <see cref="Composite"/> is the wrong tool for layering a bust: it writes
+    /// PREMULTIPLIED output at render resolution, i.e. after the jiggle pass.
+    /// The overlays have to go on before it, because in game they ride the
+    /// body's jiggle material and are displaced with it.
+    /// </summary>
+    public static void CompositeStraight(byte[] destStraight, byte[] overlayStraight)
+    {
+        int n = JiggleShader.Stride * JiggleShader.Size;
+        if (destStraight.Length != n || overlayStraight.Length != n) return;
+
+        for (int i = 0; i < n; i += 4)
+        {
+            float a = overlayStraight[i + 3] / 255f;
+            if (a <= 0f) continue;
+            if (a >= 1f)
+            {
+                destStraight[i    ] = overlayStraight[i    ];
+                destStraight[i + 1] = overlayStraight[i + 1];
+                destStraight[i + 2] = overlayStraight[i + 2];
+                destStraight[i + 3] = 255;
+                continue;
+            }
+
+            float da = destStraight[i + 3] / 255f;
+            float outA = a + da * (1f - a);
+            if (outA <= 0f) { destStraight[i + 3] = 0; continue; }
+
+            // Straight-alpha source-over: composite premultiplied, then divide
+            // the accumulated alpha back out so the buffer stays straight —
+            // the shader samples it as a plain texture.
+            for (int c = 0; c < 3; c++)
+            {
+                float o = overlayStraight[i + c] / 255f * a;
+                float d = destStraight[i + c] / 255f * da * (1f - a);
+                destStraight[i + c] = (byte)System.Math.Min(255f, (o + d) / outA * 255f);
+            }
+            destStraight[i + 3] = (byte)(outA * 255f);
+        }
+    }
+
+    /// <summary>
     /// Decodes a PNG to a BGRA32 buffer at its native resolution, capped so the
     /// longer side is at most <paramref name="maxSide"/> (aspect preserved).
     /// Used by the NPC preview so a 1024-px pose renders near its real detail

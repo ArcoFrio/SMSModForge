@@ -93,7 +93,7 @@ namespace SMSModForge.PackPlugin
             {
                 var mat = new Material(jiggleProto);
                 string maskRel = (string)def["mask"];
-                if (pack.Has(maskRel)) mat.SetTexture("_MaskTex", LoadTex(pack, maskRel));
+                if (pack.Has(maskRel)) mat.SetTexture("_MaskTex", LoadTex(pack, maskRel, linear: true));
                 if (def["jiggle"] is JObject j) BustFactory.ApplyJiggle(mat, j);
                 sr.material = mat;
             }
@@ -236,9 +236,12 @@ namespace SMSModForge.PackPlugin
                                  new Vector2(0.5f, 0.5f), 100f);
         }
 
-        private static Texture2D LoadTex(PackManifest pack, string rel)
+        /// <param name="linear">True for a data texture (a jiggle mask, whose
+        /// channels are displacement amounts). Colour sprites stay sRGB. See
+        /// BustFactory.LoadTexture for why this matters.</param>
+        private static Texture2D LoadTex(PackManifest pack, string rel, bool linear = false)
         {
-            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false);
+            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false, linear);
             byte[] bytes = pack.ReadBytes(rel);
             if (bytes != null) tex.LoadImage(bytes);   // resizes to the PNG's real dimensions
             tex.filterMode = FilterMode.Point;
