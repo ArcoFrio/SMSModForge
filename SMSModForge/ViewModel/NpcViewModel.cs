@@ -4,11 +4,29 @@ using SMSModForge.Model;
 namespace SMSModForge.ViewModel;
 
 /// <summary>
+/// Shared contract between <see cref="OutfitViewModel"/> and <see cref="NpcViewModel"/>
+/// so the mask editor can paint either without knowing the source type.
+/// </summary>
+public interface IMaskEditorHost
+{
+    /// <summary>Pack-local key used in the save dialog's default filename.</summary>
+    string Key { get; }
+    /// <summary>Path (relative to pack root) to the pose / base sprite PNG.</summary>
+    string PoseSpritePath { get; }
+    /// <summary>Path (relative to pack root) to the jiggle-mask PNG.</summary>
+    string MaskPath { get; set; }
+    /// <summary>In-progress mask buffer published by the mask editor.</summary>
+    byte[]? LiveMaskBgra { get; set; }
+    /// <summary>Bumped whenever the live buffer changes.</summary>
+    int LiveMaskRevision { get; set; }
+}
+
+/// <summary>
 /// INPC wrapper around an <see cref="NpcDef"/> for the NPCs tab. Exposes the
 /// jiggle / blink / shadow / wet sub-objects as flat properties so the view
 /// can bind sliders and boxes directly, mirroring <c>OutfitViewModel</c>.
 /// </summary>
-public sealed class NpcViewModel : ObservableObject
+public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
 {
     public NpcDef Model { get; }
 
@@ -71,6 +89,30 @@ public sealed class NpcViewModel : ObservableObject
     public bool WetStartActive { get => Model.Wet.StartActive; set { Model.Wet.StartActive = value; OnPropertyChanged(); } }
 
     public string Display => string.IsNullOrWhiteSpace(DisplayName) ? Key : $"{DisplayName} ({Key})";
+
+    // ── IMaskEditorHost ──────────────────────────────────────────────────
+
+    string IMaskEditorHost.Key => Model.Key;
+    public string PoseSpritePath => Sprite;
+    public string MaskPath
+    {
+        get => Mask;
+        set => Mask = value;
+    }
+
+    private byte[]? _liveMaskBgra;
+    public byte[]? LiveMaskBgra
+    {
+        get => _liveMaskBgra;
+        set { _liveMaskBgra = value; OnPropertyChanged(); }
+    }
+
+    private int _liveMaskRevision;
+    public int LiveMaskRevision
+    {
+        get => _liveMaskRevision;
+        set { _liveMaskRevision = value; OnPropertyChanged(); }
+    }
 }
 
 /// <summary>
@@ -103,6 +145,9 @@ public sealed class NpcPlacementViewModel : ObservableObject
         Components = new System.Collections.ObjectModel.ObservableCollection<ComponentRowViewModel>(
             model.Components.Select(c => new ComponentRowViewModel(c, RemoveComponent)));
         AddComponentCommand = new RelayCommand(() => AddComponent());
+        ActiveConditions = new System.Collections.ObjectModel.ObservableCollection<NodeConditionViewModel>(
+            model.ActiveConditions.Select(c => new NodeConditionViewModel(c, RemoveCondition)));
+        AddActiveConditionCommand = new RelayCommand(() => AddActiveCondition());
         // An NPC's children sit inside the NPCs subtree, so they may host NPCs too.
         Children = new System.Collections.ObjectModel.ObservableCollection<GameObjectViewModel>(
             model.Children.Select(c => new GameObjectViewModel(c, RemoveChild, parentInNpcSubtree: true)));
@@ -114,6 +159,11 @@ public sealed class NpcPlacementViewModel : ObservableObject
     /// the NPC is activated, so a FadeInSprite fades this NPC in on activation.</summary>
     public System.Collections.ObjectModel.ObservableCollection<ComponentRowViewModel> Components { get; }
     public RelayCommand AddComponentCommand { get; }
+
+    // ── Activation conditions for the NPC GameObject itself ─────────────
+    /// <summary>Conditions that gate this NPC's active state.</summary>
+    public System.Collections.ObjectModel.ObservableCollection<NodeConditionViewModel> ActiveConditions { get; }
+    public RelayCommand AddActiveConditionCommand { get; }
 
     public ComponentRowViewModel AddComponent()
     {
@@ -128,6 +178,22 @@ public sealed class NpcPlacementViewModel : ObservableObject
     {
         Model.Components.Remove(vm.Model);
         Components.Remove(vm);
+    }
+
+    // ── Activation conditions for the NPC GameObject itself ─────────────
+    public NodeConditionViewModel AddActiveCondition()
+    {
+        var def = new NodeConditionDef();
+        Model.ActiveConditions.Add(def);
+        var vm = new NodeConditionViewModel(def, RemoveCondition);
+        ActiveConditions.Add(vm);
+        return vm;
+    }
+
+    public void RemoveCondition(NodeConditionViewModel cond)
+    {
+        Model.ActiveConditions.Remove(cond.Model);
+        ActiveConditions.Remove(cond);
     }
 
     // ── GameObjects parented under the NPC ───────────────────────────────
@@ -173,4 +239,7 @@ public sealed class NpcPlacementViewModel : ObservableObject
             return string.IsNullOrWhiteSpace(label) ? "(unset)" : label;
         }
     }
+
+    // ── DeactivateWhenUnmet ────────────────────────────────────────────
+    public bool DeactivateWhenUnmet { get => Model.DeactivateWhenUnmet; set { Model.DeactivateWhenUnmet = value; OnPropertyChanged(); } }
 }

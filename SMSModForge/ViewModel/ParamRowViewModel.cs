@@ -57,6 +57,19 @@ public sealed class ParamRowViewModel : ObservableObject
     /// <summary>Options for a <see cref="ParamType.Choice"/> param's dropdown.</summary>
     public string[] FixedOptions => Schema.FixedOptions;
 
+    /// <summary>True when this PackVarRef param references a boolean variable.
+    /// Set by the parent VM so the BoolVarRef template can show True/False radios.
+    /// Defaults to false; the parent calls <see cref="SetBooleanVariable(bool)"/> when
+    /// building the row.</summary>
+    public bool IsBooleanVariable { get; private set; }
+
+    /// <summary>Mark this row as referencing a boolean variable (triggers INPC for visibility binding).</summary>
+    public void SetBooleanVariable(bool value) { IsBooleanVariable = value; OnPropertyChanged(); }
+
+    /// <summary>Callback the parent sets to check if a variable name is boolean.
+    /// Null = no detection available (falls back to non-boolean rendering).</summary>
+    internal System.Func<string, bool>? IsBooleanVarChecker { get; set; }
+
     /// <summary>
     /// False when <see cref="ParamSchema.EnabledWhen"/> names a sibling param
     /// that doesn't currently hold <see cref="ParamSchema.EnabledWhenValue"/>.
@@ -159,5 +172,23 @@ public sealed class ParamRowViewModel : ObservableObject
     {
         get => double.TryParse(Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var d) ? d : 0;
         set => Value = value.ToString(CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>Re-evaluate whether this row's value references a boolean variable.
+    /// Call this when the value changes and the row type is PackVarRef/BoolVarRef.</summary>
+    public void RefreshBooleanDetection()
+    {
+        if (Schema.Type != ParamType.PackVarRef && Schema.Type != ParamType.BoolVarRef)
+        {
+            if (IsBooleanVariable) { IsBooleanVariable = false; OnPropertyChanged(); }
+            return;
+        }
+        var varName = Value;
+        bool isBool = IsBooleanVarChecker?.Invoke(varName) ?? false;
+        if (IsBooleanVariable != isBool)
+        {
+            IsBooleanVariable = isBool;
+            OnPropertyChanged();
+        }
     }
 }

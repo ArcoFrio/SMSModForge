@@ -49,7 +49,8 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
             OnPropertyChanged(nameof(CatalogSummary));
             // Picking a source is what makes a hierarchy knowable, so fill it in
             // right then — the GameObjects list is the point of the tab.
-            EnsureSeeded();
+            // Reset first so old catalog nodes don't leak into the preview.
+            ResetAndSeed();
         }
     }
 
@@ -167,6 +168,18 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     public void EnsureSeeded()
     {
         if (CatalogLevel?.Hierarchy == null) return;
+        SeedFromCatalog();
+    }
+
+    /// <summary>
+    /// Replace the entire tree with the catalog's hierarchy. Called when the
+    /// source changes so old catalog nodes don't leak into the preview.
+    /// </summary>
+    private void ResetAndSeed()
+    {
+        if (CatalogLevel?.Hierarchy == null) return;
+        Model.GameObjects.Clear();
+        GameObjects.Clear();
         SeedFromCatalog();
     }
 

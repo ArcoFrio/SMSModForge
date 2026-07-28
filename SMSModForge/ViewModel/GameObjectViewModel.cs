@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
+using SMSModForge.Services;
 
 namespace SMSModForge.ViewModel;
 
@@ -16,15 +18,17 @@ public sealed class GameObjectViewModel : ObservableObject
 {
     private readonly Action<GameObjectViewModel>? _removeCallback;
     private readonly bool _parentInNpcSubtree;
+    private readonly ObservableCollection<GameObjectViewModel>? _parentCollection;
 
     public GameObjectDef Model { get; }
 
     public GameObjectViewModel(GameObjectDef model, Action<GameObjectViewModel>? removeCallback = null,
-                               bool parentInNpcSubtree = false)
+                               bool parentInNpcSubtree = false, ObservableCollection<GameObjectViewModel>? parentCollection = null)
     {
         Model = model;
         _removeCallback = removeCallback;
         _parentInNpcSubtree = parentInNpcSubtree;
+        _parentCollection = parentCollection;
         RemoveCommand = new RelayCommand(
             () => _removeCallback?.Invoke(this),
             () => _removeCallback != null && !IsNpcRoot);
@@ -43,6 +47,8 @@ public sealed class GameObjectViewModel : ObservableObject
             model.ActiveConditions.Select(c => new NodeConditionViewModel(
                 c, RemoveActiveCondition, context: ConditionContext.Rule)));
         AddActiveConditionCommand = new RelayCommand(() => AddActiveCondition());
+        CopyCommand = new RelayCommand(() => EditorClipboard.SetItem(Model), () => Model != null);
+        PasteCommand = new RelayCommand(() => PasteAsSibling(), () => EditorClipboard.Has<GameObjectDef>());
     }
 
     // ── Activation conditions ─────────────────────────────────────────────
@@ -140,6 +146,12 @@ public sealed class GameObjectViewModel : ObservableObject
     /// Disabled for the forced NPCs-root node.</summary>
     public RelayCommand RemoveCommand { get; }
 
+    /// <summary>Deep-clone this GameObjectDef into the editor clipboard for paste elsewhere.</summary>
+    public RelayCommand CopyCommand { get; }
+
+    /// <summary>Paste the clipboard's GameObjectDef as a sibling of this row.</summary>
+    public RelayCommand PasteCommand { get; }
+
     /// <summary>True for the forced NPCs-container node — its name is locked and
     /// it can't be removed, but it still carries a transform, components, and
     /// children.</summary>
@@ -158,7 +170,7 @@ public sealed class GameObjectViewModel : ObservableObject
     {
         var def = new GameObjectDef();
         Model.Children.Add(def);
-        var vm = new GameObjectViewModel(def, RemoveChild, IsInNpcSubtree);
+        var vm = new GameObjectViewModel(def, RemoveChild, IsInNpcSubtree, Children);
         Children.Add(vm);
         return vm;
     }
@@ -167,6 +179,42 @@ public sealed class GameObjectViewModel : ObservableObject
     {
         Model.Children.Remove(vm.Model);
         Children.Remove(vm);
+    }
+
+    /// <summary>Paste the clipboard's GameObjectDef as a sibling of this row.</summary>
+    public void PasteAsSibling()
+    {
+        var cloned = EditorClipboard.GetItem<GameObjectDef>();
+        if (cloned == null) return;
+        // Generate a unique name to avoid conflicts.
+        var baseName = cloned.Name ?? "GameObject";
+        var existingNames = _parentCollection?.Select(g => g.Model.Name)
+            .Where(n => !string.IsNullOrWhiteSpace(n)) ?? Array.Empty<string>();
+        cloned.Name = UniqueName(baseName, existingNames);
+        // Insert after this row in the parent collection.
+        if (_parentCollection != null)
+        {
+            var idx = _parentCollection.IndexOf(this);
+            _parentCollection.Insert(Math.Min(idx + 1, _parentCollection.Count), new GameObjectViewModel(cloned, null, IsInNpcSubtree, _parentCollection));
+            Model.Children.Add(cloned);
+        }
+        else
+        {
+            // No parent collection — can't paste.
+        }
+    }
+
+    private static string UniqueName(string baseName, IEnumerable<string> existing)
+    {
+        if (string.IsNullOrWhiteSpace(baseName)) baseName = "GameObject";
+        var set = new HashSet<string>(existing, System.StringComparer.OrdinalIgnoreCase);
+        if (!set.Contains(baseName)) return baseName;
+        var root = System.Text.RegularExpressions.Regex.Replace(baseName, @"_copy\d*$", "");
+        for (int i = 1; ; i++)
+        {
+            var cand = i == 1 ? root + "_copy" : root + "_copy" + i;
+            if (!set.Contains(cand)) return cand;
+        }
     }
 
     // ── NPC placements parented here ──────────────────────────────────────

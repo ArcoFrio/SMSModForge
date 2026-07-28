@@ -163,6 +163,43 @@ public static class BustComposer
         }
     }
 
+    /// <summary>Bilinearly resize a BGRA32 buffer from <paramref name="srcW"/>×<paramref name="srcH"/>
+    /// to <paramref name="dstW"/>×<paramref name="dstH"/>.</summary>
+    public static byte[] Resize(byte[] src, int srcW, int srcH, int dstW, int dstH)
+    {
+        var dst = new byte[dstW * dstH * 4];
+        double invW = (srcW - 1) / (double)(dstW - 1);
+        double invH = (srcH - 1) / (double)(dstH - 1);
+        for (int y = 0; y < dstH; y++)
+        {
+            double sy = y * invH;
+            int sy0 = (int)System.Math.Min(sy, srcH - 1);
+            int sy1 = System.Math.Min(sy0 + 1, srcH - 1);
+            double fy = sy - sy0;
+            for (int x = 0; x < dstW; x++)
+            {
+                double sx = x * invW;
+                int sx0 = (int)System.Math.Min(sx, srcW - 1);
+                int sx1 = System.Math.Min(sx0 + 1, srcW - 1);
+                double fx = sx - sx0;
+                int di = (y * dstW + x) * 4;
+                int si00 = (sy0 * srcW + sx0) * 4;
+                int si10 = (sy0 * srcW + sx1) * 4;
+                int si01 = (sy1 * srcW + sx0) * 4;
+                int si11 = (sy1 * srcW + sx1) * 4;
+                for (int c = 0; c < 4; c++)
+                {
+                    double a = src[si00 + c] * (1 - fx) * (1 - fy);
+                    double b = src[si10 + c] * fx * (1 - fy);
+                    double c2 = src[si01 + c] * (1 - fx) * fy;
+                    double d = src[si11 + c] * fx * fy;
+                    dst[di + c] = (byte)System.Math.Min(255, a + b + c2 + d);
+                }
+            }
+        }
+        return dst;
+    }
+
     public static (float r, float g, float b, float a) ParseTint(string hex)
     {
         if (string.IsNullOrEmpty(hex)) return (1, 1, 1, 1);

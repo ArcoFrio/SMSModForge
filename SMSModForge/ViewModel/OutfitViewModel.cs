@@ -7,7 +7,7 @@ namespace SMSModForge.ViewModel;
 /// every keystroke. Direct field exposure is fine — we don't need transforms,
 /// the binding pipes value changes straight back to the POCO.
 /// </summary>
-public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode
+public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMaskEditorHost
 {
     public OutfitDef Model { get; }
 
@@ -122,6 +122,16 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode
     }
 
     public string Display => $"{Key} ({GameObjectName})";
+
+    // ── IMaskEditorHost ────────────────────────────────────────────────
+
+    string IMaskEditorHost.Key => Model.Key;
+    public string PoseSpritePath => BaseSprite;
+    public string MaskPath
+    {
+        get => MaskSprite;
+        set => MaskSprite = value;
+    }
 
     // ── Live mask under edit (shared with MaskEditorWindow)
 

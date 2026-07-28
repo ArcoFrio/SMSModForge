@@ -49,6 +49,12 @@ public enum ParamType
     /// applying list ops to scalar vars.</summary>
     ListVarRef,
 
+    /// <summary>Same as <see cref="PackVarRef"/> but when the referenced
+    /// variable is boolean, renders as True/False radio buttons instead of
+    /// a text box. Used by conditions/actions that compare a variable's value
+    /// to true or false.</summary>
+    BoolVarRef,
+
     /// <summary>Name of a GC2 Global-Name variable (vanilla or pack-side).
     /// Open-ended — there's no authoring-time enumeration of GC2 globals,
     /// so this stays a free-text input but the param-row renderer can

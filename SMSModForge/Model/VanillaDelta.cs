@@ -93,7 +93,8 @@ public static class VanillaDelta
         if (ext == null) return false;
         var level = VanillaLevelCatalog.FindLevelByToken(ext.Source);
         if (level?.Hierarchy == null) return ext.GameObjects.Count > 0;
-        return PruneList(ext.GameObjects, VanillaLevelCatalog.RootChildren(level)).Count > 0;
+        var pruned = PruneList(ext.GameObjects, VanillaLevelCatalog.RootChildren(level));
+        return !ReferenceEquals(pruned, ext.GameObjects);
     }
 
     /// <summary>How many GameObjects this extension would actually write.</summary>

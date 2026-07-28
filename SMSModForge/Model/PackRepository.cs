@@ -1,4 +1,5 @@
 using System.IO;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -146,4 +147,21 @@ public static class PackRepository
             }
         }
     };
+
+    // ── Active pack tracking for cross-VM lookups ────────────────────────
+
+    /// <summary>Thread-local active pack set by MainViewModel when a pack is loaded.
+    /// Used by cross-VM helpers (e.g. boolean variable detection in param rows).</summary>
+    internal static ModPack? ActivePack { get; set; }
+
+    /// <summary>Check whether a variable name is boolean in the active pack.
+    /// Returns false if no pack is active or the variable isn't found.</summary>
+    public static bool IsVariableBoolean(string varName)
+    {
+        if (string.IsNullOrWhiteSpace(varName)) return false;
+        var pack = ActivePack;
+        if (pack == null) return false;
+        return pack.Variables.Any(v => string.Equals(v.Name, varName, System.StringComparison.OrdinalIgnoreCase)
+                                        && v.Type == PackVariableType.Bool);
+    }
 }

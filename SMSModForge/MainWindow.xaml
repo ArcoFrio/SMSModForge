@@ -26,6 +26,7 @@
         -->
         <conv:BoolToVisibilityConverter        x:Key="BoolToVisibility"/>
         <conv:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibility"/>
+        <conv:InverseBoolConverter             x:Key="InverseBoolConverter"/>
 
         <!--
             Implicit DataTemplate for NavigatorTargetOption: WPF picks
@@ -284,6 +285,38 @@
             </Grid>
         </DataTemplate>
 
+        <!-- BoolVarRef: variable reference that renders as True/False radio buttons
+             when the variable is boolean. Falls back to the standard variable dropdown
+             for non-boolean variables. -->
+        <DataTemplate x:Key="BoolVarRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
+            <Grid Style="{StaticResource ParamRowGrid}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding Label}" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                <!-- When IsBooleanVariable is true, show radio buttons; otherwise fall through to
+                     the PackVarRef dropdown. The radio panel is collapsed when the variable is not boolean. -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center"
+                            Visibility="{Binding IsBooleanVariable, Converter={StaticResource BoolToVisibility}}">
+                    <RadioButton Content="True" IsChecked="{Binding BoolValue, Mode=TwoWay}"
+                                 Margin="0,0,12,0" VerticalAlignment="Center"
+                                 ToolTip="Set variable to true"/>
+                    <RadioButton Content="False" IsChecked="{Binding BoolValue, Mode=TwoWay, Converter={StaticResource InverseBoolConverter}}"
+                                 VerticalAlignment="Center"
+                                 ToolTip="Set variable to false"/>
+                </StackPanel>
+                <!-- Fallback: variable dropdown when the variable is not boolean -->
+                <ComboBox Grid.Column="1"
+                          ItemsSource="{Binding DataContext.VariableNameOptions,
+                                        RelativeSource={RelativeSource AncestorType=Window}}"
+                          IsEditable="True"
+                          Text="{Binding Value, UpdateSourceTrigger=PropertyChanged}"
+                          ToolTip="{Binding Tooltip}"
+                          Visibility="{Binding IsBooleanVariable, Converter={StaticResource InverseBoolToVisibility}}"/>
+            </Grid>
+        </DataTemplate>
+
         <!-- GameVarRef stays free-text; no GC2-globals enumeration is
              available offline so we don't pretend to have a dropdown. -->
         <DataTemplate x:Key="GameVarRefParamTemplate" DataType="{x:Type vm:ParamRowViewModel}">
@@ -489,6 +522,7 @@
                                         PercentTemplate="{StaticResource PercentParamTemplate}"
                                         PackVarRefTemplate="{StaticResource PackVarRefParamTemplate}"
                                         ListVarRefTemplate="{StaticResource ListVarRefParamTemplate}"
+                                        BoolVarRefTemplate="{StaticResource BoolVarRefParamTemplate}"
                                         GameVarRefTemplate="{StaticResource GameVarRefParamTemplate}"
                                         LevelRefTemplate="{StaticResource LevelRefParamTemplate}"
                                         ActorRefTemplate="{StaticResource ActorRefParamTemplate}"
@@ -1294,6 +1328,10 @@
                                 ToolTip="This differs from the vanilla object it's bound to, so it will be saved. Match the vanilla values again and it drops out.">
                             <TextBlock Text="changed" FontSize="10"/>
                         </Border>
+                        <Button Content="Copy" Width="50" Height="22" Padding="0" Margin="4,0,0,0"
+                                Command="{Binding CopyCommand}" ToolTip="Copy this GameObject to the editor clipboard"/>
+                        <Button Content="Paste" Width="50" Height="22" Padding="0" Margin="2,0,0,0"
+                                Command="{Binding PasteCommand}" ToolTip="Paste the clipboard's GameObject as a sibling below this one"/>
                         <Button Content="−" Width="22" Height="22" Padding="0" Margin="4,0,0,0"
                                 Command="{Binding RemoveCommand}" ToolTip="Remove this GameObject"/>
                     </StackPanel>
@@ -1522,10 +1560,13 @@
                     <TextBlock Text="NPC:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="0" Grid.Column="1" IsEditable="True"
                               ItemsSource="{Binding DataContext.NpcKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"
-                              Text="{Binding Npc, UpdateSourceTrigger=PropertyChanged}"
+                              DisplayMemberPath="DisplayLabel"
+                              SelectedValuePath="Token"
+                              SelectedValue="{Binding Npc, UpdateSourceTrigger=PropertyChanged}"
                               ToolTip="Key of an NPC from the NPCs tab."/>
-                    <Button Grid.Row="0" Grid.Column="2" Content="✕" Width="24"
-                            Command="{Binding RemoveCommand}" ToolTip="Remove this NPC."/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="−" Width="22" Height="22"
+                            Padding="0" Margin="4,0,0,0" Command="{Binding RemoveCommand}"
+                            ToolTip="Remove this NPC."/>
 
                     <TextBlock Text="Name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
@@ -1569,9 +1610,29 @@
                         </StackPanel>
                     </Border>
 
+                    <!-- Activation conditions for the NPC GameObject itself. -->
+                    <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
+                            BorderBrush="#DDD" BorderThickness="0,1,0,0" Padding="0,4,0,0">
+                        <StackPanel>
+                            <DockPanel>
+                                <Button DockPanel.Dock="Right" Content="+ Condition" Padding="6,0"
+                                        Command="{Binding DataContext.AddActiveConditionCommand,
+                                                          RelativeSource={RelativeSource AncestorType=vm:NpcPlacementViewModel}}"/>
+                                <TextBlock Text="Active when" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                            </DockPanel>
+                            <TextBlock Foreground="Gray" FontSize="10" Margin="0,2,0,0" TextWrapping="Wrap"
+                                       Text="Leave empty and the NPC simply keeps its Start-active state forever. Add conditions and the runtime drives it instead — so NPCs whose conditions are mutually exclusive take turns on their own, with no rule to write."/>
+                            <ItemsControl ItemsSource="{Binding ActiveConditions}" Margin="0,4,0,0"
+                                          ItemTemplateSelector="{StaticResource ConditionTemplateSelector}"/>
+                            <CheckBox Margin="0,4,0,0" IsChecked="{Binding DeactivateWhenUnmet}"
+                                      Content="Switch back off when the conditions stop matching"
+                                      ToolTip="Checked (default): the NPC is active exactly while the conditions hold. Unchecked: it turns on the first time they pass and stays on — a one-way reveal."/>
+                        </StackPanel>
+                    </Border>
+
                     <!-- GameObjects parented under the NPC — props that ride along
                          with the pose, alongside its Circle / Blink / Wet parts. -->
-                    <Border Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
+                    <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"
                             BorderBrush="#DDD" BorderThickness="0,1,0,0" Padding="0,4,0,0">
                         <StackPanel>
                             <DockPanel>
@@ -2395,10 +2456,15 @@
                                                        Grid.Row="0" Grid.Column="1"
                                                        ToolTip="Pose PNG. Any resolution — read at its own size, 100 px/unit, centre pivot."/>
                                     <TextBlock Text="Jiggle mask:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ctl:PathPickerBox PathText="{Binding Mask, UpdateSourceTrigger=PropertyChanged}"
-                                                       PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       Grid.Row="1" Grid.Column="1"
-                                                       ToolTip="R=bounce, G=wave, B=noise, A=intensity — same convention as bust masks."/>
+                                    <DockPanel Grid.Row="1" Grid.Column="1">
+                                        <Button DockPanel.Dock="Right" Content="Edit Mask…"
+                                                Margin="4,0,0,0" Padding="6,0"
+                                                Click="EditNpcMask_Click"
+                                                ToolTip="Open the mask painter for this NPC's jiggle mask."/>
+                                        <ctl:PathPickerBox PathText="{Binding Mask, UpdateSourceTrigger=PropertyChanged}"
+                                                           PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                           ToolTip="R=bounce, G=wave, B=noise, A=intensity — same convention as bust masks."/>
+                                    </DockPanel>
                                     <TextBlock Text="Sorting order:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox Text="{Binding SortingOrder, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"
                                              ToolTip="Reference NPCs sit at -1 (under the level's props). Blink renders one step above; shadow uses its own order."/>

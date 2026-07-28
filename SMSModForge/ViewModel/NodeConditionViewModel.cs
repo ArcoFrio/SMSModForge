@@ -148,7 +148,10 @@ public sealed class NodeConditionViewModel : ObservableObject
         ParamRows.Clear();
         var schemas = ConditionSchemas.For(Model.Type);
         foreach (var schema in schemas)
-            ParamRows.Add(new ParamRowViewModel(
+        {
+            var paramType = schema.Type;
+            ParamRowViewModel? capturedRow = null;
+            var row = new ParamRowViewModel(
                 Model.Params, schema,
                 onValueChanged: () =>
                 {
@@ -158,14 +161,19 @@ public sealed class NodeConditionViewModel : ObservableObject
                     // A row that gates siblings (Timer's 'randomize') has just
                     // changed; re-evaluate every row's enabled state.
                     foreach (var r in ParamRows) r.RefreshEnabled();
-                })
+                    // Re-check boolean variable detection for PackVarRef/BoolVarRef rows.
+                    if (paramType == ParamType.PackVarRef || paramType == ParamType.BoolVarRef)
+                        capturedRow?.RefreshBooleanDetection();
+                });
+            capturedRow = row;
+            row.DefaultOf = k =>
             {
-                DefaultOf = k =>
-                {
-                    foreach (var s in schemas) if (s.Key == k) return s.DefaultValue;
-                    return "";
-                },
-            });
+                foreach (var s in schemas) if (s.Key == k) return s.DefaultValue;
+                return "";
+            };
+            row.IsBooleanVarChecker = MainViewModel.IsVariableBoolean;
+            ParamRows.Add(row);
+        }
     }
 
     public string Type

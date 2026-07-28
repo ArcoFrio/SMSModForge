@@ -66,6 +66,18 @@ public sealed class NpcPlacementDef
     [JsonProperty("children", Order = 10)]
     public List<GameObjectDef> Children { get; set; } = new();
 
+    /// <summary>
+    /// Activation conditions: the object switches itself on/off as these pass,
+    /// instead of a rule having to drive it.
+    /// </summary>
+    [JsonProperty("activeConditions", Order = 11)]
+    public List<NodeConditionDef> ActiveConditions { get; set; } = new();
+
+    /// <summary>Switch back off when the conditions stop matching.</summary>
+    [JsonProperty("deactivateWhenUnmet", Order = 12)]
+    public bool DeactivateWhenUnmet { get; set; } = true;
+
     public bool ShouldSerializeComponents() => Components.Count > 0;
     public bool ShouldSerializeChildren() => Children.Count > 0;
+    public bool ShouldSerializeActiveConditions() => ActiveConditions.Count > 0;
 }

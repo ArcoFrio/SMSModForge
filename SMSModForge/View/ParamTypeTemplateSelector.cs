@@ -28,6 +28,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
     public DataTemplate? PercentTemplate { get; set; }
     public DataTemplate? PackVarRefTemplate { get; set; }
     public DataTemplate? ListVarRefTemplate { get; set; }
+    public DataTemplate? BoolVarRefTemplate { get; set; }
     public DataTemplate? GameVarRefTemplate { get; set; }
     public DataTemplate? LevelRefTemplate { get; set; }
     public DataTemplate? ActorRefTemplate { get; set; }
@@ -53,6 +54,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
             ParamType.Percent => PercentTemplate ?? IntTemplate ?? StringTemplate,
             ParamType.PackVarRef => PackVarRefTemplate ?? StringTemplate,
             ParamType.ListVarRef => ListVarRefTemplate ?? StringTemplate,
+            ParamType.BoolVarRef => BoolVarRefTemplate ?? BoolTemplate ?? StringTemplate,
             ParamType.GameVarRef => GameVarRefTemplate ?? StringTemplate,
             ParamType.LevelRef => LevelRefTemplate ?? StringTemplate,
             ParamType.ActorRef => ActorRefTemplate ?? StringTemplate,

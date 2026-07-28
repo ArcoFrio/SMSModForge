@@ -401,6 +401,8 @@ public sealed class MainViewModel : ObservableObject
                 OnPropertyChanged(nameof(SelectedVanillaExtension));
             }
             OnPropertyChanged();
+            // Refresh global NPC options in case we're looking at an NPC placement.
+            RebuildNpcOptions();
         }
     }
 
@@ -847,8 +849,9 @@ public sealed class MainViewModel : ObservableObject
         set { _selectedNpc = value; OnPropertyChanged(); }
     }
 
-    /// <summary>NPC keys for the Places placement picker (editable combo).</summary>
-    public ObservableCollection<string> NpcKeyOptions { get; } = new();
+    /// <summary>NPC entries for the Places placement picker (editable combo). Includes token and display label
+    /// so when an NPC's DisplayName changes, the dropdown immediately reflects it.</summary>
+    public ObservableCollection<NavigatorTargetOption> NpcKeyOptions { get; } = new();
 
     private WallpaperViewModel? _selectedWallpaper;
     public WallpaperViewModel? SelectedWallpaper
@@ -1138,7 +1141,7 @@ public sealed class MainViewModel : ObservableObject
         AddSceneCommand               = new RelayCommand(AddScene);
         RemoveSceneCommand            = new RelayCommand(RemoveScene, () => SelectedScene != null || SceneTree.Selected is UnitFolderNode);
         AddNpcCommand                 = new RelayCommand(AddNpc);
-        RemoveNpcCommand              = new RelayCommand(RemoveNpc, () => SelectedNpc != null || NpcTree.Selected is UnitFolderNode);
+        RemoveNpcCommand              = new RelayCommand(RemoveNpc);
         AddWallpaperCommand           = new RelayCommand(AddWallpaper);
         RemoveWallpaperCommand        = new RelayCommand(RemoveWallpaper, () => SelectedWallpaper != null || WallpaperTree.Selected is UnitFolderNode);
         AddMusicCommand               = new RelayCommand(AddMusic);
@@ -1375,6 +1378,7 @@ public sealed class MainViewModel : ObservableObject
         try
         {
             Pack = PackRepository.Load(dir);
+            PackRepository.ActivePack = Pack;
             PackRoot = dir;
             RecordRecentFile(dir);
             RebindAll();
@@ -3049,10 +3053,13 @@ public sealed class MainViewModel : ObservableObject
     public void RebuildNpcOptions()
     {
         // In-place sync, never Clear — see SyncOptions.
-        var keys = new System.Collections.Generic.List<string>();
+        var opts = new System.Collections.Generic.List<NavigatorTargetOption>();
         foreach (var n in Npcs.OrderBy(n => n.Key, System.StringComparer.OrdinalIgnoreCase))
-            if (!string.IsNullOrWhiteSpace(n.Key)) keys.Add(n.Key);
-        SyncOptions(NpcKeyOptions, keys);
+            if (!string.IsNullOrWhiteSpace(n.Key))
+                opts.Add(new NavigatorTargetOption(
+                    Token: n.Key,
+                    DisplayLabel: string.IsNullOrWhiteSpace(n.DisplayName) ? n.DisplayName : $"{n.DisplayName} ({n.Key})"));
+        SyncOptions(NpcKeyOptions, opts);
     }
 
     private void AddNpc()
@@ -3526,5 +3533,22 @@ public sealed class MainViewModel : ObservableObject
         if (PackRoot is null) return;
         foreach (var issue in PackValidator.Validate(Pack, PackRoot))
             Issues.Add(issue);
+    }
+
+    // ── Static helper for param-row boolean detection ───────────────────
+
+    /// <summary>Check whether a variable name (from the current pack) is boolean.
+    /// Used by ParamRowViewModel to decide whether to show True/False radios.
+    /// Returns false if no pack is loaded or the variable isn't found.</summary>
+    public static bool IsVariableBoolean(string varName)
+    {
+        if (string.IsNullOrWhiteSpace(varName)) return false;
+        return PackRepository.IsVariableBoolean(varName);
+    }
+
+    /// <summary>Sets the active pack for cross-VM lookups (boolean variable detection, etc.).</summary>
+    internal void SetActivePack(ModPack pack)
+    {
+        PackRepository.ActivePack = pack;
     }
 }

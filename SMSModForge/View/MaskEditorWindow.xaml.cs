@@ -12,7 +12,7 @@ using SMSModForge.ViewModel;
 namespace SMSModForge.View;
 
 /// <summary>
-/// Per-outfit mask painter. Holds three independent 8-bit channels (R/G/B)
+/// Per-outfit / per-NPC mask painter. Holds three independent 8-bit channels (R/G/B)
 /// in a <see cref="MaskBuffer"/>, composites them with the diffuse reference
 /// for the in-editor canvas, and republishes a BGRA snapshot through
 /// <see cref="OutfitViewModel.LiveMaskBgra"/> so the main JigglePreview
@@ -20,7 +20,7 @@ namespace SMSModForge.View;
 /// </summary>
 public partial class MaskEditorWindow : Window
 {
-    private readonly OutfitViewModel _outfit;
+    private readonly IMaskEditorHost _host;
     private readonly string _packRoot;
     private readonly MaskBuffer _mask = new();
     private readonly MaskHistory _history = new();
@@ -33,6 +33,12 @@ public partial class MaskEditorWindow : Window
     private int _activeChannel;          // 0 = R, 1 = G, 2 = B
     private bool _eraser;
 
+    // Zoom state
+    private double _zoom = 1.0;
+    private const double ZoomMin = 0.25;
+    private const double ZoomMax = 8.0;
+    private const double ZoomStep = 0.25;
+
     // Stroke state
     private bool _drawing;
     private bool _dirty;
@@ -40,10 +46,10 @@ public partial class MaskEditorWindow : Window
     private float[]? _strokeBuffer;      // per-stroke max-contribution buffer
     private byte[]? _strokeOriginal;     // channel snapshot at stroke start
 
-    public MaskEditorWindow(OutfitViewModel outfit, string packRoot)
+    public MaskEditorWindow(IMaskEditorHost host, string packRoot)
     {
         InitializeComponent();
-        _outfit = outfit;
+        _host = host;
         _packRoot = packRoot;
         _viewBitmap = new WriteableBitmap(MaskBuffer.Size, MaskBuffer.Size, 96, 96, PixelFormats.Bgra32, null);
     }
@@ -54,17 +60,17 @@ public partial class MaskEditorWindow : Window
     {
         MaskImage.Source = _viewBitmap;
 
-        var basePath = Path.Combine(_packRoot, Normalize(_outfit.Model.BaseSprite));
-        var maskPath = Path.Combine(_packRoot, Normalize(_outfit.Model.MaskSprite));
+        var basePath = Path.Combine(_packRoot, Normalize(_host.PoseSpritePath));
+        var maskPath = Path.Combine(_packRoot, Normalize(_host.MaskPath));
         if (File.Exists(basePath))
             _diffuse = BustComposer.LoadPng(basePath);
-        if (!string.IsNullOrWhiteSpace(_outfit.Model.MaskSprite) && File.Exists(maskPath))
+        if (!string.IsNullOrWhiteSpace(_host.MaskPath) && File.Exists(maskPath))
             _mask.FromBgra(BustComposer.LoadPng(maskPath));
 
         // Publish the live BGRA buffer so JigglePreview switches over to it.
         _mask.ToBgra(_liveBgra);
-        _outfit.LiveMaskBgra = _liveBgra;
-        _outfit.LiveMaskRevision++;
+        _host.LiveMaskBgra = _liveBgra;
+        _host.LiveMaskRevision++;
 
         RecomposeRect(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
         UpdateStatus();
@@ -83,8 +89,8 @@ public partial class MaskEditorWindow : Window
             if (r == MessageBoxResult.Yes && !Save()) { e.Cancel = true; return; }
         }
         // Hand the preview back to the file-loaded mask.
-        _outfit.LiveMaskBgra = null;
-        _outfit.LiveMaskRevision++;
+        _host.LiveMaskBgra = null;
+        _host.LiveMaskRevision++;
     }
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
@@ -93,21 +99,67 @@ public partial class MaskEditorWindow : Window
 
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
-        // Don't steal keys away from a focused TextBox / slider value editor.
-        if (Keyboard.FocusedElement is TextBox) return;
+        // Don't steal keys away from focused text-editing controls.
+        // Allow hotkeys when the canvas is focused or when focus is on non-text controls.
+        var focused = Keyboard.FocusedElement as FrameworkElement;
+        if (focused is TextBox && !IsCanvasFocused()) return;
+        if (focused is System.Windows.Controls.Primitives.RangeBase) return; // sliders
 
         switch (e.Key)
         {
+            // ── Tool switching ──────────────────────────────────────
             case Key.B: SetTool(eraser: false); e.Handled = true; break;
             case Key.E: SetTool(eraser: true);  e.Handled = true; break;
+
+            // ── Channel selection ───────────────────────────────────
             case Key.D1: case Key.NumPad1: ActiveR.IsChecked = true; e.Handled = true; break;
             case Key.D2: case Key.NumPad2: ActiveG.IsChecked = true; e.Handled = true; break;
             case Key.D3: case Key.NumPad3: ActiveB.IsChecked = true; e.Handled = true; break;
+
+            // ── Channel visibility toggles ──────────────────────────
+            case Key.R: _showR = !_showR; ShowRToggle.IsChecked = _showR; RecomposeAll(); e.Handled = true; break;
+            case Key.G: _showG = !_showG; ShowGToggle.IsChecked = _showG; RecomposeAll(); e.Handled = true; break;
+            case Key.D: _showDiffuse = !_showDiffuse; ShowDiffuseToggle.IsChecked = _showDiffuse; RecomposeAll(); e.Handled = true; break;
+
+            // ── Brush size ──────────────────────────────────────────
             case Key.OemOpenBrackets:
                 SizeSlider.Value = Math.Max(SizeSlider.Minimum, SizeSlider.Value - 2); e.Handled = true; break;
             case Key.OemCloseBrackets:
                 SizeSlider.Value = Math.Min(SizeSlider.Maximum, SizeSlider.Value + 2); e.Handled = true; break;
+
+            // ── Channel fill / clear ────────────────────────────────
+            case Key.F: _mask.ClearChannel(_activeChannel); UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1); _dirty = true; UpdateStatus(); e.Handled = true; break;
+            case Key.C: var chFill = _mask.Channel(_activeChannel); _history.Snapshot(_activeChannel, chFill, _mask.A); Array.Fill(chFill, (byte)255); UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1); _dirty = true; UpdateStatus(); e.Handled = true; break;
+
+            // ── Undo / Redo (already bound via CommandBinding, but
+            //    ensure they work when focus is on the canvas) ──────
+            case Key.Z when (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control:
+                ApplicationCommands.Undo.Execute(null, this); e.Handled = true; break;
+            case Key.Y when (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control:
+                ApplicationCommands.Redo.Execute(null, this); e.Handled = true; break;
+            case Key.Z when (Keyboard.Modifiers & (ModifierKeys.Control | ModifierKeys.Shift)) == (ModifierKeys.Control | ModifierKeys.Shift):
+                ApplicationCommands.Redo.Execute(null, this); e.Handled = true; break;
+
+            // ── Save ────────────────────────────────────────────────
+            case Key.S when (Keyboard.Modifiers & ModifierKeys.Control) == ModifierKeys.Control:
+                Save(); e.Handled = true; break;
         }
+    }
+
+    private bool IsCanvasFocused()
+    {
+        var focused = Keyboard.FocusedElement as FrameworkElement;
+        return focused == CanvasHost || IsDescendantOf(focused, CanvasHost);
+    }
+
+    private bool IsDescendantOf(FrameworkElement? element, FrameworkElement ancestor)
+    {
+        while (element != null)
+        {
+            if (element == ancestor) return true;
+            element = VisualTreeHelper.GetParent(element) as FrameworkElement;
+        }
+        return false;
     }
 
     private void SetTool(bool eraser)
@@ -165,6 +217,7 @@ public partial class MaskEditorWindow : Window
 
     private (double fx, double fy) ScreenToTex(Point p)
     {
+        // CanvasHost's display size (after zoom) maps to the full texture.
         double sx = CanvasHost.ActualWidth, sy = CanvasHost.ActualHeight;
         return (p.X / sx * MaskBuffer.Size, p.Y / sy * MaskBuffer.Size);
     }
@@ -263,6 +316,7 @@ public partial class MaskEditorWindow : Window
 
     private void UpdateBrushCursor(Point p)
     {
+        // At zoom level _zoom, 1 texture pixel = _zoom display pixels.
         double scale = CanvasHost.ActualWidth / MaskBuffer.Size;
         double radius = SizeSlider.Value * scale;
         double hardR = radius * HardnessSlider.Value;
@@ -372,7 +426,7 @@ public partial class MaskEditorWindow : Window
                 _liveBgra[dstIdx + 3] = _mask.A[srcIdx];
             }
         }
-        _outfit.LiveMaskRevision++;
+        _host.LiveMaskRevision++;
         RecomposeRect(x0, y0, x1, y1);
     }
 
@@ -410,14 +464,14 @@ public partial class MaskEditorWindow : Window
 
     private bool Save()
     {
-        string relPath = _outfit.Model.MaskSprite;
+        string relPath = _host.MaskPath;
         if (string.IsNullOrWhiteSpace(relPath))
         {
             var dialog = new SaveFileDialog
             {
                 InitialDirectory = _packRoot,
                 Filter = "PNG (*.png)|*.png",
-                FileName = $"{_outfit.Model.Key}_mask.PNG",
+                FileName = $"{_host.Key}_mask.PNG",
                 Title = "Save mask PNG",
             };
             if (dialog.ShowDialog(this) != true) return false;
@@ -432,7 +486,7 @@ public partial class MaskEditorWindow : Window
                                 "Save failed", MessageBoxButton.OK, MessageBoxImage.Error);
                 return false;
             }
-            _outfit.MaskSprite = relPath;
+            _host.MaskPath = relPath;
         }
 
         string absPath = Path.Combine(_packRoot, Normalize(relPath));
@@ -476,5 +530,32 @@ public partial class MaskEditorWindow : Window
         string tool = _eraser ? "Eraser" : "Brush";
         string state = _dirty ? " — unsaved" : "";
         StatusText.Text = $"{tool} → {chName}{state}" + (note != null ? $"  ·  {note}" : "");
+    }
+
+    // ───────────────────────── zoom
+
+    private void UpdateZoomDisplay()
+    {
+        if (ZoomDisplay != null)
+            ZoomDisplay.Text = $"{(int)(_zoom * 100)}%";
+    }
+
+    private void Canvas_MouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        e.Handled = true;
+
+        double oldZoom = _zoom;
+        if (e.Delta > 0)
+            _zoom = Math.Min(ZoomMax, _zoom + ZoomStep);
+        else
+            _zoom = Math.Max(ZoomMin, _zoom - ZoomStep);
+
+        // Adjust canvas size to match zoom.
+        CanvasHost.Width = MaskBuffer.Size * _zoom;
+        CanvasHost.Height = MaskBuffer.Size * _zoom;
+
+        // Recompose the bitmap at the new zoom level.
+        RecomposeAll();
+        UpdateZoomDisplay();
     }
 }

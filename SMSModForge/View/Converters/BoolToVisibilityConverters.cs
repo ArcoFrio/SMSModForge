@@ -43,3 +43,19 @@ public sealed class InverseBoolToVisibilityConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         => !(value is Visibility v && v == Visibility.Visible);
 }
+
+/// <summary>
+/// Inverts a <see cref="bool"/> value: true → false, false → true.
+/// Used for binding a False RadioButton's IsChecked to the same BoolValue
+/// that the True RadioButton binds to directly.
+/// </summary>
+public sealed class InverseBoolConverter : IValueConverter
+{
+    public static readonly InverseBoolConverter Instance = new();
+
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        => value is bool b && !b;
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        => value is bool b && b;
+}

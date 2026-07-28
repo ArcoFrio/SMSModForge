@@ -36,7 +36,7 @@
                     </StackPanel>
                 </Border>
                 <Border BorderBrush="#A33" BorderThickness="1" Margin="0,0,0,4" Padding="4"
-                        x:Name="LayerR" Background="#220000">
+                        x:Name="LayerR" Background="#331100">
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton x:Name="ShowRToggle" IsChecked="True"
                                       Width="22" Height="22" Click="ShowR_Click"
@@ -45,12 +45,13 @@
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveR" IsChecked="True"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
-                                     Checked="ActiveR_Checked"
-                                     Content="Bounce (R) — 1" Foreground="White"/>
+                                     Checked="ActiveR_Checked" Background="Transparent" BorderBrush="Transparent">
+                            <TextBlock Text="Bounce(R)" FontSize="13" FontWeight="Bold" Foreground="#FF6666"/>
+                        </RadioButton>
                     </StackPanel>
                 </Border>
                 <Border BorderBrush="#3A3" BorderThickness="1" Margin="0,0,0,4" Padding="4"
-                        x:Name="LayerG" Background="#002200">
+                        x:Name="LayerG" Background="#113300">
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton x:Name="ShowGToggle" IsChecked="True"
                                       Width="22" Height="22" Click="ShowG_Click"
@@ -59,12 +60,13 @@
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveG"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
-                                     Checked="ActiveG_Checked"
-                                     Content="Sway (G) — 2" Foreground="White"/>
+                                     Checked="ActiveG_Checked" Background="Transparent" BorderBrush="Transparent">
+                            <TextBlock Text="Sway(G)" FontSize="13" FontWeight="Bold" Foreground="#66FF66"/>
+                        </RadioButton>
                     </StackPanel>
                 </Border>
                 <Border BorderBrush="#36A" BorderThickness="1" Margin="0,0,0,4" Padding="4"
-                        x:Name="LayerB" Background="#000033">
+                        x:Name="LayerB" Background="#110033">
                     <StackPanel Orientation="Horizontal">
                         <ToggleButton x:Name="ShowBToggle" IsChecked="True"
                                       Width="22" Height="22" Click="ShowB_Click"
@@ -73,8 +75,9 @@
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveB"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
-                                     Checked="ActiveB_Checked"
-                                     Content="Wave (B) — 3" Foreground="White"/>
+                                     Checked="ActiveB_Checked" Background="Transparent" BorderBrush="Transparent">
+                            <TextBlock Text="Wave(B)" FontSize="13" FontWeight="Bold" Foreground="#6699FF"/>
+                        </RadioButton>
                     </StackPanel>
                 </Border>
             </StackPanel>
@@ -91,7 +94,7 @@
                   Background="Transparent" Focusable="True"
                   MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove"
                   MouseUp="Canvas_MouseUp" MouseLeave="Canvas_MouseLeave"
-                  MouseEnter="Canvas_MouseEnter"
+                  MouseEnter="Canvas_MouseEnter" MouseWheel="Canvas_MouseWheel"
                   Cursor="None">
                 <Image x:Name="MaskImage" Stretch="Fill" SnapsToDevicePixels="True"
                        RenderOptions.BitmapScalingMode="NearestNeighbor"/>
@@ -149,11 +152,20 @@
                 <CheckBox x:Name="CapToggle" Content="Cap at opacity" Margin="0,12,0,0"
                           ToolTip="When checked, the opacity slider becomes a hard ceiling: strokes build up TO it but never past it, and pixels already higher are left alone."/>
 
-                <TextBlock Text="Hotkeys" FontWeight="Bold" Margin="0,16,0,4"/>
+                <TextBlock Text="Zoom" FontWeight="Bold" Margin="0,8,0,4"/>
+                <TextBlock x:Name="ZoomDisplay" Foreground="Gray" FontSize="11" TextAlignment="Center"
+                           Margin="0,0,0,4" Text="100%"/>
+                <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4">
+                    <Run Text="Scroll wheel"/><Run Text="  zoom in / out"/><LineBreak/>
+                </TextBlock>
+
+                <TextBlock Text="Hotkeys" FontWeight="Bold" Margin="0,12,0,4"/>
                 <TextBlock Foreground="Gray" FontSize="11" TextWrapping="Wrap" LineHeight="16">
                     <Run Text="B / E"/><Run Text="  brush / eraser"/><LineBreak/>
                     <Run Text="1 / 2 / 3"/><Run Text="  Bounce / Sway / Wave"/><LineBreak/>
+                    <Run Text="R / G / D"/><Run Text="  toggle channel / diffuse"/><LineBreak/>
                     <Run Text="[ / ]"/><Run Text="  smaller / larger brush"/><LineBreak/>
+                    <Run Text="C / F"/><Run Text="  clear / fill channel"/><LineBreak/>
                     <Run Text="Ctrl+Z / Ctrl+Y"/><Run Text="  undo / redo"/><LineBreak/>
                     <Run Text="Ctrl+S"/><Run Text="  save mask to file"/>
                 </TextBlock>

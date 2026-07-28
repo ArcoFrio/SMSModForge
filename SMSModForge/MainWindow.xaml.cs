@@ -16,8 +16,9 @@ namespace SMSModForge;
 
 public partial class MainWindow : Window
 {
-    // Track mask editors by outfit so we don't open two for the same one.
+    // Track mask editors by host (outfit or NPC) so we don't open two for the same one.
     private readonly Dictionary<OutfitViewModel, MaskEditorWindow> _maskEditors = new();
+    private readonly Dictionary<NpcViewModel, MaskEditorWindow> _npcMaskEditors = new();
 
     public MainWindow()
     {
@@ -386,6 +387,32 @@ public partial class MainWindow : Window
         var win = new MaskEditorWindow(outfit, vm.PackRoot) { Owner = this };
         _maskEditors[outfit] = win;
         win.Closed += (_, _) => _maskEditors.Remove(outfit);
+        win.Show();
+    }
+
+    private void EditNpcMask_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        var npc = vm.SelectedNpc;
+        if (npc is null) return;
+        if (string.IsNullOrWhiteSpace(vm.PackRoot))
+        {
+            MessageBox.Show(this,
+                "Save the pack to disk first — the mask editor needs a folder to read the diffuse from and to save the mask into.",
+                "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        // If one is already open for this NPC, bring it forward.
+        if (_npcMaskEditors.TryGetValue(npc, out var existing))
+        {
+            existing.Activate();
+            return;
+        }
+
+        var win = new MaskEditorWindow(npc, vm.PackRoot) { Owner = this };
+        _npcMaskEditors[npc] = win;
+        win.Closed += (_, _) => _npcMaskEditors.Remove(npc);
         win.Show();
     }
 

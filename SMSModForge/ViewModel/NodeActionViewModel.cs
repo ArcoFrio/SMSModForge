@@ -113,7 +113,10 @@ public sealed class NodeActionViewModel : ObservableObject
         ParamRows.Clear();
         var schemas = ActionSchemas.For(Model.Type);
         foreach (var schema in schemas)
-            ParamRows.Add(new ParamRowViewModel(
+        {
+            var paramType = schema.Type;
+            ParamRowViewModel? capturedRow = null;
+            var row = new ParamRowViewModel(
                 Model.Params, schema,
                 onValueChanged: () =>
                 {
@@ -130,14 +133,19 @@ public sealed class NodeActionViewModel : ObservableObject
                     // EnabledWhen gate. No action schema declares one today,
                     // but wiring it here means adding one just works.
                     foreach (var r in ParamRows) r.RefreshEnabled();
-                })
+                    // Re-check boolean variable detection for PackVarRef/BoolVarRef rows.
+                    if (paramType == ParamType.PackVarRef || paramType == ParamType.BoolVarRef)
+                        capturedRow?.RefreshBooleanDetection();
+                });
+            capturedRow = row;
+            row.DefaultOf = k =>
             {
-                DefaultOf = k =>
-                {
-                    foreach (var s in schemas) if (s.Key == k) return s.DefaultValue;
-                    return "";
-                },
-            });
+                foreach (var s in schemas) if (s.Key == k) return s.DefaultValue;
+                return "";
+            };
+            row.IsBooleanVarChecker = MainViewModel.IsVariableBoolean;
+            ParamRows.Add(row);
+        }
     }
 
     // ── Typed shortcuts for well-known param keys ────────────────────

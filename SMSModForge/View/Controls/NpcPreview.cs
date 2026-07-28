@@ -87,6 +87,11 @@ public sealed class NpcPreview : Grid
     // and composited into its output (blink) — so blink rides the jiggle and
     // its alpha is premultiplied by CompositeSame (no white halo).
     private byte[]? _base, _mask, _blinkTex;
+
+    // Live mask cache — the mask editor publishes a 256×256 BGRA buffer;
+    // we resize it to the source grid each time the revision bumps.
+    private byte[]? _liveMaskResized;
+    private int _liveMaskResizedRevision;
     private double _poseAspect = 1;        // realWidth / realHeight
     private double _ppu = 20;              // preview px per world unit (set on load)
 
@@ -249,7 +254,23 @@ public sealed class NpcPreview : Grid
         // jiggle and gets proper premultiplied alpha.
         byte[]? blink = BlinkOverlayForThisFrame(nowMs / 1000.0);
 
-        byte[] baseSnap = _base, maskSnap = _mask, output = _bodyOutput;
+        // Prefer the live mask buffer published by the mask editor.
+        byte[] maskSnap;
+        if (Npc.LiveMaskBgra != null)
+        {
+            if (_liveMaskResizedRevision != Npc.LiveMaskRevision)
+            {
+                _liveMaskResized = BustComposer.Resize(Npc.LiveMaskBgra, MaskBuffer.Size, MaskBuffer.Size, _srcW, _srcH);
+                _liveMaskResizedRevision = Npc.LiveMaskRevision;
+            }
+            maskSnap = _liveMaskResized!;
+        }
+        else
+        {
+            maskSnap = _mask!;
+        }
+
+        byte[] baseSnap = _base, output = _bodyOutput;
         var bmp = _bodyBitmap;
         int sw = _srcW, sh = _srcH, ow = _outW, oh = _outH;
         var jiggle = Npc.Model.Jiggle;
