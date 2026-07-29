@@ -395,10 +395,30 @@ namespace SMSModForge.PackPlugin
         public bool RefreshOnDayChange()
         {
             bool anyPersisted = false;
+            int dailyReset = 0;
+            System.Text.StringBuilder changed = null;
+
             foreach (var d in _decls.Values)
             {
                 if (d.Refresh == RefreshMode.Daily)
-                    _values[d.Name] = d.DefaultValue ?? "";
+                {
+                    // Report only the ones that actually MOVED. A Daily variable
+                    // still holding yesterday's value the morning after is the
+                    // signature of this pass not running at all, and telling
+                    // "reset it" apart from "it was already default" is the
+                    // difference between blaming the refresh and blaming the
+                    // rules that repopulate it.
+                    _values.TryGetValue(d.Name, out var before);
+                    string after = d.DefaultValue ?? "";
+                    _values[d.Name] = after;
+                    dailyReset++;
+                    if (before != after)
+                    {
+                        changed = changed ?? new System.Text.StringBuilder();
+                        if (changed.Length > 0) changed.Append(", ");
+                        changed.Append(d.Name).Append(": ").Append(before).Append(" -> ").Append(after);
+                    }
+                }
                 else if (d.Refresh == RefreshMode.DailyRandom)
                 {
                     _values[d.Name] = RollRandom(d);
@@ -409,6 +429,10 @@ namespace SMSModForge.PackPlugin
                     continue;
                 if (d.Persisted) anyPersisted = true;
             }
+
+            _log?.LogInfo("[SMSModForge.PackPlugin] " + PackId + ": daily refresh reset " +
+                          dailyReset + " variable(s)" +
+                          (changed != null ? " — " + changed : " — none had drifted from default"));
             return anyPersisted;
         }
 
