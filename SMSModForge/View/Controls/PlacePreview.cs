@@ -709,13 +709,12 @@ public sealed class PlacePreview : Grid
             Canvas.SetLeft(slot, left);
             Canvas.SetTop(slot, top);
 
-            // Background: the game's own "Semi Rounded", nine-sliced. A plain
-            // stretch would pull its 30px corners into ellipses on a 125x75
-            // button — Unity slices it, so the corners stay put and only the
-            // edges and middle give.
-            var bg = NineSlice(LoadOverlayFile("Semi Rounded.png"), SemiRoundedBorder,
-                               ButtonWidth, ButtonHeight);
-            if (bg != null) { Canvas.SetLeft(bg, 0); Canvas.SetTop(bg, 0); slot.Children.Add(bg); }
+            // Background: "Semi Rounded" at its own 30px corner radius, which is
+            // what Unity's nine-slice preserves at any button size.
+            var bg = ButtonBackground(ButtonWidth, ButtonHeight, SemiRoundedBorder);
+            Canvas.SetLeft(bg, 0);
+            Canvas.SetTop(bg, 0);
+            slot.Children.Add(bg);
 
             // The number's disc, tinted as the game tints it.
             AddTintedSprite(slot, "Blockout_CircleSolid.png", NumberDiscColor,
@@ -726,7 +725,8 @@ public sealed class PlacePreview : Grid
             // rather than squashed to fill.
             AddTintedSprite(slot, "Minus.png", Colors.Black,
                             ButtonWidth / 2.0, ButtonHeight / 2.0 + 24.16,
-                            MinusWidth, MinusWidth * 34.0 / 234.0);
+                            MinusWidth, MinusWidth * MinusRect.Height / (double)MinusRect.Width,
+                            MinusRect);
 
             // Order number (Barton), 1-based, on the disc.
             AddCenteredText(slot, (i + 1).ToString(), numberFont, NumberFontSize,
@@ -743,64 +743,59 @@ public sealed class PlacePreview : Grid
         }
     }
 
-    /// <summary>The nine-slice inset on "Semi Rounded" (m_Border 30 all round),
-    /// and the sizes and tint the button's decorations are authored at.</summary>
+    /// <summary>Corner radius of the button background. "Semi Rounded" carries
+    /// m_Border 30 on every side, which is the radius Unity's nine-slice
+    /// preserves at any button size.</summary>
     private const double SemiRoundedBorder = 30;
     private const double NumberDiscSize = 45;
     private const double MinusWidth = 100;
     private static readonly Color NumberDiscColor = Color.FromRgb(0x5B, 0x2B, 0x57);
 
+    /// <summary>Minus's own rect inside its 256x256 texture, top-left origin —
+    /// Unity records it bottom-up as (11, 111, 234, 34).</summary>
+    private static readonly Int32Rect MinusRect = new(11, 111, 234, 34);
+
     /// <summary>
-    /// Nine-slice a sprite into a target rectangle: fixed corners, stretched
-    /// edges, stretched middle — what Unity's Sliced image type does.
+    /// The button background: a rounded rectangle drawn as geometry.
     /// <para/>
-    /// WPF has no nine-grid brush, so this is nine cropped pieces in a 3x3 grid
-    /// whose outer rows and columns are pinned to the border inset. Without it
-    /// the button's rounded corners stretch with the button and it stops looking
-    /// like the game's.
+    /// This was nine cropped bitmap pieces in a grid, reproducing Unity's Sliced
+    /// type. It sliced correctly but showed hairline seams between the pieces,
+    /// and they are not fixable in the general case: each piece is stretched
+    /// independently and filtered to its own edge, with nothing beyond the crop
+    /// to sample, so the joins fade wherever a cell boundary lands off a whole
+    /// pixel — which the preview's arbitrary zoom guarantees.
+    /// <para/>
+    /// "Semi Rounded" is a flat rounded rectangle — the sheet's stroke variants
+    /// are the outlined ones — and a nine-slice of a flat rounded rectangle IS a
+    /// rounded rectangle with the border as its radius. Drawing it directly is
+    /// both seamless and exact, with no resampling at any zoom.
     /// </summary>
-    private static FrameworkElement? NineSlice(BitmapSource? src, double border,
-                                               double targetW, double targetH)
-    {
-        if (src == null) return null;
-        int b = (int)Math.Round(border);
-        int sw = src.PixelWidth, sh = src.PixelHeight;
-        // Degenerate source (or a border that would overlap): just stretch.
-        if (b <= 0 || sw <= b * 2 || sh <= b * 2)
-            return new Image { Source = src, Width = targetW, Height = targetH, Stretch = Stretch.Fill };
-
-        var grid = new Grid { Width = targetW, Height = targetH };
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(b) });
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(b) });
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(b) });
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(b) });
-
-        int[] xs = { 0, b, sw - b }, ws = { b, sw - b * 2, b };
-        int[] ys = { 0, b, sh - b }, hs = { b, sh - b * 2, b };
-        for (int r = 0; r < 3; r++)
-            for (int c = 0; c < 3; c++)
-            {
-                var piece = new Image
-                {
-                    Source = new CroppedBitmap(src, new Int32Rect(xs[c], ys[r], ws[c], hs[r])),
-                    Stretch = Stretch.Fill,
-                };
-                Grid.SetColumn(piece, c);
-                Grid.SetRow(piece, r);
-                grid.Children.Add(piece);
-            }
-        return grid;
-    }
+    private static FrameworkElement ButtonBackground(double w, double h, double radius)
+        => new Rectangle
+        {
+            Width = w,
+            Height = h,
+            RadiusX = radius,
+            RadiusY = radius,
+            Fill = Brushes.White,
+        };
 
     /// <summary>Draw one of the button's decoration sprites, tinted the way the
     /// game tints it, centred on a point in the slot's local space.</summary>
+    /// <param name="sourceRect">The sprite's own rect inside its texture, or
+    /// empty for the whole thing. A Unity sprite is a REGION of a sheet, not
+    /// necessarily the file: Minus is 234x34 at (11, 111) of a 256x256 texture,
+    /// and masking with the whole file squeezed the bar into a thirteenth of the
+    /// height it should have had.</param>
     private static void AddTintedSprite(Canvas slot, string file, Color tint,
-                                        double cx, double cy, double w, double h)
+                                        double cx, double cy, double w, double h,
+                                        Int32Rect sourceRect = default)
     {
         var src = LoadOverlayFile(file);
         if (src == null) return;
+        BitmapSource masked = sourceRect.HasArea
+            ? new CroppedBitmap(src, sourceRect)
+            : src;
         // Tinting is a fill masked by the sprite — these are flat shapes, so
         // masking is exact rather than an approximation.
         var el = new Rectangle
@@ -808,7 +803,7 @@ public sealed class PlacePreview : Grid
             Width = w,
             Height = h,
             Fill = new SolidColorBrush(tint),
-            OpacityMask = new ImageBrush(src),
+            OpacityMask = new ImageBrush(masked),
         };
         Canvas.SetLeft(el, cx - w / 2.0);
         Canvas.SetTop(el, cy - h / 2.0);
