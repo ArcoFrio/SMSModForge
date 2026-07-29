@@ -66,6 +66,11 @@ public sealed class MainViewModel : ObservableObject
         // first outfit, so without this an undo on the Busts tab throws you onto
         // a different bust than the one you were editing.
         string? outfitKey = SelectedOutfit?.Key;
+        // The Places tab shows either a pack place or a vanilla extension, never
+        // both — setting one selection clears the other. Only the place was ever
+        // restored, so an undo made while editing an extension put the place
+        // editor back on screen and moved the user to a different level entirely.
+        string? extSource = SelectedVanillaExtension?.Source;
 
         Undo.Suspended = true;
         try
@@ -102,6 +107,13 @@ public sealed class MainViewModel : ObservableObject
         {
             var o = Characters.SelectMany(c => c.Outfits).FirstOrDefault(x => x.Key == outfitKey);
             if (o != null) SelectedOutfit = o;
+        }
+        // Last, so it wins: the two are mutually exclusive and at most one of
+        // them was set when the snapshot was taken.
+        if (extSource != null)
+        {
+            var e = VanillaExtensions.FirstOrDefault(x => x.Source == extSource);
+            if (e != null) SelectedVanillaExtension = e;
         }
     }
 

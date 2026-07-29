@@ -2630,6 +2630,36 @@
                                 </Grid>
                             </GroupBox>
 
+                            <GroupBox Header="Reflection (mirrored copy of the pose)">
+                                <StackPanel>
+                                    <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
+                                               Text="Draws the pose again, flipped downward — the floor-reflection pattern several vanilla levels build by hand. It reuses the pose's own sprite and material, so it costs one renderer and no extra art. Vanilla draws these IN FRONT of the body, which is what makes them read as lying on the floor."/>
+                                    <CheckBox Content="Enabled" IsChecked="{Binding ReflectionEnabled}" Margin="0,0,0,4"/>
+                                    <Grid Visibility="{Binding ReflectionEnabled, Converter={StaticResource BoolToVisibility}}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Text="Alpha:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="0" Grid.Column="1" Width="70" HorizontalAlignment="Left"
+                                                 Text="{Binding ReflectionAlpha, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="0–1. Vanilla reflections read as a faint wash rather than a second character."/>
+                                        <TextBlock Text="Y offset:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="1" Grid.Column="1" Width="70" HorizontalAlignment="Left"
+                                                 Text="{Binding ReflectionOffsetY, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="World units from the pose's origin. Negative pushes the reflection further down."/>
+                                        <TextBlock Text="Sorting order:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="2" Grid.Column="1" Width="70" HorizontalAlignment="Left"
+                                                 Text="{Binding ReflectionSortingOrder, UpdateSourceTrigger=PropertyChanged}"/>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+
                             <GroupBox Header="Shadow (procedural circle — deformed by transform)">
                                 <StackPanel>
                                     <CheckBox Content="Enabled" IsChecked="{Binding ShadowEnabled}" Margin="0,0,0,4"/>

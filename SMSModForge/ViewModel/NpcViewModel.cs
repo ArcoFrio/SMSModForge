@@ -84,6 +84,12 @@ public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
     public string ShadowColor   { get => Model.Shadow.Color;        set { Model.Shadow.Color = value; OnPropertyChanged(); } }
     public int ShadowSortingOrder { get => Model.Shadow.SortingOrder; set { Model.Shadow.SortingOrder = value; OnPropertyChanged(); } }
 
+    // ── Reflection (a mirrored copy of the pose, drawn downward) ─────────
+    public bool ReflectionEnabled { get => Model.Reflection.Enabled; set { Model.Reflection.Enabled = value; OnPropertyChanged(); } }
+    public float ReflectionAlpha  { get => Model.Reflection.Alpha;   set { Model.Reflection.Alpha = value; OnPropertyChanged(); } }
+    public float ReflectionOffsetY { get => Model.Reflection.OffsetY; set { Model.Reflection.OffsetY = value; OnPropertyChanged(); } }
+    public int ReflectionSortingOrder { get => Model.Reflection.SortingOrder; set { Model.Reflection.SortingOrder = value; OnPropertyChanged(); } }
+
     // ── Wet (enabled/active; its emitter transform lives on the placement) ─
     public bool WetEnabled     { get => Model.Wet.Enabled;     set { Model.Wet.Enabled = value; OnPropertyChanged(); } }
     public bool WetStartActive { get => Model.Wet.StartActive; set { Model.Wet.StartActive = value; OnPropertyChanged(); } }

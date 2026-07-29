@@ -98,6 +98,7 @@ namespace SMSModForge.PackPlugin
                 sr.material = mat;
             }
 
+            BuildReflection(go.transform, def["reflection"] as JObject, sr);
             BuildBlink(go.transform, def["blink"] as JObject, pl["blink"] as JObject, pack, sr);
             BuildShadow(go.transform, def["shadow"] as JObject, pl["shadow"] as JObject);
             BuildWet(go.transform, def["wet"] as JObject, pl["wet"] as JObject);
@@ -131,6 +132,38 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>Eyes-closed overlay. Shares the parent's material so the
         /// jiggle distortion lines up with the face; +1 sorting order. Uses the
+        /// <summary>
+        /// A downward mirror of the pose — the floor-reflection pattern several
+        /// vanilla levels build by hand as a child holding the same sprite at
+        /// scale (1, -1).
+        /// <para/>
+        /// Shares the parent's sprite and material rather than loading anything,
+        /// so it costs one renderer and no extra texture: it IS the pose, drawn
+        /// again upside down. Vanilla puts these in front of the body, which is
+        /// what makes them read as lying on the floor rather than behind it.
+        /// </summary>
+        private static void BuildReflection(Transform npc, JObject reflDef, SpriteRenderer parentSr)
+        {
+            if (reflDef == null || parentSr == null) return;
+            if ((bool?)reflDef["enabled"] != true) return;
+
+            var go = new GameObject("Reflection");
+            go.transform.SetParent(npc, false);
+            // Flip on Y about the pose's origin, then drop by the authored
+            // offset. Local, so it follows the body's own scale and rotation.
+            go.transform.localScale = new Vector3(1f, -1f, 1f);
+            go.transform.localPosition = new Vector3(0f, F(reflDef, "offsetY", 0f), 0f);
+
+            var sr = go.AddComponent<SpriteRenderer>();
+            sr.sprite = parentSr.sprite;
+            sr.sharedMaterial = parentSr.sharedMaterial;   // same jiggle material
+            sr.sortingOrder = (int?)reflDef["sortingOrder"] ?? 0;
+
+            var c = sr.color;
+            c.a = Mathf.Clamp01(F(reflDef, "alpha", 0.35f));
+            sr.color = c;
+        }
+
         /// generic BlinkingSprite component (random open, brief close).</summary>
         private static void BuildBlink(Transform npc, JObject blinkDef, JObject blinkTr, PackManifest pack, SpriteRenderer parentSr)
         {

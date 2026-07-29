@@ -57,6 +57,15 @@ public sealed class NpcDef
     [JsonProperty("wet", Order = 9)]
     public NpcWetDef Wet { get; set; } = new();
 
+    /// <summary>
+    /// Mirror the pose downward as a floor reflection — the pattern several
+    /// vanilla levels use, where an NPC carries a child holding the same sprite
+    /// at scale (1, -1). Off by default; nothing about an NPC implies it wants
+    /// one, and it costs a second renderer.
+    /// </summary>
+    [JsonProperty("reflection", Order = 10)]
+    public NpcReflectionDef Reflection { get; set; } = new();
+
     /// <summary>The jiggle preset every reference NPC ships with (the bust
     /// defaults differ: 3 / -0.02 / 4 / 5 / 0.5, no snap).</summary>
     public static JiggleParams NewNpcJiggle() => new()
@@ -94,6 +103,32 @@ public sealed class NpcBlinkDef
     /// <summary>How long the eyes stay closed per blink.</summary>
     [JsonProperty("hold", Order = 4)]
     public float Hold { get; set; } = 0.2f;
+}
+
+/// <summary>
+/// A downward mirror of the pose, standing in for a reflection on a wet or
+/// polished floor. Reproduces what vanilla levels do by hand: a child of the
+/// NPC holding the same sprite, flipped on Y.
+/// </summary>
+public sealed class NpcReflectionDef
+{
+    [JsonProperty("enabled", Order = 1)]
+    public bool Enabled { get; set; } = false;
+
+    /// <summary>How visible the mirrored copy is. Vanilla reflections read as a
+    /// faint wash rather than a second character.</summary>
+    [JsonProperty("alpha", Order = 2)]
+    public float Alpha { get; set; } = 0.35f;
+
+    /// <summary>Vertical offset from the pose's feet, in world units. Negative
+    /// pushes it further down.</summary>
+    [JsonProperty("offsetY", Order = 3)]
+    public float OffsetY { get; set; } = 0f;
+
+    /// <summary>Sorting order for the mirrored copy. Vanilla puts these in FRONT
+    /// of the body, which is what makes them read as lying on the floor.</summary>
+    [JsonProperty("sortingOrder", Order = 4)]
+    public int SortingOrder { get; set; } = 0;
 }
 
 /// <summary>

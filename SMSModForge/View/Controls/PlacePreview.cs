@@ -751,12 +751,19 @@ public sealed class PlacePreview : Grid
                     Width = w,
                     Height = h,
                     Stretch = Stretch.Fill,
-                    Opacity = Math.Clamp(o.StartAlpha, 0.0, 1.0) * (o.StartActive ? 1.0 : 0.35),
+                    // Dimmed harder for an inactive ANCESTOR than for a node
+                    // that merely starts off itself: the game renders nothing
+                    // at all under a switched-off parent, so a whole group of
+                    // vanilla NPCs waiting to be activated should read as
+                    // scenery notes rather than as part of the picture.
+                    Opacity = Math.Clamp(o.StartAlpha, 0.0, 1.0) *
+                              (entry.ParentInactive ? 0.15 : o.StartActive ? 1.0 : 0.35),
                     RenderTransform = new MatrixTransform(m),
                     ToolTip = o.Name +
                               "\nsorting order " + o.SortingOrder +
                               (o.SortingOrder < LevelBaseSortingOrder ? "  (behind the level art)" : "") +
-                              (o.StartActive ? "" : "\n(starts inactive)"),
+                              (o.StartActive ? "" : "\n(starts inactive)") +
+                              (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : ""),
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
                 var pathForClick = entry.Path;
@@ -884,18 +891,25 @@ public sealed class PlacePreview : Grid
         public bool InNpcSubtree;                // composed (local) rather than flat (world)
         public Aff World;                        // the node's own world transform
         public Aff ParentWorld;                  // its parent's world — the gizmo frame
+
+        /// <summary>Whether an ANCESTOR starts inactive. Unity renders nothing
+        /// under an inactive parent however active the child itself is, so a
+        /// node has to be judged on the whole chain — reading its own flag alone
+        /// drew every member of a switched-off group at full strength.</summary>
+        public bool ParentInactive;
     }
 
     /// <summary>Walk the whole GameObject tree into a flat, tree-ordered list.</summary>
     private List<SceneEntry> BuildScene()
     {
         var entries = new List<SceneEntry>();
-        WalkScene(GameObjects, "", 0, Aff.Identity, false, entries);
+        WalkScene(GameObjects, "", 0, Aff.Identity, false, false, entries);
         return entries;
     }
 
     private static void WalkScene(IEnumerable? items, string prefix, int depth,
-                                  Aff parentWorld, bool inNpcSubtree, List<SceneEntry> into)
+                                  Aff parentWorld, bool inNpcSubtree, bool parentInactive,
+                                  List<SceneEntry> into)
     {
         if (items == null) return;
         foreach (var it in items)
@@ -920,7 +934,11 @@ public sealed class PlacePreview : Grid
             {
                 Node = o, Path = path, Depth = depth,
                 InNpcSubtree = npc, World = world, ParentWorld = frameParent,
+                ParentInactive = parentInactive,
             });
+
+            // Everything below inherits this node's switched-off state.
+            bool childrenInactive = parentInactive || !o.StartActive;
 
             foreach (var pl in o.Npcs)
             {
@@ -931,14 +949,16 @@ public sealed class PlacePreview : Grid
                 {
                     Npc = pl, Path = npcPath, Depth = depth + 1,
                     InNpcSubtree = npc, World = world, ParentWorld = world,
+                    ParentInactive = childrenInactive,
                 });
                 // GameObjects parented under the NPC ride along with its body,
                 // so they compose from the body's world transform.
                 WalkScene(pl.Children, npcPath, depth + 2,
-                          world.Then(LeafAff(pl.Body)), true, into);
+                          world.Then(LeafAff(pl.Body)), true,
+                          childrenInactive || !pl.StartActive, into);
             }
 
-            WalkScene(o.Children, path, depth + 1, world, npc, into);
+            WalkScene(o.Children, path, depth + 1, world, npc, childrenInactive, into);
         }
     }
 
@@ -996,11 +1016,14 @@ public sealed class PlacePreview : Grid
             // The placement's parent is the node it hangs under, already composed
             // down the NPCs chain by the scene walk.
             Aff body = entry.ParentWorld.Then(LeafAff(pl.Body));
-            double ghost = pl.StartActive ? 1.0 : 0.4;
+            // Same three-way reading the GameObject rows use: an inactive
+            // ancestor means the game draws nothing here at all.
+            double ghost = entry.ParentInactive ? 0.15 : pl.StartActive ? 1.0 : 0.4;
             int bodyOrder = def.SortingOrder;
             string tip = (string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name)
                        + "  (" + pl.Npc + ")\nsorting order " + bodyOrder
-                       + (pl.StartActive ? "" : "\n(starts inactive)");
+                       + (pl.StartActive ? "" : "\n(starts inactive)")
+                       + (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : "");
 
             // Shadow (child of the body): a tinted circle, order from the def.
             if (def.ShadowEnabled)
