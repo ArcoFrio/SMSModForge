@@ -92,6 +92,11 @@ namespace SMSModForge.PackPlugin
         private static bool _afterSleepProc;
         private static bool _savedUiWasActive;
 
+        /// <summary>True once this sleep's gameplay turnover (daily variable
+        /// refresh + OnDayChange arming) has run, so it fires once per sleep
+        /// while the Saved UI is up rather than every frame of the flash.</summary>
+        private static bool _dayTurnoverProc;
+
         /// <summary>
         /// True once the sleep autosave has fired this gameplay session (reset
         /// on every scene load). The manual-save copy reads this to decide its
@@ -378,6 +383,7 @@ namespace SMSModForge.PackPlugin
             _savedUI = null;
             _afterSleepProc = false;
             _savedUiWasActive = false;
+            _dayTurnoverProc = false;
             AutosaveProcedThisSession = false;
             // Reset slot tracking so the next CoreGameScene fresh-loads
             // the active slot's file (the player might have switched
@@ -864,14 +870,49 @@ namespace SMSModForge.PackPlugin
             if (_afterSleepEvents.activeSelf && !_afterSleepProc)
                 _afterSleepProc = true;
 
-            // Stage 2 — commit on the Saved-UI falling edge (was showing, now
-            // gone) with a sleep latched. Waiting for the flash to end lets
-            // the host mod's same-night turnover writes land in the store first.
             bool savedActive = _savedUI.activeSelf;
+
+            // Stage 2 — GAMEPLAY turnover, the moment the Saved UI appears.
+            //
+            // This is the host mod's gate exactly: SaveManager latches on
+            // afterSleepEvents and runs its turnover on `savedUI.activeSelf`,
+            // not on the flash ending. Doing our day-change work at the END of
+            // the flash instead left several seconds in which the player has
+            // control while every Daily variable still holds yesterday's value
+            // — long enough to walk into a room, or open the map, and act on
+            // state that is about to change underneath them.
+            //
+            // Nothing the host writes here is a Daily variable, so running the
+            // refresh alongside its turnover cannot clobber it.
+            if (savedActive && _afterSleepProc && !_dayTurnoverProc)
+            {
+                _dayTurnoverProc = true;
+                foreach (var c in _contexts)
+                {
+                    if (c.Vars == null) continue;
+                    c.Vars.RefreshOnDayChange();  // Daily / DailyRandom refresh policies
+                    // Let OnDayChange integration rules know an event happened.
+                    // They fire on the next Tick if their conditions also pass —
+                    // which is now while the flash is still up, so a schedule has
+                    // repopulated before the player can move.
+                    c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
+                    // Report the new day's DailyChance outcomes. Nothing is
+                    // rolled here: the values are derived, so this just prints
+                    // what every DailyChance condition will evaluate to today.
+                    LogDailyChances(c);
+                }
+            }
+
+            // Stage 3 — commit on the Saved-UI falling edge (was showing, now
+            // gone). The DISK write stays late on purpose: the host mod's own
+            // turnover writes pack variables through ModForgeBridge into this
+            // store while the flash is up, and flushing afterwards is what
+            // guarantees those night writes are in the committed file.
             bool fallingEdge = _savedUiWasActive && !savedActive;
             _savedUiWasActive = savedActive;
             if (!(fallingEdge && _afterSleepProc)) return;
             _afterSleepProc = false;
+            _dayTurnoverProc = false;
             AutosaveProcedThisSession = true;
 
             // The vanilla autosave always targets the dedicated autosave slot
@@ -886,19 +927,10 @@ namespace SMSModForge.PackPlugin
             foreach (var c in _contexts)
             {
                 if (c.Vars == null) continue;
-                c.Vars.RefreshOnDayChange();   // step 1 — apply Daily/DailyRandom refresh policies
-                c.Vars.SaveToSlot(1);          // step 2 — commit to the autosave slot
+                // Refresh already happened at stage 2, with the host mod's own
+                // turnover — this is purely the disk commit.
+                c.Vars.SaveToSlot(1);             // the autosave slot
                 if (monday) c.Vars.SaveToSlot(2); // Monday backup, mirroring SaveToFile(2)
-                // step 3 — let OnDayChange integration rules know an
-                // event happened. They'll fire on the next Tick if
-                // their conditions also pass.
-                c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
-                // step 4 — report the new day's DailyChance outcomes. Nothing
-                // is rolled here: the values are derived, so this just prints
-                // what every DailyChance condition in the pack will evaluate
-                // to for the rest of today. Runs after the Day tick-over, so
-                // it reports the day the player is waking into.
-                LogDailyChances(c);
             }
 
             Logger.LogInfo("[SMSModForge.PackPlugin] Player slept (now day " + day +
