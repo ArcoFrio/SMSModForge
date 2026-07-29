@@ -69,7 +69,41 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>Drop the cached contexts — they hold a material from a scene
         /// that no longer exists once it unloads.</summary>
-        public static void Reset() => _byPack.Clear();
+        public static void Reset() { _byPack.Clear(); _reflectionProto = null; _reflectionSearched = false; }
+
+        private static Material _reflectionProto;
+        private static bool _reflectionSearched;
+
+        /// <summary>
+        /// The game's own reflection material, borrowed from the scene.
+        /// <para/>
+        /// Several vanilla levels already build floor reflections by hand, and
+        /// every one is identifiable the same way: a renderer whose material has
+        /// "Reflection" in its name. Taking theirs means a pack reflection is
+        /// shaded by the real thing rather than an approximation of it, with no
+        /// asset to ship and no AssetBundle to build.
+        /// <para/>
+        /// Searched once per scene. A level that has no reflection anywhere
+        /// simply yields null, and the caller falls back.
+        /// </summary>
+        private static Material ReflectionProto()
+        {
+            if (_reflectionSearched) return _reflectionProto;
+            _reflectionSearched = true;
+
+            var levels = GameObject.Find("5_Levels");
+            if (levels == null) return null;
+
+            foreach (var sr in levels.GetComponentsInChildren<SpriteRenderer>(true))
+            {
+                var m = sr != null ? sr.sharedMaterial : null;
+                if (m == null || m.name == null) continue;
+                if (m.name.IndexOf("Reflection", System.StringComparison.OrdinalIgnoreCase) < 0) continue;
+                _reflectionProto = m;
+                break;
+            }
+            return _reflectionProto;
+        }
 
         /// <summary>Build one NPC placement as a child of <paramref name="parent"/>
         /// (the GameObject tree node it's authored under). <paramref name="level"/>
@@ -162,10 +196,14 @@ namespace SMSModForge.PackPlugin
         /// vanilla levels build by hand as a child holding the same sprite at
         /// scale (1, -1).
         /// <para/>
-        /// Shares the parent's sprite and material rather than loading anything,
-        /// so it costs one renderer and no extra texture: it IS the pose, drawn
-        /// again upside down. Vanilla puts these in front of the body, which is
-        /// what makes them read as lying on the floor rather than behind it.
+        /// Shares the parent's SPRITE, so it costs no extra texture: it IS the
+        /// pose, drawn again upside down. It does NOT share the parent's
+        /// material — that one is the jiggle shader, and a reflection has no
+        /// business wobbling. It takes the game's own reflection material
+        /// instead, found in the scene by name (see <see cref="ReflectionProto"/>).
+        /// <para/>
+        /// Vanilla puts these in front of the body, which is what makes them read
+        /// as lying on the floor rather than behind it.
         /// </summary>
         private static void BuildReflection(Transform npc, JObject reflDef, SpriteRenderer parentSr)
         {
@@ -187,15 +225,36 @@ namespace SMSModForge.PackPlugin
 
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = parentSr.sprite;
-            sr.sharedMaterial = parentSr.sharedMaterial;   // same jiggle material
             sr.sortingOrder = (int?)reflDef["sortingOrder"] ?? 0;
 
-            // Tint AND alpha together, the way the vanilla ones are set: their
-            // renderer colour carries both (Downtown's are #AD92AA at varying
-            // alpha). A reflection takes the colour of what it lies on.
+            // The game's reflection material, cloned so this NPC's alpha doesn't
+            // leak into every other reflection sharing the asset. Falls back to
+            // the parent's material only if the scene has none to borrow — a
+            // wobbling reflection is wrong, but an invisible one is worse.
+            float alpha = Mathf.Clamp01(F(reflDef, "alpha", 0.58f));
+            var proto = ReflectionProto();
+            if (proto != null)
+            {
+                var mat = new Material(proto);
+                // The material carries the fade in vanilla; honour the authored
+                // value through the same property rather than fighting it with
+                // the renderer colour alone.
+                if (mat.HasProperty("_Alpha")) mat.SetFloat("_Alpha", alpha);
+                sr.sharedMaterial = mat;
+            }
+            else
+            {
+                sr.sharedMaterial = parentSr.sharedMaterial;
+            }
+
+            // Tint on the renderer colour, the way the vanilla ones carry it
+            // (Downtown's are #AD92AA). A reflection takes the colour of what it
+            // lies on. Alpha rides here too, so it still applies when the scene
+            // had no reflection material to borrow and the material's own _Alpha
+            // never got set.
             if (!BustFactory.TryParseHexColor((string)reflDef["tint"] ?? "#AD92AA", out var c))
                 c = Color.white;
-            c.a = Mathf.Clamp01(F(reflDef, "alpha", 0.58f));
+            c.a = alpha;
             sr.color = c;
         }
 
