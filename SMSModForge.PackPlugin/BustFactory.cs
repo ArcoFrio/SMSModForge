@@ -170,6 +170,12 @@ namespace SMSModForge.PackPlugin
             // down — it survived removing the body's tint from the copy — so
             // the default stays on the appearance that is known good and this
             // is a switch to experiment behind rather than a silent change.
+            // One-off diagnostic: what the vanilla overlay renderers are actually
+            // shaded with. Sharing the body's jiggle material with them washes
+            // them out, and that is only explicable if their own shader differs
+            // from the body's in how it handles alpha — this says which.
+            LogOverlayShadersOnce(mBase, blink, mouthGo, expressions, logger);
+
             if ((bool?)jiggle?["applyToOverlays"] ?? false)
                 ShareMaterial(mat, blink, mouthGo, expressions);
 
@@ -264,6 +270,36 @@ namespace SMSModForge.PackPlugin
                             : Color.white);
                     sr.sharedMaterial = m;
                 }
+            }
+        }
+
+        private static bool _loggedOverlayShaders;
+
+        /// <summary>Report the body's shader and each overlay's, once per session.</summary>
+        private static void LogOverlayShadersOnce(GameObject body, GameObject blink,
+                                                  GameObject mouth, GameObject expressions,
+                                                  ManualLogSource logger)
+        {
+            if (_loggedOverlayShaders || logger == null) return;
+            _loggedOverlayShaders = true;
+
+            string Describe(SpriteRenderer sr)
+            {
+                if (sr == null) return "(none)";
+                var m = sr.sharedMaterial;
+                return m == null
+                    ? "(no material)"
+                    : m.shader == null ? "(no shader)" : m.shader.name + "  color=" + sr.color;
+            }
+
+            logger.LogInfo("[SMSModForge.PackPlugin] Bust shaders — body: " +
+                           Describe(body?.GetComponent<SpriteRenderer>()));
+            foreach (var root in new[] { blink, mouth, expressions })
+            {
+                if (root == null) continue;
+                foreach (var sr in root.GetComponentsInChildren<SpriteRenderer>(true))
+                    logger.LogInfo("[SMSModForge.PackPlugin]   overlay '" +
+                                   sr.transform.parent?.name + "/" + sr.name + "': " + Describe(sr));
             }
         }
 
