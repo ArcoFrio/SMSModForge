@@ -4332,14 +4332,20 @@
                                          reuses LevelOptions so the same token format works in both LevelActive conditions
                                          and here. -->
                                     <TextBlock Text="Refresh on level:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
+                                    <!-- SelectedValue only. Binding Text to the same
+                                         property as well, with IsEditable and a
+                                         DisplayMemberPath, made the two fight: picking
+                                         an item wrote the token, then the display text
+                                         wrote back over it and the field came out
+                                         empty. The vanilla-source picker has always
+                                         been a plain SelectedValue combo for this
+                                         reason. -->
                                     <ComboBox Grid.Row="5" Grid.Column="1" Margin="0,4,0,0"
                                               ItemsSource="{Binding DataContext.LevelOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               DisplayMemberPath="DisplayLabel"
                                               SelectedValuePath="Token"
                                               SelectedValue="{Binding RefreshScope, UpdateSourceTrigger=PropertyChanged}"
-                                              IsEditable="True"
-                                              Text="{Binding RefreshScope, UpdateSourceTrigger=PropertyChanged}"
                                               IsEnabled="{Binding IsLevelScoped}"
                                               ToolTip="The level whose activation re-rolls this variable. Used only by LevelRandom. Format: vanilla:&lt;goName&gt; or place:&lt;key&gt; — same as a LevelActive condition."/>
                                     <TextBlock Text="Min value:"     Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>

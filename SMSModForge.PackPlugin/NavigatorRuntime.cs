@@ -122,8 +122,13 @@ namespace SMSModForge.PackPlugin
                     // decorating your own. The scene (and everything built here)
                     // is recreated on every CoreGameScene load, so there's no
                     // duplication concern.
+                    // Same NPC context the places pass built. Without it every
+                    // NPC placed on a vanilla level was skipped as "no NPC
+                    // context" — an extension can host NPCs exactly like a pack
+                    // place, and the editor offers the button for it.
                     PlaceFactory.BuildGameObjectList(extObj["gameObjects"] as JArray, pack,
-                                                     sourceEntry.Level, source, logger);
+                                                     sourceEntry.Level, source, logger,
+                                                     NpcFactory.ContextFor(pack.PackId));
                 }
             }
         }

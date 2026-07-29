@@ -408,6 +408,8 @@ namespace SMSModForge.PackPlugin
             // saves via the main menu).
             _lastSeenSlot = -1;
             VanillaSaveSlot.Reset();
+            // Holds a material from the scene being torn down.
+            NpcFactory.Reset();
             PlaceRegistry.Reset();
             WeatherRuntime.Reset();
             NavigatorRuntime.Reset();
@@ -928,13 +930,26 @@ namespace SMSModForge.PackPlugin
                     // what every DailyChance condition will evaluate to today.
                     LogDailyChances(c);
                 }
+
+                // Commit NOW, alongside the host mod's own SaveToFile(1) /
+                // SaveToFile(2). Waiting for the flash to end made the whole
+                // night's progress contingent on the player still being in the
+                // game seconds later — quit while "Saved" is up and nothing had
+                // ever reached disk, which is what kept eating the weekly
+                // backup. Stage 4 writes again to pick up the host's own
+                // turnover; this write is the one that guarantees there IS a
+                // file, and a second write of a few KB costs nothing.
+                CommitSleepSave("turnover");
+                AutosaveProcedThisSession = true;
             }
 
-            // Stage 3 — commit on the Saved-UI falling edge (was showing, now
-            // gone). The DISK write stays late on purpose: the host mod's own
-            // turnover writes pack variables through ModForgeBridge into this
-            // store while the flash is up, and flushing afterwards is what
-            // guarantees those night writes are in the committed file.
+            // Stage 4 — re-commit when the flash ends. Everything is already on
+            // disk from stage 3; this second pass exists to catch what landed
+            // DURING the flash — the host mod's own turnover writes pack
+            // variables through ModForgeBridge into this store, and the
+            // OnDayChange rules armed above repopulate schedules a tick later.
+            // Missing this pass costs the night's last few values, not the
+            // night, which is the right way round.
             bool fallingEdge = _savedUiWasActive && !savedActive;
             _savedUiWasActive = savedActive;
             if (!(fallingEdge && _afterSleepProc)) return;
@@ -942,31 +957,42 @@ namespace SMSModForge.PackPlugin
             _dayTurnoverProc = false;
             AutosaveProcedThisSession = true;
 
-            // The vanilla autosave always targets the dedicated autosave slot
-            // (slot 1), NOT the loaded slot — that's what "Continue" reloads
-            // and what the player inspects as "the autosave". the host mod does
-            // the same (SaveToFile(1), plus a Monday backup to slot 2). The
-            // loaded slot is frozen by vanilla until a manual save, so writing
-            // our pack file only to slot 1 keeps it in lockstep with the
-            // vanilla + the host mod saves.
-            // Day as read at the turnover, not re-read now — see _sleepDay.
-            // Falling back to a fresh read keeps the commit correct if the
-            // turnover stage was somehow skipped, rather than treating the
-            // sentinel as a day number and silently dropping the backup.
+            CommitSleepSave("flash ended");
+            _sleepDay = -1;
+        }
+
+        /// <summary>
+        /// Write every pack store to the autosave slot, plus the Monday backup.
+        /// <para/>
+        /// The vanilla autosave always targets the dedicated autosave slot
+        /// (slot 1), NOT the loaded slot — that's what "Continue" reloads and
+        /// what the player inspects as "the autosave". The host mod does the
+        /// same (SaveToFile(1), plus a Monday backup to slot 2). The loaded slot
+        /// is frozen by vanilla until a manual save, so writing our pack file
+        /// only to slot 1 keeps it in lockstep with the vanilla + host saves.
+        /// <para/>
+        /// Called twice per sleep, and safe to be: it is a plain overwrite of a
+        /// few KB, and running it once when the Saved UI APPEARS is what stops a
+        /// player who quits during the flash from losing the night entirely.
+        /// </summary>
+        private void CommitSleepSave(string reason)
+        {
+            // Day as read at the turnover, not re-read now — see _sleepDay. The
+            // weekly backup and the daily autosave have to agree about what day
+            // it is, and re-reading is how they came apart. Falling back to a
+            // fresh read covers a turnover that was somehow skipped, rather than
+            // treating the sentinel as a day number and dropping the backup.
             int day = _sleepDay >= 0 ? _sleepDay : (int)GameVariableBridge.GetNumber("Day");
             bool monday = day == 1;
             foreach (var c in _contexts)
             {
                 if (c.Vars == null) continue;
-                // Refresh already happened at stage 2, with the host mod's own
-                // turnover — this is purely the disk commit.
                 c.Vars.SaveToSlot(1);             // the autosave slot
                 if (monday) c.Vars.SaveToSlot(2); // Monday backup, mirroring SaveToFile(2)
             }
-            _sleepDay = -1;
 
             Logger.LogInfo("[SMSModForge.PackPlugin] Player slept (now day " + day +
-                           ") — autosave: pack variables committed to slot 1" +
+                           ") — autosave (" + reason + "): pack variables committed to slot 1" +
                            (monday ? " (+ Monday backup to slot 2)." : "."));
         }
 

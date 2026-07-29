@@ -42,13 +42,34 @@ namespace SMSModForge.PackPlugin
                         defs[(string)no["key"]] = no;
 
             var mBaseSr = baseBust?.transform.Find("MBase1")?.GetComponent<SpriteRenderer>();
-            return new Context
+            var ctx = new Context
             {
                 Defs = defs,
                 JiggleProto = mBaseSr != null ? mBaseSr.sharedMaterial : null,
                 Pack = pack,
             };
+            _byPack[pack.PackId] = ctx;
+            return ctx;
         }
+
+        /// <summary>
+        /// The context built for a pack during its places pass.
+        /// <para/>
+        /// Vanilla extensions are built later, by NavigatorRuntime, which has no
+        /// baseBust to build one from — so it had none to pass and every NPC
+        /// placed on a vanilla level was skipped with a warning. The context is
+        /// per-pack and identical whoever asks for it, so handing back the one
+        /// the places pass already made is both correct and free.
+        /// </summary>
+        public static Context ContextFor(string packId)
+            => packId != null && _byPack.TryGetValue(packId, out var c) ? c : null;
+
+        private static readonly Dictionary<string, Context> _byPack =
+            new Dictionary<string, Context>();
+
+        /// <summary>Drop the cached contexts — they hold a material from a scene
+        /// that no longer exists once it unloads.</summary>
+        public static void Reset() => _byPack.Clear();
 
         /// <summary>Build one NPC placement as a child of <paramref name="parent"/>
         /// (the GameObject tree node it's authored under). <paramref name="level"/>
