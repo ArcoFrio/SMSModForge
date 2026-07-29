@@ -70,6 +70,18 @@ public static class VanillaLevelCatalog
         /// scale is used for plenty of things that aren't reflections.</summary>
         [JsonProperty("material")] public string Material { get; set; } = "";
 
+        /// <summary>The renderer tint's RGB as "#RRGGBB", or blank when it's
+        /// plain white and so has nothing to say.</summary>
+        public string TintRgb
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Color) || Color.Length < 6) return "";
+                string rgb = Color.Substring(0, 6);
+                return rgb.Equals("FFFFFF", System.StringComparison.OrdinalIgnoreCase) ? "" : "#" + rgb;
+            }
+        }
+
         /// <summary>True when this renderer uses a reflection material.</summary>
         public bool IsReflection =>
             !string.IsNullOrEmpty(Material) &&

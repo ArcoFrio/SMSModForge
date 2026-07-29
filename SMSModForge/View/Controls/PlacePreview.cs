@@ -836,6 +836,26 @@ public sealed class PlacePreview : Grid
                 img.MouseLeftButtonDown += (_, e) => { SelectNode(oForClick, pathForClick); e.Handled = true; };
                 drawables.Add((o.SortingOrder, 1, img));
 
+                // Renderer tint, for a vanilla object that has one. Same masked
+                // silhouette the NPC reflections use — WPF can't multiply a tint
+                // into an Image, and this carries the colour while the pass
+                // underneath keeps the art readable.
+                if (o.HasTint)
+                {
+                    var (tr, tg, tb, _) = BustComposer.ParseTint(o.Tint);
+                    drawables.Add((o.SortingOrder, 2, new Rectangle
+                    {
+                        Width = w,
+                        Height = h,
+                        Fill = new SolidColorBrush(Color.FromRgb(
+                            (byte)(tr * 255), (byte)(tg * 255), (byte)(tb * 255))),
+                        OpacityMask = new ImageBrush(bmp),
+                        Opacity = img.Opacity * 0.55,
+                        RenderTransform = new MatrixTransform(m),
+                        IsHitTestVisible = false,
+                    }));
+                }
+
                 ExpandBounds(m, w, h, ref minX, ref minY, ref maxX, ref maxY);
             }
         }
@@ -1160,7 +1180,14 @@ public sealed class PlacePreview : Grid
                         Opacity = ghost * Math.Clamp(def.ReflectionAlpha, 0.0, 1.0),
                         RenderTransform = new MatrixTransform(mRefl),
                         IsHitTestVisible = false,   // click the body, not its mirror
-                        ToolTip = tip + "\n(reflection)",
+                        // States the offset the preview ACTUALLY used, so "it
+                        // isn't offsetting" can be told from "it is, and that's
+                        // what -2.3 local units looks like on this pose".
+                        ToolTip = tip + "\n(reflection — Y offset "
+                                + def.ReflectionOffsetY.ToString("0.###",
+                                      System.Globalization.CultureInfo.InvariantCulture)
+                                + ", tint " + (string.IsNullOrWhiteSpace(def.ReflectionTint) ? "none" : def.ReflectionTint)
+                                + ")",
                     };
                     RenderOptions.SetBitmapScalingMode(rimg, BitmapScalingMode.HighQuality);
                     drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, rimg));

@@ -242,6 +242,9 @@ public static class VanillaDelta
         // together. Without this a vanilla reflection previewed at full
         // strength, since its material carries the fade and its colour doesn't.
         node.StartAlpha = baseline.SpriteRenderer?.EffectiveAlpha ?? 1f;
+        // ...and its colour, not just that colour's alpha. Dropping the RGB is
+        // what made the mauve street reflections preview at full sprite colour.
+        node.Tint = baseline.SpriteRenderer?.TintRgb ?? "";
 
         if (!node.OverrideTransform)
         {

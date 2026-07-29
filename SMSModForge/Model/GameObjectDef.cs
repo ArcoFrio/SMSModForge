@@ -80,6 +80,22 @@ public sealed class GameObjectDef
     [JsonProperty("startAlpha", Order = 11)]
     public float StartAlpha { get; set; } = 1f;
 
+    /// <summary>
+    /// Renderer tint as hex RGB, or blank for none.
+    /// <para/>
+    /// Preview-only for a BOUND node, where it's seeded from the vanilla
+    /// object's own renderer colour. Reading only that colour's alpha and
+    /// discarding its RGB is what left the game's street reflections previewing
+    /// at full sprite colour — they're mauve (#AD92AA), and without the tint a
+    /// reflection reads as a second character rather than something on the
+    /// pavement.
+    /// </summary>
+    [JsonProperty("tint", Order = 12, NullValueHandling = NullValueHandling.Ignore)]
+    public string Tint { get; set; } = "";
+
+    [JsonIgnore]
+    public bool HasTint => !string.IsNullOrWhiteSpace(Tint);
+
     /// <summary>Optional relative path to a mask PNG. When set, the object gets
     /// its own material with this mask bound to <c>_MaskTex</c> (the Solid
     /// cameo's shader trick). Blank = no mask.</summary>

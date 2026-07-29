@@ -378,6 +378,15 @@ public sealed class GameObjectViewModel : ObservableObject
         set { Model.StartAlpha = value; OnPropertyChanged(); }
     }
 
+    /// <summary>Renderer tint, seeded from the vanilla object for a bound node.</summary>
+    public string Tint
+    {
+        get => Model.Tint;
+        set { Model.Tint = value; OnPropertyChanged(); OnPropertyChanged(nameof(HasTint)); }
+    }
+
+    public bool HasTint => Model.HasTint;
+
     public string Mask
     {
         get => Model.Mask;
