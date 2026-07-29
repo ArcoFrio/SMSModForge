@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -22,17 +22,17 @@ namespace SMSModForge.View.Controls;
 
 /// <summary>
 /// Compositing preview for the Places tab. Builds the whole scene at the
-/// game's native level resolution (2048×1136) inside a <see cref="Viewbox"/>
+/// game's native level resolution (2048Ã—1136) inside a <see cref="Viewbox"/>
 /// so every pixel coordinate from the layout spec maps 1:1, then the Viewbox
 /// scales it down to the on-screen display size. Layers, bottom to top:
 /// <list type="number">
-///   <item>Secondary sprite — the distance/blur background.</item>
-///   <item>Base sprite — the main foreground art.</item>
-///   <item>GameplayUI overlay — the vanilla HUD frame
+///   <item>Secondary sprite â€” the distance/blur background.</item>
+///   <item>Base sprite â€” the main foreground art.</item>
+///   <item>GameplayUI overlay â€” the vanilla HUD frame
 ///         (<c>VanillaOverlays/GameplayUI.png</c>), or
 ///         <c>GameplayUIExtended.png</c> once the place has more than six
 ///         navigator buttons (mirrors the runtime's extended nav strip).</item>
-///   <item>Navigator buttons — one <c>ButtonNavigator.png</c> per authored
+///   <item>Navigator buttons â€” one <c>ButtonNavigator.png</c> per authored
 ///         navigator button, laid out in a single horizontal row that stays
 ///         centred on the canvas as buttons are added, at the in-game strip
 ///         height. Each carries its order number (Barton font) and its
@@ -41,26 +41,26 @@ namespace SMSModForge.View.Controls;
 /// </summary>
 public sealed class PlacePreview : Grid
 {
-    // ── Layout constants ────────────────────────────────────────────────
+    // â”€â”€ Layout constants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     //
     // Measured out of the game's own scene by the UI extractor, not eyeballed
     // from screenshots. Every number below has a source; where one is derived,
     // the derivation is written out so it can be rechecked against a future
     // extraction rather than re-guessed.
 
-    /// <summary>The UI's authoring resolution — every CanvasScaler in
-    /// CoreGameScene uses 1920×1080 with referencePixelsPerUnit 100. The old
-    /// 2048×1136 was a guess from a screenshot, and being close is what made
+    /// <summary>The UI's authoring resolution â€” every CanvasScaler in
+    /// CoreGameScene uses 1920Ã—1080 with referencePixelsPerUnit 100. The old
+    /// 2048Ã—1136 was a guess from a screenshot, and being close is what made
     /// the drift so hard to spot.</summary>
     private const double CanvasWidth = 1920;
     private const double CanvasHeight = 1080;
 
-    /// <summary>Navigator button size: the buttons are 125×75, not square.</summary>
+    /// <summary>Navigator button size: the buttons are 125Ã—75, not square.</summary>
     private const double ButtonWidth = 125;
     private const double ButtonHeight = 75;
 
     /// <summary>Centre-to-centre pitch. MapButtons is a HorizontalLayoutGroup
-    /// with spacing 15, so the pitch is the button width plus that gap — the
+    /// with spacing 15, so the pitch is the button width plus that gap â€” the
     /// buttons do NOT sit edge to edge.</summary>
     private const double ButtonPitch = ButtonWidth + 15;
 
@@ -69,7 +69,7 @@ public sealed class PlacePreview : Grid
     /// buttons than fit, so this is our number rather than the game's.</summary>
     private const int Columns = 6;
 
-    /// <summary>Row pitch when buttons wrap to a second row — the button height
+    /// <summary>Row pitch when buttons wrap to a second row â€” the button height
     /// plus the same 15 the horizontal layout uses, so wrapped rows are spaced
     /// like the strip rather than overlapping.</summary>
     private const double VerticalPitch = ButtonHeight + 15;
@@ -77,15 +77,15 @@ public sealed class PlacePreview : Grid
     /// <summary>
     /// Vertical centre of the navigator row, from the canvas top.
     /// <para/>
-    /// Derived: Navigator anchors bottom-centre at y −18; MapButtons sits +87.2
-    /// inside it; each button is −54.305 from MapButtons' top edge (its rect is
+    /// Derived: Navigator anchors bottom-centre at y âˆ’18; MapButtons sits +87.2
+    /// inside it; each button is âˆ’54.305 from MapButtons' top edge (its rect is
     /// 108.61 tall, so the top edge is +54.305). That puts the button centre at
-    /// UI y 69.2 above the bottom, i.e. 1080 − 69.2 from the top.
+    /// UI y 69.2 above the bottom, i.e. 1080 âˆ’ 69.2 from the top.
     /// </summary>
     private const double ButtonCenterY = CanvasHeight - 69.2;
 
     /// <summary>Local (button-space, top-left origin) centre of the order
-    /// number. The number sits at +44.8 above the button's centre — far enough
+    /// number. The number sits at +44.8 above the button's centre â€” far enough
     /// that it OVERHANGS the top edge, which is why a positive in-button offset
     /// never looked right.</summary>
     private const double NumberCenterX = ButtonWidth / 2.0;
@@ -95,37 +95,37 @@ public sealed class PlacePreview : Grid
     private const double LabelCenterX = ButtonWidth / 2.0;
     private const double LabelCenterY = ButtonHeight / 2.0;
 
-    /// <summary>Max width the label may occupy before wrapping — the button's
+    /// <summary>Max width the label may occupy before wrapping â€” the button's
     /// own width, which is what its TMP rect is set to.</summary>
     private const double LabelMaxWidth = ButtonWidth;
 
     /// <summary>Line-spacing multiplier for wrapped label text.</summary>
     private const double LabelLineHeightFactor = 0.5;
 
-    /// <summary>Font sizes as authored: the label is Curse Casual SDF at 24–27
+    /// <summary>Font sizes as authored: the label is Curse Casual SDF at 24â€“27
     /// depending on the button, the number Barton SDF at 36.</summary>
     private const double NumberFontSize = 36;
     private const double LabelFontSize = 27;
 
-    // ── Display size ────────────────────────────────────────────────────
+    // â”€â”€ Display size â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // The preview fills whatever width its container gives it (the editor pane,
     // which grows with the window and the sidebar splitter) and derives its
-    // height from the native 2048×1136 aspect, so resolution is preserved.
+    // height from the native 2048Ã—1136 aspect, so resolution is preserved.
     // FixedWidth/FixedHeight are the default / fallback (and the size the
-    // offscreen render harness uses) — 90% of half the native resolution.
+    // offscreen render harness uses) â€” 90% of half the native resolution.
     public const double FixedWidth = 921.6;
     public const double FixedHeight = 511.2;
 
     /// <summary>Native aspect ratio (width / height) the control locks to.</summary>
     private const double Aspect = CanvasWidth / CanvasHeight;   // 2048 / 1136 = 1.8028
 
-    /// <summary>On-screen scale (canvas px → display px): recomputed on every
+    /// <summary>On-screen scale (canvas px â†’ display px): recomputed on every
     /// resize as ActualWidth / CanvasWidth and pushed into <see cref="_extentScale"/>.
     /// A LayoutTransform (not a Viewbox) so the canvas can GROW past the level
     /// rect (far-flung GameObjects) and scroll instead of shrinking to fit.</summary>
     private double _displayScale = FixedWidth / CanvasWidth;   // 0.45 until first layout
 
-    // ── World mapping (GameObjects) ───────────────────────────────
+    // â”€â”€ World mapping (GameObjects) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     // Overlay positions are authored in Unity world units; level sprites
     // load at 70.32 pixels-per-unit with the level centred on the world
     // origin, so world (0,0) is the canvas centre and +Y is up.
@@ -133,7 +133,7 @@ public sealed class PlacePreview : Grid
     /// World units to canvas pixels.
     /// <para/>
     /// The gameplay cameras are orthographic at size 5.4, so they frame 10.8
-    /// world units of height into the UI's 1080 — exactly 100 px per unit. The
+    /// world units of height into the UI's 1080 â€” exactly 100 px per unit. The
     /// old 70.32 was the level SPRITE's import ppu, which says how large the
     /// texture is in world units and nothing about how world units land on
     /// screen. Conflating the two is what put every authored position slightly
@@ -143,7 +143,7 @@ public sealed class PlacePreview : Grid
     private const double WorldOriginX = CanvasWidth / 2.0;
     private const double WorldOriginY = CanvasHeight / 2.0;
 
-    // ── Dependency properties ──────────────────────────────────────────
+    // â”€â”€ Dependency properties â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     public static readonly DependencyProperty PackRootProperty =
         DependencyProperty.Register(nameof(PackRoot), typeof(string), typeof(PlacePreview),
@@ -217,7 +217,7 @@ public sealed class PlacePreview : Grid
         set => SetValue(NpcCatalogProperty, value);
     }
 
-    // ── Visual tree ─────────────────────────────────────────────────────
+    // â”€â”€ Visual tree â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     // ClipToBounds deliberately OFF: GameObjects may sit outside the
     // level rect and must still render (the extent host grows to hold them).
@@ -235,7 +235,7 @@ public sealed class PlacePreview : Grid
     /// <para/>
     /// GameObjects used to live in one canvas pinned in FRONT of the
     /// base image, so an overlay authored behind the level (SecretBeach's sky
-    /// / portal / gatekeeper are all negative) previewed in front of it — the
+    /// / portal / gatekeeper are all negative) previewed in front of it â€” the
     /// opposite of what the game does. Now the base sprite, the secondary
     /// sprite and the overlays all go into this one host and are added in
     /// sorting-order sequence, so the preview's stacking is the runtime's.
@@ -252,7 +252,7 @@ public sealed class PlacePreview : Grid
     {
         Width = CanvasWidth,
         Height = CanvasHeight,
-        // Decorative HUD nav buttons — never a selection target, so let clicks
+        // Decorative HUD nav buttons â€” never a selection target, so let clicks
         // in the button strip fall through to the NPC / overlay beneath.
         IsHitTestVisible = false,
     };
@@ -266,12 +266,35 @@ public sealed class PlacePreview : Grid
         Width = CanvasWidth,
         Height = CanvasHeight,
     };
-    private readonly ScrollViewer _scroll = new()
+    /// <summary>
+    /// Viewport. Clips, so a zoomed-in scene doesn't spill over the editor pane,
+    /// and hosts the pan/zoom transform.
+    /// <para/>
+    /// Replaces a ScrollViewer. Scrollbars are a poor fit for a scene you are
+    /// positioning things in: they only reach content inside the extent, they
+    /// cannot go past 1:1, and reaching a corner means two separate drags.
+    /// Wheel-zoom and drag-pan are what the mask editor already uses, and this
+    /// is the same interaction.
+    /// </summary>
+    private readonly Border _viewport = new()
     {
-        HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
-        VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+        ClipToBounds = true,
         Focusable = false,
+        ToolTip = "Scroll to zoom (toward the pointer) · middle-drag to pan · double middle-click to reset",
     };
+
+    /// <summary>User zoom on top of the fit-to-width scale. 1 = fit.</summary>
+    private double _zoom = 1.0;
+    private const double ZoomMin = 0.25, ZoomMax = 8.0;
+
+    /// <summary>Fit-to-width scale, recomputed on resize. The transform applies
+    /// this times <see cref="_zoom"/>.</summary>
+    private double _fitScale = FixedWidth / CanvasWidth;
+
+    private readonly TranslateTransform _viewPan = new();
+    private bool _panning;
+    private Point _panStart;
+    private double _panStartX, _panStartY;
     private readonly TextBlock _placeholder = new()
     {
         Foreground = Brushes.Gray,
@@ -297,10 +320,15 @@ public sealed class PlacePreview : Grid
         HorizontalAlignment = HorizontalAlignment.Stretch;
         VerticalAlignment = VerticalAlignment.Top;
         Background = new SolidColorBrush(Color.FromRgb(0x22, 0x22, 0x22));
-        _extentHost.LayoutTransform = _extentScale;
+        // Scale then translate: screen = pan + scale x local, which is the form
+        // the focal-zoom maths below inverts.
+        var view = new TransformGroup();
+        view.Children.Add(_extentScale);
+        view.Children.Add(_viewPan);
+        _extentHost.RenderTransform = view;
         SizeChanged += (_, e) => UpdateDisplayScale(e.NewSize.Width);
         // Focusable so grabbing a gizmo handle can pull keyboard focus off any
-        // text field being edited — otherwise that field's native Ctrl+Z would
+        // text field being edited â€” otherwise that field's native Ctrl+Z would
         // swallow the app's undo shortcut after a drag.
         Focusable = true;
         FocusVisualStyle = null;
@@ -317,7 +345,7 @@ public sealed class PlacePreview : Grid
         Canvas.SetLeft(_canvas, 0);
         Canvas.SetTop(_canvas, 0);
         _extentHost.Children.Add(_canvas);
-        _scroll.Content = _extentHost;
+        _viewport.Child = _extentHost;
 
         // Clicking empty room area (an unhandled click that bubbles up) clears
         // the gizmo selection; clicks on an NPC / overlay mark themselves handled.
@@ -329,7 +357,14 @@ public sealed class PlacePreview : Grid
         _gizmoLayer.MouseMove += OnGizmoMouseMove;
         _gizmoLayer.MouseLeftButtonUp += OnGizmoMouseUp;
 
-        Children.Add(_scroll);
+        // Wheel zooms, middle-drag pans, double-click resets. Bound on the
+        // control rather than the canvas so they work over empty room area too.
+        MouseWheel += OnViewWheel;
+        MouseDown += OnViewMouseDown;
+        MouseMove += OnViewMouseMove;
+        MouseUp += OnViewMouseUp;
+
+        Children.Add(_viewport);
         Children.Add(_placeholder);
         BuildObjectMenu();
         Children.Add(_objectMenu);
@@ -344,9 +379,9 @@ public sealed class PlacePreview : Grid
     }
 
     /// <summary>Lock the control to the native aspect: take the width the parent
-    /// offers and derive the height from 2048×1136, so it fills the editor pane's
+    /// offers and derive the height from 2048Ã—1136, so it fills the editor pane's
     /// width (which grows with the window + sidebar splitter) at preserved
-    /// proportions. Width-driven on purpose — the editor is a vertical scroller,
+    /// proportions. Width-driven on purpose â€” the editor is a vertical scroller,
     /// so a taller preview at a wider window just scrolls.</summary>
     protected override Size MeasureOverride(Size availableSize)
     {
@@ -358,28 +393,117 @@ public sealed class PlacePreview : Grid
         return new Size(w, h);
     }
 
-    /// <summary>Recompute the canvas→display scale from the live width so the
+    /// <summary>Recompute the canvasâ†’display scale from the live width so the
     /// whole scene (level art, NPCs, gizmo, water) tracks the window + splitter.</summary>
     private void UpdateDisplayScale(double controlWidth)
     {
         // Cap the object menu's height to the current preview height (it scrolls).
         _objectMenu.MaxHeight = Math.Max(60, ActualHeight - 12);
         if (controlWidth <= 0) return;
-        double scale = controlWidth / CanvasWidth;
-        if (Math.Abs(scale - _displayScale) < 1e-4) return;
-        _displayScale = scale;
-        _extentScale.ScaleX = _extentScale.ScaleY = scale;
+        double fit = controlWidth / CanvasWidth;
+        if (Math.Abs(fit - _fitScale) < 1e-4) return;
+        _fitScale = fit;
+        ApplyViewScale();
+    }
+
+    /// <summary>Push fit x zoom into the view transform.</summary>
+    private void ApplyViewScale()
+    {
+        double s = _fitScale * _zoom;
+        _displayScale = s;
+        _extentScale.ScaleX = _extentScale.ScaleY = s;
+    }
+
+    // â”€â”€ Zoom / pan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+
+    /// <summary>
+    /// Wheel zoom, anchored on the cursor.
+    /// <para/>
+    /// The transform is screen = pan + scale x local, so the local point under
+    /// the pointer is (screen - pan) / scale. Re-solving for pan at the new
+    /// scale with that point pinned keeps whatever is under the cursor exactly
+    /// where it is â€” zooming toward the thing you are looking at instead of
+    /// toward the middle and then hunting for it.
+    /// </summary>
+    private void OnViewWheel(object sender, MouseWheelEventArgs e)
+    {
+        double sOld = _fitScale * _zoom;
+        if (sOld <= 0) return;
+
+        var p = e.GetPosition(this);
+        double localX = (p.X - _viewPan.X) / sOld;
+        double localY = (p.Y - _viewPan.Y) / sOld;
+
+        // Multiplicative steps: a fixed increment feels coarse when zoomed out
+        // and glacial when zoomed in.
+        double factor = e.Delta > 0 ? 1.15 : 1.0 / 1.15;
+        _zoom = Math.Clamp(_zoom * factor, ZoomMin, ZoomMax);
+
+        double sNew = _fitScale * _zoom;
+        _viewPan.X = p.X - sNew * localX;
+        _viewPan.Y = p.Y - sNew * localY;
+        ApplyViewScale();
+        e.Handled = true;
+    }
+
+    private void OnViewMouseDown(object sender, MouseButtonEventArgs e)
+    {
+        // Middle button only: left belongs to selection and the gizmo.
+        if (e.ChangedButton != MouseButton.Middle) return;
+
+        // Double middle-click goes home. Without scrollbars there is nothing to
+        // show how far the scene has been pushed, so it needs a way back that
+        // doesn't involve dragging until something familiar appears.
+        if (e.ClickCount == 2) { ResetView(); e.Handled = true; return; }
+
+        _panning = true;
+        _panStart = e.GetPosition(this);
+        _panStartX = _viewPan.X;
+        _panStartY = _viewPan.Y;
+        CaptureMouse();
+        Cursor = Cursors.SizeAll;
+        e.Handled = true;
+    }
+
+    private void OnViewMouseMove(object sender, MouseEventArgs e)
+    {
+        if (!_panning) return;
+        if (e.MiddleButton != MouseButtonState.Pressed) { EndPan(); return; }
+        var now = e.GetPosition(this);
+        _viewPan.X = _panStartX + (now.X - _panStart.X);
+        _viewPan.Y = _panStartY + (now.Y - _panStart.Y);
+    }
+
+    private void OnViewMouseUp(object sender, MouseButtonEventArgs e)
+    {
+        if (_panning && e.ChangedButton == MouseButton.Middle) EndPan();
+    }
+
+    private void EndPan()
+    {
+        _panning = false;
+        ReleaseMouseCapture();
+        Cursor = Cursors.Arrow;
+    }
+
+    /// <summary>Back to fit-to-width, unpanned. Panning has no scrollbars to
+    /// hint at where the scene went, so there has to be a way home.</summary>
+    public void ResetView()
+    {
+        _zoom = 1.0;
+        _viewPan.X = _viewPan.Y = 0;
+        ApplyViewScale();
     }
 
     /// <summary>
     /// Size and centre a level-art layer at its TRUE world size.
     /// <para/>
     /// The art is not screen-sized: Downtown's backdrop is 2048 px at 70.33
-    /// px/unit — 29.1 world units — which at 100 px/unit is 2912 canvas pixels
+    /// px/unit â€” 29.1 world units â€” which at 100 px/unit is 2912 canvas pixels
     /// against a 1920-wide viewport. The camera sees the middle of it and the
     /// rest hangs off the sides, which is what makes it parallax. Stretching it
     /// to fill the canvas instead squashed it by about a third horizontally, so
-    /// an object authored over a doorway drew somewhere else entirely — the
+    /// an object authored over a doorway drew somewhere else entirely â€” the
     /// positional drift that made the preview untrustworthy.
     /// </summary>
     private void SizeLevelLayer(Image img, double spritePpu)
@@ -408,7 +532,7 @@ public sealed class PlacePreview : Grid
             // Base / secondary / HUD are full-canvas images. WPF hit-tests an
             // Image over its whole rectangle (transparent pixels included), so a
             // hit-testable HUD layer would swallow every click before it reached
-            // an NPC. They're decoration — take them out of hit testing so the
+            // an NPC. They're decoration â€” take them out of hit testing so the
             // gizmo's selection clicks land on the NPC / overlay underneath.
             IsHitTestVisible = false,
         };
@@ -421,7 +545,7 @@ public sealed class PlacePreview : Grid
     private static void OnInputChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         => ((PlacePreview)d).Refresh();
 
-    // ── Buttons binding plumbing ────────────────────────────────────────
+    // â”€â”€ Buttons binding plumbing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private static void OnButtonsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -440,7 +564,7 @@ public sealed class PlacePreview : Grid
     private void OnButtonsCollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
     {
         // Re-sync per-item subscriptions (labels feed the rendered text) and
-        // rebuild — the list is tiny (≤12) so a full rebuild is cheap.
+        // rebuild â€” the list is tiny (â‰¤12) so a full rebuild is cheap.
         UnsubscribeItems(e.OldItems);
         SubscribeItems(e.NewItems);
         RebuildButtons();
@@ -469,7 +593,7 @@ public sealed class PlacePreview : Grid
             RebuildButtons();
     }
 
-    // ── Composition ─────────────────────────────────────────────────────
+    // â”€â”€ Composition â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private void Refresh()
     {
@@ -496,7 +620,7 @@ public sealed class PlacePreview : Grid
             return;
         }
 
-        // Secondary (distance/blur) layer — behind base.
+        // Secondary (distance/blur) layer â€” behind base.
         string secondary = SecondarySprite ?? "";
         if (!string.IsNullOrWhiteSpace(secondary))
         {
@@ -513,7 +637,7 @@ public sealed class PlacePreview : Grid
         _baseImage.Visibility = Visibility.Visible;
 
         // Both layers at their true world size, centred on the origin, rather
-        // than stretched to the viewport — see SizeLevelLayer.
+        // than stretched to the viewport â€” see SizeLevelLayer.
         SizeLevelLayer(_baseImage, LevelArtPpu);
         SizeLevelLayer(_secondaryImage, LevelArtPpu);
 
@@ -521,7 +645,7 @@ public sealed class PlacePreview : Grid
         RebuildButtons();
         RebuildOverlayGos();
 
-        _scroll.Visibility = Visibility.Visible;
+        _viewport.Visibility = Visibility.Visible;
         _placeholder.Visibility = Visibility.Collapsed;
     }
 
@@ -540,7 +664,7 @@ public sealed class PlacePreview : Grid
         _buttonLayer.Children.Clear();
 
         // Buttons only render alongside the rest of the composition.
-        if (_scroll.Visibility != Visibility.Visible && _placeholder.Visibility == Visibility.Visible)
+        if (_viewport.Visibility != Visibility.Visible && _placeholder.Visibility == Visibility.Visible)
             return;
 
         var list = Buttons?.Cast<object>().ToList();
@@ -559,10 +683,10 @@ public sealed class PlacePreview : Grid
 
         // Wrap exactly like the runtime navigator grid: up to six buttons per
         // row, then a second row. The LATER buttons fill the bottom (strip)
-        // row and earlier ones stack above — matching the runtime's "last row
+        // row and earlier ones stack above â€” matching the runtime's "last row
         // sits where the single row normally would" shift. Each row is
         // centred on its own button count, so the group centre stays fixed.
-        int rows = (n + Columns - 1) / Columns;   // ceil(n / 6), ≤ 2 (cap is 12)
+        int rows = (n + Columns - 1) / Columns;   // ceil(n / 6), â‰¤ 2 (cap is 12)
         int bottomRow = rows - 1;
 
         for (int i = 0; i < n; i++)
@@ -571,8 +695,8 @@ public sealed class PlacePreview : Grid
             int colInRow = i - row * Columns;
             int countInRow = (row < bottomRow) ? Columns : (n - row * Columns);
 
-            // A row spans (count-1) pitches plus one button — the gaps sit
-            // BETWEEN buttons, so a row of n is narrower than n × pitch. Getting
+            // A row spans (count-1) pitches plus one button â€” the gaps sit
+            // BETWEEN buttons, so a row of n is narrower than n Ã— pitch. Getting
             // this wrong shifts the whole strip off centre by half a gap.
             double rowWidth = (countInRow - 1) * ButtonPitch + ButtonWidth;
             double startLeft = (CanvasWidth - rowWidth) / 2.0;
@@ -675,12 +799,12 @@ public sealed class PlacePreview : Grid
         _baseImage.Source = null;
         _buttonLayer.Children.Clear();
         _worldLayer.Children.Clear();
-        _scroll.Visibility = Visibility.Collapsed;
+        _viewport.Visibility = Visibility.Collapsed;
         _placeholder.Text = message;
         _placeholder.Visibility = Visibility.Visible;
     }
 
-    // ── GameObjects layer ─────────────────────────────────────────
+    // â”€â”€ GameObjects layer â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private static void OnGameObjectsChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -700,7 +824,7 @@ public sealed class PlacePreview : Grid
     private readonly System.Collections.Generic.List<object> _overlaySubscriptions = new();
 
     /// <summary>Re-subscribe the whole GameObject tree: every node, its child and
-    /// NPC collections, and each placement's four part transforms — so any edit
+    /// NPC collections, and each placement's four part transforms â€” so any edit
     /// anywhere in the hierarchy redraws the preview.</summary>
     private void ResubscribeOverlayTree()
     {
@@ -749,13 +873,13 @@ public sealed class PlacePreview : Grid
     /// </summary>
     /// <summary>
     /// Sorting order of the level's own base sprite. Both level sprites render
-    /// BEHIND the placed NPCs: an NPC's parts span shadow (-3) → body (-1/0) →
+    /// BEHIND the placed NPCs: an NPC's parts span shadow (-3) â†’ body (-1/0) â†’
     /// blink (+1), and in the reference pack the visible room is the opaque
     /// secondary while the base is a sparse layer; any foreground that must sit
     /// over the NPCs (a couch arm, shower glass) is authored as its own overlay
     /// at a positive order. So the level art belongs in the gap between the
     /// lowest NPC part (shadow, -3) and the "behind the level" overlays
-    /// (SecretBeach sky -12 … flash -9): base just under the shadow, secondary
+    /// (SecretBeach sky -12 â€¦ flash -9): base just under the shadow, secondary
     /// one below the base.
     /// <para/>
     /// If a level's prototype turns out to use a different base order, only
@@ -769,15 +893,15 @@ public sealed class PlacePreview : Grid
     /// vanilla extension overrides them with what the extraction found.
     /// <para/>
     /// The constants only ever described the prototype a PACK place is built
-    /// from. Vanilla levels each pick their own — Downtown draws its base at
-    /// -10 and its far layer at -15 — so judging "is this behind the level art"
+    /// from. Vanilla levels each pick their own â€” Downtown draws its base at
+    /// -10 and its far layer at -15 â€” so judging "is this behind the level art"
     /// against a fixed -4 was wrong for every vanilla level, and reported NPCs
     /// at -9 as buried when they are comfortably in front.
     /// </summary>
     /// <summary>
     /// Fade objects whose PARENT starts inactive. On by default, because the
     /// game draws nothing under a switched-off parent and showing them solid
-    /// misrepresents the room — a vanilla level's NPC groups all ship inactive.
+    /// misrepresents the room â€” a vanilla level's NPC groups all ship inactive.
     /// Off when you're positioning that content and want to see it properly.
     /// </summary>
     public static readonly DependencyProperty DimUnderInactiveParentProperty =
@@ -827,7 +951,7 @@ public sealed class PlacePreview : Grid
     }
 
     /// <summary>
-    /// Pixels-per-unit the level art was imported at — how large the texture is
+    /// Pixels-per-unit the level art was imported at â€” how large the texture is
     /// in WORLD units, which is a different question from how world units map to
     /// the screen (that is <see cref="PixelsPerUnit"/>, a flat 100).
     /// <para/>
@@ -847,7 +971,7 @@ public sealed class PlacePreview : Grid
 
     /// <summary>
     /// The level root's own scale. Almost every vanilla level ships at 0.79,
-    /// and everything authored under it — art, props, NPCs — inherits that.
+    /// and everything authored under it â€” art, props, NPCs â€” inherits that.
     /// <para/>
     /// Ignoring it is what made the corrected 100 px/unit mapping read as far
     /// too large: the honest factor is 100 x this. It also reconciles levels
@@ -898,17 +1022,17 @@ public sealed class PlacePreview : Grid
             foreach (var entry in _scene)
             {
                 var o = entry.Node;
-                // PreviewSprite is the pack's own sprite, or — for a node bound
-                // to an existing vanilla object — that object's extracted art,
+                // PreviewSprite is the pack's own sprite, or â€” for a node bound
+                // to an existing vanilla object â€” that object's extracted art,
                 // so a vanilla level previews fully populated.
                 string art = o?.PreviewSprite ?? "";
                 if (o == null || string.IsNullOrWhiteSpace(art)) continue;   // containers have no art
                 string abs = Path.Combine(root, Normalize(art));
-                var bmp = LoadCachedBitmap(abs);   // cached — no per-rebuild PNG decode
+                var bmp = LoadCachedBitmap(abs);   // cached â€” no per-rebuild PNG decode
                 if (bmp == null) continue;
 
                 double w = bmp.PixelWidth, h = bmp.PixelHeight;
-                // Each object's OWN sprite ppu — the pack's 70.32 for one it
+                // Each object's OWN sprite ppu â€” the pack's 70.32 for one it
                 // creates, the vanilla sprite's for one it binds to. A constant
                 // here drew every vanilla sprite as though it were 100 ppu, so a
                 // 512px NPC imported at 51.98 came out at less than half size.
@@ -934,7 +1058,7 @@ public sealed class PlacePreview : Grid
                               "\nsorting order " + o.SortingOrder +
                               (o.SortingOrder < LevelArtOrder ? "  (behind the level art)" : "") +
                               (o.StartActive ? "" : "\n(starts inactive)") +
-                              (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : ""),
+                              (entry.ParentInactive ? "\n(a parent starts inactive â€” the game draws nothing here)" : ""),
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
                 var pathForClick = entry.Path;
@@ -943,7 +1067,7 @@ public sealed class PlacePreview : Grid
                 drawables.Add((o.SortingOrder, 1, img));
 
                 // Renderer tint, for a vanilla object that has one. Same masked
-                // silhouette the NPC reflections use — WPF can't multiply a tint
+                // silhouette the NPC reflections use â€” WPF can't multiply a tint
                 // into an Image, and this carries the colour while the pass
                 // underneath keeps the art readable.
                 if (o.HasTint)
@@ -981,24 +1105,24 @@ public sealed class PlacePreview : Grid
         // The object set only changes on structural rebuilds, not per drag frame.
         if (_activeHandle == GizmoHandle.None) RefreshObjectMenu();
 
-        // Extent: the level rect plus whatever sticks out. The canvas shifts
-        // by the negative overhang so everything stays in positive space, and
-        // the scroll offset compensates so the LEVEL stays where it was.
-        double offX = -minX, offY = -minY;
-        Canvas.SetLeft(_canvas, offX);
-        Canvas.SetTop(_canvas, offY);
-        _extentHost.Width = maxX - minX;
-        _extentHost.Height = maxY - minY;
-        if (offX > 0) _scroll.ScrollToHorizontalOffset(offX * _displayScale);
-        if (offY > 0) _scroll.ScrollToVerticalOffset(offY * _displayScale);
+        // The canvas stays at the origin. It used to be shifted by the content's
+        // negative overhang so a scroll extent could cover it, with the scroll
+        // offset put back to compensate â€” machinery the viewport doesn't need,
+        // and which would now fight the pan by moving the scene out from under
+        // it on every rebuild. Content outside the level rect is simply reached
+        // by panning to it.
+        Canvas.SetLeft(_canvas, 0);
+        Canvas.SetTop(_canvas, 0);
+        _extentHost.Width = CanvasWidth;
+        _extentHost.Height = CanvasHeight;
     }
 
-    // ══ NPC layer ═══════════════════════════════════════════════════════
+    // â•â• NPC layer â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     //
     // Placed NPCs are rendered into the same world layer as the level art and
     // GameObjects. Each NPC's screen transform is the full runtime chain: the
     // forced NPCs-root node, every container node between it and the placement
-    // in the authored tree, then the placement's own body transform — composed
+    // in the authored tree, then the placement's own body transform â€” composed
     // as 2-D affines in Unity space (Y up, CCW) by the scene walk, then mapped
     // to canvas pixels. The pose is drawn as a still (the animated jiggle lives on
     // the NPCs tab); the shadow is a tinted ellipse; the Wet particle emitter is
@@ -1023,7 +1147,7 @@ public sealed class PlacePreview : Grid
 
     /// <summary>A 2-D affine transform (Unity convention: +Y up, rotation CCW).
     /// Columns are the mapped basis vectors: x-axis (A,B), y-axis (C,D); (Tx,Ty)
-    /// is the origin. Composes the container→body chain before the flip to
+    /// is the origin. Composes the containerâ†’body chain before the flip to
     /// canvas space.</summary>
     private readonly struct Aff
     {
@@ -1033,7 +1157,7 @@ public sealed class PlacePreview : Grid
 
         public static readonly Aff Identity = new(1, 0, 0, 1, 0, 0);
 
-        /// <summary>Local transform = translate ∘ rotateZ ∘ scale. X/Y rotation
+        /// <summary>Local transform = translate âˆ˜ rotateZ âˆ˜ scale. X/Y rotation
         /// on a flat sprite under an ortho camera is exactly a cos-foreshorten,
         /// so it folds into the scale (matching the NPC-tab shadow).</summary>
         public static Aff Trs(double x, double y, double rotX, double rotY, double rotZ, double sx, double sy)
@@ -1042,12 +1166,12 @@ public sealed class PlacePreview : Grid
             double sye = sy * Math.Abs(Math.Cos(rotX * Math.PI / 180.0));
             double r = rotZ * Math.PI / 180.0;
             double cos = Math.Cos(r), sin = Math.Sin(r);
-            // R·S: x-axis = (cos·sxe, sin·sxe), y-axis = (-sin·sye, cos·sye).
+            // RÂ·S: x-axis = (cosÂ·sxe, sinÂ·sxe), y-axis = (-sinÂ·sye, cosÂ·sye).
             return new Aff(cos * sxe, sin * sxe, -sin * sye, cos * sye, x, y);
         }
 
-        /// <summary>this ∘ child — apply <paramref name="child"/> (child→this
-        /// space) then this. Used to walk parent→leaf down the chain.</summary>
+        /// <summary>this âˆ˜ child â€” apply <paramref name="child"/> (childâ†’this
+        /// space) then this. Used to walk parentâ†’leaf down the chain.</summary>
         public Aff Then(in Aff c) => new(
             A * c.A + C * c.B, B * c.A + D * c.B,
             A * c.C + C * c.D, B * c.C + D * c.D,
@@ -1061,7 +1185,7 @@ public sealed class PlacePreview : Grid
     private static Aff NodeAff(GameObjectViewModel o)
         => Aff.Trs(o.X, o.Y, 0, 0, o.RotationZ, o.ScaleX, o.ScaleY);
 
-    // ── Scene walk ──────────────────────────────────────────────────────
+    // â”€â”€ Scene walk â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     //
     // One pass over the GameObject tree resolves everything the preview needs:
     // each node's world transform, the frame its gizmo handles live in, and
@@ -1071,8 +1195,8 @@ public sealed class PlacePreview : Grid
     // while ordinary sprite objects are positioned in WORLD space independently
     // of their parent (the runtime sets transform.position on each).
 
-    /// <summary>One resolved entry in the place's hierarchy — either a
-    /// GameObject node or an NPC placement hanging off one — in tree order.</summary>
+    /// <summary>One resolved entry in the place's hierarchy â€” either a
+    /// GameObject node or an NPC placement hanging off one â€” in tree order.</summary>
     private sealed class SceneEntry
     {
         public GameObjectViewModel? Node;        // set for GameObject nodes
@@ -1081,11 +1205,11 @@ public sealed class PlacePreview : Grid
         public int Depth;
         public bool InNpcSubtree;                // composed (local) rather than flat (world)
         public Aff World;                        // the node's own world transform
-        public Aff ParentWorld;                  // its parent's world — the gizmo frame
+        public Aff ParentWorld;                  // its parent's world â€” the gizmo frame
 
         /// <summary>Whether an ANCESTOR starts inactive. Unity renders nothing
         /// under an inactive parent however active the child itself is, so a
-        /// node has to be judged on the whole chain — reading its own flag alone
+        /// node has to be judged on the whole chain â€” reading its own flag alone
         /// drew every member of a switched-off group at full strength.</summary>
         public bool ParentInactive;
     }
@@ -1110,7 +1234,7 @@ public sealed class PlacePreview : Grid
             string path = string.IsNullOrEmpty(prefix) ? name : prefix + "/" + name;
             // Two things make a subtree compose rather than sit flat, and both
             // mirror what the runtime does: the NPCs root builds with
-            // localPosition, and so does a BOUND node — it's addressing an
+            // localPosition, and so does a BOUND node â€” it's addressing an
             // object that already lives in a hierarchy, so its transform is
             // local by definition. Anything else is a pack-created object,
             // which the runtime places in world space.
@@ -1154,8 +1278,8 @@ public sealed class PlacePreview : Grid
     }
 
     /// <summary>Maps a leaf's world affine + sprite pixel size to the WPF matrix
-    /// that places its (0..w, 0..h) pixel rect on the canvas — including the
-    /// Unity→canvas Y flip and the level/sprite px-per-unit ratio. Exact for any
+    /// that places its (0..w, 0..h) pixel rect on the canvas â€” including the
+    /// Unityâ†’canvas Y flip and the level/sprite px-per-unit ratio. Exact for any
     /// rotation / mirror / non-uniform scale (no scale/rotation decomposition).
     /// <paramref name="spritePpu"/> is the sprite's authored pixels-per-unit:
     /// NPC art loads at 100, GameObject sprites at the level's own 70.32 (so
@@ -1163,7 +1287,7 @@ public sealed class PlacePreview : Grid
     private Matrix LeafMatrix(in Aff w, double spx, double spy, double spritePpu = NpcSpritePpu)
     {
         // World units land on canvas at the camera's rate THROUGH the level
-        // root's scale — everything authored under the level inherits it.
+        // root's scale â€” everything authored under the level inherits it.
         double ppu = WorldPpu;
         double k = ppu / spritePpu;
         double halfW = spx / (2.0 * spritePpu);
@@ -1215,19 +1339,19 @@ public sealed class PlacePreview : Grid
             double ghost = entry.ParentInactive && DimUnderInactiveParent ? 0.15
                          : !pl.StartActive && DimInactive ? 0.4
                          : 1.0;
-            // The placement's own order wins — depth belongs to the room.
+            // The placement's own order wins â€” depth belongs to the room.
             int bodyOrder = pl.Model.SortingOrder ?? def.SortingOrder;
             string tip = (string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name)
                        + "  (" + pl.Npc + ")\nsorting order " + bodyOrder
                        + (pl.StartActive ? "" : "\n(starts inactive)")
-                       + (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : "");
+                       + (entry.ParentInactive ? "\n(a parent starts inactive â€” the game draws nothing here)" : "");
 
             // Shadow (child of the body): a tinted circle, order from the def.
             if (def.ShadowEnabled)
             {
                 var sw = body.Then(LeafAff(pl.Shadow));
                 var (cr, cg, cb, ca) = BustComposer.ParseTint(def.ShadowColor);
-                const double circlePx = 256;   // circle sprite is 256²@100
+                const double circlePx = 256;   // circle sprite is 256Â²@100
                 var mShadow = LeafMatrix(sw, circlePx, circlePx);
                 var ell = new Ellipse
                 {
@@ -1268,7 +1392,7 @@ public sealed class PlacePreview : Grid
 
                 // Reflection: the same bitmap again, mirrored on Y about the
                 // pose's origin. Costs nothing beyond a second Image sharing the
-                // already-cached bitmap — exactly what it costs in game, where
+                // already-cached bitmap â€” exactly what it costs in game, where
                 // it's a child renderer reusing the parent's sprite.
                 //
                 // Deliberately NOT bounds-expanding: a reflection is a floor
@@ -1279,7 +1403,7 @@ public sealed class PlacePreview : Grid
                     // Mirror about the sprite's FEET, not its centre.
                     //
                     // scale (1,-1) alone flips the pose within its own box, so
-                    // the reflection lands exactly on top of the body — which is
+                    // the reflection lands exactly on top of the body â€” which is
                     // why a fixed offset looked like no offset at all on a large
                     // pose. Dropping it a full sprite height puts its top edge at
                     // the body's bottom edge, where a floor reflection starts,
@@ -1301,7 +1425,7 @@ public sealed class PlacePreview : Grid
                         // States the offset the preview ACTUALLY used, so "it
                         // isn't offsetting" can be told from "it is, and that's
                         // what -2.3 local units looks like on this pose".
-                        ToolTip = tip + "\n(reflection — Y offset "
+                        ToolTip = tip + "\n(reflection â€” Y offset "
                                 + def.ReflectionOffsetY.ToString("0.###",
                                       System.Globalization.CultureInfo.InvariantCulture)
                                 + ", tint " + (string.IsNullOrWhiteSpace(def.ReflectionTint) ? "none" : def.ReflectionTint)
@@ -1313,7 +1437,7 @@ public sealed class PlacePreview : Grid
                     // Tint pass: the sprite's own silhouette filled with the
                     // reflection colour, laid over the mirrored pose. WPF can't
                     // multiply a tint into an Image, and a shader effect would
-                    // cost far more than this is worth — masking a filled
+                    // cost far more than this is worth â€” masking a filled
                     // rectangle by the same cached bitmap gets the colour across
                     // while the pass underneath keeps the pose readable.
                     var (tr, tg, tb, _) = BustComposer.ParseTint(def.ReflectionTint);
@@ -1335,7 +1459,7 @@ public sealed class PlacePreview : Grid
                 }
             }
 
-            // Wet particle emitter — a lightweight animated droplet marker at the
+            // Wet particle emitter â€” a lightweight animated droplet marker at the
             // emitter's transform (the runtime clones the exact vanilla particle,
             // so a transform indicator is all the preview needs). During a gizmo
             // drag we draw only the box + ring (no animated droplets) so a drag
@@ -1350,14 +1474,14 @@ public sealed class PlacePreview : Grid
         }
     }
 
-    // ── Wet particle marker ─────────────────────────────────────────────
+    // â”€â”€ Wet particle marker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     //
     // Modelled on the vanilla shower emitter dumped from Unity: a Box shape,
     // shapeScale (2,1,1), startSpeed 6, startLifetime 2, gravityModifier 0.7,
     // simulationSpace Local. So the spray is an emission box twice as wide as
     // tall, and the droplets fall (gravity over the lifetime) a fixed WORLD
-    // distance — not the short fixed column the old marker drew. The emission
-    // WIDTH scales with the Wet transform's X (its parent chain × the wet
+    // distance â€” not the short fixed column the old marker drew. The emission
+    // WIDTH scales with the Wet transform's X (its parent chain Ã— the wet
     // scaleX), so widening the spray is just scaling the Wet part on X; the fall
     // is the physics distance in world units (gravity is world-space, so it
     // doesn't scale with the transform), which reads the same as the game.
@@ -1378,8 +1502,8 @@ public sealed class PlacePreview : Grid
     }
 
     // Vanilla emitter constants (from npc_dump.json's Anna shower particle).
-    private const double WetShapeW = 2.0;          // Box shapeScale.x → emission width
-    private const double WetShapeH = 1.0;          // Box shapeScale.y → emission height
+    private const double WetShapeW = 2.0;          // Box shapeScale.x â†’ emission width
+    private const double WetShapeH = 1.0;          // Box shapeScale.y â†’ emission height
     private const double WetGravityModifier = 0.7;
     private const double WetLifetime = 2.0;
     private const double UnityGravity = 9.81;
@@ -1399,7 +1523,7 @@ public sealed class PlacePreview : Grid
 
         var host = new Canvas { Opacity = opacity, IsHitTestVisible = false };
 
-        // Emission indicator: just the top edge of the box — a line marking where
+        // Emission indicator: just the top edge of the box â€” a line marking where
         // the droplets start. Its length is the spray width (scales with the Wet
         // transform's X); there is deliberately no box height, so the Wet Y scale
         // is irrelevant.
@@ -1422,7 +1546,7 @@ public sealed class PlacePreview : Grid
         for (int i = 0; i < n; i++)
         {
             // Positioned by a TranslateTransform (a render-only change) instead of
-            // Canvas.Left/Top — moving many droplets per tick with attached props
+            // Canvas.Left/Top â€” moving many droplets per tick with attached props
             // re-invalidates layout; a transform only re-renders.
             var drop = new Ellipse
             {
@@ -1504,7 +1628,7 @@ public sealed class PlacePreview : Grid
 
     /// <summary>Decode-once bitmap loader (NPC poses + overlay sprites). A full
     /// rebuild happens on every transform edit / gizmo drag, so decoding the
-    /// 2048×1136 level-overlay PNGs each time was a big hidden cost — cache them.</summary>
+    /// 2048Ã—1136 level-overlay PNGs each time was a big hidden cost â€” cache them.</summary>
     private static BitmapImage? LoadCachedBitmap(string abs)
     {
         if (_bitmapCache.TryGetValue(abs, out var cached)) return cached;
@@ -1513,7 +1637,7 @@ public sealed class PlacePreview : Grid
         return bmp;
     }
 
-    // ── NPC subscriptions ───────────────────────────────────────────────
+    // â”€â”€ NPC subscriptions â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private static void OnNpcCatalogChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
@@ -1552,7 +1676,7 @@ public sealed class PlacePreview : Grid
 
     private void OnNpcItemChanged(object? sender, PropertyChangedEventArgs e) => RebuildOverlayGos();
 
-    // ══ Transform gizmo ═════════════════════════════════════════════════
+    // â•â• Transform gizmo â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
     //
     // A Unity-style handle set that edits one part's transform directly in the
     // preview. Click an NPC (or overlay) to select it; a toolbar picks the part
@@ -1629,7 +1753,7 @@ public sealed class PlacePreview : Grid
     }
 
     /// <summary>Where a part's parent sits on the canvas and how a unit of local
-    /// X / Y maps to a canvas vector — enough to place handles and invert a drag.</summary>
+    /// X / Y maps to a canvas vector â€” enough to place handles and invert a drag.</summary>
     private readonly struct GizmoFrame
     {
         public readonly Point ParentOrigin;
@@ -1639,7 +1763,7 @@ public sealed class PlacePreview : Grid
         public Point OriginFor(double x, double y) => ParentOrigin + x * Ux + y * Uy;
     }
 
-    // Handle geometry, in canvas px (the whole canvas is shown at ~0.45×, so
+    // Handle geometry, in canvas px (the whole canvas is shown at ~0.45Ã—, so
     // these are generous on purpose).
     private const double GizmoAxisLen = 150, GizmoHead = 34, GizmoHeadW = 22;
     private const double GizmoRing = 128, GizmoSquare = 26, GizmoHit = 30;
@@ -1663,7 +1787,7 @@ public sealed class PlacePreview : Grid
     private Button _btnBody = new(), _btnShadow = new(), _btnBlink = new(), _btnWet = new();
     private Button _btnMove = new(), _btnRotate = new(), _btnScale = new();
 
-    // Object menu — the left-side hierarchy of every GameObject + NPC in the
+    // Object menu â€” the left-side hierarchy of every GameObject + NPC in the
     // place; clicking a row selects that object for the gizmo.
     private Border _objectMenu = new();
     private StackPanel _objectMenuList = new();
@@ -1690,7 +1814,7 @@ public sealed class PlacePreview : Grid
     private Vector _dragUx, _dragUy;
     private double _startX, _startY, _startRotZ, _startRotX, _startRotY, _startScaleX, _startScaleY;
 
-    // ── Selection ───────────────────────────────────────────────────────
+    // â”€â”€ Selection â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private void SelectPlacement(NpcPlacementViewModel pl, string path)
     {
@@ -1703,7 +1827,7 @@ public sealed class PlacePreview : Grid
     }
 
     /// <summary>Select a GameObject node (sprite object, container, or the forced
-    /// NPCs root) — all three edit through the same Move / Rotate / Scale
+    /// NPCs root) â€” all three edit through the same Move / Rotate / Scale
     /// handles, in whatever frame their parent chain resolves to.</summary>
     private void SelectNode(GameObjectViewModel o, string path)
     {
@@ -1823,7 +1947,7 @@ public sealed class PlacePreview : Grid
         }));
     }
 
-    // ── Drawing ─────────────────────────────────────────────────────────
+    // â”€â”€ Drawing â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private void DrawGizmo()
     {
@@ -1833,7 +1957,7 @@ public sealed class PlacePreview : Grid
         Point o = _gizmoFrame.OriginFor(_gizmoTarget.X, _gizmoTarget.Y);
         double frameAngle = Math.Atan2(_gizmoFrame.Ux.Y, _gizmoFrame.Ux.X) * 180 / Math.PI;
 
-        // Origin pip — always shown so the selection is obvious.
+        // Origin pip â€” always shown so the selection is obvious.
         var pip = new Ellipse { Width = 12, Height = 12, Fill = Brushes.White, Stroke = Brushes.Black, StrokeThickness = 1 };
         Canvas.SetLeft(pip, o.X - 6); Canvas.SetTop(pip, o.Y - 6);
         _gizmoLayer.Children.Add(pip);
@@ -1850,8 +1974,8 @@ public sealed class PlacePreview : Grid
                 AddRing(o, GizmoRing, 1.0, frameAngle, GZBlue, GizmoHandle.RotZ);           // Z: in-plane full circle
                 if (_gizmoTarget.SupportsTilt)
                 {
-                    // Unity convention: X (red) rotates in the Y–Z plane → a VERTICAL
-                    // foreshortened ellipse; Y (green) rotates in the X–Z plane → a
+                    // Unity convention: X (red) rotates in the Yâ€“Z plane â†’ a VERTICAL
+                    // foreshortened ellipse; Y (green) rotates in the Xâ€“Z plane â†’ a
                     // HORIZONTAL one. (These were swapped before.) Overlays are flat
                     // sprites, so they only get the Z ring.
                     AddRing(o, GizmoRing * 0.92, 0.30, frameAngle + 90, GX, GizmoHandle.RotX); // X: vertical ellipse
@@ -1866,7 +1990,7 @@ public sealed class PlacePreview : Grid
                 break;
 
             default:
-                // A mode the target can't do (overlay Rotate/Scale) — show Move.
+                // A mode the target can't do (overlay Rotate/Scale) â€” show Move.
                 AddArrow(o, _gizmoFrame.Ux, GX, GizmoHandle.MoveX);
                 AddArrow(o, _gizmoFrame.Uy, GY, GizmoHandle.MoveY);
                 AddSquare(o, GUniform, GizmoHandle.MoveFree, GizmoSquare + 4);
@@ -1938,7 +2062,7 @@ public sealed class PlacePreview : Grid
         s.MouseLeftButtonDown += (_, e) => StartHandle(h, e);
     }
 
-    // ── Interaction ─────────────────────────────────────────────────────
+    // â”€â”€ Interaction â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private void StartHandle(GizmoHandle h, MouseButtonEventArgs e)
     {
@@ -2007,7 +2131,7 @@ public sealed class PlacePreview : Grid
     }
 
     /// <summary>World-space angle (degrees, CCW) of a canvas point about a canvas
-    /// origin — canvas Y is flipped, so this equals the local rotZ frame.</summary>
+    /// origin â€” canvas Y is flipped, so this equals the local rotZ frame.</summary>
     private static double CanvasAngle(Point m, Point o)
         => Math.Atan2(-(m.Y - o.Y), m.X - o.X) * 180 / Math.PI;
 
@@ -2022,7 +2146,7 @@ public sealed class PlacePreview : Grid
 
     private static double Dist(Point a, Point b) => (a - b).Length;
 
-    // ── Toolbar ─────────────────────────────────────────────────────────
+    // â”€â”€ Toolbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private void BuildGizmoToolbar()
     {
@@ -2041,7 +2165,7 @@ public sealed class PlacePreview : Grid
         var modeRow = new StackPanel { Orientation = Orientation.Horizontal };
         foreach (var b in new[] { _btnMove, _btnRotate, _btnScale }) modeRow.Children.Add(b);
 
-        var close = MakeChip("✕", Deselect);
+        var close = MakeChip("âœ•", Deselect);
 
         var stack = new StackPanel();
         stack.Children.Add(_gizmoTitle);
@@ -2100,7 +2224,7 @@ public sealed class PlacePreview : Grid
 
     private static readonly Brush ChipOn = new SolidColorBrush(Color.FromRgb(0x3B, 0x82, 0xF6));
     private static readonly Brush ChipOff = new SolidColorBrush(Color.FromRgb(0x3A, 0x3D, 0x42));
-    // Overlay panels are always dark, so their text is explicitly light — the
+    // Overlay panels are always dark, so their text is explicitly light â€” the
     // app's implicit TextBlock style (Theme.Text) would be dark on a light theme.
     private static readonly Brush ChipText = new SolidColorBrush(Color.FromRgb(0xF2, 0xF4, 0xF6));
 
@@ -2138,7 +2262,7 @@ public sealed class PlacePreview : Grid
         b.Foreground = Brushes.White;
     }
 
-    // ── Object menu (left-side GO list) ─────────────────────────────────
+    // â”€â”€ Object menu (left-side GO list) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     // Resize limits for the hierarchy panel. Deep trees and long object names
     // both overflow the default, so the panel is draggable rather than fixed.
@@ -2243,8 +2367,8 @@ public sealed class PlacePreview : Grid
         {
             if (entry.Node is GameObjectViewModel node)
             {
-                // ◈ the forced NPCs root, ▦ a sprite object, ⌗ a bare container.
-                string icon = node.IsNpcRoot ? "◈" : (string.IsNullOrWhiteSpace(node.Sprite) ? "⌗" : "▦");
+                // â—ˆ the forced NPCs root, â–¦ a sprite object, âŒ— a bare container.
+                string icon = node.IsNpcRoot ? "â—ˆ" : (string.IsNullOrWhiteSpace(node.Sprite) ? "âŒ—" : "â–¦");
                 var n = node; var p = entry.Path;
                 _objectMenuList.Children.Add(MenuRow(
                     icon + "  " + node.Display, entry.Depth,
@@ -2255,7 +2379,7 @@ public sealed class PlacePreview : Grid
             {
                 var q = pl; var p = entry.Path;
                 _objectMenuList.Children.Add(MenuRow(
-                    "☺  " + pl.Display, entry.Depth,
+                    "â˜º  " + pl.Display, entry.Depth,
                     ReferenceEquals(_selPlacement, q),
                     () => SelectPlacement(q, p)));
             }
@@ -2264,7 +2388,7 @@ public sealed class PlacePreview : Grid
 
     /// <summary>One clickable hierarchy row, indented by its depth in the tree.
     /// The indent is real padding rather than leading spaces so it survives
-    /// trimming and stays true in a proportional font — the row has to read as
+    /// trimming and stays true in a proportional font â€” the row has to read as
     /// a tree or there's no telling whose child is whose.</summary>
     private Button MenuRow(string text, int depth, bool selected, System.Action onClick)
     {
@@ -2272,7 +2396,7 @@ public sealed class PlacePreview : Grid
         {
             // Explicit light foreground on the TextBlock: the app's implicit
             // TextBlock style would otherwise paint it Theme.Text (dark on a light
-            // theme) onto this always-dark panel → invisible.
+            // theme) onto this always-dark panel â†’ invisible.
             Content = new TextBlock { Text = text, Foreground = ChipText, TextTrimming = TextTrimming.CharacterEllipsis },
             HorizontalContentAlignment = HorizontalAlignment.Left,
             Padding = new Thickness(6 + depth * 12, 2, 6, 2),
@@ -2289,7 +2413,7 @@ public sealed class PlacePreview : Grid
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
 
-    // ── Asset loading ───────────────────────────────────────────────────
+    // â”€â”€ Asset loading â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
     private static string? OverlayDir()
     {
@@ -2354,3 +2478,4 @@ public sealed class PlacePreview : Grid
         }
     }
 }
+

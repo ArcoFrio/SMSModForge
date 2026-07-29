@@ -649,10 +649,10 @@ public partial class MaskEditorWindow : Window
         double v = CanvasHost.Height > 0 ? p.Y / CanvasHost.Height : 0.5;
         double wasW = CanvasHost.Width, wasH = CanvasHost.Height;
 
-        if (e.Delta > 0)
-            _zoom = Math.Min(ZoomMax, _zoom + ZoomStep);
-        else
-            _zoom = Math.Max(ZoomMin, _zoom - ZoomStep);
+        // Multiplicative, like the Places preview: a fixed increment feels
+        // coarse zoomed out and glacial zoomed in, and at 25% steps the
+        // cursor-anchoring below is hard to perceive at all.
+        _zoom = Math.Clamp(_zoom * (e.Delta > 0 ? 1.15 : 1.0 / 1.15), ZoomMin, ZoomMax);
 
         ApplyZoomSize();
 
