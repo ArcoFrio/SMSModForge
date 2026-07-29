@@ -237,6 +237,20 @@ public sealed class NpcPlacementViewModel : ObservableObject
 
     public bool StartActive { get => Model.StartActive; set { Model.StartActive = value; OnPropertyChanged(); } }
 
+    /// <summary>Per-placement sorting order as text, so blank can mean "use the
+    /// NPC's own" rather than a numeric zero that would silently pin it.</summary>
+    public string SortingOrder
+    {
+        get => Model.SortingOrder?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "";
+        set
+        {
+            Model.SortingOrder = int.TryParse(value, System.Globalization.NumberStyles.Integer,
+                                              System.Globalization.CultureInfo.InvariantCulture, out var v)
+                                 ? v : (int?)null;
+            OnPropertyChanged();
+        }
+    }
+
     public string Display
     {
         get

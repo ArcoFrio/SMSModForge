@@ -86,7 +86,11 @@ namespace SMSModForge.PackPlugin
 
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = MakeSprite(pack, spriteRel);
-            sr.sortingOrder = (int?)def["sortingOrder"] ?? -1;
+            // The PLACEMENT's order wins over the NPC's own: depth belongs to
+            // the room, and the same NPC stands behind one level's furniture and
+            // in front of another's. Absent on placements authored before the
+            // field existed, which then fall back to the NPC's.
+            sr.sortingOrder = (int?)pl["sortingOrder"] ?? (int?)def["sortingOrder"] ?? -1;
 
             // Per-NPC material clone: jiggle uniforms + this NPC's mask.
             if (jiggleProto != null)

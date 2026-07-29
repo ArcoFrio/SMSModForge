@@ -711,6 +711,38 @@ public sealed class PlacePreview : Grid
     /// against a fixed -4 was wrong for every vanilla level, and reported NPCs
     /// at -9 as buried when they are comfortably in front.
     /// </summary>
+    /// <summary>
+    /// Fade objects whose PARENT starts inactive. On by default, because the
+    /// game draws nothing under a switched-off parent and showing them solid
+    /// misrepresents the room — a vanilla level's NPC groups all ship inactive.
+    /// Off when you're positioning that content and want to see it properly.
+    /// </summary>
+    public static readonly DependencyProperty DimUnderInactiveParentProperty =
+        DependencyProperty.Register(nameof(DimUnderInactiveParent), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(true, OnInputChanged));
+
+    public bool DimUnderInactiveParent
+    {
+        get => (bool)GetValue(DimUnderInactiveParentProperty);
+        set => SetValue(DimUnderInactiveParentProperty, value);
+    }
+
+    /// <summary>
+    /// Fade objects that start inactive themselves. Independent of the parent
+    /// rule above: an object parked for a rule to switch on is still yours to
+    /// place, so you may want it solid while its switched-off ancestors stay
+    /// faint, or the reverse.
+    /// </summary>
+    public static readonly DependencyProperty DimInactiveProperty =
+        DependencyProperty.Register(nameof(DimInactive), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(true, OnInputChanged));
+
+    public bool DimInactive
+    {
+        get => (bool)GetValue(DimInactiveProperty);
+        set => SetValue(DimInactiveProperty, value);
+    }
+
     public static readonly DependencyProperty LevelArtOrderProperty =
         DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
             new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
@@ -788,7 +820,9 @@ public sealed class PlacePreview : Grid
                     // vanilla NPCs waiting to be activated should read as
                     // scenery notes rather than as part of the picture.
                     Opacity = Math.Clamp(o.StartAlpha, 0.0, 1.0) *
-                              (entry.ParentInactive ? 0.15 : o.StartActive ? 1.0 : 0.35),
+                              (entry.ParentInactive && DimUnderInactiveParent ? 0.15
+                               : !o.StartActive && DimInactive ? 0.35
+                               : 1.0),
                     RenderTransform = new MatrixTransform(m),
                     ToolTip = o.Name +
                               "\nsorting order " + o.SortingOrder +
@@ -1049,8 +1083,11 @@ public sealed class PlacePreview : Grid
             Aff body = entry.ParentWorld.Then(LeafAff(pl.Body));
             // Same three-way reading the GameObject rows use: an inactive
             // ancestor means the game draws nothing here at all.
-            double ghost = entry.ParentInactive ? 0.15 : pl.StartActive ? 1.0 : 0.4;
-            int bodyOrder = def.SortingOrder;
+            double ghost = entry.ParentInactive && DimUnderInactiveParent ? 0.15
+                         : !pl.StartActive && DimInactive ? 0.4
+                         : 1.0;
+            // The placement's own order wins — depth belongs to the room.
+            int bodyOrder = pl.Model.SortingOrder ?? def.SortingOrder;
             string tip = (string.IsNullOrWhiteSpace(pl.Name) ? pl.Npc : pl.Name)
                        + "  (" + pl.Npc + ")\nsorting order " + bodyOrder
                        + (pl.StartActive ? "" : "\n(starts inactive)")

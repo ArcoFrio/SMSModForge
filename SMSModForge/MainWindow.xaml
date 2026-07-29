@@ -1683,9 +1683,17 @@
                         </StackPanel>
                     </Expander>
 
-                    <CheckBox Grid.Row="3" Grid.Column="1" Content="Start active"
-                              IsChecked="{Binding StartActive}" Margin="0,4,0,0"
-                              ToolTip="Off = parked, switched on by a rule / host code by name."/>
+                    <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" Margin="0,4,0,0">
+                        <CheckBox Content="Start active" IsChecked="{Binding StartActive}" VerticalAlignment="Center"
+                                  ToolTip="Off = parked, switched on by a rule / host code by name."/>
+                        <!-- Depth belongs to the ROOM, not the character: the same
+                             NPC stands behind one level's furniture and in front of
+                             another's, and every vanilla level picks its own orders.
+                             So it sits here with the transforms. -->
+                        <TextBlock Text="Sorting order" VerticalAlignment="Center" Margin="16,0,4,0"/>
+                        <TextBox Width="55" Text="{Binding SortingOrder, UpdateSourceTrigger=LostFocus}"
+                                 ToolTip="Overrides the NPC's own sorting order for this placement. Leave blank to use the NPC's."/>
+                    </StackPanel>
 
                     <!-- Utility components on the NPC itself. Attached before the
                          NPC is activated, so a FadeInSprite fades it in on
@@ -2599,9 +2607,14 @@
                                                            PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            ToolTip="R=bounce, G=wave, B=noise, A=intensity — same convention as bust masks."/>
                                     </DockPanel>
-                                    <TextBlock Text="Sorting order:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding SortingOrder, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"
-                                             ToolTip="Reference NPCs sit at -1 (under the level's props). Blink renders one step above; shadow uses its own order."/>
+                                    <TextBlock Text="Default sorting order:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                                        <TextBox Width="55" Text="{Binding SortingOrder, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="Reference NPCs sit at -1 (under the level's props). Blink renders one step above; shadow uses its own order."/>
+                                        <TextBlock Foreground="Gray" FontSize="10" VerticalAlignment="Center" Margin="8,0,0,0"
+                                                   TextWrapping="Wrap"
+                                                   Text="Starting point only — set the real depth per placement on the Places tab, since it depends on the room."/>
+                                    </StackPanel>
                                 </Grid>
                             </GroupBox>
 
@@ -2851,16 +2864,24 @@
                                      level plus whatever this extension actually adds. -->
                                 <GroupBox Header="Preview">
                                     <StackPanel>
-                                        <ctl:PlacePreview Margin="200,0"
+                                        <ctl:PlacePreview x:Name="ExtPreview" Margin="200,0"
                                                           PackRoot="{Binding DataContext.PackRoot,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"
                                                           BaseSprite="{Binding PreviewBaseSprite}"
                                                           SecondarySprite="{Binding PreviewSecondarySprite}"
                                                           LevelArtOrder="{Binding PreviewArtOrder}"
                                                           LevelArtSecondaryOrder="{Binding PreviewArtSecondaryOrder}"
+                                                          DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
+                                                          DimInactive="{Binding IsChecked, ElementName=ExtDimSelf}"
                                                           GameObjects="{Binding GameObjects}"
                                                           NpcCatalog="{Binding DataContext.Npcs,
                                                                      RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                            <CheckBox x:Name="ExtDimParent" IsChecked="True" Content="Fade under an inactive parent"
+                                                      ToolTip="The game draws nothing beneath a switched-off parent, so these are faded to show the room as it really loads. Untick while positioning that content."/>
+                                            <CheckBox x:Name="ExtDimSelf" IsChecked="True" Content="Fade objects that start inactive" Margin="12,0,0,0"
+                                                      ToolTip="Objects parked for a rule to switch on. Untick to see them at full strength while you place them."/>
+                                        </StackPanel>
                                         <TextBlock Text="{Binding CatalogSummary}" Foreground="Gray"
                                                    FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
                                     </StackPanel>
@@ -2930,15 +2951,25 @@
                             <!-- ── Preview ── composites secondary + base sprites with GameplayUI overlay
                                  and the live navigator buttons, same z-order as runtime. -->
                             <GroupBox Header="Preview">
-                                <ctl:PlacePreview Margin="200,0"
-                                                  PackRoot="{Binding DataContext.PackRoot,
-                                                             RelativeSource={RelativeSource AncestorType=Window}}"
-                                                  BaseSprite="{Binding BaseSprite}"
-                                                  SecondarySprite="{Binding SecondarySprite}"
-                                                  Buttons="{Binding NavigatorButtons}"
-                                                  GameObjects="{Binding GameObjects}"
-                                                  NpcCatalog="{Binding DataContext.Npcs,
-                                                             RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                <StackPanel>
+                                    <ctl:PlacePreview x:Name="PlacePreviewMain" Margin="200,0"
+                                                      PackRoot="{Binding DataContext.PackRoot,
+                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      BaseSprite="{Binding BaseSprite}"
+                                                      SecondarySprite="{Binding SecondarySprite}"
+                                                      Buttons="{Binding NavigatorButtons}"
+                                                      DimUnderInactiveParent="{Binding IsChecked, ElementName=PlaceDimParent}"
+                                                      DimInactive="{Binding IsChecked, ElementName=PlaceDimSelf}"
+                                                      GameObjects="{Binding GameObjects}"
+                                                      NpcCatalog="{Binding DataContext.Npcs,
+                                                                 RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                        <CheckBox x:Name="PlaceDimParent" IsChecked="True" Content="Fade under an inactive parent"
+                                                  ToolTip="The game draws nothing beneath a switched-off parent, so these are faded to show the room as it really loads. Untick while positioning that content."/>
+                                        <CheckBox x:Name="PlaceDimSelf" IsChecked="True" Content="Fade objects that start inactive" Margin="12,0,0,0"
+                                                  ToolTip="Objects parked for a rule to switch on. Untick to see them at full strength while you place them."/>
+                                    </StackPanel>
+                                </StackPanel>
                             </GroupBox>
 
                             <GroupBox Header="Identity">

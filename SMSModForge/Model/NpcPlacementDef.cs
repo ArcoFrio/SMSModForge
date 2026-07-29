@@ -49,6 +49,18 @@ public sealed class NpcPlacementDef
     public bool StartActive { get; set; } = false;
 
     /// <summary>
+    /// Sorting order for this placement's body, overriding the NPC's own.
+    /// <para/>
+    /// Depth is a property of the ROOM, not of the character: the same NPC
+    /// stands behind one level's furniture and in front of another's, and every
+    /// vanilla level picks its own orders. So it lives here with the transforms,
+    /// for the same reason they do. Null means "use the NPC's own", which is
+    /// what every placement authored before this field existed does.
+    /// </summary>
+    [JsonProperty("sortingOrder", Order = 9, NullValueHandling = NullValueHandling.Ignore)]
+    public int? SortingOrder { get; set; }
+
+    /// <summary>
     /// Generic utility components attached to this NPC's GameObject — the same
     /// vocabulary any <see cref="GameObjectDef"/> takes. They're added before
     /// the NPC is activated, so a <c>FadeInSprite</c> here makes this NPC fade
