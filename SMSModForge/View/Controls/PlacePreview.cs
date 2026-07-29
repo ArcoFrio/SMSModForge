@@ -1136,6 +1136,35 @@ public sealed class PlacePreview : Grid
                 img.MouseLeftButtonDown += (_, e) => { SelectPlacement(plForClick, plPathForClick); e.Handled = true; };
                 drawables.Add((bodyOrder, NpcBodyTie, img));
                 ExpandBounds(mBody, bmp.PixelWidth, bmp.PixelHeight, ref minX, ref minY, ref maxX, ref maxY);
+
+                // Reflection: the same bitmap again, mirrored on Y about the
+                // pose's origin. Costs nothing beyond a second Image sharing the
+                // already-cached bitmap — exactly what it costs in game, where
+                // it's a child renderer reusing the parent's sprite.
+                //
+                // Deliberately NOT bounds-expanding: a reflection is a floor
+                // effect, and letting it push the auto-fit out would shrink the
+                // room to make space for a mirror image of what's already there.
+                if (def.ReflectionEnabled)
+                {
+                    // The same local transform the runtime gives the child:
+                    // localPosition (0, offsetY), localScale (1, -1).
+                    var refl = body.Then(Aff.Trs(0, def.ReflectionOffsetY, 0, 0, 0, 1, -1));
+                    var mRefl = LeafMatrix(refl, bmp.PixelWidth, bmp.PixelHeight);
+                    var rimg = new Image
+                    {
+                        Source = bmp,
+                        Width = bmp.PixelWidth,
+                        Height = bmp.PixelHeight,
+                        Stretch = Stretch.Fill,
+                        Opacity = ghost * Math.Clamp(def.ReflectionAlpha, 0.0, 1.0),
+                        RenderTransform = new MatrixTransform(mRefl),
+                        IsHitTestVisible = false,   // click the body, not its mirror
+                        ToolTip = tip + "\n(reflection)",
+                    };
+                    RenderOptions.SetBitmapScalingMode(rimg, BitmapScalingMode.HighQuality);
+                    drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, rimg));
+                }
             }
 
             // Wet particle emitter — a lightweight animated droplet marker at the

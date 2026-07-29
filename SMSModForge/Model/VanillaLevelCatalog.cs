@@ -54,6 +54,30 @@ public static class VanillaLevelCatalog
         [JsonProperty("sortingOrder")] public int SortingOrder { get; set; }
         [JsonProperty("enabled")] public bool Enabled { get; set; } = true;
         [JsonProperty("pixelsPerUnit")] public float PixelsPerUnit { get; set; } = 100f;
+
+        /// <summary>Renderer tint as RGBA hex. Its alpha is half the story of how
+        /// solid the object looks.</summary>
+        [JsonProperty("color")] public string Color { get; set; } = "FFFFFFFF";
+
+        /// <summary>The MATERIAL's own alpha, when it exposes one. The other
+        /// half: the game's reflection material carries _Alpha 0.58 while its
+        /// renderer colour stays opaque white, so reading the colour alone shows
+        /// a reflection at full strength.</summary>
+        [JsonProperty("materialAlpha")] public float MaterialAlpha { get; set; } = 1f;
+
+        /// <summary>How solid this renderer actually draws — both alphas together.</summary>
+        public float EffectiveAlpha
+        {
+            get
+            {
+                float a = 1f;
+                if (!string.IsNullOrEmpty(Color) && Color.Length >= 8 &&
+                    int.TryParse(Color.Substring(6, 2), System.Globalization.NumberStyles.HexNumber,
+                                 System.Globalization.CultureInfo.InvariantCulture, out var byteA))
+                    a = byteA / 255f;
+                return a * (MaterialAlpha <= 0f ? 1f : MaterialAlpha);
+            }
+        }
     }
 
     public sealed class Level

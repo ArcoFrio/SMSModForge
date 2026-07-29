@@ -115,10 +115,11 @@ public sealed class NpcReflectionDef
     [JsonProperty("enabled", Order = 1)]
     public bool Enabled { get; set; } = false;
 
-    /// <summary>How visible the mirrored copy is. Vanilla reflections read as a
-    /// faint wash rather than a second character.</summary>
+    /// <summary>How visible the mirrored copy is. Defaulted to what the game's
+    /// own NPCCoreReflectionMat uses (_Alpha 0.58), so an untouched reflection
+    /// matches the ones already in the levels.</summary>
     [JsonProperty("alpha", Order = 2)]
-    public float Alpha { get; set; } = 0.35f;
+    public float Alpha { get; set; } = 0.58f;
 
     /// <summary>Vertical offset from the pose's feet, in world units. Negative
     /// pushes it further down.</summary>

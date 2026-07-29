@@ -238,6 +238,10 @@ public static class VanillaDelta
         // Preview-only and dropped for every bound node, so always re-derived.
         node.VanillaArtPath = VanillaLevelCatalog.FindNodeArt(level, baseline);
         node.SortingOrder = baseline.SpriteRenderer?.SortingOrder ?? 0;
+        // How solid the object really draws — renderer tint and material alpha
+        // together. Without this a vanilla reflection previewed at full
+        // strength, since its material carries the fade and its colour doesn't.
+        node.StartAlpha = baseline.SpriteRenderer?.EffectiveAlpha ?? 1f;
 
         if (!node.OverrideTransform)
         {
