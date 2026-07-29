@@ -103,8 +103,25 @@ public sealed class JigglePreview : Image
     // (amplitude x (1 - variation x rand01)); the preview shows the nominal
     // value rather than picking a random one, so what you author is what you see.
     private const double BreathingSpeed = 3.0;
-    private const double BreathingAmplitude =
-        0.1 * 100.0 * (JiggleShader.RenderSize / (double)JiggleShader.Size);
+
+    /// <summary>
+    /// Breathing depth in preview pixels.
+    /// <para/>
+    /// Exposed rather than derived because the world-units-to-pixels ratio
+    /// isn't knowable from the pack: in game the offset is applied to the
+    /// busts' PARENT (2_Bust_Manager), so what it works out to on screen
+    /// depends on that transform's scale and the camera, neither of which the
+    /// editor can see. Dial it until the preview matches and leave it there.
+    /// </summary>
+    public static readonly DependencyProperty BreathingAmplitudeProperty =
+        DependencyProperty.Register(nameof(BreathingAmplitude), typeof(double), typeof(JigglePreview),
+            new PropertyMetadata(4.0));
+
+    public double BreathingAmplitude
+    {
+        get => (double)GetValue(BreathingAmplitudeProperty);
+        set => SetValue(BreathingAmplitudeProperty, value);
+    }
     private readonly TranslateTransform _breathingTransform = new();
 
     private readonly WriteableBitmap _bitmap;

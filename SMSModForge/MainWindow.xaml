@@ -2195,7 +2195,8 @@
                                                SelectedMouthFrame="{Binding ElementName=MouthPicker, Path=SelectedIndex, Mode=OneWay}"
                                                Blinking="{Binding ElementName=BlinkToggle, Path=IsChecked, Mode=OneWay}"
                                                Yapping="{Binding ElementName=YappingToggle, Path=IsChecked, Mode=OneWay}"
-                                               Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"/>
+                                               Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"
+                                               BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
                         </Border>
                         <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
                             <Grid.ColumnDefinitions>
@@ -2214,6 +2215,18 @@
                                 <CheckBox x:Name="YappingToggle" Content="Yapping" Margin="2,6,0,0"/>
                                 <CheckBox x:Name="BlinkToggle" Content="Blinking" IsChecked="True" Margin="2,6,0,0"/>
                                 <CheckBox x:Name="BreathingToggle" Content="Breathing" IsChecked="True" Margin="2,6,0,0"/>
+                                <!-- Depth is a preview-only calibration: in game the
+                                     offset moves the busts' parent, so its on-screen
+                                     size depends on scene scale the editor can't see. -->
+                                <StackPanel Orientation="Horizontal" Margin="2,2,0,0"
+                                            IsEnabled="{Binding ElementName=BreathingToggle, Path=IsChecked}">
+                                    <TextBlock Text="Depth" Foreground="Gray" FontSize="10" VerticalAlignment="Center"/>
+                                    <Slider x:Name="BreathingDepth" Width="80" Margin="4,0,0,0"
+                                            Minimum="0" Maximum="20" Value="4" VerticalAlignment="Center"
+                                            ToolTip="Preview-only: how far the bust bobs, in preview pixels. Match it to the game by eye."/>
+                                    <TextBlock Text="{Binding ElementName=BreathingDepth, Path=Value, StringFormat=F1}"
+                                               Foreground="Gray" FontSize="10" Margin="4,0,0,0" VerticalAlignment="Center"/>
+                                </StackPanel>
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Expression"/>

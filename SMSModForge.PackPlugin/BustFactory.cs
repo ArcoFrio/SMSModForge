@@ -164,7 +164,14 @@ namespace SMSModForge.PackPlugin
             // Sharing one instance is what makes the displacement consistent:
             // the shader samples _MaskTex in the sprite's own UV space and
             // these overlays are authored on the body's frame.
-            ShareMaterial(mat, blink, mouthGo, expressions);
+            // Opt-in, default OFF = vanilla behaviour (overlays keep their own
+            // material and only the body jiggles). Sharing the jiggle material
+            // with the overlays washes them out for a reason not yet pinned
+            // down — it survived removing the body's tint from the copy — so
+            // the default stays on the appearance that is known good and this
+            // is a switch to experiment behind rather than a silent change.
+            if ((bool?)jiggle?["applyToOverlays"] ?? false)
+                ShareMaterial(mat, blink, mouthGo, expressions);
 
             // Drop the GC2 Conditions/Trigger components on Expressions so they
             // don't fire vanilla behaviour. Found by name to avoid a hard ref
