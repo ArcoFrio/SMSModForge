@@ -20,8 +20,11 @@
             <ColumnDefinition Width="260"/>
         </Grid.ColumnDefinitions>
 
-        <!-- LEFT: layers -->
-        <DockPanel Grid.Column="0" Margin="8">
+        <!-- LEFT: layers. Drawn OVER the canvas (which spans the whole window),
+             so panning slides the image behind the panel rather than stopping
+             at its edge. Needs an opaque background for that to read. -->
+        <Border Grid.Column="0" Panel.ZIndex="1" Background="{DynamicResource Theme.Window}">
+        <DockPanel Margin="8">
             <TextBlock Text="Layers" FontWeight="Bold" DockPanel.Dock="Top" Margin="0,0,0,6"/>
             <StackPanel DockPanel.Dock="Top">
                 <Border BorderBrush="LightGray" BorderThickness="1" Margin="0,0,0,4" Padding="4" Background="#222">
@@ -86,11 +89,14 @@
                 <Button Content="Fill active channel"  Click="FillChannel_Click"  Margin="0,2" Height="26"/>
             </StackPanel>
         </DockPanel>
+        </Border>
 
-        <!-- CENTER: canvas. ClipToBounds keeps a panned canvas inside its own
-             column — without it the render transform draws it straight over
-             the layer and brush panels either side. -->
-        <Border Grid.Column="1" Background="#1a1a1a" Padding="8" ClipToBounds="True">
+        <!-- CENTER: canvas. Spans every column and sits at the bottom of the
+             z-order, so the working area is the whole window and a panned or
+             zoomed-in canvas slides UNDER the side panels instead of being cut
+             off at a column edge. ClipToBounds then only trims at the window. -->
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Panel.ZIndex="0"
+                Background="#1a1a1a" Padding="8" ClipToBounds="True">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
                   x:Name="CanvasHost" Width="512" Height="512"
                   Background="Transparent" Focusable="True"
@@ -118,7 +124,8 @@
         </Border>
 
         <!-- RIGHT: tools -->
-        <DockPanel Grid.Column="2" Margin="8">
+        <Border Grid.Column="2" Panel.ZIndex="1" Background="{DynamicResource Theme.Window}">
+        <DockPanel Margin="8">
             <TextBlock Text="Tools" FontWeight="Bold" DockPanel.Dock="Top" Margin="0,0,0,6"/>
             <StackPanel DockPanel.Dock="Top">
                 <UniformGrid Columns="2" Margin="0,0,0,8">
@@ -189,5 +196,6 @@
                 <Button Content="Close" Click="CloseBtn_Click" Height="28" Margin="0,2"/>
             </StackPanel>
         </DockPanel>
+        </Border>
     </Grid>
 </Window>

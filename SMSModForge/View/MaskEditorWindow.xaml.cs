@@ -39,6 +39,11 @@ public partial class MaskEditorWindow : Window
     private const double ZoomMax = 8.0;
     private const double ZoomStep = 0.25;
 
+    /// <summary>Canvas size at 100%. Twice the mask resolution, so a 256-px mask
+    /// is big enough to paint on before zooming. Must match the Width/Height the
+    /// XAML gives CanvasHost, or the first zoom would jump.</summary>
+    private const double BaseDisplaySize = MaskBuffer.Size * 2;
+
     // Stroke state
     private bool _drawing;
     private bool _dirty;
@@ -271,7 +276,7 @@ public partial class MaskEditorWindow : Window
     private void ResetView()
     {
         _zoom = 1.0;
-        CanvasHost.Width = CanvasHost.Height = MaskBuffer.Size;
+        ApplyZoomSize();
         PanTransform.X = PanTransform.Y = 0;
         UpdateZoomDisplay();
     }
@@ -637,18 +642,43 @@ public partial class MaskEditorWindow : Window
     {
         e.Handled = true;
 
-        double oldZoom = _zoom;
+        // Where the cursor is on the canvas, as a fraction of it, captured
+        // before the resize so the same point can be put back under the cursor.
+        var p = e.GetPosition(CanvasHost);
+        double u = CanvasHost.Width > 0 ? p.X / CanvasHost.Width : 0.5;
+        double v = CanvasHost.Height > 0 ? p.Y / CanvasHost.Height : 0.5;
+        double wasW = CanvasHost.Width, wasH = CanvasHost.Height;
+
         if (e.Delta > 0)
             _zoom = Math.Min(ZoomMax, _zoom + ZoomStep);
         else
             _zoom = Math.Max(ZoomMin, _zoom - ZoomStep);
 
-        // Adjust canvas size to match zoom.
-        CanvasHost.Width = MaskBuffer.Size * _zoom;
-        CanvasHost.Height = MaskBuffer.Size * _zoom;
+        ApplyZoomSize();
+
+        // The canvas is centred in its host, so it grows about its middle;
+        // shifting the pan by how far the cursor's point moved keeps that point
+        // still. Without this, zooming in walks the area of interest off-screen
+        // and every zoom has to be followed by a hunt with the pan.
+        PanTransform.X += (u - 0.5) * (wasW - CanvasHost.Width);
+        PanTransform.Y += (v - 0.5) * (wasH - CanvasHost.Height);
 
         // Recompose the bitmap at the new zoom level.
         RecomposeAll();
         UpdateZoomDisplay();
+    }
+
+    /// <summary>
+    /// Size the canvas for the current zoom.
+    /// <para/>
+    /// Sized off <see cref="BaseDisplaySize"/>, NOT the mask resolution: the
+    /// canvas is shown at twice the mask's pixels so a 256-px mask is workable,
+    /// and multiplying the raw 256 by the zoom instead meant the first scroll
+    /// UP shrank the canvas from 512 to 320 while the readout claimed 125%.
+    /// </summary>
+    private void ApplyZoomSize()
+    {
+        CanvasHost.Width = BaseDisplaySize * _zoom;
+        CanvasHost.Height = BaseDisplaySize * _zoom;
     }
 }
