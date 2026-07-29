@@ -110,7 +110,30 @@ namespace SMSModForge.PackPlugin
             // Intrinsic, not manifest-authored: every store has the roll seed
             // so DailyChance works regardless of what the pack declares.
             Declare(RollSeedName, PackVariableType.Int, "0", persisted: true);
+            // Which in-game day the Daily refresh last ran for. Persisted so it
+            // travels with the save — see LastRefreshDay.
+            Declare(LastRefreshDayName, PackVariableType.Int, "0", persisted: true);
         }
+
+        /// <summary>Internal marker, underscored like the roll seed so it stays
+        /// out of the pack's public variable surface.</summary>
+        private const string LastRefreshDayName = "__lastRefreshDay";
+
+        /// <summary>
+        /// The in-game day the Daily / DailyRandom refresh last ran for, or 0
+        /// on a save that has never seen one.
+        /// <para/>
+        /// The refresh is edge-triggered off sleeping, and the commit that
+        /// follows is what puts the refreshed values on disk. If that commit
+        /// never lands — a crash, or quitting during the save flash — the file
+        /// keeps YESTERDAY's values while the game has moved on a day, and
+        /// nothing would ever reset them: loading restores the file verbatim
+        /// and the next refresh only comes at the next sleep. Recording the day
+        /// alongside the values lets a load notice the gap and close it.
+        /// </summary>
+        public int LastRefreshDay =>
+            _values.TryGetValue(LastRefreshDayName, out var s) &&
+            int.TryParse(s, NumberStyles.Integer, CultureInfo.InvariantCulture, out var v) ? v : 0;
 
         /// <summary>Internal seed variable. Underscored so
         /// <see cref="EnumerateNames"/> keeps it out of the public surface —
@@ -392,7 +415,9 @@ namespace SMSModForge.PackPlugin
         /// when a refreshed variable was persisted) is informational only;
         /// the daily autosave commits unconditionally.
         /// </summary>
-        public bool RefreshOnDayChange()
+        /// <param name="day">The in-game day being refreshed INTO, recorded so
+        /// a later load can tell whether this ever reached disk.</param>
+        public bool RefreshOnDayChange(int day)
         {
             bool anyPersisted = false;
             int dailyReset = 0;
@@ -430,8 +455,13 @@ namespace SMSModForge.PackPlugin
                 if (d.Persisted) anyPersisted = true;
             }
 
+            // Stamped last, so it is only ever recorded alongside a refresh that
+            // actually ran. It rides the same persisted slice as the values it
+            // vouches for, so the two can't disagree on disk.
+            if (day > 0) _values[LastRefreshDayName] = day.ToString(CultureInfo.InvariantCulture);
+
             _log?.LogInfo("[SMSModForge.PackPlugin] " + PackId + ": daily refresh reset " +
-                          dailyReset + " variable(s)" +
+                          dailyReset + " variable(s) for day " + day +
                           (changed != null ? " — " + changed : " — none had drifted from default"));
             return anyPersisted;
         }

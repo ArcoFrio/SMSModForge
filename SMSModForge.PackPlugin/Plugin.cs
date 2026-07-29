@@ -109,6 +109,10 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static int _sleepDay = -1;
 
+        /// <summary>One-shot latch for <see cref="TickDailyCatchUp"/>, so the
+        /// load-time reconciliation runs once per CoreGameScene.</summary>
+        private static bool _dailyCatchUpDone;
+
         /// <summary>
         /// True once the sleep autosave has fired this gameplay session (reset
         /// on every scene load). The manual-save copy reads this to decide its
@@ -397,6 +401,7 @@ namespace SMSModForge.PackPlugin
             _savedUiWasActive = false;
             _dayTurnoverProc = false;
             _sleepDay = -1;
+            _dailyCatchUpDone = false;
             AutosaveProcedThisSession = false;
             // Reset slot tracking so the next CoreGameScene fresh-loads
             // the active slot's file (the player might have switched
@@ -735,6 +740,7 @@ namespace SMSModForge.PackPlugin
                 // reads pack state, so we want the file backing it to
                 // match the currently-active NanoSave slot.
                 TickSaveSlot();
+                TickDailyCatchUp();
                 TickSleepAutosave();
                 TickLevelRefresh();
                 NavigatorRuntime.Tick();
@@ -911,7 +917,7 @@ namespace SMSModForge.PackPlugin
                 foreach (var c in _contexts)
                 {
                     if (c.Vars == null) continue;
-                    c.Vars.RefreshOnDayChange();  // Daily / DailyRandom refresh policies
+                    c.Vars.RefreshOnDayChange(_sleepDay);  // Daily / DailyRandom refresh policies
                     // Let OnDayChange integration rules know an event happened.
                     // They fire on the next Tick if their conditions also pass —
                     // which is now while the flash is still up, so a schedule has
@@ -1025,6 +1031,41 @@ namespace SMSModForge.PackPlugin
             _lastSeenSlot = slot;
             Logger.LogInfo("[SMSModForge.PackPlugin] Bound pack saves to slot " + slot +
                            " (NANOSAVE_" + slot.ToString("D4") + ").");
+        }
+
+        /// <summary>
+        /// Close the gap when a save was loaded whose Daily variables never got
+        /// their refresh committed.
+        /// <para/>
+        /// The refresh runs on sleeping and reaches disk on the commit that
+        /// follows. If that commit never landed — a crash, or quitting while
+        /// the save flash was up — the file still holds the previous day's
+        /// values, and nothing else would ever reset them: loading restores the
+        /// file verbatim, and the next refresh is a whole sleep away. So each
+        /// store records the day its refresh last ran for, and a mismatch
+        /// against the day actually being played is closed here, once, on the
+        /// first frame the day reads valid after binding.
+        /// <para/>
+        /// A brand-new save reads day 0 and refreshes immediately, which is a
+        /// no-op — every value is already at its default.
+        /// </summary>
+        private void TickDailyCatchUp()
+        {
+            if (_dailyCatchUpDone || _lastSeenSlot <= 0) return;
+
+            int day = (int)GameVariableBridge.GetNumber("Day");
+            if (day <= 0) return;              // day not readable yet — try again next frame
+            _dailyCatchUpDone = true;
+
+            foreach (var c in _contexts)
+            {
+                if (c.Vars == null || c.Vars.LastRefreshDay == day) continue;
+                Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId +
+                               ": loaded save was last refreshed for day " + c.Vars.LastRefreshDay +
+                               " but it is day " + day + " — running the daily refresh now.");
+                c.Vars.RefreshOnDayChange(day);
+                c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
+            }
         }
 
         /// <summary>
