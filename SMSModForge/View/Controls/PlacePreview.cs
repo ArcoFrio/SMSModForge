@@ -908,10 +908,11 @@ public sealed class PlacePreview : Grid
                 if (bmp == null) continue;
 
                 double w = bmp.PixelWidth, h = bmp.PixelHeight;
-                // GameObject sprites load at the level's own px-per-unit, so the
-                // sprite's pixels are canvas pixels; the node's world affine
-                // carries its position, spin and scale (composed, under NPCs).
-                var m = LeafMatrix(entry.World, w, h, PixelsPerUnit);
+                // Each object's OWN sprite ppu — the pack's 70.32 for one it
+                // creates, the vanilla sprite's for one it binds to. A constant
+                // here drew every vanilla sprite as though it were 100 ppu, so a
+                // 512px NPC imported at 51.98 came out at less than half size.
+                var m = LeafMatrix(entry.World, w, h, o.SpritePpu);
 
                 var img = new Image
                 {

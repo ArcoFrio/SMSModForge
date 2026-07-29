@@ -96,6 +96,20 @@ public sealed class GameObjectDef
     [JsonIgnore]
     public bool HasTint => !string.IsNullOrWhiteSpace(Tint);
 
+    /// <summary>
+    /// Pixels-per-unit this object's sprite is built at — how many texture
+    /// pixels make one world unit, and so how big it draws.
+    /// <para/>
+    /// Preview-only and never serialized: for an object the PACK creates the
+    /// runtime fixes it at 70.32, and for a bound one it belongs to the vanilla
+    /// sprite and is seeded from the catalog. It has to be per object because
+    /// the game's own are all over the place — Mall's NPCs alone run 51.35,
+    /// 51.98, 52.67 and 100. Treating it as one global constant drew every
+    /// vanilla sprite as though it were 100, which shrank them by nearly half.
+    /// </summary>
+    [JsonIgnore]
+    public float SpritePpu { get; set; } = 70.32f;
+
     /// <summary>Optional relative path to a mask PNG. When set, the object gets
     /// its own material with this mask bound to <c>_MaskTex</c> (the Solid
     /// cameo's shader trick). Blank = no mask.</summary>

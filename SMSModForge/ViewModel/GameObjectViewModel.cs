@@ -387,6 +387,10 @@ public sealed class GameObjectViewModel : ObservableObject
 
     public bool HasTint => Model.HasTint;
 
+    /// <summary>This object's sprite ppu — the pack's own for a created object,
+    /// the vanilla sprite's for a bound one. Drives how large it previews.</summary>
+    public float SpritePpu => Model.SpritePpu;
+
     public string Mask
     {
         get => Model.Mask;

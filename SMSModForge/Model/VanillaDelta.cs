@@ -245,6 +245,10 @@ public static class VanillaDelta
         // ...and its colour, not just that colour's alpha. Dropping the RGB is
         // what made the mauve street reflections preview at full sprite colour.
         node.Tint = baseline.SpriteRenderer?.TintRgb ?? "";
+        // The vanilla sprite's own import ppu — it decides how large the object
+        // is in world units, and the game's are far from uniform.
+        float ppu = baseline.SpriteRenderer?.PixelsPerUnit ?? 0f;
+        if (ppu > 0f) node.SpritePpu = ppu;
 
         if (!node.OverrideTransform)
         {
