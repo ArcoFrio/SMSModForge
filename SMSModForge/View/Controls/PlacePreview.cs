@@ -2388,8 +2388,33 @@ public sealed class PlacePreview : Grid
             Margin = new Thickness(2, 0, 0, 3),
         });
 
-        foreach (var entry in scene)
+        // The scene list is already in tree order, so a row has children exactly
+        // when the next one is deeper, and a collapsed row's subtree is every
+        // following row deeper than it — no second structure to keep in step.
+        int hiddenBelowDepth = -1;
+        for (int i = 0; i < scene.Count; i++)
         {
+            var entry = scene[i];
+
+            if (hiddenBelowDepth >= 0)
+            {
+                if (entry.Depth > hiddenBelowDepth) continue;   // inside a collapsed subtree
+                hiddenBelowDepth = -1;
+            }
+
+            bool hasChildren = i + 1 < scene.Count && scene[i + 1].Depth > entry.Depth;
+            bool collapsed = hasChildren && _collapsed.Contains(entry.Path);
+            if (collapsed) hiddenBelowDepth = entry.Depth;
+
+            string rowPath = entry.Path;
+            System.Action? toggle = hasChildren
+                ? () =>
+                  {
+                      if (!_collapsed.Remove(rowPath)) _collapsed.Add(rowPath);
+                      RefreshObjectMenu();
+                  }
+                : null;
+
             if (entry.Node is GameObjectViewModel node)
             {
                 // ◈ the forced NPCs root, ▦ a sprite object, ⌗ a bare container.
@@ -2398,7 +2423,7 @@ public sealed class PlacePreview : Grid
                 _objectMenuList.Children.Add(MenuRow(
                     icon + "  " + node.Display, entry,
                     ReferenceEquals(_selNode, n),
-                    () => SelectNode(n, p)));
+                    () => SelectNode(n, p), collapsed, toggle));
             }
             else if (entry.Npc is NpcPlacementViewModel pl)
             {
@@ -2406,10 +2431,20 @@ public sealed class PlacePreview : Grid
                 _objectMenuList.Children.Add(MenuRow(
                     "☺  " + pl.Display, entry,
                     ReferenceEquals(_selPlacement, q),
-                    () => SelectPlacement(q, p)));
+                    () => SelectPlacement(q, p), collapsed, toggle));
             }
         }
     }
+
+    /// <summary>
+    /// Paths of the rows whose children are folded away.
+    /// <para/>
+    /// Keyed by path rather than by view-model reference because the menu is
+    /// rebuilt from scratch on every refresh — including mid-drag — and a
+    /// collapse that reopened itself every time the scene changed would be
+    /// worse than none. Paths that no longer exist simply never match.
+    /// </summary>
+    private readonly HashSet<string> _collapsed = new();
 
     /// <summary>
     /// One clickable hierarchy row, prefixed with tree guides.
@@ -2425,7 +2460,8 @@ public sealed class PlacePreview : Grid
     /// line up column to column in a fixed-width font, and the labels stay in
     /// the UI font where they belong.
     /// </summary>
-    private Button MenuRow(string text, SceneEntry entry, bool selected, System.Action onClick)
+    private Button MenuRow(string text, SceneEntry entry, bool selected, System.Action onClick,
+                           bool collapsed = false, System.Action? onToggle = null)
     {
         var guides = new System.Text.StringBuilder();
         foreach (bool hasMore in entry.Guides) guides.Append(hasMore ? "│ " : "  ");
@@ -2444,6 +2480,26 @@ public sealed class PlacePreview : Grid
                 VerticalAlignment = VerticalAlignment.Center,
             });
         }
+
+        // Fold arrow, or a spacer of the same width on a leaf so every label
+        // starts at the same column regardless.
+        var arrow = new TextBlock
+        {
+            Text = onToggle == null ? "  " : collapsed ? "▸ " : "▾ ",
+            FontFamily = new FontFamily("Consolas, Courier New, monospace"),
+            Foreground = ChipText,
+            VerticalAlignment = VerticalAlignment.Center,
+        };
+        if (onToggle != null)
+        {
+            arrow.Cursor = Cursors.Hand;
+            arrow.ToolTip = "Fold this object's children";
+            // Handling the DOWN is what keeps the row's own click from firing:
+            // the Button never captures, so folding does not also re-select.
+            arrow.MouseLeftButtonDown += (_, e) => { onToggle(); e.Handled = true; };
+        }
+        row.Children.Add(arrow);
+
         row.Children.Add(new TextBlock
         {
             Text = text,
