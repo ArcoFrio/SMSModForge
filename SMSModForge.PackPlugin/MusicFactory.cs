@@ -108,7 +108,6 @@ namespace SMSModForge.PackPlugin
             // SwitchMusic can find it by name.
             var go = Object.Instantiate(template, audioPlayer);
             go.name = key;
-            go.SetActive(false);
 
             var source = go.GetComponent<AudioSource>();
             if (source == null)
@@ -118,18 +117,28 @@ namespace SMSModForge.PackPlugin
             }
             else
             {
+                // The clone inherits the template's clip, and if the template
+                // was active it has already begun playing it. Silence it before
+                // anything is audible; the pack's own clip lands on the
+                // coroutine below.
+                source.Stop();
+                source.clip = null;
+
                 // Apply overrides BEFORE the clip lands — Unity is fine
                 // with loop / volume changes on a clipless source.
                 if (t["loop"] != null) source.loop = (bool)t["loop"];
                 if (t["volume"] != null) source.volume = (float)t["volume"];
 
-                // The template's AudioSource has playOnAwake = true
-                // (vanilla Beach starts playing on enable); the swap
-                // happens with the GO inactive so nothing audible
-                // leaks. Force playOnAwake off so SwitchMusic is the
-                // sole trigger.
-                source.playOnAwake = false;
+                // playOnAwake stays ON, matching every other track under
+                // 12_AudioPlayer. A track there sounds BECAUSE it is enabled:
+                // SwitchMusic only deactivates the siblings and activates the
+                // one it wants, and never calls Play(). Turning playOnAwake off
+                // therefore made pack music silent by every route — switched to
+                // by a dialogue action, or enabled by hand.
+                source.playOnAwake = true;
             }
+
+            go.SetActive(false);
 
             pluginHost.StartCoroutine(LoadAudioCoroutine(path, source, key, pack.PackId, logger));
             return true;
@@ -174,7 +183,18 @@ namespace SMSModForge.PackPlugin
                     yield break;
                 }
                 clip.name = key;
-                if (source != null) source.clip = clip;
+                if (source != null)
+                {
+                    source.clip = clip;
+
+                    // If the track was switched to while the clip was still
+                    // loading, playOnAwake has already come and gone against an
+                    // empty source. Assigning a clip does NOT start playback, so
+                    // without this the track stays silent for as long as it
+                    // remains enabled — the load simply never becomes audible.
+                    if (source.isActiveAndEnabled && !source.isPlaying)
+                        source.Play();
+                }
                 logger.LogInfo("[SMSModForge.PackPlugin] Music '" + key + "' loaded for pack " + packId + ".");
             }
         }
