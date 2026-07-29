@@ -65,6 +65,23 @@ public static class VanillaLevelCatalog
         /// a reflection at full strength.</summary>
         [JsonProperty("materialAlpha")] public float MaterialAlpha { get; set; } = 1f;
 
+        /// <summary>Material name. The only reliable way to tell a reflection
+        /// from an ordinary sprite: the geometry alone doesn't, since a mirrored
+        /// scale is used for plenty of things that aren't reflections.</summary>
+        [JsonProperty("material")] public string Material { get; set; } = "";
+
+        /// <summary>True when this renderer uses a reflection material.</summary>
+        public bool IsReflection =>
+            !string.IsNullOrEmpty(Material) &&
+            Material.IndexOf("Reflection", System.StringComparison.OrdinalIgnoreCase) >= 0;
+
+        /// <summary>Alpha a reflection falls back to when the catalog predates
+        /// materialAlpha — the value the game's own reflection material uses.
+        /// Better than treating it as opaque, which is what made the two
+        /// Downtown reflections whose RENDERER colour is fully opaque draw as
+        /// solid copies of the character.</summary>
+        private const float ReflectionFallbackAlpha = 0.58f;
+
         /// <summary>How solid this renderer actually draws — both alphas together.</summary>
         public float EffectiveAlpha
         {
@@ -75,7 +92,12 @@ public static class VanillaLevelCatalog
                     int.TryParse(Color.Substring(6, 2), System.Globalization.NumberStyles.HexNumber,
                                  System.Globalization.CultureInfo.InvariantCulture, out var byteA))
                     a = byteA / 255f;
-                return a * (MaterialAlpha <= 0f ? 1f : MaterialAlpha);
+
+                float mat = MaterialAlpha <= 0f ? 1f : MaterialAlpha;
+                // A reflection whose material alpha wasn't recorded would other-
+                // wise inherit 1 and draw solid. Its own material never does.
+                if (mat >= 0.999f && IsReflection) mat = ReflectionFallbackAlpha;
+                return a * mat;
             }
         }
     }
