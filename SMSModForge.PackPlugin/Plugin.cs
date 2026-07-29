@@ -98,6 +98,18 @@ namespace SMSModForge.PackPlugin
         private static bool _dayTurnoverProc;
 
         /// <summary>
+        /// The in-game day as read at this sleep's turnover, carried to the
+        /// commit that follows a few seconds later. <c>-1</c> when no turnover
+        /// is in flight.
+        /// <para/>
+        /// The weekly backup and the daily autosave have to agree about what
+        /// day it is: they are one decision taken at one moment in the host
+        /// mod, and re-reading the day at the later commit is how they came
+        /// apart.
+        /// </summary>
+        private static int _sleepDay = -1;
+
+        /// <summary>
         /// True once the sleep autosave has fired this gameplay session (reset
         /// on every scene load). The manual-save copy reads this to decide its
         /// source slot — exactly like the host mod's <c>autosaveProcedThisSession</c>:
@@ -384,6 +396,7 @@ namespace SMSModForge.PackPlugin
             _afterSleepProc = false;
             _savedUiWasActive = false;
             _dayTurnoverProc = false;
+            _sleepDay = -1;
             AutosaveProcedThisSession = false;
             // Reset slot tracking so the next CoreGameScene fresh-loads
             // the active slot's file (the player might have switched
@@ -887,6 +900,14 @@ namespace SMSModForge.PackPlugin
             if (savedActive && _afterSleepProc && !_dayTurnoverProc)
             {
                 _dayTurnoverProc = true;
+
+                // Read the day HERE, where the host mod reads it, and carry the
+                // answer to the commit below. Deciding "is it Monday" at the
+                // falling edge instead meant the weekly backup was gated on a
+                // reading taken seconds later than the daily one it is supposed
+                // to accompany — the two could disagree, and slot 2 would be
+                // skipped on a day slot 1 was written.
+                _sleepDay = (int)GameVariableBridge.GetNumber("Day");
                 foreach (var c in _contexts)
                 {
                     if (c.Vars == null) continue;
@@ -922,7 +943,11 @@ namespace SMSModForge.PackPlugin
             // loaded slot is frozen by vanilla until a manual save, so writing
             // our pack file only to slot 1 keeps it in lockstep with the
             // vanilla + the host mod saves.
-            int day = (int)GameVariableBridge.GetNumber("Day");
+            // Day as read at the turnover, not re-read now — see _sleepDay.
+            // Falling back to a fresh read keeps the commit correct if the
+            // turnover stage was somehow skipped, rather than treating the
+            // sentinel as a day number and silently dropping the backup.
+            int day = _sleepDay >= 0 ? _sleepDay : (int)GameVariableBridge.GetNumber("Day");
             bool monday = day == 1;
             foreach (var c in _contexts)
             {
@@ -932,6 +957,7 @@ namespace SMSModForge.PackPlugin
                 c.Vars.SaveToSlot(1);             // the autosave slot
                 if (monday) c.Vars.SaveToSlot(2); // Monday backup, mirroring SaveToFile(2)
             }
+            _sleepDay = -1;
 
             Logger.LogInfo("[SMSModForge.PackPlugin] Player slept (now day " + day +
                            ") — autosave: pack variables committed to slot 1" +
