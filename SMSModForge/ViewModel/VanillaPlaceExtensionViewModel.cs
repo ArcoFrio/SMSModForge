@@ -70,6 +70,35 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
 
     public string PreviewSecondarySprite => VanillaLevelCatalog.FindArt(CatalogLevel?.GoName, "Secondary.PNG");
 
+    /// <summary>
+    /// Sorting order of this level's own art, from the extraction.
+    /// <para/>
+    /// Every vanilla level picks its own — Downtown draws its base at -10 and
+    /// its far layer at -15 — so the preview can't judge what sits in front of
+    /// the backdrop from the single convention a PACK place is built to. Read
+    /// off the level root's renderer, falling back to the pack default when the
+    /// catalog has no entry.
+    /// </summary>
+    public int PreviewArtOrder => CatalogLevel?.Hierarchy?.SpriteRenderer?.SortingOrder ?? -4;
+
+    /// <summary>The lowest order any of the level's own art draws at — the far
+    /// layer, when it has one.</summary>
+    public int PreviewArtSecondaryOrder
+    {
+        get
+        {
+            var lv = CatalogLevel;
+            if (lv?.Hierarchy == null) return -5;
+            int lowest = PreviewArtOrder;
+            foreach (var c in lv.Hierarchy.Children)
+            {
+                var sr = c.SpriteRenderer;
+                if (sr != null && sr.SortingOrder < lowest) lowest = sr.SortingOrder;
+            }
+            return lowest;
+        }
+    }
+
     /// <summary>One-line status under the preview: what the catalog knows, or
     /// why there's nothing to show.</summary>
     public string CatalogSummary

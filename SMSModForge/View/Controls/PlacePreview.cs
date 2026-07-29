@@ -700,6 +700,37 @@ public sealed class PlacePreview : Grid
     /// </summary>
     private const int LevelBaseSortingOrder = -4;
 
+    /// <summary>
+    /// Sorting order of the level art this preview is actually drawing, and of
+    /// the layer behind it. Defaults to the pack-place convention above; a
+    /// vanilla extension overrides them with what the extraction found.
+    /// <para/>
+    /// The constants only ever described the prototype a PACK place is built
+    /// from. Vanilla levels each pick their own — Downtown draws its base at
+    /// -10 and its far layer at -15 — so judging "is this behind the level art"
+    /// against a fixed -4 was wrong for every vanilla level, and reported NPCs
+    /// at -9 as buried when they are comfortably in front.
+    /// </summary>
+    public static readonly DependencyProperty LevelArtOrderProperty =
+        DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
+            new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
+
+    public int LevelArtOrder
+    {
+        get => (int)GetValue(LevelArtOrderProperty);
+        set => SetValue(LevelArtOrderProperty, value);
+    }
+
+    public static readonly DependencyProperty LevelArtSecondaryOrderProperty =
+        DependencyProperty.Register(nameof(LevelArtSecondaryOrder), typeof(int), typeof(PlacePreview),
+            new PropertyMetadata(LevelSecondarySortingOrder, OnInputChanged));
+
+    public int LevelArtSecondaryOrder
+    {
+        get => (int)GetValue(LevelArtSecondaryOrderProperty);
+        set => SetValue(LevelArtSecondaryOrderProperty, value);
+    }
+
     /// <summary>Sorting order of the level's secondary (distance/blur) sprite,
     /// which renders behind the base.</summary>
     private const int LevelSecondarySortingOrder = -5;
@@ -722,8 +753,8 @@ public sealed class PlacePreview : Grid
         var drawables = new System.Collections.Generic.List<(int Order, int Tie, UIElement Element)>();
 
         if (_secondaryImage.Source != null)
-            drawables.Add((LevelSecondarySortingOrder, 0, _secondaryImage));
-        drawables.Add((LevelBaseSortingOrder, 0, _baseImage));
+            drawables.Add((LevelArtSecondaryOrder, 0, _secondaryImage));
+        drawables.Add((LevelArtOrder, 0, _baseImage));
 
         if (!string.IsNullOrEmpty(root) && _placeholder.Visibility != Visibility.Visible)
         {
@@ -761,7 +792,7 @@ public sealed class PlacePreview : Grid
                     RenderTransform = new MatrixTransform(m),
                     ToolTip = o.Name +
                               "\nsorting order " + o.SortingOrder +
-                              (o.SortingOrder < LevelBaseSortingOrder ? "  (behind the level art)" : "") +
+                              (o.SortingOrder < LevelArtOrder ? "  (behind the level art)" : "") +
                               (o.StartActive ? "" : "\n(starts inactive)") +
                               (entry.ParentInactive ? "\n(a parent starts inactive — the game draws nothing here)" : ""),
                 };
