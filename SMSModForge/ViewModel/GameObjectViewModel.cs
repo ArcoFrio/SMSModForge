@@ -101,6 +101,10 @@ public sealed class GameObjectViewModel : ObservableObject
             Model.Bind = value;
             OnPropertyChanged();
             OnPropertyChanged(nameof(IsCreated));
+            // Binding a node named "NPCs" turns it into the NPC host, which the
+            // "+ Add NPC child" button keys off.
+            OnPropertyChanged(nameof(IsNpcHost));
+            OnPropertyChanged(nameof(CanHostNpcs));
             RefreshVanillaChange();
         }
     }
@@ -166,10 +170,22 @@ public sealed class GameObjectViewModel : ObservableObject
         set { Model.OverrideActive = value; OnPropertyChanged(); RefreshVanillaChange(); }
     }
 
-    /// <summary>True for the NPCs-root node and everything nested under it —
+    /// <summary>
+    /// The level's NPCs container. Either the forced role node a pack place
+    /// carries, or — in a vanilla extension — the level's own "NPCs" object,
+    /// reached by BINDING rather than by role, which is why matching on the
+    /// role alone left an extension with no way to place an NPC.
+    /// <para/>
+    /// Deliberately not folded into <see cref="IsNpcRoot"/>: that one marks the
+    /// node the pack owns and cannot delete, and a bound node stays removable.
+    /// </summary>
+    public bool IsNpcHost => IsNpcRoot ||
+        (Model.Bind && string.Equals(Model.Name, "NPCs", System.StringComparison.OrdinalIgnoreCase));
+
+    /// <summary>True for the NPCs container and everything nested under it —
     /// the part of the tree whose transforms compose locally and where NPC
     /// placements belong.</summary>
-    public bool IsInNpcSubtree => IsNpcRoot || _parentInNpcSubtree;
+    public bool IsInNpcSubtree => IsNpcHost || _parentInNpcSubtree;
 
     /// <summary>Only nodes inside the NPCs subtree offer "+ Add NPC child".</summary>
     public bool CanHostNpcs => IsInNpcSubtree;

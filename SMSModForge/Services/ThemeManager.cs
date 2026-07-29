@@ -65,6 +65,15 @@ public static class ThemeManager
     public const string KeyText = "Theme.Text";
     public const string KeyControl = "Theme.Control";
 
+    /// <summary>Background for a GameObject row the vanilla level owns, and for
+    /// one the pack has actually altered. Derived from the theme's own Surface
+    /// rather than authored per theme, and OPAQUE on purpose: these rows nest,
+    /// and a translucent tint let a parent's colour show through every child
+    /// that sat inside it — which is what made a fresh child look like an
+    /// untouched vanilla object, and an NPC look like a changed one.</summary>
+    public const string KeyVanillaSurface = "Theme.VanillaSurface";
+    public const string KeyChangedSurface = "Theme.ChangedSurface";
+
     // Catalogue. Index 0 ("Light") is the neutral default + fallback. Light
     // themes keep dark Text on a near-white Control; the dark themes flip both
     // (light Text on a dark Control) — and every text-bearing surface below is
@@ -102,6 +111,12 @@ public static class ThemeManager
         r[KeyAccentText] = Brush(theme.AccentText);
         r[KeyText] = Brush(theme.Text);
         r[KeyControl] = Brush(theme.Control);
+        // Blended toward a hue rather than alpha-composited, so the result is
+        // opaque and still tracks whether the theme is light or dark.
+        var surface = (Color)ColorConverter.ConvertFromString(theme.Surface);
+        r[KeyVanillaSurface] = Frozen(Blend(surface, Color.FromRgb(0x5B, 0x8F, 0xCB), 0.16));
+        r[KeyChangedSurface] = Frozen(Blend(surface,
+            (Color)ColorConverter.ConvertFromString(theme.Accent), 0.28));
 
         foreach (var t in All) t.IsCurrent = ReferenceEquals(t, theme);
         Current = theme;
@@ -118,11 +133,21 @@ public static class ThemeManager
         Apply(theme);
     }
 
-    private static SolidColorBrush Brush(string hex)
+    private static SolidColorBrush Brush(string hex) => Frozen((Color)ColorConverter.ConvertFromString(hex));
+
+    private static SolidColorBrush Frozen(Color c)
     {
-        var b = new SolidColorBrush((Color)ColorConverter.ConvertFromString(hex));
+        var b = new SolidColorBrush(c);
         b.Freeze();
         return b;
+    }
+
+    /// <summary>Mix <paramref name="amount"/> of <paramref name="toward"/> into
+    /// <paramref name="base"/>, staying fully opaque.</summary>
+    private static Color Blend(Color @base, Color toward, double amount)
+    {
+        byte Mix(byte a, byte b) => (byte)(a + (b - a) * amount);
+        return Color.FromRgb(Mix(@base.R, toward.R), Mix(@base.G, toward.G), Mix(@base.B, toward.B));
     }
 
     private static string? LoadName()

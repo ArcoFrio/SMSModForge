@@ -1287,15 +1287,20 @@
                     <Style TargetType="Border">
                         <Setter Property="BorderBrush" Value="LightGray"/>
                         <Setter Property="BorderThickness" Value="1"/>
+                        <!-- Opaque, and set on every row rather than only the
+                             tinted ones. These rows nest, so a row without its
+                             own background shows its PARENT's — which is what
+                             made a freshly added child look like an untouched
+                             vanilla object and an NPC look like a changed one. -->
+                        <Setter Property="Background" Value="{DynamicResource Theme.Surface}"/>
                         <Style.Triggers>
                             <!-- An object of the GAME'S own, not the pack's. A
                                  seeded extension is mostly these, so they get a
                                  cool cast to separate them at a glance from the
-                                 few rows the pack actually creates. Alpha-blended
-                                 so it reads on either theme. -->
+                                 few rows the pack actually creates. -->
                             <DataTrigger Binding="{Binding Bind}" Value="True">
                                 <Setter Property="BorderBrush" Value="#805B8FCB"/>
-                                <Setter Property="Background" Value="#141E5AA8"/>
+                                <Setter Property="Background" Value="{DynamicResource Theme.VanillaSurface}"/>
                             </DataTrigger>
                             <!-- Listed second on purpose: a bound node you've
                                  actually changed is the stronger signal, and the
@@ -1303,7 +1308,7 @@
                             <DataTrigger Binding="{Binding HasVanillaChange}" Value="True">
                                 <Setter Property="BorderBrush" Value="{DynamicResource Theme.Accent}"/>
                                 <Setter Property="BorderThickness" Value="2"/>
-                                <Setter Property="Background" Value="#22808080"/>
+                                <Setter Property="Background" Value="{DynamicResource Theme.ChangedSurface}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -1567,8 +1572,12 @@
 
         <!-- Implicit, so a GameObject node's nested NPCs ItemsControl picks it up. -->
         <DataTemplate DataType="{x:Type vm:NpcPlacementViewModel}">
+            <!-- Opaque background: an NPC row nests inside its host GameObject's
+                 row, and without one it showed that host's tint — reading as if
+                 the NPC were itself a changed vanilla object. -->
             <Border BorderBrush="{DynamicResource Theme.Accent}" BorderThickness="1"
-                    CornerRadius="3" Margin="0,3" Padding="6">
+                    CornerRadius="3" Margin="0,3" Padding="6"
+                    Background="{DynamicResource Theme.Surface}">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="90"/>

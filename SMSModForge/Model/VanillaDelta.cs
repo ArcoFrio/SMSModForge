@@ -154,7 +154,7 @@ public static class VanillaDelta
     /// <summary>Whether a bound node actually does something to the object it
     /// resolves, rather than merely being an ancestor of one that does.</summary>
     private static bool ChangesItsTarget(GameObjectDef n)
-        => n.OverrideTransform || n.OverrideActive || HasOwnAdditions(n);
+        => n.OverrideTransform || n.OverrideActive || AltersItsTarget(n);
 
     // ── Shared comparison predicates ──────────────────────────────────────
     //
@@ -171,10 +171,28 @@ public static class VanillaDelta
     public static bool ActiveDiffers(GameObjectDef n, VanillaLevelCatalog.Node b)
         => n.StartActive != b.ActiveSelf;
 
-    /// <summary>Carries something of its own — those apply to a bound object
-    /// regardless of any override flag, so they always count as a change.</summary>
+    /// <summary>
+    /// Carries something that has to be written for it to work. Used by the
+    /// SAVE to decide whether a bound node survives the prune: an NPC hung
+    /// under a vanilla object needs that object's node in the manifest to say
+    /// where it goes, even though the object itself is untouched.
+    /// </summary>
     public static bool HasOwnAdditions(GameObjectDef n)
         => n.Components.Count > 0 || n.ActiveConditions.Count > 0 || n.Npcs.Count > 0;
+
+    /// <summary>
+    /// Whether the pack ALTERS the vanilla object, as opposed to merely hanging
+    /// new content off it. The distinction matters to the author and not to the
+    /// serializer: attaching a component or gating its active state changes the
+    /// object the game shipped, while parenting an NPC or a new GameObject under
+    /// it leaves it exactly as it was.
+    /// <para/>
+    /// Kept apart from <see cref="HasOwnAdditions"/> on purpose — conflating
+    /// them marked the level's own NPCs container as "changed" the moment an NPC
+    /// was placed in it, which is the one thing that container is for.
+    /// </summary>
+    public static bool AltersItsTarget(GameObjectDef n)
+        => n.Components.Count > 0 || n.ActiveConditions.Count > 0;
 
     /// <summary>
     /// LIVE test of whether a bound node currently changes its vanilla target —
@@ -187,8 +205,8 @@ public static class VanillaDelta
     {
         if (n == null || !n.Bind) return false;
         var b = n.Baseline;
-        if (b == null) return n.OverrideTransform || n.OverrideActive || HasOwnAdditions(n);
-        return TransformDiffers(n, b) || ActiveDiffers(n, b) || HasOwnAdditions(n);
+        if (b == null) return n.OverrideTransform || n.OverrideActive || AltersItsTarget(n);
+        return TransformDiffers(n, b) || ActiveDiffers(n, b) || AltersItsTarget(n);
     }
 
     // ── Re-anchoring (the inverse of the prune) ───────────────────────────
