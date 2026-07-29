@@ -392,8 +392,22 @@ public sealed class MainViewModel : ObservableObject
     public OutfitViewModel? SelectedOutfit
     {
         get => _selectedOutfit;
-        set { _selectedOutfit = value; OnPropertyChanged(); }
+        set { _selectedOutfit = value; OnPropertyChanged(); OnPropertyChanged(nameof(SelectedCharacter)); }
     }
+
+    /// <summary>
+    /// The character owning <see cref="SelectedOutfit"/>. Derived rather than
+    /// stored, since the tree's selection is whichever row was clicked and an
+    /// outfit belongs to exactly one character.
+    /// <para/>
+    /// Exists so the Busts tab can edit the character's own name and display
+    /// name: the sidebar shows both, but nothing anywhere could set them, which
+    /// left a new character stuck reading as "NewChar&lt;n&gt;".
+    /// </summary>
+    public CharacterViewModel? SelectedCharacter =>
+        _selectedOutfit == null
+            ? null
+            : Characters.FirstOrDefault(c => c.Outfits.Contains(_selectedOutfit));
 
     private PlaceViewModel? _selectedPlace;
     public PlaceViewModel? SelectedPlace

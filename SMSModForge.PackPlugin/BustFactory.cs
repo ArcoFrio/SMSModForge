@@ -243,7 +243,20 @@ namespace SMSModForge.PackPlugin
             {
                 if (root == null) continue;
                 foreach (var sr in root.GetComponentsInChildren<SpriteRenderer>(true))
-                    sr.sharedMaterial = mat;
+                {
+                    var original = sr.sharedMaterial;
+                    var m = new Material(mat);
+                    // Keep the overlay's OWN tint. _Color on the body's material
+                    // is that art's colour correction; the eyes, mouth and
+                    // expression are drawn separately and inheriting it washed
+                    // them out. Only the displacement should carry over, which
+                    // is the mask plus the jiggle uniforms already in the copy.
+                    m.SetColor("_Color",
+                        original != null && original.HasProperty("_Color")
+                            ? original.GetColor("_Color")
+                            : Color.white);
+                    sr.sharedMaterial = m;
+                }
             }
         }
 

@@ -137,9 +137,13 @@ public partial class MaskEditorWindow : Window
             // ── View ────────────────────────────────────────────────
             case Key.Home: ResetView(); e.Handled = true; break;
 
-            // ── Channel fill / clear ────────────────────────────────
-            case Key.F: _mask.ClearChannel(_activeChannel); UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1); _dirty = true; UpdateStatus(); e.Handled = true; break;
-            case Key.C: var chFill = _mask.Channel(_activeChannel); _history.Snapshot(_activeChannel, chFill, _mask.A); Array.Fill(chFill, (byte)255); UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1); _dirty = true; UpdateStatus(); e.Handled = true; break;
+            // ── Channel clear / fill ────────────────────────────────
+            // C clears and F fills, matching the legend and the buttons — these
+            // were the wrong way round. Both snapshot first: clearing a channel
+            // is the single most destructive action here and it was the one
+            // action Ctrl+Z could not take back.
+            case Key.C: ClearActiveChannel(); e.Handled = true; break;
+            case Key.F: FillActiveChannel(); e.Handled = true; break;
 
             // ── Undo / Redo (already bound via CommandBinding, but
             //    ensure they work when focus is on the canvas) ──────
@@ -165,6 +169,28 @@ public partial class MaskEditorWindow : Window
         double step = coarse ? 0.20 : 0.05;
         OpacitySlider.Value = Math.Clamp(OpacitySlider.Value + direction * step,
                                          OpacitySlider.Minimum, OpacitySlider.Maximum);
+    }
+
+    /// <summary>Wipe the active channel. Snapshots first so it can be undone.</summary>
+    private void ClearActiveChannel()
+    {
+        var ch = _mask.Channel(_activeChannel);
+        _history.Snapshot(_activeChannel, ch, _mask.A);
+        _mask.ClearChannel(_activeChannel);
+        UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
+        _dirty = true;
+        UpdateStatus();
+    }
+
+    /// <summary>Fill the active channel to full. Snapshots first.</summary>
+    private void FillActiveChannel()
+    {
+        var ch = _mask.Channel(_activeChannel);
+        _history.Snapshot(_activeChannel, ch, _mask.A);
+        Array.Fill(ch, (byte)255);
+        UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
+        _dirty = true;
+        UpdateStatus();
     }
 
     private bool IsCanvasFocused()
@@ -216,23 +242,9 @@ public partial class MaskEditorWindow : Window
     private void ShowG_Click(object sender, RoutedEventArgs e) { _showG = ShowGToggle.IsChecked == true; RecomposeAll(); }
     private void ShowB_Click(object sender, RoutedEventArgs e) { _showB = ShowBToggle.IsChecked == true; RecomposeAll(); }
 
-    private void ClearChannel_Click(object sender, RoutedEventArgs e)
-    {
-        var ch = _mask.Channel(_activeChannel);
-        _history.Snapshot(_activeChannel, ch, _mask.A);
-        _mask.ClearChannel(_activeChannel);
-        UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
-        _dirty = true; UpdateStatus();
-    }
+    private void ClearChannel_Click(object sender, RoutedEventArgs e) => ClearActiveChannel();
 
-    private void FillChannel_Click(object sender, RoutedEventArgs e)
-    {
-        var ch = _mask.Channel(_activeChannel);
-        _history.Snapshot(_activeChannel, ch, _mask.A);
-        Array.Fill(ch, (byte)255);
-        UpdateLiveAndView(0, 0, MaskBuffer.Size - 1, MaskBuffer.Size - 1);
-        _dirty = true; UpdateStatus();
-    }
+    private void FillChannel_Click(object sender, RoutedEventArgs e) => FillActiveChannel();
 
     // ───────────────────────── drawing
 

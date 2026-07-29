@@ -122,6 +122,18 @@ public sealed class GameObjectViewModel : ObservableObject
     /// that can flip it, so the row's highlight tracks typing.</summary>
     public void RefreshVanillaChange() => OnPropertyChanged(nameof(HasVanillaChange));
 
+    /// <summary>True when there's a vanilla state to go back to — a bound node
+    /// with a baseline attached from the extracted catalog.</summary>
+    public bool CanResetToVanilla => Model.Bind && Model.Baseline != null;
+
+    /// <summary>Discard this node's edits and restore the values the vanilla
+    /// level actually has. Not a reset to zero — the baseline is the extracted
+    /// object's own transform, active state and sorting.</summary>
+    public RelayCommand ResetToVanillaCommand => _resetToVanilla ??= new RelayCommand(
+        () => { if (VanillaDelta.ResetToBaseline(Model)) RefreshFromModel(); },
+        () => CanResetToVanilla);
+    private RelayCommand? _resetToVanilla;
+
     /// <summary>
     /// Re-read every field something rewrote on the model behind this VM's back.
     /// Needed after <see cref="VanillaDelta.Rebase"/>, which anchors a bound node

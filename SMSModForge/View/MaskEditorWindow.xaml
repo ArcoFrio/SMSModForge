@@ -45,7 +45,7 @@
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveR" IsChecked="True"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
-                                     Checked="ActiveR_Checked" Background="Transparent" BorderBrush="Transparent">
+                                     Checked="ActiveR_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
                             <TextBlock Text="Bounce(R)" FontSize="13" FontWeight="Bold" Foreground="#FF6666"/>
                         </RadioButton>
                     </StackPanel>
@@ -60,7 +60,7 @@
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveG"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
-                                     Checked="ActiveG_Checked" Background="Transparent" BorderBrush="Transparent">
+                                     Checked="ActiveG_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
                             <TextBlock Text="Sway(G)" FontSize="13" FontWeight="Bold" Foreground="#66FF66"/>
                         </RadioButton>
                     </StackPanel>
@@ -75,7 +75,7 @@
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveB"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
-                                     Checked="ActiveB_Checked" Background="Transparent" BorderBrush="Transparent">
+                                     Checked="ActiveB_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
                             <TextBlock Text="Wave(B)" FontSize="13" FontWeight="Bold" Foreground="#6699FF"/>
                         </RadioButton>
                     </StackPanel>
@@ -87,8 +87,10 @@
             </StackPanel>
         </DockPanel>
 
-        <!-- CENTER: canvas -->
-        <Border Grid.Column="1" Background="#1a1a1a" Padding="8">
+        <!-- CENTER: canvas. ClipToBounds keeps a panned canvas inside its own
+             column — without it the render transform draws it straight over
+             the layer and brush panels either side. -->
+        <Border Grid.Column="1" Background="#1a1a1a" Padding="8" ClipToBounds="True">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
                   x:Name="CanvasHost" Width="512" Height="512"
                   Background="Transparent" Focusable="True"

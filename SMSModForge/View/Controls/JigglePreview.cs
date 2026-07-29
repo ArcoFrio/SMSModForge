@@ -91,10 +91,20 @@ public sealed class JigglePreview : Image
         set => SetValue(BreathingProperty, value);
     }
 
-    // SpriteManager inspector values: speed 3 rad/s, amplitude 0.1 world units.
-    // At 100 PPU the sprite is 256 px → 0.1 × 100 = 10 source px.
+    // Matches SpriteManager: y = sin(Time.time * speed) * amplitude, applied as
+    // a world-space position offset (not a squash), with the inspector's
+    // speed 3 and amplitude 0.1 world units.
+    //
+    // 0.1 world units is 10 SOURCE pixels at 100 PPU — but the preview bitmap
+    // is RenderSize (2x Size) shown one bitmap pixel per WPF unit, so the
+    // offset has to be in render pixels or the preview breathes at half depth.
+    //
+    // The game also varies both per character, always DOWNWARD from these
+    // (amplitude x (1 - variation x rand01)); the preview shows the nominal
+    // value rather than picking a random one, so what you author is what you see.
     private const double BreathingSpeed = 3.0;
-    private const double BreathingAmplitude = 10.0;
+    private const double BreathingAmplitude =
+        0.1 * 100.0 * (JiggleShader.RenderSize / (double)JiggleShader.Size);
     private readonly TranslateTransform _breathingTransform = new();
 
     private readonly WriteableBitmap _bitmap;

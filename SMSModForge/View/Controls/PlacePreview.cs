@@ -1852,9 +1852,47 @@ public sealed class PlacePreview : Grid
 
     // ── Object menu (left-side GO list) ─────────────────────────────────
 
+    // Resize limits for the hierarchy panel. Deep trees and long object names
+    // both overflow the default, so the panel is draggable rather than fixed.
+    private const double MenuMinWidth = 120, MenuMaxWidth = 640;
+    private const double MenuMinHeight = 90, MenuMaxHeight = 900;
+
     private void BuildObjectMenu()
     {
         _objectMenuList = new StackPanel();
+
+        // Grip in the bottom-right corner, over the scroll view rather than
+        // beside it, so resizing costs no layout space when unused.
+        var grip = new System.Windows.Controls.Primitives.Thumb
+        {
+            Width = 14,
+            Height = 14,
+            HorizontalAlignment = HorizontalAlignment.Right,
+            VerticalAlignment = VerticalAlignment.Bottom,
+            Cursor = Cursors.SizeNWSE,
+            Opacity = 0.75,
+            ToolTip = "Drag to resize the hierarchy",
+            Template = GripTemplate(),
+        };
+        grip.DragDelta += (_, e) =>
+        {
+            _objectMenu.Width = Math.Min(MenuMaxWidth,
+                Math.Max(MenuMinWidth, _objectMenu.Width + e.HorizontalChange));
+            _objectMenu.Height = Math.Min(MenuMaxHeight,
+                Math.Max(MenuMinHeight, _objectMenu.Height + e.VerticalChange));
+        };
+
+        var scroller = new ScrollViewer
+        {
+            VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
+            HorizontalScrollBarVisibility = ScrollBarVisibility.Auto,
+            Content = _objectMenuList,
+        };
+
+        var content = new Grid();
+        content.Children.Add(scroller);
+        content.Children.Add(grip);
+
         _objectMenu = new Border
         {
             Background = new SolidColorBrush(Color.FromArgb(0xDD, 0x22, 0x24, 0x28)),
@@ -1864,17 +1902,35 @@ public sealed class PlacePreview : Grid
             Padding = new Thickness(4),
             Margin = new Thickness(6),
             Width = 178,
+            // An explicit height is what makes the panel scrollable AND
+            // vertically resizable; sized-to-content it would just grow.
+            Height = 260,
             HorizontalAlignment = HorizontalAlignment.Left,
             VerticalAlignment = VerticalAlignment.Top,
             Visibility = Visibility.Collapsed,
-            Child = new ScrollViewer
-            {
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-                Content = _objectMenuList,
-            },
+            Child = content,
         };
         RefreshObjectMenu();
+    }
+
+    /// <summary>Three diagonal ticks, the conventional resize-corner mark.</summary>
+    private static ControlTemplate GripTemplate()
+    {
+        var canvas = new FrameworkElementFactory(typeof(Canvas));
+        canvas.SetValue(Canvas.BackgroundProperty, Brushes.Transparent);
+        for (int i = 0; i < 3; i++)
+        {
+            double o = 4 + i * 4;
+            var line = new FrameworkElementFactory(typeof(System.Windows.Shapes.Line));
+            line.SetValue(System.Windows.Shapes.Line.X1Property, 14.0);
+            line.SetValue(System.Windows.Shapes.Line.Y1Property, o);
+            line.SetValue(System.Windows.Shapes.Line.X2Property, o);
+            line.SetValue(System.Windows.Shapes.Line.Y2Property, 14.0);
+            line.SetValue(System.Windows.Shapes.Shape.StrokeProperty, ChipText);
+            line.SetValue(System.Windows.Shapes.Shape.StrokeThicknessProperty, 1.0);
+            canvas.AppendChild(line);
+        }
+        return new ControlTemplate(typeof(System.Windows.Controls.Primitives.Thumb)) { VisualTree = canvas };
     }
 
     /// <summary>Rebuild the left-side hierarchy: every GameObject and NPC in the

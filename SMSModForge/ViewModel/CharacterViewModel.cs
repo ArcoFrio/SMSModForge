@@ -55,14 +55,17 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         set { if (_isFilteredIn == value) return; _isFilteredIn = value; OnPropertyChanged(); }
     }
 
-    private bool _isExpanded = true;
+    // Collapsed on load, like the outfits beneath it — a pack opens to a list
+    // of characters you can scan, not a wall of bust editors. Only the initial
+    // state; expansion is remembered normally from then on.
+    private bool _isExpanded;
     public bool IsExpanded
     {
         get => _isExpanded;
         set { if (_isExpanded == value) return; _isExpanded = value; OnPropertyChanged(); }
     }
 
-    private bool _expandedBeforeFilter = true;
+    private bool _expandedBeforeFilter;
     public void StashExpansion() => _expandedBeforeFilter = IsExpanded;
     public void RestoreExpansion() => IsExpanded = _expandedBeforeFilter;
 

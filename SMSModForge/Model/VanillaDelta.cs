@@ -232,6 +232,30 @@ public static class VanillaDelta
         if (!node.OverrideActive) node.StartActive = baseline.ActiveSelf;
     }
 
+    /// <summary>
+    /// Put a bound node back to exactly what the vanilla level has, discarding
+    /// whatever was authored on it. Uses the baseline already attached by
+    /// seeding, so it restores the REAL extracted values rather than zeroing
+    /// fields. Does nothing for a node the pack created — there's no vanilla
+    /// state to go back to.
+    /// </summary>
+    public static bool ResetToBaseline(GameObjectDef node)
+    {
+        var b = node?.Baseline;
+        if (b == null || !node.Bind) return false;
+
+        node.OverrideTransform = false;
+        node.OverrideActive = false;
+        node.X = b.X;
+        node.Y = b.Y;
+        node.RotationZ = b.RotationZ;
+        node.ScaleX = b.ScaleX;
+        node.ScaleY = b.ScaleY;
+        node.StartActive = b.ActiveSelf;
+        node.SortingOrder = b.SpriteRenderer?.SortingOrder ?? 0;
+        return true;
+    }
+
     private static int CountNodes(List<GameObjectDef> nodes)
     {
         int n = 0;
