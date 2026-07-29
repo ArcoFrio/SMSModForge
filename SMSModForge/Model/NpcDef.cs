@@ -130,11 +130,19 @@ public sealed class NpcReflectionDef
     [JsonProperty("tint", Order = 3)]
     public string Tint { get; set; } = "#AD92AA";
 
-    /// <summary>Vertical offset from the pose's origin, in the NPC's local
-    /// units. Negative pushes it further down. Defaulted to what Downtown's
-    /// reflections sit at (-2.16 to -2.46 across its five).</summary>
+    /// <summary>
+    /// Extra vertical nudge, in the NPC's local units, on top of the automatic
+    /// placement.
+    /// <para/>
+    /// The mirror is dropped a full pose height by itself, so its top edge meets
+    /// the body's bottom edge whatever size the pose is — mirroring alone would
+    /// flip it within its own box and leave it sitting on the character. Vanilla
+    /// levels write that height out by hand (Downtown's five carry -2.16 to
+    /// -2.46, all close to their sprite heights); deriving it means a pose of any
+    /// size lands right with this left at zero.
+    /// </summary>
     [JsonProperty("offsetY", Order = 4)]
-    public float OffsetY { get; set; } = -2.3f;
+    public float OffsetY { get; set; } = 0f;
 
     /// <summary>Sorting order for the mirrored copy. Vanilla puts these in FRONT
     /// of the body — Downtown's bodies sit at -9 and their reflections at 0 —

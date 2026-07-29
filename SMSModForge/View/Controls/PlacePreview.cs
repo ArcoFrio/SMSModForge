@@ -1167,9 +1167,18 @@ public sealed class PlacePreview : Grid
                 // room to make space for a mirror image of what's already there.
                 if (def.ReflectionEnabled)
                 {
-                    // The same local transform the runtime gives the child:
-                    // localPosition (0, offsetY), localScale (1, -1).
-                    var refl = body.Then(Aff.Trs(0, def.ReflectionOffsetY, 0, 0, 0, 1, -1));
+                    // Mirror about the sprite's FEET, not its centre.
+                    //
+                    // scale (1,-1) alone flips the pose within its own box, so
+                    // the reflection lands exactly on top of the body — which is
+                    // why a fixed offset looked like no offset at all on a large
+                    // pose. Dropping it a full sprite height puts its top edge at
+                    // the body's bottom edge, where a floor reflection starts,
+                    // whatever the pose's size. The authored offset is then a
+                    // nudge from there rather than the whole placement.
+                    double poseHeight = bmp.PixelHeight / NpcSpritePpu;
+                    var refl = body.Then(Aff.Trs(0, def.ReflectionOffsetY - poseHeight,
+                                                 0, 0, 0, 1, -1));
                     var mRefl = LeafMatrix(refl, bmp.PixelWidth, bmp.PixelHeight);
                     var rimg = new Image
                     {

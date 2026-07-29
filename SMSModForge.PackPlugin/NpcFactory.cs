@@ -153,10 +153,16 @@ namespace SMSModForge.PackPlugin
 
             var go = new GameObject("Reflection");
             go.transform.SetParent(npc, false);
-            // Flip on Y about the pose's origin, then drop by the authored
-            // offset. Local, so it follows the body's own scale and rotation.
+            // Mirror about the pose's FEET, not its centre. scale (1,-1) alone
+            // flips it within its own box and leaves it sitting on the
+            // character; dropping it a full sprite height puts its top edge at
+            // the body's bottom edge, where a floor reflection starts, whatever
+            // size the pose is. Vanilla levels write that height out by hand —
+            // deriving it keeps any pose right with the authored offset at zero.
+            float poseHeight = parentSr.sprite != null ? parentSr.sprite.bounds.size.y : 0f;
             go.transform.localScale = new Vector3(1f, -1f, 1f);
-            go.transform.localPosition = new Vector3(0f, F(reflDef, "offsetY", 0f), 0f);
+            go.transform.localPosition =
+                new Vector3(0f, F(reflDef, "offsetY", 0f) - poseHeight, 0f);
 
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = parentSr.sprite;
