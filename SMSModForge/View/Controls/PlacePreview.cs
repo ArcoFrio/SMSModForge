@@ -308,7 +308,6 @@ public sealed class PlacePreview : Grid
 
     private static BitmapImage? _cachedOverlay;
     private static BitmapImage? _cachedOverlayExtended;
-    private static BitmapImage? _cachedButton;
     private static FontFamily? _numberFont;
     private static FontFamily? _labelFont;
 
@@ -677,7 +676,6 @@ public sealed class PlacePreview : Grid
 
         if (n == 0) return;
 
-        var buttonSprite = LoadButton();
         FontFamily numberFont = NumberFont();
         FontFamily labelFont = LabelFont();
 
@@ -711,22 +709,26 @@ public sealed class PlacePreview : Grid
             Canvas.SetLeft(slot, left);
             Canvas.SetTop(slot, top);
 
-            if (buttonSprite != null)
-            {
-                var img = new Image
-                {
-                    Source = buttonSprite,
-                    Width = ButtonWidth,
-                    Height = ButtonHeight,
-                    Stretch = Stretch.Fill,
-                };
-                RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
-                Canvas.SetLeft(img, 0);
-                Canvas.SetTop(img, 0);
-                slot.Children.Add(img);
-            }
+            // Background: the game's own "Semi Rounded", nine-sliced. A plain
+            // stretch would pull its 30px corners into ellipses on a 125x75
+            // button — Unity slices it, so the corners stay put and only the
+            // edges and middle give.
+            var bg = NineSlice(LoadOverlayFile("Semi Rounded.png"), SemiRoundedBorder,
+                               ButtonWidth, ButtonHeight);
+            if (bg != null) { Canvas.SetLeft(bg, 0); Canvas.SetTop(bg, 0); slot.Children.Add(bg); }
 
-            // Order number (Barton), 1-based, centred at (74,44).
+            // The number's disc, tinted as the game tints it.
+            AddTintedSprite(slot, "Blockout_CircleSolid.png", NumberDiscColor,
+                            NumberCenterX, NumberCenterY, NumberDiscSize, NumberDiscSize);
+
+            // The small rule under the label. Its RectTransform is square while
+            // the sprite is 234x34, so it is drawn to the sprite's own aspect
+            // rather than squashed to fill.
+            AddTintedSprite(slot, "Minus.png", Colors.Black,
+                            ButtonWidth / 2.0, ButtonHeight / 2.0 + 24.16,
+                            MinusWidth, MinusWidth * 34.0 / 234.0);
+
+            // Order number (Barton), 1-based, on the disc.
             AddCenteredText(slot, (i + 1).ToString(), numberFont, NumberFontSize,
                             NumberCenterX, NumberCenterY, Brushes.White, FontWeights.Normal, 0, 0);
 
@@ -739,6 +741,78 @@ public sealed class PlacePreview : Grid
 
             _buttonLayer.Children.Add(slot);
         }
+    }
+
+    /// <summary>The nine-slice inset on "Semi Rounded" (m_Border 30 all round),
+    /// and the sizes and tint the button's decorations are authored at.</summary>
+    private const double SemiRoundedBorder = 30;
+    private const double NumberDiscSize = 45;
+    private const double MinusWidth = 100;
+    private static readonly Color NumberDiscColor = Color.FromRgb(0x5B, 0x2B, 0x57);
+
+    /// <summary>
+    /// Nine-slice a sprite into a target rectangle: fixed corners, stretched
+    /// edges, stretched middle — what Unity's Sliced image type does.
+    /// <para/>
+    /// WPF has no nine-grid brush, so this is nine cropped pieces in a 3x3 grid
+    /// whose outer rows and columns are pinned to the border inset. Without it
+    /// the button's rounded corners stretch with the button and it stops looking
+    /// like the game's.
+    /// </summary>
+    private static FrameworkElement? NineSlice(BitmapSource? src, double border,
+                                               double targetW, double targetH)
+    {
+        if (src == null) return null;
+        int b = (int)Math.Round(border);
+        int sw = src.PixelWidth, sh = src.PixelHeight;
+        // Degenerate source (or a border that would overlap): just stretch.
+        if (b <= 0 || sw <= b * 2 || sh <= b * 2)
+            return new Image { Source = src, Width = targetW, Height = targetH, Stretch = Stretch.Fill };
+
+        var grid = new Grid { Width = targetW, Height = targetH };
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(b) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
+        grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(b) });
+        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(b) });
+        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+        grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(b) });
+
+        int[] xs = { 0, b, sw - b }, ws = { b, sw - b * 2, b };
+        int[] ys = { 0, b, sh - b }, hs = { b, sh - b * 2, b };
+        for (int r = 0; r < 3; r++)
+            for (int c = 0; c < 3; c++)
+            {
+                var piece = new Image
+                {
+                    Source = new CroppedBitmap(src, new Int32Rect(xs[c], ys[r], ws[c], hs[r])),
+                    Stretch = Stretch.Fill,
+                };
+                Grid.SetColumn(piece, c);
+                Grid.SetRow(piece, r);
+                grid.Children.Add(piece);
+            }
+        return grid;
+    }
+
+    /// <summary>Draw one of the button's decoration sprites, tinted the way the
+    /// game tints it, centred on a point in the slot's local space.</summary>
+    private static void AddTintedSprite(Canvas slot, string file, Color tint,
+                                        double cx, double cy, double w, double h)
+    {
+        var src = LoadOverlayFile(file);
+        if (src == null) return;
+        // Tinting is a fill masked by the sprite — these are flat shapes, so
+        // masking is exact rather than an approximation.
+        var el = new Rectangle
+        {
+            Width = w,
+            Height = h,
+            Fill = new SolidColorBrush(tint),
+            OpacityMask = new ImageBrush(src),
+        };
+        Canvas.SetLeft(el, cx - w / 2.0);
+        Canvas.SetTop(el, cy - h / 2.0);
+        slot.Children.Add(el);
     }
 
     /// <summary>
@@ -2539,7 +2613,8 @@ public sealed class PlacePreview : Grid
 
     private static BitmapImage? LoadOverlay() => _cachedOverlay ??= LoadOverlayFile("GameplayUI.png");
     private static BitmapImage? LoadOverlayExtended() => _cachedOverlayExtended ??= LoadOverlayFile("GameplayUIExtended.png");
-    private static BitmapImage? LoadButton() => _cachedButton ??= LoadOverlayFile("ButtonNavigator.png");
+    // ButtonNavigator.png is gone: the button is drawn from the game's own
+    // "Semi Rounded", nine-sliced, with its disc and rule sprites over it.
 
     private static BitmapImage? LoadOverlayFile(string fileName)
     {
