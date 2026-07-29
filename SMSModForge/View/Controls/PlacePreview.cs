@@ -41,52 +41,71 @@ namespace SMSModForge.View.Controls;
 /// </summary>
 public sealed class PlacePreview : Grid
 {
-    // ── Layout constants (all in native 2048×1136 canvas pixels) ────────
+    // ── Layout constants ────────────────────────────────────────────────
+    //
+    // Measured out of the game's own scene by the UI extractor, not eyeballed
+    // from screenshots. Every number below has a source; where one is derived,
+    // the derivation is written out so it can be rechecked against a future
+    // extraction rather than re-guessed.
 
-    private const double CanvasWidth = 2048;
-    private const double CanvasHeight = 1136;
+    /// <summary>The UI's authoring resolution — every CanvasScaler in
+    /// CoreGameScene uses 1920×1080 with referencePixelsPerUnit 100. The old
+    /// 2048×1136 was a guess from a screenshot, and being close is what made
+    /// the drift so hard to spot.</summary>
+    private const double CanvasWidth = 1920;
+    private const double CanvasHeight = 1080;
 
-    /// <summary>ButtonNavigator.png native size. Buttons sit edge-to-edge at
-    /// this pitch — no overlap, no extra gap. The wrap row pitch reuses it so
-    /// rows touch vertically too (same "no extra spacing" rule).</summary>
-    private const double ButtonSize = 150;
+    /// <summary>Navigator button size: the buttons are 125×75, not square.</summary>
+    private const double ButtonWidth = 125;
+    private const double ButtonHeight = 75;
 
-    /// <summary>Columns per navigator row. Matches the runtime grid: the
-    /// strip holds six buttons, then wraps to a second row above.</summary>
+    /// <summary>Centre-to-centre pitch. MapButtons is a HorizontalLayoutGroup
+    /// with spacing 15, so the pitch is the button width plus that gap — the
+    /// buttons do NOT sit edge to edge.</summary>
+    private const double ButtonPitch = ButtonWidth + 15;
+
+    /// <summary>Columns before the strip wraps. Vanilla lays out one unbroken
+    /// row; the wrap is ModForge's own extension for packs that add more
+    /// buttons than fit, so this is our number rather than the game's.</summary>
     private const int Columns = 6;
 
-    /// <summary>Row pitch (centre-to-centre) when buttons wrap to a second
-    /// row. 70% of the sprite height (the touching pitch reduced by 30%) so
-    /// the upper row sits a little closer to the strip row.</summary>
-    private const double VerticalPitch = ButtonSize * 0.7;
+    /// <summary>Row pitch when buttons wrap to a second row — the button height
+    /// plus the same 15 the horizontal layout uses, so wrapped rows are spaced
+    /// like the strip rather than overlapping.</summary>
+    private const double VerticalPitch = ButtonHeight + 15;
 
-    /// <summary>Vertical centre of the bottom (strip) navigator row, measured
-    /// from the canvas top (pixel 1052). The button midpoint lands here; when
-    /// a second row is needed it stacks above by <see cref="VerticalPitch"/>.</summary>
-    private const double ButtonCenterY = 1052;
+    /// <summary>
+    /// Vertical centre of the navigator row, from the canvas top.
+    /// <para/>
+    /// Derived: Navigator anchors bottom-centre at y −18; MapButtons sits +87.2
+    /// inside it; each button is −54.305 from MapButtons' top edge (its rect is
+    /// 108.61 tall, so the top edge is +54.305). That puts the button centre at
+    /// UI y 69.2 above the bottom, i.e. 1080 − 69.2 from the top.
+    /// </summary>
+    private const double ButtonCenterY = CanvasHeight - 69.2;
 
     /// <summary>Local (button-space, top-left origin) centre of the order
-    /// number.</summary>
-    private const double NumberCenterX = 74;
-    private const double NumberCenterY = 44;
+    /// number. The number sits at +44.8 above the button's centre — far enough
+    /// that it OVERHANGS the top edge, which is why a positive in-button offset
+    /// never looked right.</summary>
+    private const double NumberCenterX = ButtonWidth / 2.0;
+    private const double NumberCenterY = ButtonHeight / 2.0 - 44.8;
 
-    /// <summary>Local centre of the label-override text.</summary>
-    private const double LabelCenterX = 74;
-    private const double LabelCenterY = 93;
+    /// <summary>The label fills the button and is centred in it.</summary>
+    private const double LabelCenterX = ButtonWidth / 2.0;
+    private const double LabelCenterY = ButtonHeight / 2.0;
 
-    /// <summary>Max width (button-local px) the label may occupy before it
-    /// wraps to the next line. 128 of the 150-wide button → ~11px side
-    /// margins.</summary>
-    private const double LabelMaxWidth = 128;
+    /// <summary>Max width the label may occupy before wrapping — the button's
+    /// own width, which is what its TMP rect is set to.</summary>
+    private const double LabelMaxWidth = ButtonWidth;
 
-    /// <summary>Line-spacing multiplier for wrapped label text: 0.5 = the
-    /// font's natural line height reduced by 50%, pulling the lines closer.</summary>
+    /// <summary>Line-spacing multiplier for wrapped label text.</summary>
     private const double LabelLineHeightFactor = 0.5;
 
-    // Font sizes aren't part of the positional spec; these read close to the
-    // in-game HUD and are easy to nudge.
-    private const double NumberFontSize = 46;
-    private const double LabelFontSize = 35.7;  // 42px reduced 15%
+    /// <summary>Font sizes as authored: the label is Curse Casual SDF at 24–27
+    /// depending on the button, the number Barton SDF at 36.</summary>
+    private const double NumberFontSize = 36;
+    private const double LabelFontSize = 27;
 
     // ── Display size ────────────────────────────────────────────────────
     // The preview fills whatever width its container gives it (the editor pane,
@@ -110,7 +129,17 @@ public sealed class PlacePreview : Grid
     // Overlay positions are authored in Unity world units; level sprites
     // load at 70.32 pixels-per-unit with the level centred on the world
     // origin, so world (0,0) is the canvas centre and +Y is up.
-    private const double PixelsPerUnit = 70.32;
+    /// <summary>
+    /// World units to canvas pixels.
+    /// <para/>
+    /// The gameplay cameras are orthographic at size 5.4, so they frame 10.8
+    /// world units of height into the UI's 1080 — exactly 100 px per unit. The
+    /// old 70.32 was the level SPRITE's import ppu, which says how large the
+    /// texture is in world units and nothing about how world units land on
+    /// screen. Conflating the two is what put every authored position slightly
+    /// out while still looking plausible.
+    /// </summary>
+    private const double PixelsPerUnit = 100.0;
     private const double WorldOriginX = CanvasWidth / 2.0;
     private const double WorldOriginY = CanvasHeight / 2.0;
 
@@ -342,6 +371,30 @@ public sealed class PlacePreview : Grid
         _extentScale.ScaleX = _extentScale.ScaleY = scale;
     }
 
+    /// <summary>
+    /// Size and centre a level-art layer at its TRUE world size.
+    /// <para/>
+    /// The art is not screen-sized: Downtown's backdrop is 2048 px at 70.33
+    /// px/unit — 29.1 world units — which at 100 px/unit is 2912 canvas pixels
+    /// against a 1920-wide viewport. The camera sees the middle of it and the
+    /// rest hangs off the sides, which is what makes it parallax. Stretching it
+    /// to fill the canvas instead squashed it by about a third horizontally, so
+    /// an object authored over a doorway drew somewhere else entirely — the
+    /// positional drift that made the preview untrustworthy.
+    /// </summary>
+    private void SizeLevelLayer(Image img, double spritePpu)
+    {
+        if (img.Source is not BitmapSource bmp) return;
+        double ppu = spritePpu > 0 ? spritePpu : LevelArtPpu;
+        double w = bmp.PixelWidth / ppu * PixelsPerUnit;
+        double h = bmp.PixelHeight / ppu * PixelsPerUnit;
+        img.Width = w;
+        img.Height = h;
+        // Centred on the world origin, which is where the camera sits.
+        Canvas.SetLeft(img, WorldOriginX - w / 2.0);
+        Canvas.SetTop(img, WorldOriginY - h / 2.0);
+    }
+
     private static Image NewLayerImage()
     {
         var img = new Image
@@ -457,6 +510,11 @@ public sealed class PlacePreview : Grid
         _baseImage.Source = TryLoad(absBase);
         _baseImage.Visibility = Visibility.Visible;
 
+        // Both layers at their true world size, centred on the origin, rather
+        // than stretched to the viewport — see SizeLevelLayer.
+        SizeLevelLayer(_baseImage, LevelArtPpu);
+        SizeLevelLayer(_secondaryImage, LevelArtPpu);
+
         ApplyOverlay();
         RebuildButtons();
         RebuildOverlayGos();
@@ -511,16 +569,19 @@ public sealed class PlacePreview : Grid
             int colInRow = i - row * Columns;
             int countInRow = (row < bottomRow) ? Columns : (n - row * Columns);
 
-            double rowWidth = countInRow * ButtonSize;
+            // A row spans (count-1) pitches plus one button — the gaps sit
+            // BETWEEN buttons, so a row of n is narrower than n × pitch. Getting
+            // this wrong shifts the whole strip off centre by half a gap.
+            double rowWidth = (countInRow - 1) * ButtonPitch + ButtonWidth;
             double startLeft = (CanvasWidth - rowWidth) / 2.0;
-            double left = startLeft + colInRow * ButtonSize;
+            double left = startLeft + colInRow * ButtonPitch;
 
-            // Bottom row at the strip centre (y=1052); each row above is one
+            // Bottom row at the strip centre; each row above is one
             // VerticalPitch higher.
             double centerY = ButtonCenterY - (bottomRow - row) * VerticalPitch;
-            double top = centerY - ButtonSize / 2.0;
+            double top = centerY - ButtonHeight / 2.0;
 
-            var slot = new Canvas { Width = ButtonSize, Height = ButtonSize };
+            var slot = new Canvas { Width = ButtonWidth, Height = ButtonHeight };
             Canvas.SetLeft(slot, left);
             Canvas.SetTop(slot, top);
 
@@ -529,8 +590,8 @@ public sealed class PlacePreview : Grid
                 var img = new Image
                 {
                     Source = buttonSprite,
-                    Width = ButtonSize,
-                    Height = ButtonSize,
+                    Width = ButtonWidth,
+                    Height = ButtonHeight,
                     Stretch = Stretch.Fill,
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.NearestNeighbor);
@@ -761,6 +822,25 @@ public sealed class PlacePreview : Grid
     {
         get => (int)GetValue(LevelArtSecondaryOrderProperty);
         set => SetValue(LevelArtSecondaryOrderProperty, value);
+    }
+
+    /// <summary>
+    /// Pixels-per-unit the level art was imported at — how large the texture is
+    /// in WORLD units, which is a different question from how world units map to
+    /// the screen (that is <see cref="PixelsPerUnit"/>, a flat 100).
+    /// <para/>
+    /// Per level, not global: the extraction has it on each level's renderer and
+    /// they are not all the same. Defaults to the value the pack-place prototype
+    /// uses.
+    /// </summary>
+    public static readonly DependencyProperty LevelArtPpuProperty =
+        DependencyProperty.Register(nameof(LevelArtPpu), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(70.32, OnInputChanged));
+
+    public double LevelArtPpu
+    {
+        get => (double)GetValue(LevelArtPpuProperty);
+        set => SetValue(LevelArtPpuProperty, value);
     }
 
     /// <summary>Sorting order of the level's secondary (distance/blur) sprite,

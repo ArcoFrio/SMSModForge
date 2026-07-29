@@ -81,6 +81,17 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     /// </summary>
     public int PreviewArtOrder => CatalogLevel?.Hierarchy?.SpriteRenderer?.SortingOrder ?? -4;
 
+    /// <summary>This level's art import ppu, which decides how large the
+    /// backdrop is in world units. Per level — they are not all the same.</summary>
+    public float PreviewArtPpu
+    {
+        get
+        {
+            float ppu = CatalogLevel?.Hierarchy?.SpriteRenderer?.PixelsPerUnit ?? 0f;
+            return ppu > 0f ? ppu : 70.32f;
+        }
+    }
+
     /// <summary>The lowest order any of the level's own art draws at — the far
     /// layer, when it has one.</summary>
     public int PreviewArtSecondaryOrder
