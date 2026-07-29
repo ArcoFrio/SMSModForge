@@ -87,6 +87,7 @@ public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
     // ── Reflection (a mirrored copy of the pose, drawn downward) ─────────
     public bool ReflectionEnabled { get => Model.Reflection.Enabled; set { Model.Reflection.Enabled = value; OnPropertyChanged(); } }
     public float ReflectionAlpha  { get => Model.Reflection.Alpha;   set { Model.Reflection.Alpha = value; OnPropertyChanged(); } }
+    public string ReflectionTint  { get => Model.Reflection.Tint;    set { Model.Reflection.Tint = value; OnPropertyChanged(); } }
     public float ReflectionOffsetY { get => Model.Reflection.OffsetY; set { Model.Reflection.OffsetY = value; OnPropertyChanged(); } }
     public int ReflectionSortingOrder { get => Model.Reflection.SortingOrder; set { Model.Reflection.SortingOrder = value; OnPropertyChanged(); } }
 

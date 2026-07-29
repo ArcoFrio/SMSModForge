@@ -1164,6 +1164,29 @@ public sealed class PlacePreview : Grid
                     };
                     RenderOptions.SetBitmapScalingMode(rimg, BitmapScalingMode.HighQuality);
                     drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, rimg));
+
+                    // Tint pass: the sprite's own silhouette filled with the
+                    // reflection colour, laid over the mirrored pose. WPF can't
+                    // multiply a tint into an Image, and a shader effect would
+                    // cost far more than this is worth — masking a filled
+                    // rectangle by the same cached bitmap gets the colour across
+                    // while the pass underneath keeps the pose readable.
+                    var (tr, tg, tb, _) = BustComposer.ParseTint(def.ReflectionTint);
+                    if (tr < 0.99 || tg < 0.99 || tb < 0.99)
+                    {
+                        var tintRect = new Rectangle
+                        {
+                            Width = bmp.PixelWidth,
+                            Height = bmp.PixelHeight,
+                            Fill = new SolidColorBrush(Color.FromRgb(
+                                (byte)(tr * 255), (byte)(tg * 255), (byte)(tb * 255))),
+                            OpacityMask = new ImageBrush(bmp),
+                            Opacity = ghost * Math.Clamp(def.ReflectionAlpha, 0.0, 1.0) * 0.55,
+                            RenderTransform = new MatrixTransform(mRefl),
+                            IsHitTestVisible = false,
+                        };
+                        drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, tintRect));
+                    }
                 }
             }
 

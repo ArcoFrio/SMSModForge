@@ -121,14 +121,25 @@ public sealed class NpcReflectionDef
     [JsonProperty("alpha", Order = 2)]
     public float Alpha { get; set; } = 0.58f;
 
-    /// <summary>Vertical offset from the pose's feet, in world units. Negative
-    /// pushes it further down.</summary>
-    [JsonProperty("offsetY", Order = 3)]
-    public float OffsetY { get; set; } = 0f;
+    /// <summary>
+    /// Tint applied to the mirrored copy. Defaulted to the muted mauve the
+    /// game's own street reflections use (#AD92AA on Downtown's) — a reflection
+    /// takes the colour of what it's lying on, so an untinted one reads as a
+    /// second character rather than something on the pavement.
+    /// </summary>
+    [JsonProperty("tint", Order = 3)]
+    public string Tint { get; set; } = "#AD92AA";
+
+    /// <summary>Vertical offset from the pose's origin, in the NPC's local
+    /// units. Negative pushes it further down. Defaulted to what Downtown's
+    /// reflections sit at (-2.16 to -2.46 across its five).</summary>
+    [JsonProperty("offsetY", Order = 4)]
+    public float OffsetY { get; set; } = -2.3f;
 
     /// <summary>Sorting order for the mirrored copy. Vanilla puts these in FRONT
-    /// of the body, which is what makes them read as lying on the floor.</summary>
-    [JsonProperty("sortingOrder", Order = 4)]
+    /// of the body — Downtown's bodies sit at -9 and their reflections at 0 —
+    /// which is what makes them read as lying on the floor.</summary>
+    [JsonProperty("sortingOrder", Order = 5)]
     public int SortingOrder { get; set; } = 0;
 }
 

@@ -163,8 +163,12 @@ namespace SMSModForge.PackPlugin
             sr.sharedMaterial = parentSr.sharedMaterial;   // same jiggle material
             sr.sortingOrder = (int?)reflDef["sortingOrder"] ?? 0;
 
-            var c = sr.color;
-            c.a = Mathf.Clamp01(F(reflDef, "alpha", 0.35f));
+            // Tint AND alpha together, the way the vanilla ones are set: their
+            // renderer colour carries both (Downtown's are #AD92AA at varying
+            // alpha). A reflection takes the colour of what it lies on.
+            if (!BustFactory.TryParseHexColor((string)reflDef["tint"] ?? "#AD92AA", out var c))
+                c = Color.white;
+            c.a = Mathf.Clamp01(F(reflDef, "alpha", 0.58f));
             sr.color = c;
         }
 

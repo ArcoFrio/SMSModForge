@@ -2690,11 +2690,16 @@
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
                                             <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Alpha:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                         <TextBox Grid.Row="0" Grid.Column="1" Width="70" HorizontalAlignment="Left"
                                                  Text="{Binding ReflectionAlpha, UpdateSourceTrigger=PropertyChanged}"
                                                  ToolTip="0–1. Vanilla reflections read as a faint wash rather than a second character."/>
+                                        <TextBlock Text="Tint:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="3" Grid.Column="1" Width="90" HorizontalAlignment="Left"
+                                                 Text="{Binding ReflectionTint, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="Hex colour. Defaults to the muted mauve the game's street reflections use (#AD92AA) — a reflection takes the colour of what it lies on."/>
                                         <TextBlock Text="Y offset:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                         <TextBox Grid.Row="1" Grid.Column="1" Width="70" HorizontalAlignment="Left"
                                                  Text="{Binding ReflectionOffsetY, UpdateSourceTrigger=PropertyChanged}"
