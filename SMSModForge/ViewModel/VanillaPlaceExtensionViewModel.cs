@@ -81,6 +81,17 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
     /// </summary>
     public int PreviewArtOrder => CatalogLevel?.Hierarchy?.SpriteRenderer?.SortingOrder ?? -4;
 
+    /// <summary>The level root's own scale, which everything under it inherits.
+    /// Almost every vanilla level ships at 0.79.</summary>
+    public float PreviewLevelScale
+    {
+        get
+        {
+            var s = CatalogLevel?.Hierarchy?.ScaleY ?? 0f;
+            return s > 0f ? s : 0.79f;
+        }
+    }
+
     /// <summary>This level's art import ppu, which decides how large the
     /// backdrop is in world units. Per level — they are not all the same.</summary>
     public float PreviewArtPpu

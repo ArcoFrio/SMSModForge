@@ -386,8 +386,10 @@ public sealed class PlacePreview : Grid
     {
         if (img.Source is not BitmapSource bmp) return;
         double ppu = spritePpu > 0 ? spritePpu : LevelArtPpu;
-        double w = bmp.PixelWidth / ppu * PixelsPerUnit;
-        double h = bmp.PixelHeight / ppu * PixelsPerUnit;
+        // Same WorldPpu the objects use, so art and props stay locked together
+        // whatever the level's scale.
+        double w = bmp.PixelWidth / ppu * WorldPpu;
+        double h = bmp.PixelHeight / ppu * WorldPpu;
         img.Width = w;
         img.Height = h;
         // Centred on the world origin, which is where the camera sits.
@@ -843,6 +845,29 @@ public sealed class PlacePreview : Grid
         set => SetValue(LevelArtPpuProperty, value);
     }
 
+    /// <summary>
+    /// The level root's own scale. Almost every vanilla level ships at 0.79,
+    /// and everything authored under it — art, props, NPCs — inherits that.
+    /// <para/>
+    /// Ignoring it is what made the corrected 100 px/unit mapping read as far
+    /// too large: the honest factor is 100 x this. It also reconciles levels
+    /// that ship the same scene at different resolutions, since 2048px at
+    /// 70.33 ppu and 2912px at 100 ppu are both 29.12 world units.
+    /// </summary>
+    public static readonly DependencyProperty LevelScaleProperty =
+        DependencyProperty.Register(nameof(LevelScale), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.79, OnInputChanged));
+
+    public double LevelScale
+    {
+        get => (double)GetValue(LevelScaleProperty);
+        set => SetValue(LevelScaleProperty, value);
+    }
+
+    /// <summary>Canvas pixels per world unit as actually seen: the camera's
+    /// 100 px/unit through the level root's scale.</summary>
+    private double WorldPpu => PixelsPerUnit * (LevelScale > 0 ? LevelScale : 1.0);
+
     /// <summary>Sorting order of the level's secondary (distance/blur) sprite,
     /// which renders behind the base.</summary>
     private const int LevelSecondarySortingOrder = -5;
@@ -1134,9 +1159,12 @@ public sealed class PlacePreview : Grid
     /// <paramref name="spritePpu"/> is the sprite's authored pixels-per-unit:
     /// NPC art loads at 100, GameObject sprites at the level's own 70.32 (so
     /// one sprite pixel is one canvas pixel).</summary>
-    private static Matrix LeafMatrix(in Aff w, double spx, double spy, double spritePpu = NpcSpritePpu)
+    private Matrix LeafMatrix(in Aff w, double spx, double spy, double spritePpu = NpcSpritePpu)
     {
-        double k = PixelsPerUnit / spritePpu;
+        // World units land on canvas at the camera's rate THROUGH the level
+        // root's scale — everything authored under the level inherits it.
+        double ppu = WorldPpu;
+        double k = ppu / spritePpu;
         double halfW = spx / (2.0 * spritePpu);
         double halfH = spy / (2.0 * spritePpu);
         // Top-left pixel maps to local unit (-halfW, +halfH).
@@ -1145,8 +1173,8 @@ public sealed class PlacePreview : Grid
         return new Matrix(
             k * w.A, -k * w.B,      // M11, M12  (x-axis, canvas Y flipped)
             -k * w.C, k * w.D,      // M21, M22  (y-axis)
-            PixelsPerUnit * wx + WorldOriginX,
-            -PixelsPerUnit * wy + WorldOriginY);
+            ppu * wx + WorldOriginX,
+            -ppu * wy + WorldOriginY);
     }
 
     private static void ExpandBounds(in Matrix m, double w, double h,
