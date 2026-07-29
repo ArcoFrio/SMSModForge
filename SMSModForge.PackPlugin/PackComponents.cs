@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Reflection;
 using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -239,9 +241,117 @@ namespace SMSModForge.PackPlugin
                         F(c, "blinkInterval", 0.5f), F(c, "minAlpha", 0f), F(c, "maxAlpha", 1f));
                     break;
                 default:
-                    log?.LogWarning("[SMSModForge.PackPlugin] Unknown pack component type '" + type + "' — skipped.");
+                    // Not one of ours — try the game's own. A vanilla level is
+                    // mostly its own behaviour scripts (ParallaxMouseEffect,
+                    // OffsetScrolling, DisableChildren…), and there is no reason
+                    // a pack should be limited to the handful reimplemented
+                    // above when the real ones are already loaded.
+                    if (!ApplyByReflection(go, type, c, log))
+                        log?.LogWarning("[SMSModForge.PackPlugin] Unknown pack component type '" + type +
+                                        "' — no pack component and no loaded type by that name; skipped.");
                     break;
             }
+        }
+
+        /// <summary>
+        /// Attach a component the GAME defines, by type name, and set whatever
+        /// authored values match its fields or properties.
+        /// <para/>
+        /// Names come straight from the vanilla extraction, which reads them off
+        /// Unity's serialized properties — so for the game's own scripts a key
+        /// like <c>parallaxStrength</c> is the actual field. Engine components
+        /// are a different matter: their serialized names are Unity internals
+        /// (<c>m_CastShadows</c>) that don't correspond to anything settable by
+        /// that name, so those keys simply find no target and are reported.
+        /// Nothing here throws — a pack naming a type that isn't loaded, or a
+        /// value that won't convert, costs that one component and not the build.
+        /// </summary>
+        private static bool ApplyByReflection(GameObject go, string typeName, JObject c, ManualLogSource log)
+        {
+            if (string.IsNullOrEmpty(typeName)) return false;
+            var t = ResolveType(typeName);
+            if (t == null || !typeof(Component).IsAssignableFrom(t)) return false;
+
+            Component comp;
+            try { comp = go.AddComponent(t); }
+            catch (System.Exception ex)
+            {
+                log?.LogWarning("[SMSModForge.PackPlugin] Could not add '" + typeName + "': " + ex.Message);
+                return true;   // resolved, so don't also report it as unknown
+            }
+            if (comp == null) return true;
+
+            foreach (var prop in c)
+            {
+                if (prop.Key == "type") continue;
+                if (!TrySetMember(comp, t, prop.Key, prop.Value))
+                    log?.LogInfo("[SMSModForge.PackPlugin] " + typeName + "." + prop.Key +
+                                 " — no settable field or property by that name; left at its default.");
+            }
+            return true;
+        }
+
+        private static readonly Dictionary<string, System.Type> _typeCache =
+            new Dictionary<string, System.Type>();
+
+        /// <summary>Find a loaded type by its short name. Cached — the scan walks
+        /// every loaded assembly and a level can carry hundreds of components.</summary>
+        private static System.Type ResolveType(string name)
+        {
+            if (_typeCache.TryGetValue(name, out var hit)) return hit;
+            System.Type found = null;
+            foreach (var asm in System.AppDomain.CurrentDomain.GetAssemblies())
+            {
+                try
+                {
+                    foreach (var t in asm.GetTypes())
+                        if (t.Name == name && typeof(Component).IsAssignableFrom(t)) { found = t; break; }
+                }
+                catch { /* a dynamic or partially-loaded assembly — skip it */ }
+                if (found != null) break;
+            }
+            _typeCache[name] = found;
+            return found;
+        }
+
+        private static bool TrySetMember(Component target, System.Type t, string name, JToken value)
+        {
+            const BindingFlags Flags = BindingFlags.Public | BindingFlags.NonPublic |
+                                       BindingFlags.Instance | BindingFlags.IgnoreCase;
+            try
+            {
+                var f = t.GetField(name, Flags);
+                if (f != null && !f.IsInitOnly)
+                {
+                    f.SetValue(target, Convert(value, f.FieldType));
+                    return true;
+                }
+                var p = t.GetProperty(name, Flags);
+                if (p != null && p.CanWrite)
+                {
+                    p.SetValue(target, Convert(value, p.PropertyType), null);
+                    return true;
+                }
+            }
+            catch { /* wrong shape for this member — treated as not settable */ }
+            return false;
+        }
+
+        /// <summary>Coerce an authored JSON value to a member's type. Covers what
+        /// the extractor emits: numbers, bools, strings, enums by name, and the
+        /// Vector2/3 and Color it writes as arrays and hex.</summary>
+        private static object Convert(JToken v, System.Type target)
+        {
+            if (target == typeof(string)) return (string)v;
+            if (target.IsEnum) return System.Enum.Parse(target, (string)v, true);
+            if (target == typeof(Vector2)) return new Vector2((float)v[0], (float)v[1]);
+            if (target == typeof(Vector3)) return new Vector3((float)v[0], (float)v[1], (float)v[2]);
+            if (target == typeof(Color))
+            {
+                ColorUtility.TryParseHtmlString("#" + ((string)v).TrimStart('#'), out var col);
+                return col;
+            }
+            return v.ToObject(target);
         }
 
         private static float F(JObject c, string key, float dflt) => c[key] != null ? (float)c[key] : dflt;

@@ -31,6 +31,10 @@ public static class VanillaLevelCatalog
         [JsonProperty("localEulerAngles")] public float[] LocalEulerAngles { get; set; } = new float[3];
         [JsonProperty("localScale")] public float[] LocalScale { get; set; } = { 1f, 1f, 1f };
         [JsonProperty("components")] public List<string> Components { get; set; } = new();
+        /// <summary>The same components with their serialized values. Absent from
+        /// catalogs written before the extractor recorded them, hence the empty
+        /// default rather than a required field.</summary>
+        [JsonProperty("componentValues")] public List<ComponentValues> ComponentValues { get; set; } = new();
         [JsonProperty("spriteRenderer")] public RendererInfo? SpriteRenderer { get; set; }
         [JsonProperty("children")] public List<Node> Children { get; set; } = new();
 
@@ -58,6 +62,14 @@ public static class VanillaLevelCatalog
         [JsonProperty("siblingIndex")] public int SiblingIndex { get; set; }
         [JsonProperty("activeSelf")] public bool ActiveSelf { get; set; }
         [JsonProperty("hierarchy")] public Node? Hierarchy { get; set; }
+    }
+
+    /// <summary>One component on a node, with the serialized values the
+    /// extractor read off it. Keys are Unity's own property paths.</summary>
+    public sealed class ComponentValues
+    {
+        [JsonProperty("type")] public string Type { get; set; } = "";
+        [JsonProperty("params")] public Dictionary<string, object?> Params { get; set; } = new();
     }
 
     private sealed class CatalogFile

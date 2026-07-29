@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Linq;
 
 namespace SMSModForge.Model;
 
@@ -8,16 +9,24 @@ namespace SMSModForge.Model;
 /// (overlay). Each mirrors a vanilla game component by name and maps to a
 /// reusable MonoBehaviour in the plugin runtime.
 /// </summary>
-public enum PackComponentType
+public static class PackComponentType
 {
     /// <summary>Fade a SpriteRenderer in: alpha 0 → target over a duration.</summary>
-    FadeInSprite,
+    public const string FadeInSprite = "FadeInSprite";
     /// <summary>Fade a SpriteRenderer out: current alpha → 0 over a duration; optionally deactivate after.</summary>
-    FadeOutSprite,
+    public const string FadeOutSprite = "FadeOutSprite";
     /// <summary>Activate one random child on enable, disable the rest.</summary>
-    RandomChildActivator,
+    public const string RandomChildActivator = "RandomChildActivator";
     /// <summary>Toggle a SpriteRenderer's alpha between min/max on an interval (blink / pulse).</summary>
-    BlinkingSprite,
+    public const string BlinkingSprite = "BlinkingSprite";
+
+    /// <summary>The four the plugin reimplements itself, each with a purpose-built
+    /// editor below. Anything else names a component the GAME defines, which the
+    /// runtime resolves and configures by reflection.</summary>
+    public static readonly string[] BuiltIn =
+        { FadeInSprite, FadeOutSprite, RandomChildActivator, BlinkingSprite };
+
+    public static bool IsBuiltIn(string type) => System.Array.IndexOf(BuiltIn, type) >= 0;
 }
 
 /// <summary>
@@ -30,9 +39,24 @@ public enum PackComponentType
 /// </summary>
 public sealed class ComponentDef
 {
+    /// <summary>
+    /// A free-form type NAME rather than an enum, so a pack can attach one of
+    /// the game's own components (ParallaxMouseEffect, OffsetScrolling…) and not
+    /// only the four reimplemented here. The four keep their purpose-built
+    /// editors; anything else is authored as name/value pairs and configured by
+    /// reflection at runtime.
+    /// </summary>
     [JsonProperty("type", Order = 1)]
-    [JsonConverter(typeof(StringEnumConverter))]
-    public PackComponentType Type { get; set; } = PackComponentType.FadeInSprite;
+    public string Type { get; set; } = PackComponentType.FadeInSprite;
+
+    /// <summary>
+    /// Parameters for a component the game defines, kept flat alongside
+    /// <see cref="Type"/> — the same shape the built-in fields serialize to, and
+    /// the shape the runtime reads. Extension data so any key round-trips
+    /// without this class having to know it.
+    /// </summary>
+    [JsonExtensionData]
+    public IDictionary<string, JToken> Params { get; set; } = new Dictionary<string, JToken>();
 
     // ── FadeInSprite ──────────────────────────────────────────────────
     [JsonProperty("fadeDuration", Order = 2)]
@@ -62,7 +86,8 @@ public sealed class ComponentDef
     [JsonProperty("maxAlpha", Order = 10)]
     public float MaxAlpha { get; set; } = 1f;
 
-    // Serialize only the fields the chosen type uses.
+    // Serialize only the fields the chosen type uses. A game component uses none
+    // of them — its values live in Params.
     public bool ShouldSerializeFadeDuration() => Type == PackComponentType.FadeInSprite;
     public bool ShouldSerializeTargetAlpha() => Type == PackComponentType.FadeInSprite;
     public bool ShouldSerializeDuration() => Type == PackComponentType.FadeOutSprite;

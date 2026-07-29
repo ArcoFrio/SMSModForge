@@ -1587,6 +1587,39 @@
                                                         <TextBox Width="40" Text="{Binding MaxAlpha, UpdateSourceTrigger=LostFocus}"/>
                                                     </WrapPanel>
                                                 </StackPanel>
+
+                                                <!-- A component the GAME defines. Parameter names come
+                                                     from the vanilla extraction, so they match the real
+                                                     fields; blank means "leave at the component's own
+                                                     default" rather than writing an empty value. -->
+                                                <StackPanel Margin="0,4,0,0"
+                                                            Visibility="{Binding IsGameComponent, Converter={StaticResource BoolToVisibility}}">
+                                                    <TextBlock Text="{Binding TypeNote}" Foreground="Gray" FontSize="10"
+                                                               TextWrapping="Wrap" Margin="0,0,0,3"/>
+                                                    <ItemsControl ItemsSource="{Binding ParamRows}">
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Grid Margin="0,0,0,2">
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition Width="170"/>
+                                                                        <ColumnDefinition Width="90"/>
+                                                                        <ColumnDefinition Width="*"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock Grid.Column="0" Text="{Binding Name}"
+                                                                               VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                                                                               ToolTip="{Binding Name}"/>
+                                                                    <TextBox Grid.Column="1"
+                                                                             Text="{Binding Value, UpdateSourceTrigger=LostFocus}"/>
+                                                                    <TextBlock Grid.Column="2" Foreground="Gray" FontSize="10"
+                                                                               VerticalAlignment="Center" Margin="6,0,0,0"
+                                                                               TextTrimming="CharacterEllipsis"
+                                                                               Text="{Binding Observed, StringFormat=vanilla: {0}}"
+                                                                               ToolTip="What the extraction saw on a vanilla level. Shown rather than filled in, so an untouched parameter isn't pinned to another level's value."/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </StackPanel>
                                             </StackPanel>
                                         </Border>
         </DataTemplate>
