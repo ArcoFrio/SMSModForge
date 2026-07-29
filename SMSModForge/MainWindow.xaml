@@ -1337,6 +1337,18 @@
                              IsEnabled="{Binding CanEditIdentity}"
                              ToolTip="GameObject name dialogue actions target by (keep unique across the pack)."/>
                     <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal">
+                        <!-- The NPCs container. Deliberately a CHIP and not a
+                             tint: the row's background and border already carry
+                             whether the object is the game's and whether the pack
+                             changed it, so this rides alongside them instead of
+                             overwriting either. Shows on the pack's forced node
+                             and on a vanilla level's own NPCs object alike. -->
+                        <Border Padding="4,0" Margin="4,0,0,0" CornerRadius="2" VerticalAlignment="Center"
+                                Background="#80C08A3E"
+                                Visibility="{Binding IsNpcHost, Converter={StaticResource BoolToVisibility}}"
+                                ToolTip="The level's NPCs container — where NPC placements live. Its transform offsets every NPC in the room, and its subtree composes transforms down the chain.">
+                            <TextBlock Text="NPCs" FontSize="10" FontWeight="SemiBold"/>
+                        </Border>
                         <!-- Names the colour cast, so "this one is the game's"
                              doesn't rely on spotting a tint. -->
                         <Border Padding="4,0" Margin="4,0,0,0" CornerRadius="2" VerticalAlignment="Center"
@@ -1365,15 +1377,23 @@
                                 Command="{Binding RemoveCommand}" ToolTip="Remove this GameObject"/>
                     </StackPanel>
 
-                    <!-- The forced NPCs node maps onto the level's own NPCs object. -->
-                    <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Foreground="Gray" FontSize="10"
+                    <!-- One row, stacked. The NPCs note and the bind controls can
+                         BOTH apply now that an extension's NPCs container is a
+                         bound node, and two siblings sharing a Grid.Row draw on
+                         top of each other rather than below. -->
+                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+
+                    <!-- Shown for both kinds of NPCs container: the forced node a
+                         pack place carries, and the vanilla object an extension
+                         binds to. -->
+                    <TextBlock Foreground="Gray" FontSize="10"
                                TextWrapping="Wrap" Margin="0,2,0,2"
-                               Visibility="{Binding IsNpcRoot, Converter={StaticResource BoolToVisibility}}"
-                               Text="The level's built-in NPCs object. Always present — its transform offsets every NPC in the room, and you can give it components and children like any GameObject."/>
+                               Visibility="{Binding IsNpcHost, Converter={StaticResource BoolToVisibility}}"
+                               Text="The level's built-in NPCs object — its transform offsets every NPC in the room, and you can give it components and children like any GameObject. Placing an NPC in it doesn't count as changing it."/>
 
                     <!-- Bind: address an object that already exists in the scene
                          (a vanilla level's own furniture) instead of creating one. -->
-                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,2,0,2"
+                    <StackPanel Margin="0,2,0,2"
                                 Visibility="{Binding CanEditIdentity, Converter={StaticResource BoolToVisibility}}">
                         <CheckBox IsChecked="{Binding Bind}"
                                   Content="This GameObject already exists (bind, don't create)"
@@ -1388,6 +1408,7 @@
                         <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="16,2,0,0"
                                    Visibility="{Binding Bind, Converter={StaticResource BoolToVisibility}}"
                                    Text="Components, Active-when conditions, children and NPCs always apply — they're additions either way. Everything else is left untouched unless overridden above, so a bound object you haven't changed is a no-op. If the object isn't found the runtime logs a warning and skips it rather than creating a look-alike."/>
+                    </StackPanel>
                     </StackPanel>
 
                     <TextBlock Text="Sprite:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
