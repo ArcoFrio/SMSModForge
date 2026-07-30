@@ -51,29 +51,28 @@ public static class CharacterMerge
                     Name = "",
                     BustSource = string.IsNullOrWhiteSpace(a.DefaultBustKey)
                         ? BustSource.None : BustSource.Vanilla,
-                    VanillaBust = a.DefaultBustKey ?? "",
-                    // The actor's own list is the wearable set here, since there
-                    // are no pack outfits to read it off.
-                    VanillaOutfits = (a.Outfits ?? new List<string>())
-                        .Where(o => !string.IsNullOrWhiteSpace(o) &&
-                                    !string.Equals(o, a.DefaultBustKey, StringComparison.OrdinalIgnoreCase))
-                        .ToList(),
+                    DefaultOutfit = a.DefaultBustKey ?? "",
                 };
+                // A vanilla character's outfits are the bust names themselves —
+                // same list as a pack character's, just with nothing to ship.
+                foreach (var bust in BustNames(a))
+                    owner.Outfits.Add(new OutfitDef { Key = bust, GameObjectName = bust });
                 pack.Characters.Add(owner);
             }
             else
             {
                 owner.BustSource = BustSource.Pack;
                 owner.DefaultOutfit = a.DefaultBustKey ?? "";
-                // The actor's outfit list was the bust's own outfit keys written
-                // out a second time. Anything in it that ISN'T one of them was
-                // a vanilla bust the character could also wear, so that part is
-                // the only bit worth keeping.
-                var own = new HashSet<string>(owner.Outfits.Select(o => o.Key),
+                // The actor's outfit list was the bust's own outfits written out
+                // a second time, so it is simply dropped. Anything in it that
+                // ISN'T one of them was a vanilla bust the character could also
+                // wear — that becomes an outfit like any other, carrying a name
+                // and no art.
+                var own = new HashSet<string>(owner.Outfits.Select(o => o.GameObjectName),
                                               StringComparer.OrdinalIgnoreCase);
-                owner.VanillaOutfits = (a.Outfits ?? new List<string>())
-                    .Where(o => !string.IsNullOrWhiteSpace(o) && !own.Contains(o))
-                    .ToList();
+                foreach (var bust in BustNames(a))
+                    if (!own.Contains(bust))
+                        owner.Outfits.Add(new OutfitDef { Key = bust, GameObjectName = bust });
             }
 
             // Actor fields have no counterpart on a bust, so they transfer whole.
@@ -88,6 +87,18 @@ public static class CharacterMerge
         pack.Actors = new List<ActorDef>();
         BackfillNames(pack);
         return folded;
+    }
+
+    /// <summary>Every bust an actor could be shown as: its default first, then
+    /// the rest, deduplicated and in order.</summary>
+    private static IEnumerable<string> BustNames(ActorDef a)
+    {
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrWhiteSpace(a.DefaultBustKey) && seen.Add(a.DefaultBustKey))
+            yield return a.DefaultBustKey;
+        foreach (var o in a.Outfits ?? new List<string>())
+            if (!string.IsNullOrWhiteSpace(o) && seen.Add(o))
+                yield return o;
     }
 
     /// <summary>

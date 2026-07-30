@@ -12,8 +12,8 @@ public enum BustSource
     /// <summary>This pack draws the bust, from <see cref="CharacterDef.Outfits"/>.</summary>
     Pack,
 
-    /// <summary>The character borrows one of the game's own busts. No art is
-    /// shipped; <see cref="CharacterDef.VanillaBust"/> names it.</summary>
+    /// <summary>The character borrows the game's own busts. Its outfits are
+    /// vanilla bust names and nothing else — no art is shipped.</summary>
     Vanilla,
 
     /// <summary>A speaking part with no bust at all — a name and a voice, like
@@ -70,21 +70,6 @@ public sealed class CharacterDef
     [JsonConverter(typeof(StringEnumConverter))]
     public BustSource BustSource { get; set; } = BustSource.Pack;
 
-    /// <summary>The game's bust to borrow, when <see cref="BustSource"/> is
-    /// <see cref="BustSource.Vanilla"/>.</summary>
-    [JsonProperty("vanillaBust", Order = 6, NullValueHandling = NullValueHandling.Ignore)]
-    public string VanillaBust { get; set; } = "";
-
-    /// <summary>
-    /// Further vanilla busts this character can be switched to at runtime.
-    /// <para/>
-    /// Only meaningful for a vanilla-sourced character — a pack-sourced one can
-    /// wear any of its own <see cref="Outfits"/>, so listing them again is the
-    /// duplication this merge removes.
-    /// </summary>
-    [JsonProperty("vanillaOutfits", Order = 7)]
-    public List<string> VanillaOutfits { get; set; } = new();
-
     /// <summary>Outfit shown first. Blank = the first entry.</summary>
     [JsonProperty("defaultOutfit", Order = 8, NullValueHandling = NullValueHandling.Ignore)]
     public string DefaultOutfit { get; set; } = "";
@@ -96,8 +81,15 @@ public sealed class CharacterDef
     [JsonProperty("giftLikes", Order = 9)]
     public List<string> GiftLikes { get; set; } = new();
 
-    /// <summary>This pack's own outfits. Empty unless <see cref="BustSource"/>
-    /// is <see cref="BustSource.Pack"/>.</summary>
+    /// <summary>
+    /// The character's outfits, whichever source it draws from. A pack outfit
+    /// carries its own sprites; a vanilla one is a NAME and nothing else — the
+    /// bust already exists in the game, so there is nothing to ship for it.
+    /// <para/>
+    /// One list either way, because "which busts can this character wear" is
+    /// the same question in both cases, and answering it twice is what the
+    /// merge set out to stop.
+    /// </summary>
     [JsonProperty("outfits", Order = 10)]
     public List<OutfitDef> Outfits { get; set; } = new();
 
@@ -109,7 +101,6 @@ public sealed class CharacterDef
     [JsonProperty("typewriter", Order = 12, NullValueHandling = NullValueHandling.Ignore)]
     public TypewriterDef? Typewriter { get; set; }
 
-    public bool ShouldSerializeVanillaOutfits() => VanillaOutfits.Count > 0;
     public bool ShouldSerializeGiftLikes() => GiftLikes.Count > 0;
     public bool ShouldSerializeOutfits() => Outfits.Count > 0;
     public bool ShouldSerializeExpressions() => Expressions.Count > 0;
@@ -117,14 +108,10 @@ public sealed class CharacterDef
     /// <summary>Every bust name this character can be shown as, whichever source
     /// it draws from — what an outfit picker should offer.</summary>
     [JsonIgnore]
-    public IEnumerable<string> WearableBusts => BustSource switch
-    {
-        BustSource.Pack => Outfits.Select(o => o.Key),
-        BustSource.Vanilla => string.IsNullOrWhiteSpace(VanillaBust)
-            ? VanillaOutfits
-            : new[] { VanillaBust }.Concat(VanillaOutfits).Distinct(),
-        _ => System.Array.Empty<string>(),
-    };
+    public IEnumerable<string> WearableBusts
+        => BustSource == BustSource.None
+           ? System.Array.Empty<string>()
+           : Outfits.Select(o => o.GameObjectName);
 
     /// <summary>
     /// Turn a display name into an identifier: letters and digits only, first

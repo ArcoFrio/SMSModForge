@@ -74,11 +74,7 @@ namespace SMSModForge.PackPlugin
             // Merged: "defaultOutfit" for a pack bust, "vanillaBust" for a
             // borrowed one. Legacy: "defaultBustKey" covered both.
             string source = (string)actor["bustSource"];
-            string defaultBust = (string)actor["defaultBustKey"];
-            if (string.IsNullOrEmpty(defaultBust))
-                defaultBust = source == "Vanilla"
-                    ? (string)actor["vanillaBust"]
-                    : (string)actor["defaultOutfit"];
+            string defaultBust = (string)actor["defaultBustKey"] ?? (string)actor["defaultOutfit"];
 
             var entry = new ActorEntry
             {
@@ -86,13 +82,13 @@ namespace SMSModForge.PackPlugin
                 DisplayName = (string)actor["displayName"] ?? key,
                 DefaultBustKey = defaultBust ?? "",
             };
-            entry.CurrentBustKey = entry.DefaultBustKey;
             if (!string.IsNullOrEmpty(entry.DefaultBustKey)) entry.OutfitNames.Add(entry.DefaultBustKey);
 
-            // Legacy actors listed every wearable bust by name. A merged
-            // character's own outfits ARE that list, so they are read off the
-            // outfits rather than restated; "vanillaOutfits" carries only the
-            // borrowed busts, which have nothing to be read off.
+            // Legacy actors listed every wearable bust by name; a merged
+            // character's outfits ARE that list. Both land in the same array,
+            // as bare strings on the old shape and objects on the new one —
+            // including a vanilla character's, whose outfits are bust names
+            // carrying no art.
             if (actor["outfits"] is JArray outfits)
                 foreach (var o in outfits)
                 {
@@ -101,12 +97,11 @@ namespace SMSModForge.PackPlugin
                         : (string)((JObject)o)["gameObjectName"] ?? (string)((JObject)o)["key"];
                     if (!string.IsNullOrEmpty(name)) entry.OutfitNames.Add(name);
                 }
-            if (actor["vanillaOutfits"] is JArray vanillaOutfits)
-                foreach (var o in vanillaOutfits)
-                {
-                    string name = (string)o;
-                    if (!string.IsNullOrEmpty(name)) entry.OutfitNames.Add(name);
-                }
+            // Blank default means the first outfit, which is what the editor
+            // shows and so what an author will expect.
+            if (string.IsNullOrEmpty(entry.DefaultBustKey))
+                foreach (var n in entry.OutfitNames) { entry.DefaultBustKey = n; break; }
+            entry.CurrentBustKey = entry.DefaultBustKey;
 
             // A character with no bust at all is still a speaker — it just
             // never activates anything. Nothing below needs a special case.

@@ -17,10 +17,6 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public ObservableCollection<OutfitViewModel> Outfits { get; }
     public ObservableCollection<ActorExpressionViewModel> Expressions { get; }
 
-    /// <summary>Extra vanilla busts this character can switch to. Only used by a
-    /// vanilla-sourced character — a pack-sourced one wears its own outfits.</summary>
-    public ObservableCollection<ActorOutfitViewModel> VanillaOutfits { get; }
-
     /// <summary>
     /// The other characters in the pack, for deduplicating derived names.
     /// A callback rather than a snapshot because the list changes underneath.
@@ -50,9 +46,6 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
         Expressions = new ObservableCollection<ActorExpressionViewModel>(
             model.Expressions.Select(e => new ActorExpressionViewModel(e)));
-
-        VanillaOutfits = new ObservableCollection<ActorOutfitViewModel>(
-            model.VanillaOutfits.Select(o => new ActorOutfitViewModel(o, SyncVanillaOutfits, RemoveVanillaOutfit)));
     }
 
     // ── Identity ──────────────────────────────────────────────────────────
@@ -144,19 +137,6 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     /// </summary>
     public IReadOnlyList<SMSModForge.Model.VanillaBusts.VanillaBust> VanillaBustCatalog
         => SMSModForge.Model.VanillaBusts.All;
-
-    public string VanillaBust
-    {
-        get => Model.VanillaBust;
-        set
-        {
-            if (Model.VanillaBust == value) return;
-            Model.VanillaBust = value ?? "";
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(WearableBusts));
-            BustSourceChanged?.Invoke(this, EventArgs.Empty);
-        }
-    }
 
     public string DefaultOutfit
     {
@@ -318,14 +298,24 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
 
     // ── Collections ───────────────────────────────────────────────────────
 
-    public void AddOutfit()
+    /// <summary>
+    /// Add an outfit. For a vanilla character this is a bust name and nothing
+    /// else — pick which from the catalog in the editor; for a pack character it
+    /// is a fresh outfit to hang sprites on.
+    /// </summary>
+    public OutfitViewModel AddOutfit(string bustName = "")
     {
-        string baseName = string.IsNullOrWhiteSpace(Name) ? "Outfit" : Name;
-        string key = CharacterDef.UniqueIdentifier(baseName + " New", Outfits.Select(o => o.Key));
-        var def = new OutfitDef { Key = key, GameObjectName = key };
+        string name = string.IsNullOrWhiteSpace(bustName)
+            ? CharacterDef.UniqueIdentifier(
+                (string.IsNullOrWhiteSpace(Name) ? "Outfit" : Name) + " New",
+                Outfits.Select(o => o.GameObjectName))
+            : bustName;
+        var def = new OutfitDef { Key = name, GameObjectName = name };
         Model.Outfits.Add(def);
-        Outfits.Add(new OutfitViewModel(def));
+        var vm = new OutfitViewModel(def);
+        Outfits.Add(vm);
         OnPropertyChanged(nameof(WearableBusts));
+        return vm;
     }
 
     public void RemoveOutfit(OutfitViewModel vm)
@@ -350,26 +340,6 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         Expressions.Remove(vm);
     }
 
-    private void SyncVanillaOutfits()
-    {
-        Model.VanillaOutfits = VanillaOutfits.Select(o => o.BustGoName).ToList();
-        OnPropertyChanged(nameof(WearableBusts));
-    }
-
-    public ActorOutfitViewModel AddVanillaOutfit(string bustGoName = "")
-    {
-        var vm = new ActorOutfitViewModel(bustGoName, SyncVanillaOutfits, RemoveVanillaOutfit);
-        VanillaOutfits.Add(vm);
-        SyncVanillaOutfits();
-        return vm;
-    }
-
-    public void RemoveVanillaOutfit(ActorOutfitViewModel vm)
-    {
-        VanillaOutfits.Remove(vm);
-        SyncVanillaOutfits();
-    }
-
     // ── Sidebar search (IFilterableTreeNode) ──────────────────────────────
 
     private bool _isFilteredIn = true;
@@ -392,6 +362,6 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     public void StashExpansion() => _expandedBeforeFilter = IsExpanded;
     public void RestoreExpansion() => IsExpanded = _expandedBeforeFilter;
 
-    public string FilterKey => $"{Name} {DisplayName} {Key} {VanillaBust}";
+    public string FilterKey => $"{Name} {DisplayName} {Key}";
     public IEnumerable<IFilterableTreeNode> FilterChildren => Outfits;
 }

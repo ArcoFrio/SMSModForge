@@ -404,22 +404,48 @@ public sealed class MainViewModel : ObservableObject
     public OutfitViewModel? SelectedOutfit
     {
         get => _selectedOutfit;
-        set { _selectedOutfit = value; OnPropertyChanged(); OnPropertyChanged(nameof(SelectedCharacter)); }
+        set
+        {
+            _selectedOutfit = value;
+            OnPropertyChanged();
+            // Picking an outfit implies its owner. The reverse is not true, so
+            // the character is stored rather than derived — see below.
+            if (value != null)
+            {
+                var owner = Characters.FirstOrDefault(c => c.Outfits.Contains(value));
+                if (owner != null) SelectedCharacter = owner;
+            }
+        }
     }
 
+    private CharacterViewModel? _selectedCharacter;
+
     /// <summary>
-    /// The character owning <see cref="SelectedOutfit"/>. Derived rather than
-    /// stored, since the tree's selection is whichever row was clicked and an
-    /// outfit belongs to exactly one character.
+    /// The character being edited.
     /// <para/>
-    /// Exists so the Busts tab can edit the character's own name and display
-    /// name: the sidebar shows both, but nothing anywhere could set them, which
-    /// left a new character stuck reading as "NewChar&lt;n&gt;".
+    /// Stored, not derived from the selected outfit. It used to be derived, on
+    /// the reasoning that an outfit belongs to exactly one character — true, but
+    /// it made a character with NO outfits unselectable, so clicking a
+    /// voice-only one did nothing at all and its editor never appeared. A
+    /// character is a thing in its own right; the outfit merely implies it.
     /// </summary>
-    public CharacterViewModel? SelectedCharacter =>
-        _selectedOutfit == null
-            ? null
-            : Characters.FirstOrDefault(c => c.Outfits.Contains(_selectedOutfit));
+    public CharacterViewModel? SelectedCharacter
+    {
+        get => _selectedCharacter;
+        set
+        {
+            if (ReferenceEquals(_selectedCharacter, value)) return;
+            _selectedCharacter = value;
+            OnPropertyChanged();
+            // A stale outfit from the previously selected character would leave
+            // the sprite editor showing art that belongs to someone else.
+            if (value != null && _selectedOutfit != null && !value.Outfits.Contains(_selectedOutfit))
+            {
+                _selectedOutfit = value.Outfits.FirstOrDefault();
+                OnPropertyChanged(nameof(SelectedOutfit));
+            }
+        }
+    }
 
     private PlaceViewModel? _selectedPlace;
     public PlaceViewModel? SelectedPlace
@@ -1121,8 +1147,11 @@ public sealed class MainViewModel : ObservableObject
         AddCharacterCommand = new RelayCommand(AddCharacter);
         AddVanillaCharacterCommand = new RelayCommand(() => AddCharacter(BustSource.Vanilla));
         AddVoiceCharacterCommand   = new RelayCommand(() => AddCharacter(BustSource.None));
-        AddVanillaOutfitCommand    = new RelayCommand(() => SelectedCharacter?.AddVanillaOutfit(""),
-                                                      () => SelectedCharacter != null);
+        // A vanilla character adds outfits the same way a pack one does; the
+        // editor just offers a bust picker instead of sprite fields.
+        AddVanillaOutfitCommand    = new RelayCommand(
+            () => { var o = SelectedCharacter?.AddOutfit(); if (o != null) SelectedOutfit = o; },
+            () => SelectedCharacter != null);
         AddOutfitCommand   = new RelayCommand(AddOutfit, () => SelectedOutfit != null || Characters.Count > 0);
         AddPlaceCommand    = new RelayCommand(AddPlace);
         RemovePlaceCommand = new RelayCommand(RemovePlace, () => SelectedPlace != null || PlaceTree.Selected is UnitFolderNode);

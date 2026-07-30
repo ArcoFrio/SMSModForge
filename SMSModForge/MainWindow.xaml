@@ -2194,40 +2194,9 @@
                                         </ComboBox>
                                     </StackPanel>
 
-                                    <StackPanel Margin="0,6,0,0"
-                                                Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}">
-                                        <StackPanel Orientation="Horizontal">
-                                            <TextBlock Text="Vanilla bust:" Width="140" VerticalAlignment="Center"/>
-                                            <ComboBox ItemsSource="{Binding VanillaBustCatalog}"
-                                                      SelectedValue="{Binding VanillaBust}"
-                                                      SelectedValuePath="GoName" Width="280"
-                                                      ToolTip="Which of the game's busts this character speaks through.">
-                                                <ComboBox.ItemTemplate>
-                                                    <DataTemplate>
-                                                        <StackPanel Orientation="Horizontal">
-                                                            <TextBlock Text="{Binding GoName}"/>
-                                                            <TextBlock Text="{Binding Character}" Foreground="Gray" Margin="8,0,0,0"/>
-                                                        </StackPanel>
-                                                    </DataTemplate>
-                                                </ComboBox.ItemTemplate>
-                                            </ComboBox>
-                                        </StackPanel>
-                                        <TextBlock Text="Other vanilla busts this character can switch to:"
-                                                   Foreground="Gray" FontSize="10" Margin="140,6,0,2"/>
-                                        <ItemsControl ItemsSource="{Binding VanillaOutfits}" Margin="140,0,0,0">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <StackPanel Orientation="Horizontal" Margin="0,1">
-                                                        <TextBox Text="{Binding BustGoName, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
-                                                        <Button Content="−" Command="{Binding RemoveCommand}" Width="22" Margin="4,0,0,0"/>
-                                                    </StackPanel>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                        <Button Content="+ Bust" HorizontalAlignment="Left" Margin="140,4,0,0" Padding="8,0"
-                                                Command="{Binding DataContext.AddVanillaOutfitCommand,
-                                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                    </StackPanel>
+                                    <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                               Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"
+                                               Text="This character wears the game's own busts. Its outfits are bust names and nothing else — add one per bust it can appear as, and pick which from the list in the outfit editor."/>
 
                                     <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
                                                Visibility="{Binding HasNoBust, Converter={StaticResource BoolToVisibility}}"
@@ -2262,7 +2231,27 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="What dialogue and actions reference this outfit by, and the GameObject the runtime builds."/>
-                                    <TextBox  Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox  Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"
+                                              Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
+                                                           RelativeSource={RelativeSource AncestorType=Window},
+                                                           Converter={StaticResource BoolToVisibility}}"/>
+                                    <ComboBox Grid.Row="0" Grid.Column="1"
+                                              ItemsSource="{Binding DataContext.SelectedCharacter.VanillaBustCatalog,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                                              SelectedValue="{Binding GameObjectName}" SelectedValuePath="GoName"
+                                              Visibility="{Binding DataContext.SelectedCharacter.IsVanillaBust,
+                                                           RelativeSource={RelativeSource AncestorType=Window},
+                                                           Converter={StaticResource BoolToVisibility}}"
+                                              ToolTip="Which of the game's busts this outfit is.">
+                                        <ComboBox.ItemTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding GoName}"/>
+                                                    <TextBlock Text="{Binding Character}" Foreground="Gray" Margin="8,0,0,0"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </ComboBox.ItemTemplate>
+                                    </ComboBox>
                                     <TextBlock Text="Every outfit reference in this pack uses this name."
                                                Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                 </Grid>

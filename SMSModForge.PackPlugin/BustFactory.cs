@@ -46,6 +46,14 @@ namespace SMSModForge.PackPlugin
                 string charName = (string)charObj["name"];
                 if (string.IsNullOrEmpty(charName)) continue;
 
+                // Only a pack-drawn character has busts to build. A vanilla one
+                // carries outfits too, but they are the game's OWN bust names
+                // with no art behind them — building those would create empty
+                // GameObjects named after real busts and collide with them
+                // under 2_Bust_Manager, which is far worse than doing nothing.
+                string source = (string)charObj["bustSource"];
+                if (source == "Vanilla" || source == "None") continue;
+
                 var outfits = charObj["outfits"] as JArray;
                 if (outfits == null) continue;
 

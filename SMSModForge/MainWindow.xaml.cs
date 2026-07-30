@@ -391,9 +391,14 @@ public partial class MainWindow : Window
         if (e.NewValue is OutfitViewModel outfit)
             vm.SelectedOutfit = outfit;
         // Selecting a character shows its default (first) outfit in the preview,
-        // so you don't have to drill into an outfit just to see the bust.
-        else if (e.NewValue is CharacterViewModel ch && ch.Outfits.Count > 0)
-            vm.SelectedOutfit = ch.Outfits[0];
+        // so you don't have to drill into an outfit just to see the bust. The
+        // character is set either way — one with no outfits at all is still
+        // selectable, which is the whole point of a voice-only character.
+        else if (e.NewValue is CharacterViewModel ch)
+        {
+            vm.SelectedCharacter = ch;
+            if (ch.Outfits.Count > 0) vm.SelectedOutfit = ch.Outfits[0];
+        }
     }
 
     private void EditMask_Click(object sender, RoutedEventArgs e)

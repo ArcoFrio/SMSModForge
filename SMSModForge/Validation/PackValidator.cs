@@ -42,6 +42,19 @@ public static class PackValidator
                 if (string.IsNullOrWhiteSpace(outfit.GameObjectName))
                     issues.Add(new(Severity.Error, oWhere, "gameObjectName is required"));
 
+                // A vanilla character's outfits are the game's own bust names
+                // and carry no art on purpose, so there is nothing to check for
+                // on disk — and demanding sprites for them would bury the real
+                // issues under a warning for every file such an outfit will
+                // never have.
+                if (character.BustSource != BustSource.Pack)
+                {
+                    if (VanillaBusts.FindByGoName(outfit.GameObjectName) == null)
+                        issues.Add(new(Severity.Warning, oWhere,
+                            $"'{outfit.GameObjectName}' isn't a bust in the 1.8E catalog — the runtime will still look for it under 2_Bust_Manager, but check the name"));
+                    continue;
+                }
+
                 CheckFile(packRoot, outfit.BaseSprite,  $"{oWhere}.baseSprite",  issues);
                 CheckFile(packRoot, outfit.MaskSprite,  $"{oWhere}.maskSprite",  issues);
                 CheckFile(packRoot, outfit.BlinkSprite, $"{oWhere}.blinkSprite", issues);
@@ -280,17 +293,16 @@ public static class PackValidator
             // Having no bust is a declared choice now rather than an omission,
             // so it is only worth reporting when a character claims a source it
             // has not actually filled in.
-            string defaultBust = a.BustSource == BustSource.Vanilla ? a.VanillaBust : a.DefaultOutfit;
+            string defaultBust = string.IsNullOrWhiteSpace(a.DefaultOutfit)
+                ? a.Outfits.FirstOrDefault()?.GameObjectName ?? ""
+                : a.DefaultOutfit;
 
-            if (a.BustSource == BustSource.Vanilla && string.IsNullOrWhiteSpace(a.VanillaBust))
-            {
-                issues.Add(new(Severity.Warning, $"{aWhere}.vanillaBust",
-                    "Set to borrow a vanilla bust, but none is chosen — nothing will be shown"));
-            }
-            else if (a.BustSource == BustSource.Pack && a.Outfits.Count == 0)
+            if (a.BustSource != BustSource.None && a.Outfits.Count == 0)
             {
                 issues.Add(new(Severity.Warning, $"{aWhere}.outfits",
-                    "Set to use this pack's own outfits, but has none — add one, or switch the bust source to vanilla or none"));
+                    a.BustSource == BustSource.Vanilla
+                        ? "Set to borrow vanilla busts, but none is chosen — nothing will be shown"
+                        : "Set to use this pack's own outfits, but has none — add one, or switch the bust source to vanilla or none"));
             }
             else if (!string.IsNullOrWhiteSpace(defaultBust) &&
                      !bustNamesInPack.Contains(defaultBust) &&
