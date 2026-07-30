@@ -50,8 +50,12 @@ public static class PackRepository
                 Path.Combine(packRoot, ManifestFileName));
 
         var json = File.ReadAllText(manifest);
-        return JsonConvert.DeserializeObject<ModPack>(json, JsonSettings)
-               ?? throw new InvalidDataException($"Empty or invalid manifest: {manifest}");
+        var pack = JsonConvert.DeserializeObject<ModPack>(json, JsonSettings)
+                   ?? throw new InvalidDataException($"Empty or invalid manifest: {manifest}");
+        // Legacy actors fold into characters on the way in. In memory only —
+        // the file is untouched until the author saves.
+        CharacterMerge.Apply(pack);
+        return pack;
     }
 
     /// <summary>
@@ -121,7 +125,12 @@ public static class PackRepository
 
     /// <summary>Inverse of <see cref="Serialize"/> — rebuilds a pack from an
     /// in-memory snapshot (used by undo/redo). Returns null on malformed JSON.</summary>
-    public static ModPack? Deserialize(string json) => JsonConvert.DeserializeObject<ModPack>(json, JsonSettings);
+    public static ModPack? Deserialize(string json)
+    {
+        var pack = JsonConvert.DeserializeObject<ModPack>(json, JsonSettings);
+        if (pack != null) CharacterMerge.Apply(pack);
+        return pack;
+    }
 
     /// <summary>
     /// Creates a blank pack in memory with one starter character/outfit so the
