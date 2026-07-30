@@ -1039,6 +1039,11 @@ namespace SMSModForge.PackPlugin
         /// scene, which resets the latch in <see cref="OnSceneLoaded"/> and
         /// rebinds here.
         /// </summary>
+        /// <summary>Reserved key for the player. Fixed so a dialogue in any
+        /// pack addressing "you" reaches the same speaker; see
+        /// CharacterDef.PlayerKey on the editor side.</summary>
+        private const string PlayerCharacterKey = "player";
+
         private void TickSaveSlot()
         {
             if (_lastSeenSlot > 0) return;       // already bound this scene
@@ -1416,6 +1421,18 @@ namespace SMSModForge.PackPlugin
                         speakers.Add(c);
             if (m.Root["actors"] is Newtonsoft.Json.Linq.JArray legacy)
                 foreach (var a in legacy) speakers.Add(a);
+
+            // The player is addressable from every pack and declared by none of
+            // them, so it is registered here rather than being something each
+            // manifest has to remember. Declared FIRST so a pack that does ship
+            // its own entry overwrites this one and keeps its name colour and
+            // voice — the reserved key is the contract, not the settings.
+            ctx.Actors.Declare(new Newtonsoft.Json.Linq.JObject
+            {
+                ["key"] = PlayerCharacterKey,
+                ["displayName"] = "You",
+                ["bustSource"] = "None",
+            });
 
             var actors = speakers;
             if (actors != null)

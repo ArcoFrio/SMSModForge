@@ -92,6 +92,20 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         }
     }
 
+    /// <summary>
+    /// The reserved player character, which every pack shares.
+    /// <para/>
+    /// Its key is the contract between packs, so the editor shows it but does
+    /// not let it be renamed, re-sourced or deleted — a pack that changed any of
+    /// those would simply stop addressing the same person as everyone else. The
+    /// name colour and voice remain editable, since those are presentation and
+    /// a pack is entitled to its own.
+    /// </summary>
+    public bool IsPlayer => Model.IsPlayer;
+
+    /// <summary>Inverse of <see cref="IsPlayer"/>, for binding enabled-ness.</summary>
+    public bool CanEditIdentity => !Model.IsPlayer;
+
     /// <summary>Whether the names are still tracking the display name — shown
     /// in the advanced panel so it is clear why they move on their own.</summary>
     public bool NamesAreDerived => _namesFollowDisplay;

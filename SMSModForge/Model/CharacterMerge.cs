@@ -23,8 +23,18 @@ public static class CharacterMerge
     public static int Apply(ModPack pack)
     {
         if (pack == null) return 0;
+
         var actors = pack.Actors;
-        if (actors == null || actors.Count == 0) return 0;
+        if (actors == null || actors.Count == 0)
+        {
+            // Already merged. There is nothing to fold, but the player still has
+            // to be guaranteed — and this is the common path, since a pack only
+            // has actors to fold once. Returning early here is what stopped it
+            // running at all.
+            BackfillNames(pack);
+            EnsurePlayer(pack);
+            return 0;
+        }
 
         var byName = new Dictionary<string, CharacterDef>(StringComparer.OrdinalIgnoreCase);
         foreach (var c in pack.Characters)
@@ -86,7 +96,43 @@ public static class CharacterMerge
 
         pack.Actors = new List<ActorDef>();
         BackfillNames(pack);
+        EnsurePlayer(pack);
         return folded;
+    }
+
+    /// <summary>
+    /// Guarantee the reserved player character, exactly once.
+    /// <para/>
+    /// Called on every load, including for a pack with no actors to fold, so
+    /// "You" is present whether or not anything declared it — that is what lets
+    /// a dialogue address the player without every pack having to invent one,
+    /// and what keeps two packs' players being the same person.
+    /// <para/>
+    /// An existing entry is adopted rather than replaced: a pack may have given
+    /// it a name colour or a voice, and those are the author's.
+    /// </summary>
+    public static void EnsurePlayer(ModPack pack)
+    {
+        var existing = pack.Characters
+            .Where(c => string.Equals(c.Key, CharacterDef.PlayerKey, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
+        if (existing.Count == 0)
+        {
+            pack.Characters.Insert(0, CharacterDef.NewPlayer());
+            return;
+        }
+
+        // Fold any duplicates onto the first, so a pack that declared the
+        // player twice under different casings ends up with one.
+        var player = existing[0];
+        for (int i = 1; i < existing.Count; i++) pack.Characters.Remove(existing[i]);
+
+        player.Key = CharacterDef.PlayerKey;
+        player.BustSource = BustSource.None;
+        player.Outfits.Clear();
+        if (string.IsNullOrWhiteSpace(player.DisplayName)) player.DisplayName = "You";
+        if (string.IsNullOrWhiteSpace(player.Name)) player.Name = "You";
     }
 
     /// <summary>Every bust an actor could be shown as: its default first, then

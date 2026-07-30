@@ -42,6 +42,35 @@ public enum BustSource
 public sealed class CharacterDef
 {
     /// <summary>
+    /// Reserved key for the player, who every pack can address and no pack
+    /// owns.
+    /// <para/>
+    /// The player is the one speaker that genuinely spans packs: two mods both
+    /// writing lines for "you" mean the same person, and neither should have to
+    /// declare them or agree with the other on a spelling. So the key is fixed,
+    /// the runtime registers the character itself whether a manifest mentions it
+    /// or not, and the editor shows it without letting it be renamed or deleted.
+    /// <para/>
+    /// A pack that already declares a player is folded onto this on load rather
+    /// than sitting beside it as a near-duplicate.
+    /// </summary>
+    public const string PlayerKey = "player";
+
+    /// <summary>The built-in player. Voice-only: the game shows no bust for the
+    /// character the player is.</summary>
+    public static CharacterDef NewPlayer() => new()
+    {
+        Key = PlayerKey,
+        Name = "You",
+        DisplayName = "You",
+        BustSource = BustSource.None,
+    };
+
+    /// <summary>True for the reserved player character.</summary>
+    [JsonIgnore]
+    public bool IsPlayer => string.Equals(Key, PlayerKey, System.StringComparison.OrdinalIgnoreCase);
+
+    /// <summary>
     /// Pack-local key, and what a dialogue node's <c>actor</c> field matches.
     /// Derived from <see cref="DisplayName"/> when a character is created;
     /// preserved verbatim for anything that already exists.

@@ -2322,10 +2322,6 @@ public sealed class MainViewModel : ObservableObject
                     RenameKey("Dialogue", SelectedDialogue, v => v.Key, (v, k) => v.Key = k,
                               Dialogues.Where(x => x != SelectedDialogue).Select(x => x.Key));
                 break;
-                if (SelectedActor != null)
-                    RenameKey("Actor", SelectedActor, v => v.Key, (v, k) => { v.Key = k; RebuildActorAndBustOptions(); ActorTree.Sort(); ActorTree.SyncToModel(); },
-                              Actors.Where(x => x != SelectedActor).Select(x => x.Key));
-                break;
             case TabScenes:
                 if (SelectedScene != null)
                     RenameKey("Scene", SelectedScene, v => v.Key, (v, k) => { v.Key = k; RebuildSceneOptions(); SceneTree.Sort(); SceneTree.SyncToModel(); },
