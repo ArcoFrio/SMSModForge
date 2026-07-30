@@ -87,6 +87,13 @@ public sealed class ModPack
     public List<ActorDef> Actors { get; set; } = new();
 
     /// <summary>
+    /// Legacy only. Actors fold into <see cref="Characters"/> on load, so a
+    /// merged pack has none and writes no array at all rather than an empty one
+    /// that reads like a section someone forgot to fill in.
+    /// </summary>
+    public bool ShouldSerializeActors() => Actors.Count > 0;
+
+    /// <summary>
     /// Pack-defined variables, used by dialogue conditions and actions.
     /// Per-pack save file at <c>BepInEx/plugins/SMSModForge/Saves/&lt;packId&gt;.json</c>.
     /// See <see cref="PackVariableDef"/>.

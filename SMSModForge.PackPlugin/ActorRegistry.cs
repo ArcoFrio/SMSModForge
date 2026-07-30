@@ -57,24 +57,61 @@ namespace SMSModForge.PackPlugin
 
         public ActorRegistry(ManualLogSource log) { _log = log; }
 
+        /// <summary>
+        /// Register a speaker from either shape of manifest.
+        /// <para/>
+        /// A merged pack declares its speakers inside <c>characters</c>, with a
+        /// <c>bustSource</c> saying where the art comes from; an older pack has
+        /// a separate <c>actors</c> array. Both land here, because the only
+        /// things that differ are where the wearable bust names come from and
+        /// what the default is called.
+        /// </summary>
         public void Declare(JObject actor)
         {
             string key = (string)actor["key"];
             if (string.IsNullOrEmpty(key)) return;
+
+            // Merged: "defaultOutfit" for a pack bust, "vanillaBust" for a
+            // borrowed one. Legacy: "defaultBustKey" covered both.
+            string source = (string)actor["bustSource"];
+            string defaultBust = (string)actor["defaultBustKey"];
+            if (string.IsNullOrEmpty(defaultBust))
+                defaultBust = source == "Vanilla"
+                    ? (string)actor["vanillaBust"]
+                    : (string)actor["defaultOutfit"];
+
             var entry = new ActorEntry
             {
                 Key = key,
                 DisplayName = (string)actor["displayName"] ?? key,
-                DefaultBustKey = (string)actor["defaultBustKey"] ?? "",
+                DefaultBustKey = defaultBust ?? "",
             };
             entry.CurrentBustKey = entry.DefaultBustKey;
             if (!string.IsNullOrEmpty(entry.DefaultBustKey)) entry.OutfitNames.Add(entry.DefaultBustKey);
+
+            // Legacy actors listed every wearable bust by name. A merged
+            // character's own outfits ARE that list, so they are read off the
+            // outfits rather than restated; "vanillaOutfits" carries only the
+            // borrowed busts, which have nothing to be read off.
             if (actor["outfits"] is JArray outfits)
                 foreach (var o in outfits)
+                {
+                    string name = o.Type == JTokenType.String
+                        ? (string)o
+                        : (string)((JObject)o)["gameObjectName"] ?? (string)((JObject)o)["key"];
+                    if (!string.IsNullOrEmpty(name)) entry.OutfitNames.Add(name);
+                }
+            if (actor["vanillaOutfits"] is JArray vanillaOutfits)
+                foreach (var o in vanillaOutfits)
                 {
                     string name = (string)o;
                     if (!string.IsNullOrEmpty(name)) entry.OutfitNames.Add(name);
                 }
+
+            // A character with no bust at all is still a speaker — it just
+            // never activates anything. Nothing below needs a special case.
+            if (entry.OutfitNames.Count == 0 && source == "None")
+                _log?.LogInfo("[SMSModForge.PackPlugin] Character '" + key + "' speaks with no bust.");
             var exprs = actor["expressions"] as JArray;
             if (exprs != null)
             {

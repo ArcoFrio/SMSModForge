@@ -264,29 +264,40 @@ public static class PackValidator
         var seenActorKeys = new HashSet<string>();
         var actorKeysInPack = new HashSet<string>();
         var bustNamesInPack = new HashSet<string>();
-        foreach (var a in pack.Actors) actorKeysInPack.Add(a.Key);
+        foreach (var c in pack.Characters) actorKeysInPack.Add(c.Key);
         foreach (var ch in pack.Characters)
             foreach (var o in ch.Outfits)
                 bustNamesInPack.Add(o.GameObjectName);
 
-        foreach (var a in pack.Actors)
+        foreach (var a in pack.Characters)
         {
-            var aWhere = $"actors[{a.Key}]";
+            var aWhere = $"characters[{a.Key}]";
             if (string.IsNullOrWhiteSpace(a.Key))
-                issues.Add(new(Severity.Error, aWhere, "Actor key is required"));
+                issues.Add(new(Severity.Error, aWhere, "Character key is required"));
             else if (!seenActorKeys.Add(a.Key))
-                issues.Add(new(Severity.Error, aWhere, $"Duplicate actor key '{a.Key}'"));
+                issues.Add(new(Severity.Error, aWhere, $"Duplicate character key '{a.Key}'"));
 
-            if (string.IsNullOrWhiteSpace(a.DefaultBustKey))
+            // Having no bust is a declared choice now rather than an omission,
+            // so it is only worth reporting when a character claims a source it
+            // has not actually filled in.
+            string defaultBust = a.BustSource == BustSource.Vanilla ? a.VanillaBust : a.DefaultOutfit;
+
+            if (a.BustSource == BustSource.Vanilla && string.IsNullOrWhiteSpace(a.VanillaBust))
             {
-                issues.Add(new(Severity.Info, $"{aWhere}.defaultBustKey",
-                    "No default bust — actor will speak with no visible portrait until SetActorBust runs"));
+                issues.Add(new(Severity.Warning, $"{aWhere}.vanillaBust",
+                    "Set to borrow a vanilla bust, but none is chosen — nothing will be shown"));
             }
-            else if (!bustNamesInPack.Contains(a.DefaultBustKey) &&
-                     VanillaBusts.FindByGoName(a.DefaultBustKey) == null)
+            else if (a.BustSource == BustSource.Pack && a.Outfits.Count == 0)
             {
-                issues.Add(new(Severity.Warning, $"{aWhere}.defaultBustKey",
-                    $"Default bust '{a.DefaultBustKey}' isn't a vanilla bust in the 1.8E catalog and isn't a GameObjectName from any outfit in this pack — runtime will still try GameObject.Find under 2_Bust_Manager, but verify the name"));
+                issues.Add(new(Severity.Warning, $"{aWhere}.outfits",
+                    "Set to use this pack's own outfits, but has none — add one, or switch the bust source to vanilla or none"));
+            }
+            else if (!string.IsNullOrWhiteSpace(defaultBust) &&
+                     !bustNamesInPack.Contains(defaultBust) &&
+                     VanillaBusts.FindByGoName(defaultBust) == null)
+            {
+                issues.Add(new(Severity.Warning, $"{aWhere}.defaultBust",
+                    $"Default bust '{defaultBust}' isn't a vanilla bust in the 1.8E catalog and isn't a GameObjectName from any outfit in this pack — runtime will still try GameObject.Find under 2_Bust_Manager, but verify the name"));
             }
 
             var seenExprKeys = new HashSet<string>();

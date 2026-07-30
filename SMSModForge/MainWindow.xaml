@@ -6,6 +6,7 @@
         xmlns:conv="clr-namespace:SMSModForge.View.Converters"
         xmlns:view="clr-namespace:SMSModForge.View"
         xmlns:model="clr-namespace:SMSModForge.Model"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
         Title="{Binding Title}"
         Icon="Resources/SMSModForge.ico"
         Width="1400" Height="900"
@@ -2048,8 +2049,26 @@
             <!-- ════════════════════════════════════════════════════
                  BUSTS TAB
                  ════════════════════════════════════════════════════ -->
-            <TabItem Header="Busts">
+            <TabItem Header="Characters">
                 <Grid>
+                    <Grid.Resources>
+                        <!-- Pack-authored and vanilla-borrowed characters read
+                             very differently, so the tree groups by source
+                             rather than mixing a bust you drew with one you
+                             merely pointed at. -->
+                        <CollectionViewSource x:Key="GroupedCharacters" Source="{Binding Characters}"
+                                              IsLiveGroupingRequested="True">
+                            <!-- Live, or switching a character to a vanilla bust
+                                 would leave it filed under the wrong heading
+                                 until the tab was rebound. -->
+                            <CollectionViewSource.LiveGroupingProperties>
+                                <sys:String>BustSource</sys:String>
+                            </CollectionViewSource.LiveGroupingProperties>
+                            <CollectionViewSource.GroupDescriptions>
+                                <PropertyGroupDescription PropertyName="BustSource"/>
+                            </CollectionViewSource.GroupDescriptions>
+                        </CollectionViewSource>
+                    </Grid.Resources>
                     <!--
                         Column 4 (the live-preview side panel) is intentionally
                         fixed: it has no GridSplitter between it and the middle
@@ -2070,15 +2089,30 @@
                     <!-- LEFT: character/outfit tree -->
                     <DockPanel Grid.Column="0">
                         <ToolBar DockPanel.Dock="Top">
-                            <Button Content="+ Character" Command="{Binding AddCharacterCommand}"/>
+                            <Button Content="+ Character" Command="{Binding AddCharacterCommand}"
+                                    ToolTip="A character this pack draws the bust for."/>
+                            <Button Content="+ Vanilla" Command="{Binding AddVanillaCharacterCommand}"
+                                    ToolTip="A character that borrows one of the game's own busts — pick which below. No art needed."/>
+                            <Button Content="+ Voice" Command="{Binding AddVoiceCharacterCommand}"
+                                    ToolTip="A speaking part with no bust at all, like John Dick."/>
                             <Button Content="+ Outfit"    Command="{Binding AddOutfitCommand}"/>
                         </ToolBar>
                         <ContentControl DockPanel.Dock="Top" Focusable="False"
                                         DataContext="{Binding CharacterTreeFilter}"
                                         Template="{StaticResource SidebarSearchTemplate}"/>
                         <TreeView x:Name="CharacterTree"
-                                  ItemsSource="{Binding Characters}"
+                                  ItemsSource="{Binding Source={StaticResource GroupedCharacters}}"
                                   SelectedItemChanged="TreeView_SelectedItemChanged">
+                            <TreeView.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Margin="2,8,0,2" FontWeight="Bold" Foreground="Gray"
+                                                       Text="{Binding Name, Converter={x:Static conv:BustSourceHeaderConverter.Instance}}"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </TreeView.GroupStyle>
                             <TreeView.ItemContainerStyle>
                                 <Style TargetType="TreeViewItem" BasedOn="{StaticResource {x:Type TreeViewItem}}">
                                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
@@ -2094,9 +2128,9 @@
                                 <HierarchicalDataTemplate DataType="{x:Type vm:CharacterViewModel}"
                                                           ItemsSource="{Binding Outfits}">
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Name}" FontWeight="Bold"/>
-                                        <TextBlock Text=" — "/>
-                                        <TextBlock Text="{Binding DisplayName}" Foreground="Gray"/>
+                                        <TextBlock Text="{Binding DisplayName}" FontWeight="Bold"/>
+                                        <TextBlock Text="{Binding VanillaBust, StringFormat=' ({0})'}" Foreground="Gray"
+                                                   Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"/>
                                     </StackPanel>
                                 </HierarchicalDataTemplate>
                                 <DataTemplate DataType="{x:Type vm:OutfitViewModel}">
@@ -2133,13 +2167,87 @@
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox Grid.Row="0" Grid.Column="1"
-                                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
-                                             ToolTip="The character's key — what the sidebar lists and what the rest of the pack refers to."/>
-                                    <TextBlock Text="Display name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox Grid.Row="1" Grid.Column="1"
                                              Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
-                                             ToolTip="Shown to the player."/>
+                                             ToolTip="What the player reads on a speech line. The only name you need to write — the internal ones are derived from it."/>
+                                    <TextBlock Text="Name colour:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                        <Border Width="22" Height="18" BorderBrush="#888" BorderThickness="1"
+                                                Background="{Binding NameColorBrush}" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding NameColor, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="6,0,0,0"
+                                                 ToolTip="Speaker-name tint as hex, e.g. #FF8844. Blank uses the default."/>
+                                    </StackPanel>
                                 </Grid>
+                            </GroupBox>
+
+                            <GroupBox Header="Bust"
+                                      DataContext="{Binding DataContext.SelectedCharacter,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <StackPanel>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="Source:" Width="140" VerticalAlignment="Center"/>
+                                        <ComboBox SelectedValue="{Binding BustSource}" Width="200" SelectedValuePath="Tag"
+                                                  ToolTip="Where this character's bust comes from. 'No bust' is a speaking part with no art at all.">
+                                            <ComboBoxItem Content="This pack's outfits"  Tag="{x:Static model:BustSource.Pack}"/>
+                                            <ComboBoxItem Content="A vanilla bust"       Tag="{x:Static model:BustSource.Vanilla}"/>
+                                            <ComboBoxItem Content="No bust (voice only)" Tag="{x:Static model:BustSource.None}"/>
+                                        </ComboBox>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,6,0,0"
+                                                Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="Vanilla bust:" Width="140" VerticalAlignment="Center"/>
+                                            <ComboBox ItemsSource="{Binding VanillaBustCatalog}"
+                                                      SelectedValue="{Binding VanillaBust}"
+                                                      SelectedValuePath="GoName" Width="280"
+                                                      ToolTip="Which of the game's busts this character speaks through.">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding GoName}"/>
+                                                            <TextBlock Text="{Binding Character}" Foreground="Gray" Margin="8,0,0,0"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </StackPanel>
+                                        <TextBlock Text="Other vanilla busts this character can switch to:"
+                                                   Foreground="Gray" FontSize="10" Margin="140,6,0,2"/>
+                                        <ItemsControl ItemsSource="{Binding VanillaOutfits}" Margin="140,0,0,0">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                                                        <TextBox Text="{Binding BustGoName, UpdateSourceTrigger=PropertyChanged}" Width="250"/>
+                                                        <Button Content="−" Command="{Binding RemoveCommand}" Width="22" Margin="4,0,0,0"/>
+                                                    </StackPanel>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                        <Button Content="+ Bust" HorizontalAlignment="Left" Margin="140,4,0,0" Padding="8,0"
+                                                Command="{Binding DataContext.AddVanillaOutfitCommand,
+                                                          RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    </StackPanel>
+
+                                    <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                               Visibility="{Binding HasNoBust, Converter={StaticResource BoolToVisibility}}"
+                                               Text="This character speaks with no bust shown. Dialogue lines, name colour and voice all work; nothing is drawn."/>
+
+                                    <Expander Header="Internal names" Margin="0,8,0,0">
+                                        <StackPanel Margin="0,4,0,0">
+                                            <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
+                                                       Text="Derived from the name above and deduplicated within this pack; two packs may both ship a Sarah, since the runtime keys by pack as well. Existing characters keep whatever they already had — these are real GameObject and dialogue references, so changing one renames what the pack builds."/>
+                                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                                <TextBlock Text="Dialogue key:" Width="140" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                            </StackPanel>
+                                            <StackPanel Orientation="Horizontal" Margin="0,2">
+                                                <TextBlock Text="GameObject:" Width="140" VerticalAlignment="Center"/>
+                                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </Expander>
+                                </StackPanel>
                             </GroupBox>
 
                             <GroupBox Header="Identity">
@@ -2152,11 +2260,11 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="Runtime name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="What actions reference this outfit by (SwitchOutfit etc.)."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
-                                    <TextBlock Text="GameObject name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                                               ToolTip="What dialogue and actions reference this outfit by, and the GameObject the runtime builds."/>
+                                    <TextBox  Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBlock Text="Every outfit reference in this pack uses this name."
+                                               Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                 </Grid>
                             </GroupBox>
 
@@ -2340,203 +2448,6 @@
             <!-- ════════════════════════════════════════════════════
                  ACTORS TAB
                  ════════════════════════════════════════════════════ -->
-            <TabItem Header="Actors">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <DockPanel Grid.Column="0">
-                        <TextBlock DockPanel.Dock="Top" Text="Actors"
-                                   FontWeight="Bold" Margin="6,4,0,2"/>
-                        <ToolBar DockPanel.Dock="Top">
-                            <Button Content="+ Actor"  Command="{Binding AddActorCommand}"/>
-                            <Button Content="+ Folder" Tag="{Binding ActorTree}" Click="UnitAddFolder_Click"
-                                        ToolTip="Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack)."/>
-                                <Button Content="Rename" Tag="{Binding ActorTree}" Click="UnitRenameFolder_Click"
-                                        ToolTip="Rename the selected folder."/>
-                                <Button Content="− Remove" Command="{Binding RemoveActorCommand}"
-                                    ToolTip="Remove the selected actor, or delete the selected folder (its contents move up)."/>
-                        </ToolBar>
-                        <ContentControl DockPanel.Dock="Top" Focusable="False"
-                                        DataContext="{Binding ActorTree.Filter}"
-                                        Template="{StaticResource SidebarSearchTemplate}"/>
-                        <TreeView x:Name="ActorTreeView"
-                                 ItemsSource="{Binding ActorTree.Tree}"
-                                 ItemContainerStyle="{StaticResource UnitTreeItemStyle}"
-                                 AllowDrop="True"
-                                 ToolTip="Ctrl+click / Shift+click selects extra items to drag into a folder together. The detail pane follows the normally-selected item."/>
-                    </DockPanel>
-                    <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
-
-                    <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto"
-                                  DataContext="{Binding SelectedActor}">
-                        <StackPanel Margin="8">
-                            <GroupBox Header="Identity">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="140"/>
-                                        <ColumnDefinition Width="*"/>
-                                        <ColumnDefinition Width="Auto"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
-                                    <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="What dialogue nodes reference this actor by."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
-                                    <TextBlock Text="Default bust:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ComboBox view:IssueTarget.Field="defaultBustKey" Grid.Row="2" Grid.Column="1"
-                                              ItemsSource="{Binding Outfits}"
-                                              SelectedValuePath="BustGoName"
-                                              SelectedValue="{Binding DefaultBustKey, UpdateSourceTrigger=PropertyChanged}"
-                                              IsEditable="True"
-                                              Text="{Binding DefaultBustKey, UpdateSourceTrigger=PropertyChanged}"
-                                              ToolTip="The outfit shown when this actor first appears, before any node switches it. Pick one of the actor's outfits listed below."/>
-                                    <TextBlock Text="Name colour:"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <!--
-                                        Colour-picker row: hex TextBox + live swatch + "Pick..." button
-                                        that opens the Win32 ColorDialog. Matches the host mod's
-                                        TMPWordColorizer pattern — at runtime the plugin registers
-                                        (displayName → Color) against the active speech UI's
-                                        colorizer, which paints the speaker label accordingly.
-                                    -->
-                                    <DockPanel Grid.Row="3" Grid.Column="1">
-                                        <Border DockPanel.Dock="Left" Width="24" Height="22"
-                                                BorderBrush="Gray" BorderThickness="1"
-                                                Background="{Binding NameColorBrush}"
-                                                ToolTip="{Binding NameColor}"
-                                                Margin="0,0,4,0"/>
-                                        <Button DockPanel.Dock="Right" Content="Pick…" Margin="4,0,0,0" Padding="6,0"
-                                                Click="PickActorColor_Click"
-                                                ToolTip="Open the Win32 colour picker."/>
-                                        <TextBox Text="{Binding NameColor, UpdateSourceTrigger=PropertyChanged}"
-                                                 ToolTip="Hex colour for the speaker name (e.g. #FF8844 or #FF8844FF). Leave blank to use the default colour."/>
-                                    </DockPanel>
-                                    <!-- Preview pane: composites base + default expression for the selected actor. -->
-                                    <ctl:BustPreview Grid.Row="0" Grid.RowSpan="4" Grid.Column="2"
-                                                     Margin="8,0,0,0"
-                                                     MainViewModel="{Binding DataContext,
-                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
-                                                     BustKey="{Binding DefaultBustKey}"
-                                                     ExpressionKey=""/>
-                                </Grid>
-                            </GroupBox>
-
-                            <GroupBox Header="Voice (typewriter blip)">
-                                <StackPanel>
-                                    <TextBlock Foreground="Gray" FontSize="10" Margin="0,0,0,6" TextWrapping="Wrap"
-                                               Text="The blip that plays as this actor's line types out. Pick a preset or dial in a custom pitch range. Frequency is how often the blip fires; pitch randomises between min and max. Editing a value switches the template to Custom."/>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="140"/>
-                                            <ColumnDefinition Width="*"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                            <RowDefinition Height="Auto"/>
-                                        </Grid.RowDefinitions>
-                                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,6"
-                                                  Content="Enable typewriter voice" IsChecked="{Binding TypewriterEnabled}"
-                                                  ToolTip="When off, this actor's line types out silently."/>
-                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Template:" VerticalAlignment="Center"/>
-                                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,4"
-                                                  ItemsSource="{Binding VoiceTemplates}"
-                                                  SelectedItem="{Binding VoiceTemplate}"
-                                                  ToolTip="Male → freq 45, pitch 0.6–0.9. Female → freq 45, pitch 1.0–1.5. Custom → your own values."/>
-                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Frequency:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,4"
-                                                 Text="{Binding TypewriterFrequencyText, UpdateSourceTrigger=PropertyChanged}"
-                                                 ToolTip="How often the blip fires as text types (GC2 Typewriter frequency). Preset value: 45."/>
-                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Pitch min:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,4"
-                                                 Text="{Binding TypewriterPitchMinText, UpdateSourceTrigger=PropertyChanged}"
-                                                 ToolTip="Low end of the random pitch range. Male 0.6, Female 1.0."/>
-                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Pitch max:" VerticalAlignment="Center"/>
-                                        <TextBox Grid.Row="4" Grid.Column="1"
-                                                 Text="{Binding TypewriterPitchMaxText, UpdateSourceTrigger=PropertyChanged}"
-                                                 ToolTip="High end of the random pitch range. Male 0.9, Female 1.5."/>
-                                    </Grid>
-                                </StackPanel>
-                            </GroupBox>
-
-                            <GroupBox Header="Outfits (busts this actor can wear)">
-                                <DockPanel>
-                                    <Button DockPanel.Dock="Bottom" Content="+ Add outfit"
-                                            Command="{Binding DataContext.AddActorOutfitCommand,
-                                                              RelativeSource={RelativeSource AncestorType=Window}}"
-                                            HorizontalAlignment="Left" Margin="0,6,0,0" Padding="8,2"/>
-                                    <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,4"
-                                               TextWrapping="Wrap"
-                                               Text="Each entry is a bust GameObject name. A dialogue node can switch the actor to any of these outfits — the actor's previous bust is deactivated and the new one shown. The Default bust above should be one of these."/>
-                                    <ItemsControl ItemsSource="{Binding Outfits}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ActorOutfitViewModel}">
-                                                <Grid Margin="0,0,0,4">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="Auto"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <ComboBox Grid.Column="0"
-                                                              ItemsSource="{Binding DataContext.BustNameOptions,
-                                                                            RelativeSource={RelativeSource AncestorType=Window}}"
-                                                              SelectedValuePath="Token"
-                                                              SelectedValue="{Binding BustGoName, UpdateSourceTrigger=PropertyChanged}"
-                                                              IsEditable="True"
-                                                              Text="{Binding BustGoName, UpdateSourceTrigger=PropertyChanged}"
-                                                              ToolTip="Bust GO name — a vanilla bust under 2_Bust_Manager or a pack outfit's GameObjectName."/>
-                                                    <Button Grid.Column="1" Content="−" Width="22" Margin="4,0,0,0"
-                                                            Command="{Binding RemoveCommand}"
-                                                            ToolTip="Remove this outfit"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </DockPanel>
-                            </GroupBox>
-
-                            <GroupBox Header="Expressions (per-node key → bust expression child)">
-                                <DockPanel>
-                                    <Button DockPanel.Dock="Bottom" Content="+ Add expression"
-                                            Command="{Binding DataContext.AddActorExpressionCommand,
-                                                              RelativeSource={RelativeSource AncestorType=Window}}"
-                                            HorizontalAlignment="Left" Margin="0,6,0,0" Padding="8,2"/>
-                                    <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,4"
-                                               TextWrapping="Wrap"
-                                               Text="If empty, the four standard expressions (Happy/Angry/Sad/Flirty) each map by name to a child of the bust's MBase1/Expressions/. Add entries to override or add custom expressions."/>
-                                    <ItemsControl ItemsSource="{Binding Expressions}">
-                                        <ItemsControl.ItemTemplate>
-                                            <DataTemplate DataType="{x:Type vm:ActorExpressionViewModel}">
-                                                <Grid Margin="0,0,0,4">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="*"/>
-                                                        <ColumnDefinition Width="8"/>
-                                                        <ColumnDefinition Width="*"/>
-                                                    </Grid.ColumnDefinitions>
-                                                    <TextBox Grid.Column="0" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
-                                                             ToolTip="Pack-local expression key (e.g. Happy)"/>
-                                                    <TextBox Grid.Column="2" Text="{Binding ExpressionGoName, UpdateSourceTrigger=PropertyChanged}"
-                                                             ToolTip="Child name under MBase1/Expressions/ on the bust"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ItemsControl.ItemTemplate>
-                                    </ItemsControl>
-                                </DockPanel>
-                            </GroupBox>
-                        </StackPanel>
-                    </ScrollViewer>
-                </Grid>
-            </TabItem>
 
             <!-- ════════════════════════════════════════════════════
                  NPCS TAB

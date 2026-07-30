@@ -942,6 +942,9 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand ExportPackCommand { get; }
     public RelayCommand ExportPackAsCommand { get; }
     public RelayCommand AddCharacterCommand { get; }
+    public RelayCommand AddVanillaCharacterCommand { get; }
+    public RelayCommand AddVoiceCharacterCommand { get; }
+    public RelayCommand AddVanillaOutfitCommand { get; }
     public RelayCommand AddOutfitCommand { get; }
     public RelayCommand AddPlaceCommand { get; }
     public RelayCommand RemovePlaceCommand { get; }
@@ -1116,6 +1119,10 @@ public sealed class MainViewModel : ObservableObject
         ExportPackCommand   = new RelayCommand(ExportPack, () => PackRoot != null);
         ExportPackAsCommand = new RelayCommand(ExportPackAs, () => PackRoot != null);
         AddCharacterCommand = new RelayCommand(AddCharacter);
+        AddVanillaCharacterCommand = new RelayCommand(() => AddCharacter(BustSource.Vanilla));
+        AddVoiceCharacterCommand   = new RelayCommand(() => AddCharacter(BustSource.None));
+        AddVanillaOutfitCommand    = new RelayCommand(() => SelectedCharacter?.AddVanillaOutfit(""),
+                                                      () => SelectedCharacter != null);
         AddOutfitCommand   = new RelayCommand(AddOutfit, () => SelectedOutfit != null || Characters.Count > 0);
         AddPlaceCommand    = new RelayCommand(AddPlace);
         RemovePlaceCommand = new RelayCommand(RemovePlace, () => SelectedPlace != null || PlaceTree.Selected is UnitFolderNode);
@@ -1272,7 +1279,7 @@ public sealed class MainViewModel : ObservableObject
     {
         Characters.Clear();
         foreach (var c in Pack.Characters)
-            Characters.Add(new CharacterViewModel(c));
+            Characters.Add(new CharacterViewModel(c, () => Characters));
         SelectedOutfit = Characters.FirstOrDefault()?.Outfits.FirstOrDefault();
     }
 
@@ -1603,18 +1610,29 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    private void AddCharacter()
+    private void AddCharacter() => AddCharacter(BustSource.Pack);
+
+    /// <summary>
+    /// Create a character of a given kind. Only a pack-drawn one starts with
+    /// an outfit — a vanilla-backed character borrows its bust and a voice-only
+    /// one has none, so giving either an empty outfit would just be a stub to
+    /// delete.
+    /// </summary>
+    private void AddCharacter(BustSource source)
     {
-        var def = new CharacterDef
-        {
-            Name = $"NewChar{Pack.Characters.Count + 1}",
-            DisplayName = "New Character",
-            Outfits = { new OutfitDef { Key = "newchar", GameObjectName = "NewCharBase" } },
-        };
+        // Names are left blank and derived: a new character's key and
+        // GameObject follow whatever display name gets typed, until the author
+        // overrides one. Existing characters never re-derive.
+        var def = new CharacterDef { DisplayName = "New Character", BustSource = source };
+        var vm = new CharacterViewModel(def, () => Characters, isNew: true);
+        vm.DisplayName = def.DisplayName;   // triggers the first derivation
+        if (source == BustSource.Pack)
+            def.Outfits.Add(new OutfitDef { Key = def.Name, GameObjectName = def.Name });
         Pack.Characters.Add(def);
-        var vm = new CharacterViewModel(def);
         Characters.Add(vm);
+        foreach (var o in def.Outfits) vm.Outfits.Add(new OutfitViewModel(o));
         SelectedOutfit = vm.Outfits.FirstOrDefault();
+        OnPropertyChanged(nameof(SelectedCharacter));
     }
 
     private void AddOutfit()
@@ -2050,9 +2068,11 @@ public sealed class MainViewModel : ObservableObject
     // list, so no Tab* constant and the per-tab dispatches all no-op there.
     // MUST stay in lockstep with the TabItem order in MainWindow.xaml and with
     // MainWindow.xaml.cs's own copy of these constants.
-    private const int TabBusts = 1, TabActors = 2, TabNpcs = 3, TabPlaces = 4,
-                      TabMapButtons = 5, TabDialogues = 6, TabScenes = 7, TabMusic = 8,
-                      TabSfx = 9, TabWallpapers = 10, TabVariables = 11, TabIntegration = 12;
+    // Must track MainTabs' order exactly — see the note on the copy in
+    // MainWindow.xaml.cs. Characters absorbed Actors, so these shifted down one.
+    private const int TabBusts = 1, TabNpcs = 2, TabPlaces = 3,
+                      TabMapButtons = 4, TabDialogues = 5, TabScenes = 6, TabMusic = 7,
+                      TabSfx = 8, TabWallpapers = 9, TabVariables = 10, TabIntegration = 11;
 
     private int _selectedTabIndex;
     /// <summary>Active tab (bound to the TabControl) — drives which list Copy/Paste/Duplicate hit.</summary>
@@ -2180,7 +2200,6 @@ public sealed class MainViewModel : ObservableObject
             case TabPlaces: DuplicateFlat(SelectedPlace?.Model, Pack.Places, Places, p => p.Key, (p, k) => p.Key = k, d => new PlaceViewModel(d), vm => { PlaceTree.PlaceNew(vm); RebuildDialogueRoomTalkOptions(); }); break;
             case TabMapButtons: DuplicateFlat(SelectedMapButton?.Model, Pack.MapButtons, MapButtons, _ => "", (_, __) => { }, d => new MapButtonViewModel(d, RemoveMapButtonVm), vm => SelectedMapButton = vm); break;
             case TabDialogues: DuplicateDialogue(SelectedDialogue == null ? null : EditorClipboard.CloneOne(SelectedDialogue.Model)); break;
-            case TabActors: DuplicateFlat(SelectedActor?.Model, Pack.Actors, Actors, a => a.Key, (a, k) => a.Key = k, MakeActorVm, vm => { ActorTree.PlaceNew(vm); RebuildActorAndBustOptions(); }); break;
             case TabScenes: DuplicateFlat(SelectedScene?.Model, Pack.Scenes, Scenes, s => s.Key, (s, k) => s.Key = k, d => new SceneViewModel(d), vm => { SceneTree.PlaceNew(vm); RebuildSceneOptions(); }); break;
             case TabNpcs: DuplicateFlat(SelectedNpc?.Model, Pack.Npcs, Npcs, n => n.Key, (n, k) => n.Key = k, d => new NpcViewModel(d), vm => { NpcTree.PlaceNew(vm); RebuildNpcOptions(); }); break;
             case TabVariables: DuplicateFlat(SelectedVariable?.Model, Pack.Variables, Variables, v => v.Name, (v, k) => v.Name = k, d => new PackVariableViewModel(d), vm => PlaceNewVariableInTree(vm)); break;
@@ -2199,7 +2218,6 @@ public sealed class MainViewModel : ObservableObject
             case TabPlaces: if (SelectedPlace != null) EditorClipboard.SetItem(SelectedPlace.Model); break;
             case TabMapButtons: if (SelectedMapButton != null) EditorClipboard.SetItem(SelectedMapButton.Model); break;
             case TabDialogues: if (SelectedDialogue != null) EditorClipboard.SetItem(SelectedDialogue.Model); break;
-            case TabActors: if (SelectedActor != null) EditorClipboard.SetItem(SelectedActor.Model); break;
             case TabScenes: if (SelectedScene != null) EditorClipboard.SetItem(SelectedScene.Model); break;
             case TabNpcs: if (SelectedNpc != null) EditorClipboard.SetItem(SelectedNpc.Model); break;
             case TabVariables: if (SelectedVariable != null) EditorClipboard.SetItem(SelectedVariable.Model); break;
@@ -2218,7 +2236,6 @@ public sealed class MainViewModel : ObservableObject
             case TabPlaces: PasteFlat(Pack.Places, Places, p => p.Key, (p, k) => p.Key = k, d => new PlaceViewModel(d), vm => { PlaceTree.PlaceNew(vm); RebuildDialogueRoomTalkOptions(); }); break;
             case TabMapButtons: PasteFlat(Pack.MapButtons, MapButtons, _ => "", (_, __) => { }, d => new MapButtonViewModel(d, RemoveMapButtonVm), vm => SelectedMapButton = vm); break;
             case TabDialogues: DuplicateDialogue(EditorClipboard.GetItem<DialogueDef>()); break;
-            case TabActors: PasteFlat(Pack.Actors, Actors, a => a.Key, (a, k) => a.Key = k, MakeActorVm, vm => { ActorTree.PlaceNew(vm); RebuildActorAndBustOptions(); }); break;
             case TabScenes: PasteFlat(Pack.Scenes, Scenes, s => s.Key, (s, k) => s.Key = k, d => new SceneViewModel(d), vm => { SceneTree.PlaceNew(vm); RebuildSceneOptions(); }); break;
             case TabNpcs: PasteFlat(Pack.Npcs, Npcs, n => n.Key, (n, k) => n.Key = k, d => new NpcViewModel(d), vm => { NpcTree.PlaceNew(vm); RebuildNpcOptions(); }); break;
             case TabVariables: PasteFlat(Pack.Variables, Variables, v => v.Name, (v, k) => v.Name = k, d => new PackVariableViewModel(d), vm => PlaceNewVariableInTree(vm)); break;
@@ -2242,7 +2259,6 @@ public sealed class MainViewModel : ObservableObject
             case TabPlaces: Run(RemovePlaceCommand); break;
             case TabMapButtons: Run(RemoveMapButtonCommand); break;
             case TabDialogues: Run(RemoveDialogueCommand); break;
-            case TabActors: Run(RemoveActorCommand); break;
             case TabScenes: Run(RemoveSceneCommand); break;
             case TabNpcs: Run(RemoveNpcCommand); break;
             case TabVariables: Run(RemoveVariableCommand); break;
@@ -2277,7 +2293,6 @@ public sealed class MainViewModel : ObservableObject
                     RenameKey("Dialogue", SelectedDialogue, v => v.Key, (v, k) => v.Key = k,
                               Dialogues.Where(x => x != SelectedDialogue).Select(x => x.Key));
                 break;
-            case TabActors:
                 if (SelectedActor != null)
                     RenameKey("Actor", SelectedActor, v => v.Key, (v, k) => { v.Key = k; RebuildActorAndBustOptions(); ActorTree.Sort(); ActorTree.SyncToModel(); },
                               Actors.Where(x => x != SelectedActor).Select(x => x.Key));

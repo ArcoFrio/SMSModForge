@@ -48,7 +48,6 @@ public partial class MainWindow : Window
 
             // Shared unit trees: one handler set (selection, multi-select,
             // drag-drop) wired to each — the controllers hold the behavior.
-            WireUnitTree(ActorTreeView,     vm, vm.ActorTree);
             WireUnitTree(PlaceTreeView,     vm, vm.PlaceTree);
             WireUnitTree(SceneTreeView,     vm, vm.SceneTree);
             WireUnitTree(NpcTreeView,       vm, vm.NpcTree);
@@ -159,7 +158,7 @@ public partial class MainWindow : Window
     {
         var lists = new System.Windows.Controls.Control[]
         {
-            CharacterTree, PlaceTreeView, DialogueTreeView, ActorTreeView, SceneTreeView,
+            CharacterTree, PlaceTreeView, DialogueTreeView, SceneTreeView,
             VariableTreeView, WallpaperTreeView, MusicTreeView, SfxTreeView, IntegrationTreeView,
         };
         const string hint = "Del: delete • F2/F12: rename • Ctrl+C/V: copy/paste • Ctrl+D: duplicate";
@@ -943,8 +942,12 @@ public partial class MainWindow : Window
 
     // Keep in lockstep with MainViewModel's Tab* constants — index 0 is the
     // ModForge landing tab, unit tabs start at 1 in authoring-workflow order.
-    private const int TabBusts = 1, TabActors = 2, TabNpcs = 3, TabPlaces = 4,
-                      TabMapButtons = 5, TabDialogues = 6, TabVariables = 11;
+    // Indices into MainTabs, and they must track its order exactly. Actors
+    // merging into Characters removed a tab, so everything after it moved down
+    // one — the constants are the only record of that order, so a stale one
+    // silently navigates to the wrong tab rather than failing.
+    private const int TabBusts = 1, TabNpcs = 2, TabPlaces = 3,
+                      TabMapButtons = 4, TabDialogues = 5, TabVariables = 10;
 
     private void IssueList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
@@ -1021,13 +1024,15 @@ public partial class MainWindow : Window
                 }
                 break;
             }
+            // Kept for issue paths written before actors merged into
+            // characters: same target, matched on the key rather than the name.
             case "actors":
             {
-                MainTabs.SelectedIndex = TabActors;
-                var ac = vm.Actors.FirstOrDefault(a => a.Key == inner);
+                MainTabs.SelectedIndex = TabBusts;
+                var ac = vm.Characters.FirstOrDefault(c => c.Key == inner);
                 if (ac == null) return;
-                vm.SelectedActor = ac;
-                Reveal(field, ActorTreeView, ac);
+                Dispatcher.BeginInvoke(new Action(() => SelectInTree(ac, null)),
+                                       System.Windows.Threading.DispatcherPriority.Loaded);
                 break;
             }
             case "variables":

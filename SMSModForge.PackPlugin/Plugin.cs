@@ -1405,7 +1405,19 @@ namespace SMSModForge.PackPlugin
             // dispatcher's per-line colour-applier can find it by display
             // name. Colour parsing is best-effort — bad hex strings just
             // skip registration (the colorizer's default colour stands in).
-            var actors = m.Root["actors"] as Newtonsoft.Json.Linq.JArray;
+            // Speakers live in "characters" once a pack has been merged, and in
+            // "actors" before that. Both are read, so a pack saved by either
+            // editor version loads: a merged pack has an empty actors array, an
+            // older one has characters carrying no key.
+            var speakers = new Newtonsoft.Json.Linq.JArray();
+            if (m.Root["characters"] is Newtonsoft.Json.Linq.JArray chars)
+                foreach (var c in chars)
+                    if (!string.IsNullOrEmpty((string)((Newtonsoft.Json.Linq.JObject)c)["key"]))
+                        speakers.Add(c);
+            if (m.Root["actors"] is Newtonsoft.Json.Linq.JArray legacy)
+                foreach (var a in legacy) speakers.Add(a);
+
+            var actors = speakers;
             if (actors != null)
             {
                 foreach (var a in actors)
