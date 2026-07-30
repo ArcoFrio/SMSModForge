@@ -1090,6 +1090,7 @@ public sealed class PlacePreview : Grid
         {
             foreach (var entry in _scene)
             {
+                if (entry.Hidden) continue;   // hidden from the preview only
                 var o = entry.Node;
                 // PreviewSprite is the pack's own sprite, or — for a node bound
                 // to an existing vanilla object — that object's extracted art,
@@ -1289,6 +1290,15 @@ public sealed class PlacePreview : Grid
 
         /// <summary>Last of its siblings, so its elbow closes the branch.</summary>
         public bool IsLast;
+
+        /// <summary>This row's own preview-visibility toggle is switched off.
+        /// Purely a viewing preference — see <see cref="_hidden"/>.</summary>
+        public bool HiddenBySelf;
+
+        /// <summary>Not drawn: either its own toggle is off, or an ancestor's is.
+        /// Hiding follows the tree the way the game's own parenting does, so
+        /// switching off a group takes its whole subtree with it.</summary>
+        public bool Hidden;
     }
 
     /// <summary>Walk the whole GameObject tree into a flat, tree-ordered list.</summary>
@@ -1296,8 +1306,41 @@ public sealed class PlacePreview : Grid
     {
         var entries = new List<SceneEntry>();
         WalkScene(GameObjects, "", 0, Aff.Identity, false, false, new List<bool>(), entries);
+        ApplyHiddenFlags(entries);
         return entries;
     }
+
+    /// <summary>
+    /// Resolve each row's preview visibility, inheriting down the tree.
+    /// <para/>
+    /// The list is already in tree order, so a hidden row's subtree is exactly
+    /// the following rows deeper than it — the same observation the fold arrows
+    /// use, and the reason neither needs a structure kept in step with the tree.
+    /// </summary>
+    private void ApplyHiddenFlags(List<SceneEntry> entries)
+    {
+        // Depth of the shallowest hidden row whose subtree we are still inside.
+        int cutoff = -1;
+        foreach (var e in entries)
+        {
+            if (cutoff >= 0 && e.Depth <= cutoff) cutoff = -1;   // left that subtree
+            e.HiddenBySelf = _hidden.Contains(e.Path);
+            e.Hidden = cutoff >= 0 || e.HiddenBySelf;
+            if (e.Hidden && cutoff < 0) cutoff = e.Depth;
+        }
+    }
+
+    /// <summary>
+    /// Paths of the rows hidden from the preview.
+    /// <para/>
+    /// A VIEWING preference and nothing else: it never reaches the pack, and is
+    /// deliberately not the same thing as a node's <c>StartActive</c>, which is
+    /// authored data the game reads. Hiding a wall to see what is behind it must
+    /// not quietly switch that wall off in the room. Keyed by path for the same
+    /// reason as <see cref="_collapsed"/> — the menu is rebuilt from scratch on
+    /// every refresh, and paths that no longer exist simply never match.
+    /// </summary>
+    private readonly HashSet<string> _hidden = new();
 
     private static void WalkScene(IEnumerable? items, string prefix, int depth,
                                   Aff parentWorld, bool inNpcSubtree, bool parentInactive,
@@ -1413,7 +1456,7 @@ public sealed class PlacePreview : Grid
     {
         if (_placeholder.Visibility == Visibility.Visible) return;
 
-        var placements = _scene.Where(e => e.Npc != null).ToList();
+        var placements = _scene.Where(e => e.Npc != null && !e.Hidden).ToList();
         if (placements.Count == 0) return;
 
         var catalog = NpcCatalog?.Cast<object>().OfType<NpcViewModel>()
@@ -2484,6 +2527,14 @@ public sealed class PlacePreview : Grid
                   }
                 : null;
 
+            // Visibility redraws the scene, not just the menu — unlike folding,
+            // which only changes what the list shows.
+            System.Action hide = () =>
+            {
+                if (!_hidden.Remove(rowPath)) _hidden.Add(rowPath);
+                RebuildOverlayGos();
+            };
+
             if (entry.Node is GameObjectViewModel node)
             {
                 // ◈ the forced NPCs root, ▦ a sprite object, ⌗ a bare container.
@@ -2492,7 +2543,7 @@ public sealed class PlacePreview : Grid
                 _objectMenuList.Children.Add(MenuRow(
                     icon + "  " + node.Display, entry,
                     ReferenceEquals(_selNode, n),
-                    () => SelectNode(n, p), collapsed, toggle));
+                    () => SelectNode(n, p), collapsed, toggle, hide));
             }
             else if (entry.Npc is NpcPlacementViewModel pl)
             {
@@ -2500,7 +2551,7 @@ public sealed class PlacePreview : Grid
                 _objectMenuList.Children.Add(MenuRow(
                     "☺  " + pl.Display, entry,
                     ReferenceEquals(_selPlacement, q),
-                    () => SelectPlacement(q, p), collapsed, toggle));
+                    () => SelectPlacement(q, p), collapsed, toggle, hide));
             }
         }
     }
@@ -2530,7 +2581,8 @@ public sealed class PlacePreview : Grid
     /// the UI font where they belong.
     /// </summary>
     private Button MenuRow(string text, SceneEntry entry, bool selected, System.Action onClick,
-                           bool collapsed = false, System.Action? onToggle = null)
+                           bool collapsed = false, System.Action? onToggle = null,
+                           System.Action? onHide = null)
     {
         var guides = new System.Text.StringBuilder();
         foreach (bool hasMore in entry.Guides) guides.Append(hasMore ? "│ " : "  ");
@@ -2569,10 +2621,38 @@ public sealed class PlacePreview : Grid
         }
         row.Children.Add(arrow);
 
+        // Preview visibility. Three states worth telling apart: shown, switched
+        // off here, and switched off by an ancestor — the last one still owns its
+        // toggle (clicking it does something, just nothing you can see yet), so
+        // it reads as off but greyed rather than being disabled outright.
+        if (onHide != null)
+        {
+            var eye = new TextBlock
+            {
+                Text = entry.Hidden ? "○ " : "◉ ",
+                FontFamily = new FontFamily("Consolas, Courier New, monospace"),
+                Foreground = entry.HiddenBySelf ? ChipText
+                           : entry.Hidden ? new SolidColorBrush(Color.FromArgb(0x66, 0xB0, 0xB6, 0xBE))
+                           : new SolidColorBrush(Color.FromArgb(0xAA, 0xB0, 0xB6, 0xBE)),
+                VerticalAlignment = VerticalAlignment.Center,
+                Cursor = Cursors.Hand,
+                ToolTip = entry.HiddenBySelf ? "Hidden from the preview — click to show. Preview only; the object is untouched."
+                        : entry.Hidden ? "Hidden because a parent is hidden. Its own toggle is still on."
+                        : "Hide this object and everything under it. Preview only — nothing is saved to the pack.",
+            };
+            // Same as the fold arrow: swallowing the DOWN stops the row's own
+            // click, so toggling visibility does not also change the selection.
+            eye.MouseLeftButtonDown += (_, e) => { onHide(); e.Handled = true; };
+            row.Children.Add(eye);
+        }
+
         row.Children.Add(new TextBlock
         {
             Text = text,
-            Foreground = ChipText,
+            // A hidden row's label fades with it, so the tree shows at a glance
+            // what is being left out of the picture.
+            Foreground = entry.Hidden
+                ? new SolidColorBrush(Color.FromArgb(0x77, 0xB0, 0xB6, 0xBE)) : ChipText,
             TextTrimming = TextTrimming.CharacterEllipsis,
             VerticalAlignment = VerticalAlignment.Center,
         });
