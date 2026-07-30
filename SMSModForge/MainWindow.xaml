@@ -2897,6 +2897,11 @@
                                                           SecondarySprite="{Binding PreviewSecondarySprite}"
                                                           LevelArtOrder="{Binding PreviewArtOrder}"
                                                           LevelArtSecondaryOrder="{Binding PreviewArtSecondaryOrder}"
+                                                          LevelParallax="{Binding PreviewLevelParallax}"
+                                                          LevelParallaxSecondary="{Binding PreviewLevelParallaxSecondary}"
+                                                          LevelParallaxReversed="{Binding PreviewLevelParallaxReversed}"
+                                                          LevelParallaxSecondaryReversed="{Binding PreviewLevelParallaxSecondaryReversed}"
+                                                          ParallaxPreview="{Binding IsChecked, ElementName=ExtParallaxPreview}"
                                                           LevelArtPpu="{Binding PreviewArtPpu}"
                                                           LevelScale="{Binding PreviewLevelScale}"
                                                           DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
@@ -2909,6 +2914,8 @@
                                                       ToolTip="The game draws nothing beneath a switched-off parent, so these are faded to show the room as it really loads. Untick while positioning that content."/>
                                             <CheckBox x:Name="ExtDimSelf" IsChecked="True" Content="Fade objects that start inactive" Margin="12,0,0,0"
                                                       ToolTip="Objects parked for a rule to switch on. Untick to see them at full strength while you place them."/>
+                                            <CheckBox x:Name="ExtParallaxPreview" IsChecked="False" Content="Preview parallax" Margin="12,0,0,0"
+                                                      ToolTip="Drift the scene with the cursor, as the game does — including each vanilla object's own effect, read from the extraction. Viewing only. Leave off while positioning."/>
                                         </StackPanel>
                                         <TextBlock Text="{Binding CatalogSummary}" Foreground="Gray"
                                                    FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
@@ -2989,6 +2996,13 @@
                                                       DimUnderInactiveParent="{Binding IsChecked, ElementName=PlaceDimParent}"
                                                       DimInactive="{Binding IsChecked, ElementName=PlaceDimSelf}"
                                                       GameObjects="{Binding GameObjects}"
+                                                      LevelArtOrder="{Binding BaseSortingOrder}"
+                                                      LevelArtSecondaryOrder="{Binding SecondarySortingOrder}"
+                                                      LevelParallax="{Binding ParallaxStrength}"
+                                                      LevelParallaxSecondary="{Binding ParallaxSecondaryStrength}"
+                                                      LevelParallaxReversed="{Binding ParallaxReversed}"
+                                                      LevelParallaxSecondaryReversed="{Binding ParallaxSecondaryReversed}"
+                                                      ParallaxPreview="{Binding IsChecked, ElementName=PlaceParallaxPreview}"
                                                       NpcCatalog="{Binding DataContext.Npcs,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
@@ -2996,6 +3010,8 @@
                                                   ToolTip="The game draws nothing beneath a switched-off parent, so these are faded to show the room as it really loads. Untick while positioning that content."/>
                                         <CheckBox x:Name="PlaceDimSelf" IsChecked="True" Content="Fade objects that start inactive" Margin="12,0,0,0"
                                                   ToolTip="Objects parked for a rule to switch on. Untick to see them at full strength while you place them."/>
+                                        <CheckBox x:Name="PlaceParallaxPreview" IsChecked="False" Content="Preview parallax" Margin="12,0,0,0"
+                                                  ToolTip="Drift the scene with the cursor, as the game does. Each layer moves by its own strength plus every parent's, and vertical travel is half horizontal. Viewing only — nothing moves in the pack. Leave off while positioning."/>
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
@@ -3035,6 +3051,8 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Base sprite (2048×1136):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ctl:PathPickerBox view:IssueTarget.Field="baseSprite"
@@ -3046,13 +3064,25 @@
                                                        PathText="{Binding SecondarySprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="1" Grid.Column="1"/>
+                                    <TextBlock Text="Sorting order:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
+                                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="0,6,0,0">
+                                        <TextBlock Text="base" VerticalAlignment="Center" Margin="0,0,4,0"/>
+                                        <TextBox Text="{Binding BaseSortingOrder, UpdateSourceTrigger=PropertyChanged}" Width="55"
+                                                 ToolTip="SpriteRenderer sorting order of the base art. −10 is the prototype's, and what all but four vanilla levels use. Lower it to park objects behind the level art."/>
+                                        <TextBlock Text="backdrop" VerticalAlignment="Center" Margin="12,0,4,0"/>
+                                        <TextBox Text="{Binding SecondarySortingOrder, UpdateSourceTrigger=PropertyChanged}" Width="55"
+                                                 ToolTip="Sorting order of the secondary sprite. −12 is the prototype's; vanilla backdrops sit at −12 or −15."/>
+                                    </StackPanel>
+                                    <TextBlock Text="Every sprite in the game shares one sorting layer, so order alone decides what draws in front."
+                                               Grid.Row="5" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,0"/>
                                     <TextBlock Text="Mask sprite (256×143):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ctl:PathPickerBox view:IssueTarget.Field="maskSprite"
                                                        PathText="{Binding MaskSprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
-                                                       Grid.Row="2" Grid.Column="1"/>
-                                    <TextBlock Text="(The mod clones the Beach level and swaps in these PNGs.)"
-                                               Grid.Row="3" Grid.Column="1" Foreground="Gray" FontSize="10"/>
+                                                       Grid.Row="2" Grid.Column="1"
+                                                       ToolTip="Bound as _MaskTex on the BASE sprite's material only. The backdrop and every GameObject in the place are unaffected. Loaded as linear data, not colour, because it carries amounts rather than pixels."/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                               Text="The mod clones the Beach level and swaps in these PNGs. The mask applies to the base sprite's own material (_MaskTex) — not the backdrop, not GameObjects; the material is cloned per level, so it can't leak into the vanilla levels that share Beach's."/>
                                 </Grid>
                             </GroupBox>
 

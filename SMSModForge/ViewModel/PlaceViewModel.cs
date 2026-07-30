@@ -163,6 +163,31 @@ public sealed class PlaceViewModel : ObservableObject
         set { Model.MaskSprite = value; OnPropertyChanged(); }
     }
 
+    /// <summary>The Beach prototype's own sorting orders, which a place keeps
+    /// until it says otherwise. Also what the preview draws the art at.</summary>
+    public const int DefaultBaseSortingOrder = -10;
+    public const int DefaultSecondarySortingOrder = -12;
+
+    public int BaseSortingOrder
+    {
+        get => Model.BaseSortingOrder ?? DefaultBaseSortingOrder;
+        set
+        {
+            Model.BaseSortingOrder = value == DefaultBaseSortingOrder ? null : value;
+            OnPropertyChanged();
+        }
+    }
+
+    public int SecondarySortingOrder
+    {
+        get => Model.SecondarySortingOrder ?? DefaultSecondarySortingOrder;
+        set
+        {
+            Model.SecondarySortingOrder = value == DefaultSecondarySortingOrder ? null : value;
+            OnPropertyChanged();
+        }
+    }
+
     public float ParallaxStrength
     {
         get => Model.ParallaxStrength;

@@ -115,7 +115,9 @@ namespace SMSModForge.PackPlugin
 
             // Level
             GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel,
-                                                  parallax, parallaxRev, parallax2, parallax2Rev, keepAudio, keepSeagulls);
+                                                  parallax, parallaxRev, parallax2, parallax2Rev,
+                                                  (int?)p["baseSortingOrder"], (int?)p["secondarySortingOrder"],
+                                                  keepAudio, keepSeagulls);
             DestroyComponentByName(level, "Trigger"); // the prototype carries a Trigger we don't want
 
             // The place's whole GameObject hierarchy: layered sprite objects,
@@ -144,7 +146,7 @@ namespace SMSModForge.PackPlugin
         private static GameObject CloneAndDressLevel(GameObject beach, Transform parent,
             string goName, PackManifest pack, string baseRel, string secondRel, string maskRel,
             float parallax, bool parallaxRev, float parallax2, bool parallax2Rev,
-            bool keepAudio, bool keepSeagulls)
+            int? baseOrder, int? secondOrder, bool keepAudio, bool keepSeagulls)
         {
             GameObject newLevel = Object.Instantiate(beach, parent);
             newLevel.name = goName;
@@ -189,10 +191,17 @@ namespace SMSModForge.PackPlugin
             var sr = newLevel.GetComponent<SpriteRenderer>();
             Material mat = new Material(sr.material);
             sr.sprite = LoadLevelSprite(pack, baseRel, 2048, 1136, FilterMode.Bilinear);
+            // Absent = keep the prototype's own order, so a place that never
+            // asked keeps the -10 / -12 it has always had.
+            if (baseOrder.HasValue) sr.sortingOrder = baseOrder.Value;
             if (newLevel.transform.childCount > 1)
             {
                 var sr2 = newLevel.transform.GetChild(1).GetComponent<SpriteRenderer>();
-                if (sr2 != null) sr2.sprite = LoadLevelSprite(pack, secondRel, 2048, 1136, FilterMode.Point);
+                if (sr2 != null)
+                {
+                    sr2.sprite = LoadLevelSprite(pack, secondRel, 2048, 1136, FilterMode.Point);
+                    if (secondOrder.HasValue) sr2.sortingOrder = secondOrder.Value;
+                }
             }
             // linear: the mask carries displacement amounts, not colour. As sRGB
             // a painted 0.5 samples as ~0.22 and the effect stops resembling the

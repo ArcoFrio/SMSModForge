@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace SMSModForge.Model;
 
@@ -250,6 +252,20 @@ public static class VanillaDelta
         float ppu = baseline.SpriteRenderer?.PixelsPerUnit ?? 0f;
         if (ppu > 0f) node.SpritePpu = ppu;
 
+        // The object's real parallax, so the preview drifts a bound node the way
+        // the game does. Preview-only like everything above: the runtime never
+        // touches a bound object's effect, and these fields are gated out of the
+        // saved manifest for bound nodes.
+        var px = baseline.ComponentValues
+                         ?.FirstOrDefault(c => c.Type == "ParallaxMouseEffect")?.Params;
+        node.ParallaxDisabled = px == null;
+        if (px != null)
+        {
+            node.ParallaxStrength = ParamFloat(px, "parallaxStrength") ?? 0.75f;
+            node.ParallaxReversed = ParamBool(px, "reversed");
+            node.ParallaxIsUI = ParamBool(px, "isUI");
+        }
+
         if (!node.OverrideTransform)
         {
             node.X = baseline.X;
@@ -361,6 +377,18 @@ public static class VanillaDelta
     }
 
     private static bool Near(float a, float b) => Math.Abs(a - b) <= Epsilon;
+
+    // Extraction params arrive as boxed JSON scalars, so read them by conversion
+    // rather than by cast — a whole number lands as long, not double.
+    private static float? ParamFloat(Dictionary<string, object?> p, string key)
+        => p.TryGetValue(key, out var v) && v != null
+           && float.TryParse(Convert.ToString(v, CultureInfo.InvariantCulture),
+                             NumberStyles.Float, CultureInfo.InvariantCulture, out var f)
+           ? f : null;
+
+    private static bool ParamBool(Dictionary<string, object?> p, string key)
+        => p.TryGetValue(key, out var v) && v != null
+           && bool.TryParse(Convert.ToString(v, CultureInfo.InvariantCulture), out var b) && b;
 
     /// <summary>Shallow copy sharing the child collections we don't rewrite.
     /// The copy is serialized and discarded, so sharing is safe.</summary>

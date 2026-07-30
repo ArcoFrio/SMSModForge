@@ -121,6 +121,45 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
         }
     }
 
+    /// <summary>The level's own parallax, read off its extracted component so
+    /// the preview drifts a vanilla room exactly as the game does rather than
+    /// at some pack-shaped default.</summary>
+    public double PreviewLevelParallax => ParallaxOf(CatalogLevel?.Hierarchy)?.Strength ?? 0.75;
+    public bool PreviewLevelParallaxReversed => ParallaxOf(CatalogLevel?.Hierarchy)?.Reversed ?? false;
+
+    /// <summary>Same for the far layer — the node the preview draws as the
+    /// backdrop, i.e. the one holding <see cref="PreviewArtSecondaryOrder"/>.</summary>
+    public double PreviewLevelParallaxSecondary => SecondaryParallax()?.Strength ?? PreviewLevelParallax;
+    public bool PreviewLevelParallaxSecondaryReversed => SecondaryParallax()?.Reversed ?? false;
+
+    private (double Strength, bool Reversed)? SecondaryParallax()
+    {
+        var lv = CatalogLevel;
+        if (lv?.Hierarchy == null) return null;
+        Model.VanillaLevelCatalog.Node? far = null;
+        int lowest = PreviewArtOrder;
+        foreach (var c in lv.Hierarchy.Children)
+        {
+            var sr = c.SpriteRenderer;
+            if (sr != null && sr.SortingOrder < lowest) { lowest = sr.SortingOrder; far = c; }
+        }
+        return ParallaxOf(far);
+    }
+
+    private static (double Strength, bool Reversed)? ParallaxOf(Model.VanillaLevelCatalog.Node? n)
+    {
+        var p = n?.ComponentValues?.FirstOrDefault(c => c.Type == "ParallaxMouseEffect")?.Params;
+        if (p == null) return null;
+        double s = p.TryGetValue("parallaxStrength", out var v) && v != null
+                   && double.TryParse(System.Convert.ToString(v, System.Globalization.CultureInfo.InvariantCulture),
+                                      System.Globalization.NumberStyles.Float,
+                                      System.Globalization.CultureInfo.InvariantCulture, out var f)
+                   ? f : 0.75;
+        bool r = p.TryGetValue("reversed", out var rv) && rv != null
+                 && bool.TryParse(System.Convert.ToString(rv, System.Globalization.CultureInfo.InvariantCulture), out var b) && b;
+        return (s, r);
+    }
+
     /// <summary>One-line status under the preview: what the catalog knows, or
     /// why there's nothing to show.</summary>
     public string CatalogSummary

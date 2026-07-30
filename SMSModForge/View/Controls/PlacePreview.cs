@@ -361,6 +361,7 @@ public sealed class PlacePreview : Grid
         MouseWheel += OnViewWheel;
         MouseDown += OnViewMouseDown;
         MouseMove += OnViewMouseMove;
+        MouseLeave += OnViewMouseLeave;
         MouseUp += OnViewMouseUp;
 
         Children.Add(_viewport);
@@ -466,11 +467,23 @@ public sealed class PlacePreview : Grid
 
     private void OnViewMouseMove(object sender, MouseEventArgs e)
     {
+        // Drift follows the cursor whenever it is over the preview and not
+        // dragging it around; a pan is a camera move, not a look.
+        if (ParallaxPreview && !_panning && _activeHandle == GizmoHandle.None)
+            ApplyParallax(e.GetPosition(_canvas));
+
         if (!_panning) return;
         if (e.MiddleButton != MouseButtonState.Pressed) { EndPan(); return; }
         var now = e.GetPosition(this);
         _viewPan.X = _panStartX + (now.X - _panStart.X);
         _viewPan.Y = _panStartY + (now.Y - _panStart.Y);
+    }
+
+    /// <summary>Cursor gone: settle back to the neutral, authored position
+    /// rather than freezing the scene wherever it happened to be pointing.</summary>
+    private void OnViewMouseLeave(object sender, MouseEventArgs e)
+    {
+        if (ParallaxPreview) ResetParallax();
     }
 
     private void OnViewMouseUp(object sender, MouseButtonEventArgs e)
@@ -999,6 +1012,74 @@ public sealed class PlacePreview : Grid
         set => SetValue(DimInactiveProperty, value);
     }
 
+    /// <summary>Parallax strength of the level's MAIN sprite — the baseline every
+    /// object in the place inherits.</summary>
+    public static readonly DependencyProperty LevelParallaxProperty =
+        DependencyProperty.Register(nameof(LevelParallax), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.75, OnInputChanged));
+
+    public double LevelParallax
+    {
+        get => (double)GetValue(LevelParallaxProperty);
+        set => SetValue(LevelParallaxProperty, value);
+    }
+
+    /// <summary>Parallax strength of the SECONDARY sprite. Its own drift is on
+    /// top of the main sprite's, exactly as the runtime composes them.</summary>
+    public static readonly DependencyProperty LevelParallaxSecondaryProperty =
+        DependencyProperty.Register(nameof(LevelParallaxSecondary), typeof(double), typeof(PlacePreview),
+            new PropertyMetadata(0.75, OnInputChanged));
+
+    public double LevelParallaxSecondary
+    {
+        get => (double)GetValue(LevelParallaxSecondaryProperty);
+        set => SetValue(LevelParallaxSecondaryProperty, value);
+    }
+
+    public static readonly DependencyProperty LevelParallaxReversedProperty =
+        DependencyProperty.Register(nameof(LevelParallaxReversed), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(false, OnInputChanged));
+
+    public bool LevelParallaxReversed
+    {
+        get => (bool)GetValue(LevelParallaxReversedProperty);
+        set => SetValue(LevelParallaxReversedProperty, value);
+    }
+
+    public static readonly DependencyProperty LevelParallaxSecondaryReversedProperty =
+        DependencyProperty.Register(nameof(LevelParallaxSecondaryReversed), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(false, OnInputChanged));
+
+    public bool LevelParallaxSecondaryReversed
+    {
+        get => (bool)GetValue(LevelParallaxSecondaryReversedProperty);
+        set => SetValue(LevelParallaxSecondaryReversedProperty, value);
+    }
+
+    /// <summary>
+    /// Track the cursor and drift the scene as the game would. Off by default:
+    /// it changes where everything sits, which is the opposite of what you want
+    /// while placing something.
+    /// <para/>
+    /// Toggling only arms the handler — the gains are precomputed on every
+    /// rebuild regardless, so turning it on costs nothing and turning it off
+    /// puts the scene straight back to its authored position.
+    /// </summary>
+    public static readonly DependencyProperty ParallaxPreviewProperty =
+        DependencyProperty.Register(nameof(ParallaxPreview), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(false, OnParallaxPreviewChanged));
+
+    public bool ParallaxPreview
+    {
+        get => (bool)GetValue(ParallaxPreviewProperty);
+        set => SetValue(ParallaxPreviewProperty, value);
+    }
+
+    private static void OnParallaxPreviewChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is PlacePreview p && !(bool)e.NewValue) p.ResetParallax();
+    }
+
     public static readonly DependencyProperty LevelArtOrderProperty =
         DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
             new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
@@ -1082,9 +1163,20 @@ public sealed class PlacePreview : Grid
         // authored at exactly the base's order is meant to sit on top of it.
         var drawables = new System.Collections.Generic.List<(int Order, int Tie, UIElement Element)>();
 
+        _parallaxTargets.Clear();
+
+        double baseGain = ParallaxGain(LevelParallax, LevelParallaxReversed, PixelsPerUnit);
         if (_secondaryImage.Source != null)
+        {
             drawables.Add((LevelArtSecondaryOrder, 0, _secondaryImage));
+            // The backdrop is a CHILD of the level root: it carries the root's
+            // drift and adds its own, scaled by the root. That sum is the whole
+            // depth effect.
+            TrackParallax(_secondaryImage,
+                baseGain + ParallaxGain(LevelParallaxSecondary, LevelParallaxSecondaryReversed, WorldPpu));
+        }
         drawables.Add((LevelArtOrder, 0, _baseImage));
+        TrackParallax(_baseImage, baseGain);
 
         if (!string.IsNullOrEmpty(root) && _placeholder.Visibility != Visibility.Visible)
         {
@@ -1135,6 +1227,7 @@ public sealed class PlacePreview : Grid
                 var oForClick = o;
                 img.MouseLeftButtonDown += (_, e) => { SelectNode(oForClick, pathForClick); e.Handled = true; };
                 drawables.Add((o.SortingOrder, 1, img));
+                TrackParallax(img, entry.ParallaxGain);
 
                 // Renderer tint, for a vanilla object that has one. Same masked
                 // silhouette the NPC reflections use — WPF can't multiply a tint
@@ -1143,7 +1236,7 @@ public sealed class PlacePreview : Grid
                 if (o.HasTint)
                 {
                     var (tr, tg, tb, _) = BustComposer.ParseTint(o.Tint);
-                    drawables.Add((o.SortingOrder, 2, new Rectangle
+                    var tintRect = new Rectangle
                     {
                         Width = w,
                         Height = h,
@@ -1153,7 +1246,10 @@ public sealed class PlacePreview : Grid
                         Opacity = img.Opacity * 0.55,
                         RenderTransform = new MatrixTransform(m),
                         IsHitTestVisible = false,
-                    }));
+                    };
+                    drawables.Add((o.SortingOrder, 2, tintRect));
+                    // Rides with the sprite it colours, or it would smear off it.
+                    TrackParallax(tintRect, entry.ParallaxGain);
                 }
 
                 ExpandBounds(m, w, h, ref minX, ref minY, ref maxX, ref maxY);
@@ -1299,6 +1395,90 @@ public sealed class PlacePreview : Grid
         /// Hiding follows the tree the way the game's own parenting does, so
         /// switching off a group takes its whole subtree with it.</summary>
         public bool Hidden;
+
+        /// <summary>
+        /// Canvas pixels this row travels per unit of cursor offset, summed down
+        /// the whole ancestor chain. See <see cref="ParallaxGain"/>.
+        /// </summary>
+        public double ParallaxGain;
+    }
+
+    // ══ Parallax ════════════════════════════════════════════════════════
+    //
+    // ParallaxMouseEffect, in the game's own words:
+    //
+    //     v      = camera.ScreenToViewportPoint(mousePosition)   // 0..1
+    //     off    = (v.x - 0.5, v.y - 0.5)                        // ±0.5
+    //     amount = isUI ? strength * 1000 : strength
+    //     sign   = reversed ? +1 : -1
+    //     localPosition = start + (sign*off.x*amount, sign*off.y*amount*0.5, 0)
+    //
+    // Three consequences drive everything below. It writes localPosition, so a
+    // child rides its parent's shift AND adds its own — the gains compound down
+    // the tree, which is why they are summed during the walk rather than read
+    // per object. Vertical travel is HALF horizontal, so a room sweeps sideways
+    // far more than it bobs. And the offset saturates at ±0.5, so an object's
+    // total excursion is bounded at strength/2 across and strength/4 down,
+    // whatever the screen size.
+    //
+    // Every gain is precomputed here into ONE number per row: canvas pixels per
+    // unit of cursor offset. Tracking the cursor is then a multiply and a
+    // translate per element, with no rebuild, no re-layout and no re-decode.
+
+    /// <summary>
+    /// Canvas pixels an object moves per unit of horizontal cursor offset, for
+    /// its own <c>ParallaxMouseEffect</c> alone.
+    /// <para/>
+    /// The strength is a LOCAL-space distance, so it reaches the canvas through
+    /// the scale of everything above it: an object inside the level root is
+    /// shrunk by that root's scale, while the level root itself is not.
+    /// </summary>
+    private static double ParallaxGain(double strength, bool reversed, double chainScale)
+        => (reversed ? 1.0 : -1.0) * strength * chainScale;
+
+    /// <summary>Elements that drift, each with the transform it was laid out
+    /// with and its gain. Rebuilt with the scene; empty means nothing drifts.</summary>
+    private readonly List<(UIElement Element, Matrix Base, double Gain)> _parallaxTargets = new();
+
+    /// <summary>Register an element to drift, unless it has no reason to.</summary>
+    private void TrackParallax(UIElement element, double gain)
+    {
+        if (Math.Abs(gain) < 1e-6) return;
+        var m = (element.RenderTransform as MatrixTransform)?.Matrix ?? Matrix.Identity;
+        _parallaxTargets.Add((element, m, gain));
+    }
+
+    /// <summary>
+    /// Drift everything for a cursor at <paramref name="canvasPoint"/>.
+    /// <para/>
+    /// The canvas IS the camera's viewport — it is the 1920×1080 the game
+    /// renders — so the cursor's fraction across it is exactly the viewport
+    /// point the effect reads, and it needs no knowledge of the zoom or pan
+    /// (WPF has already mapped the mouse into canvas space). Y is flipped twice
+    /// over: once because Unity's viewport counts up from the bottom, once
+    /// because the canvas counts down from the top — which cancels, leaving the
+    /// vertical term positive against a raw top-down offset.
+    /// </summary>
+    private void ApplyParallax(Point canvasPoint)
+    {
+        if (_parallaxTargets.Count == 0) return;
+        double offX = canvasPoint.X / CanvasWidth - 0.5;
+        double offY = canvasPoint.Y / CanvasHeight - 0.5;
+
+        foreach (var (element, baseM, gain) in _parallaxTargets)
+        {
+            // Vertical travel is half horizontal — the game's own * 0.5f.
+            var m = baseM;
+            m.Translate(gain * offX, gain * offY * 0.5);
+            element.RenderTransform = new MatrixTransform(m);
+        }
+    }
+
+    /// <summary>Put every drifting element back where it was authored.</summary>
+    private void ResetParallax()
+    {
+        foreach (var (element, baseM, _) in _parallaxTargets)
+            element.RenderTransform = new MatrixTransform(baseM);
     }
 
     /// <summary>Walk the whole GameObject tree into a flat, tree-ordered list.</summary>
@@ -1307,7 +1487,71 @@ public sealed class PlacePreview : Grid
         var entries = new List<SceneEntry>();
         WalkScene(GameObjects, "", 0, Aff.Identity, false, false, new List<bool>(), entries);
         ApplyHiddenFlags(entries);
+        ApplyParallaxGains(entries);
         return entries;
+    }
+
+    /// <summary>
+    /// Sum each row's parallax gain with every enabled ancestor's, in canvas
+    /// pixels per unit of cursor offset.
+    /// <para/>
+    /// Inheritance is the point: the effect writes localPosition, so a child of
+    /// a drifting parent is carried by it and then adds its own on top. Every
+    /// object in a place is a descendant of the level root, so the level's own
+    /// gain is the baseline each row starts from.
+    /// <para/>
+    /// The scale chain is deliberately approximate at one point: a node's own
+    /// X/Y scale is folded in for its DESCENDANTS, which is where Unity applies
+    /// it, but rotation between a node and the canvas is not decomposed. Pack
+    /// objects are overwhelmingly unrotated, and being a few pixels out on a
+    /// rotated group is a far smaller error than ignoring the chain entirely.
+    /// </summary>
+    private void ApplyParallaxGains(List<SceneEntry> entries)
+    {
+        // Level root: its localPosition sits in the levels container, above the
+        // level's own scale, so it reaches the canvas at the raw camera ppu.
+        double baseGain = ParallaxGain(LevelParallax, LevelParallaxReversed, PixelsPerUnit);
+
+        // (depth, gain, childScale) for the ancestors currently open.
+        var stack = new List<(int Depth, double Gain, double Scale)>();
+        foreach (var e in entries)
+        {
+            while (stack.Count > 0 && stack[^1].Depth >= e.Depth) stack.RemoveAt(stack.Count - 1);
+
+            double inherited = stack.Count > 0 ? stack[^1].Gain : baseGain;
+            // Scale from this row's PARENT down to the canvas. Directly under the
+            // level root that is the level's own scale, i.e. WorldPpu.
+            double parentScale = stack.Count > 0 ? stack[^1].Scale : WorldPpu;
+
+            double own = 0;
+            var node = e.Node;
+            if (node != null && node.ParallaxEnabled)
+            {
+                // isUI is a different space, not just a bigger number. The game
+                // multiplies by 1000 because a canvas object's localPosition is
+                // in UI units, and the canvas is authored at this very
+                // 1920x1080 — so one of those units is one canvas pixel, and
+                // the world scale chain does not apply to it at all. Running it
+                // through the chain anyway would throw the object several
+                // thousand pixels off screen.
+                own = node.ParallaxIsUI
+                    ? ParallaxGain(node.ParallaxStrength * 1000.0, node.ParallaxReversed, 1.0)
+                    : ParallaxGain(node.ParallaxStrength, node.ParallaxReversed, parentScale);
+            }
+
+            e.ParallaxGain = inherited + own;
+
+            if (node != null)
+            {
+                double sx = node.ScaleX == 0 ? 1 : Math.Abs(node.ScaleX);
+                stack.Add((e.Depth, e.ParallaxGain, parentScale * sx));
+            }
+            else
+            {
+                // An NPC placement carries its parent's drift and hosts children.
+                stack.Add((e.Depth, e.ParallaxGain, parentScale));
+            }
+        }
     }
 
     /// <summary>
@@ -1501,6 +1745,7 @@ public sealed class PlacePreview : Grid
                     IsHitTestVisible = false,
                 };
                 drawables.Add((def.ShadowSortingOrder, NpcShadowTieBelow, ell));
+                TrackParallax(ell, entry.ParallaxGain);
                 ExpandBounds(mShadow, circlePx, circlePx, ref minX, ref minY, ref maxX, ref maxY);
             }
 
@@ -1525,6 +1770,7 @@ public sealed class PlacePreview : Grid
                 var plPathForClick = entry.Path;
                 img.MouseLeftButtonDown += (_, e) => { SelectPlacement(plForClick, plPathForClick); e.Handled = true; };
                 drawables.Add((bodyOrder, NpcBodyTie, img));
+                TrackParallax(img, entry.ParallaxGain);
                 ExpandBounds(mBody, bmp.PixelWidth, bmp.PixelHeight, ref minX, ref minY, ref maxX, ref maxY);
 
                 // Reflection: the same bitmap again, mirrored on Y about the
@@ -1570,6 +1816,7 @@ public sealed class PlacePreview : Grid
                     };
                     RenderOptions.SetBitmapScalingMode(rimg, BitmapScalingMode.HighQuality);
                     drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, rimg));
+                    TrackParallax(rimg, entry.ParallaxGain);
 
                     // Tint pass: the sprite's own silhouette filled with the
                     // reflection colour, laid over the mirrored pose. WPF can't
@@ -1592,6 +1839,7 @@ public sealed class PlacePreview : Grid
                             IsHitTestVisible = false,
                         };
                         drawables.Add((def.ReflectionSortingOrder, NpcBodyTie, tintRect));
+                        TrackParallax(tintRect, entry.ParallaxGain);
                     }
                 }
             }
@@ -1607,6 +1855,7 @@ public sealed class PlacePreview : Grid
                 var marker = BuildWetMarker(ww, def.WetStartActive ? ghost : ghost * 0.6,
                                             animated: _activeHandle == GizmoHandle.None);
                 drawables.Add((bodyOrder, NpcWetTie, marker.Host));
+                TrackParallax(marker.Host, entry.ParallaxGain);
             }
         }
     }
