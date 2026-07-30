@@ -292,8 +292,10 @@ public sealed class JigglePreview : Image
             _base = _mask = _blink = null;
             for (int i = 1; i <= 4; i++) _mouth[i] = null;
             _expressions.Clear();
+            _vanillaJiggle = null;
             return;
         }
+        _vanillaJiggle = null;
         var m = Outfit.Model;
         _base = LoadIfExists(Path.Combine(PackRoot, Normalize(m.BaseSprite)));
         _mask = LoadIfExists(Path.Combine(PackRoot, Normalize(m.MaskSprite)));
@@ -333,6 +335,10 @@ public sealed class JigglePreview : Image
         if (!Directory.Exists(dir)) return;
 
         _base  = LoadIfExists(Path.Combine(dir, "Base.PNG"));
+        // Absent on art exported before the mask was added, in which case the
+        // bust simply holds still — the shader reads a missing mask as zero
+        // displacement, so nothing needs a version check.
+        _mask  = LoadIfExists(Path.Combine(dir, "Mask.PNG"));
         _blink = LoadIfExists(Path.Combine(dir, "Blink.PNG"));
         for (int i = 1; i <= 4; i++)
             _mouth[i] = LoadIfExists(Path.Combine(dir, "Mouth" + i + ".PNG"));
@@ -341,6 +347,52 @@ public sealed class JigglePreview : Image
             var px = LoadIfExists(Path.Combine(dir, "Expression" + name + ".PNG"));
             if (px != null) _expressions[name] = px;
         }
+        _vanillaJiggle = LoadJiggleSettings(Path.Combine(dir, "Jiggle.txt"));
+    }
+
+    /// <summary>The borrowed bust's own shader uniforms, or null to fall back
+    /// to the outfit's.</summary>
+    private JiggleParams? _vanillaJiggle;
+
+    /// <summary>
+    /// Read the uniforms the extractor wrote beside a vanilla bust's art.
+    /// <para/>
+    /// Returns null when the file is absent — art exported before masks were
+    /// added — so the caller keeps its existing default rather than snapping a
+    /// bust to zero. Unknown keys are ignored, so the format can gain fields
+    /// without older editors choking on them.
+    /// </summary>
+    private static JiggleParams? LoadJiggleSettings(string abs)
+    {
+        if (!File.Exists(abs)) return null;
+        var p = new JiggleParams();
+        var inv = System.Globalization.CultureInfo.InvariantCulture;
+        try
+        {
+            foreach (var raw in File.ReadAllLines(abs))
+            {
+                var line = raw.Trim();
+                if (line.Length == 0 || line[0] == '#') continue;
+                int eq = line.IndexOf('=');
+                if (eq <= 0) continue;
+                string key = line.Substring(0, eq).Trim();
+                string val = line.Substring(eq + 1).Trim();
+                if (string.Equals(key, "Tint", System.StringComparison.OrdinalIgnoreCase))
+                { p.Tint = val; continue; }
+                if (!float.TryParse(val, System.Globalization.NumberStyles.Float, inv, out var f)) continue;
+                switch (key)
+                {
+                    case "JiggleSpeed":     p.Speed = f; break;
+                    case "JiggleStrength":  p.Strength = f; break;
+                    case "JiggleFrequency": p.Frequency = f; break;
+                    case "NoiseScale":      p.NoiseScale = f; break;
+                    case "NoiseSpeed":      p.NoiseSpeed = f; break;
+                    case "NoiseStrength":   p.NoiseStrength = f; break;
+                }
+            }
+        }
+        catch { return null; }
+        return p;
     }
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
@@ -484,7 +536,9 @@ public sealed class JigglePreview : Image
         // without disturbing the in-flight pass.
         byte[] baseSnap = _base;
         byte[] maskSnap = mask;
-        var jiggle = Outfit.Model.Jiggle;
+        // A borrowed bust jiggles by the game's own numbers, not the pack's
+        // defaults — those would be motion the game never gives it.
+        var jiggle = _vanillaJiggle ?? Outfit.Model.Jiggle;
         var tint = BustComposer.ParseTint(Outfit.Tint);
         float time = (float)(DateTime.Now - _startTime).TotalSeconds;
         byte[]? expression = (SelectedExpression is not (null or "None")
