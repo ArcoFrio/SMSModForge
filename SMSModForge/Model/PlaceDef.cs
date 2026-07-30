@@ -51,15 +51,48 @@ public sealed class PlaceDef
     [JsonProperty("maskSprite", Order = 6)]
     public string MaskSprite { get; set; } = "";
 
-    /// <summary>Strength of the parallax-mouse effect on this level. Vanilla outdoor levels use ~0.75; tight indoor rooms use ~0.05.</summary>
+    /// <summary>Strength of the parallax-mouse effect on the level's MAIN
+    /// sprite. Every vanilla level uses 0.75 here — the depth comes from the
+    /// backdrop moving differently, not from this.</summary>
     [JsonProperty("parallaxStrength", Order = 7)]
     public float ParallaxStrength { get; set; } = 0.75f;
+
+    /// <summary>
+    /// Parallax strength of the SECONDARY (distance) sprite.
+    /// <para/>
+    /// This is what actually produces the depth: in the vanilla levels the two
+    /// sprites almost never share a value (56 of the 61 pairs differ), with the
+    /// main sprite pinned at 0.75 and the backdrop set to 0.1, 0.5 or 1.5 —
+    /// below for a distant background that should barely shift, above for one
+    /// that should overshoot the foreground. Giving both the same number, which
+    /// is what happened before this existed, moves the whole level as one flat
+    /// card and cancels the effect out.
+    /// <para/>
+    /// Null means "match the main sprite", which is what every place did before
+    /// this setting existed — so an older pack keeps behaving exactly as it did,
+    /// including the tight indoor rooms authored at 0.05 that a blanket 0.5
+    /// default would have thrown wide open. Vanilla's own backdrops are 0.1,
+    /// 0.5 or 1.5; 0.5 is the most common.
+    /// </summary>
+    [JsonProperty("parallaxSecondaryStrength", Order = 8, NullValueHandling = NullValueHandling.Ignore)]
+    public float? ParallaxSecondaryStrength { get; set; }
+
+    /// <summary>Invert the main sprite's parallax direction — it moves WITH the
+    /// cursor rather than against it.</summary>
+    [JsonProperty("parallaxReversed", Order = 9)]
+    public bool ParallaxReversed { get; set; } = false;
+
+    /// <summary>Invert the secondary sprite's parallax direction. Vanilla uses
+    /// this once (53_Hotelroom's backdrop), to make a background drift opposite
+    /// the room in front of it.</summary>
+    [JsonProperty("parallaxSecondaryReversed", Order = 10)]
+    public bool ParallaxSecondaryReversed { get; set; } = false;
 
     /// <summary>
     /// If true, the cloned level keeps the Beach prototype's <c>Audio Source</c>
     /// (ocean ambience loop). False for indoor rooms.
     /// </summary>
-    [JsonProperty("keepAudio", Order = 8)]
+    [JsonProperty("keepAudio", Order = 11)]
     public bool KeepAudio { get; set; } = false;
 
     /// <summary>
@@ -67,7 +100,7 @@ public sealed class PlaceDef
     /// <c>Particle System (2)</c> (seagulls flying overhead). Independent
     /// of <see cref="KeepAudio"/>.
     /// </summary>
-    [JsonProperty("keepSeagulls", Order = 9)]
+    [JsonProperty("keepSeagulls", Order = 12)]
     public bool KeepSeagulls { get; set; } = false;
 
     /// <summary>
@@ -76,7 +109,7 @@ public sealed class PlaceDef
     /// <c>Inside</c> = indoor rain/snow particles, <c>Outside</c> =
     /// outdoor rain/snow particles.
     /// </summary>
-    [JsonProperty("weatherType", Order = 10)]
+    [JsonProperty("weatherType", Order = 13)]
     [JsonConverter(typeof(StringEnumConverter))]
     public WeatherType WeatherType { get; set; } = WeatherType.None;
 
@@ -85,7 +118,7 @@ public sealed class PlaceDef
     /// active level</em>. Each button targets another place by stable
     /// reference (vanilla name or pack-scoped key).
     /// </summary>
-    [JsonProperty("navigatorButtons", Order = 11)]
+    [JsonProperty("navigatorButtons", Order = 14)]
     public List<NavigatorButtonDef> NavigatorButtons { get; set; } = new();
 
     /// <summary>
@@ -96,7 +129,7 @@ public sealed class PlaceDef
     /// container subtree hosts the NPC placements. Each node is named so
     /// dialogue actions can show/hide/fade/move/spin it.
     /// </summary>
-    [JsonProperty("gameObjects", Order = 12)]
+    [JsonProperty("gameObjects", Order = 15)]
     public List<GameObjectDef> GameObjects { get; set; } = new();
 
     /// <summary>
@@ -105,13 +138,18 @@ public sealed class PlaceDef
     /// moment; passing groups execute their actions. Re-entering the level
     /// runs them again (gate with variables for one-time effects).
     /// </summary>
-    [JsonProperty("onEnter", Order = 13)]
+    [JsonProperty("onEnter", Order = 16)]
     public List<LevelHookDef> OnEnter { get; set; } = new();
 
     /// <summary>Same as <see cref="OnEnter"/>, on the active→inactive edge.</summary>
-    [JsonProperty("onExit", Order = 14)]
+    [JsonProperty("onExit", Order = 17)]
     public List<LevelHookDef> OnExit { get; set; } = new();
 
+    // Off is the overwhelming default (vanilla reverses exactly one sprite in
+    // the whole game), so an unreversed place writes nothing rather than two
+    // false flags onto every entry.
+    public bool ShouldSerializeParallaxReversed() => ParallaxReversed;
+    public bool ShouldSerializeParallaxSecondaryReversed() => ParallaxSecondaryReversed;
     public bool ShouldSerializeGameObjects() => GameObjects.Count > 0;
     public bool ShouldSerializeOnEnter() => OnEnter.Count > 0;
     public bool ShouldSerializeOnExit() => OnExit.Count > 0;

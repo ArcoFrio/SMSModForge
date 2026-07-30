@@ -96,9 +96,11 @@ public static class PackValidator
             CheckFile(packRoot, place.SecondarySprite, $"{pWhere}.secondarySprite", issues);
             CheckFile(packRoot, place.MaskSprite,      $"{pWhere}.maskSprite",      issues);
 
-            if (place.ParallaxStrength < 0f || place.ParallaxStrength > 1.0f)
-                issues.Add(new(Severity.Warning, $"{pWhere}.parallaxStrength",
-                    $"parallaxStrength {place.ParallaxStrength} is outside the usual 0..1 range"));
+            // 1.5 is a real vanilla value (a backdrop that overshoots the room in
+            // front of it), so the old 0..1 ceiling flagged legitimate settings.
+            CheckParallax(place.ParallaxStrength, $"{pWhere}.parallaxStrength", issues);
+            if (place.ParallaxSecondaryStrength.HasValue)
+                CheckParallax(place.ParallaxSecondaryStrength.Value, $"{pWhere}.parallaxSecondaryStrength", issues);
 
             foreach (var btn in place.NavigatorButtons)
                 ValidateNavigatorButton(btn, pWhere, placeKeysInPack, issues);
@@ -808,6 +810,16 @@ public static class PackValidator
                     $"Cross-pack target '{tref.PackId}.{tref.Key}' — relies on the other pack being installed"));
                 break;
         }
+    }
+
+    /// <summary>Flag a parallax strength outside the range the game itself uses.
+    /// Vanilla's 221 ParallaxMouseEffect instances span 0 to 1.5, so that is the
+    /// band — anything past it is not wrong, just far outside anything shipped.</summary>
+    private static void CheckParallax(float strength, string where, List<ValidationIssue> issues)
+    {
+        if (strength < 0f || strength > 1.5f)
+            issues.Add(new(Severity.Warning, where,
+                $"parallax strength {strength} is outside the 0..1.5 range vanilla levels use"));
     }
 
     private static void CheckFile(string packRoot, string relPath, string where, List<ValidationIssue> issues)

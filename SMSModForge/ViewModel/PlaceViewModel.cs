@@ -166,7 +166,52 @@ public sealed class PlaceViewModel : ObservableObject
     public float ParallaxStrength
     {
         get => Model.ParallaxStrength;
-        set { Model.ParallaxStrength = value; OnPropertyChanged(); }
+        set
+        {
+            Model.ParallaxStrength = value;
+            OnPropertyChanged();
+            // A linked backdrop follows it.
+            OnPropertyChanged(nameof(ParallaxSecondaryStrength));
+        }
+    }
+
+    /// <summary>Whether the backdrop just copies the main sprite (the pre-split
+    /// behaviour). Unticking seeds the slider from the main value, so the
+    /// author starts at what they already had and moves away from it.</summary>
+    public bool ParallaxSecondaryLinked
+    {
+        get => Model.ParallaxSecondaryStrength == null;
+        set
+        {
+            Model.ParallaxSecondaryStrength = value ? null : Model.ParallaxStrength;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxSecondaryStrength));
+        }
+    }
+
+    /// <summary>The backdrop's effective strength — the main sprite's while
+    /// linked. Setting it always means "I want my own value".</summary>
+    public float ParallaxSecondaryStrength
+    {
+        get => Model.ParallaxSecondaryStrength ?? Model.ParallaxStrength;
+        set
+        {
+            Model.ParallaxSecondaryStrength = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxSecondaryLinked));
+        }
+    }
+
+    public bool ParallaxReversed
+    {
+        get => Model.ParallaxReversed;
+        set { Model.ParallaxReversed = value; OnPropertyChanged(); }
+    }
+
+    public bool ParallaxSecondaryReversed
+    {
+        get => Model.ParallaxSecondaryReversed;
+        set { Model.ParallaxSecondaryReversed = value; OnPropertyChanged(); }
     }
 
     public bool KeepAudio

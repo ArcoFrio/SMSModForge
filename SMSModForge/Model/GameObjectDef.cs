@@ -66,18 +66,50 @@ public sealed class GameObjectDef
     public int SortingOrder { get; set; } = 0;
 
     /// <summary>Disable the cloned ParallaxMouseEffect so the object stays put
-    /// as the mouse moves (true for almost every overlay).</summary>
+    /// as the mouse moves (true for almost every overlay). When false, the
+    /// effect runs with the three settings below.</summary>
     [JsonProperty("parallaxDisabled", Order = 9)]
     public bool ParallaxDisabled { get; set; } = true;
 
+    /// <summary>
+    /// How far this object shifts with the cursor, once parallax is enabled.
+    /// <para/>
+    /// Read as depth relative to the level's main sprite, which every vanilla
+    /// level fixes at 0.75: below that the object sits further away and lags
+    /// behind the room, above it the object sits nearer and overshoots.
+    /// Vanilla's own objects use 0.1, 0.5, 0.75 and 1.5.
+    /// <para/>
+    /// Null inherits the level's own strength, which is what a created object
+    /// got before this setting existed — it is cloned from the level's sprite,
+    /// component and all. That keeps an overlay in a 0.05 room drifting with
+    /// the room rather than jumping to some default of its own.
+    /// </summary>
+    [JsonProperty("parallaxStrength", Order = 10, NullValueHandling = NullValueHandling.Ignore)]
+    public float? ParallaxStrength { get; set; }
+
+    /// <summary>Move WITH the cursor instead of against it.</summary>
+    [JsonProperty("parallaxReversed", Order = 11)]
+    public bool ParallaxReversed { get; set; } = false;
+
+    /// <summary>
+    /// Treat the object as UI, which switches the effect to canvas coordinates.
+    /// <para/>
+    /// Only correct for something parented under a Canvas — vanilla sets it on
+    /// exactly two objects, both inside a level's button canvas. A pack's own
+    /// GameObjects are world-space sprites, so this normally stays off; it
+    /// exists because a bound node can be addressing a canvas object.
+    /// </summary>
+    [JsonProperty("parallaxIsUI", Order = 12)]
+    public bool ParallaxIsUI { get; set; } = false;
+
     /// <summary>Whether the object starts visible. False for things a dialogue
     /// reveals later (Flash, Portal); true for an always-on backdrop (Sky).</summary>
-    [JsonProperty("startActive", Order = 10)]
+    [JsonProperty("startActive", Order = 13)]
     public bool StartActive { get; set; } = true;
 
     /// <summary>Initial alpha (0..1). Start at 0 for an object a dialogue fades
     /// in with <c>FadeSprite</c> (e.g. the Portal).</summary>
-    [JsonProperty("startAlpha", Order = 11)]
+    [JsonProperty("startAlpha", Order = 14)]
     public float StartAlpha { get; set; } = 1f;
 
     /// <summary>
@@ -90,7 +122,7 @@ public sealed class GameObjectDef
     /// reflection reads as a second character rather than something on the
     /// pavement.
     /// </summary>
-    [JsonProperty("tint", Order = 12, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("tint", Order = 15, NullValueHandling = NullValueHandling.Ignore)]
     public string Tint { get; set; } = "";
 
     [JsonIgnore]
@@ -113,7 +145,7 @@ public sealed class GameObjectDef
     /// <summary>Optional relative path to a mask PNG. When set, the object gets
     /// its own material with this mask bound to <c>_MaskTex</c> (the Solid
     /// cameo's shader trick). Blank = no mask.</summary>
-    [JsonProperty("mask", Order = 12)]
+    [JsonProperty("mask", Order = 16)]
     public string Mask { get; set; } = "";
 
     /// <summary>
@@ -121,7 +153,7 @@ public sealed class GameObjectDef
     /// configured at build time and reacts to the GameObject being activated.
     /// See <see cref="ComponentDef"/>.
     /// </summary>
-    [JsonProperty("components", Order = 13)]
+    [JsonProperty("components", Order = 17)]
     public List<ComponentDef> Components { get; set; } = new();
 
     /// <summary>
@@ -129,7 +161,7 @@ public sealed class GameObjectDef
     /// runtime builds each child under this object's transform (recursively),
     /// so a child rides along with its parent. Same shape as this node.
     /// </summary>
-    [JsonProperty("children", Order = 14)]
+    [JsonProperty("children", Order = 18)]
     public List<GameObjectDef> Children { get; set; } = new();
 
     /// <summary>
@@ -138,7 +170,7 @@ public sealed class GameObjectDef
     /// local transform. Typically authored under the forced NPCs-root node's
     /// subtree (containers), but any node may host them.
     /// </summary>
-    [JsonProperty("npcs", Order = 15)]
+    [JsonProperty("npcs", Order = 19)]
     public List<NpcPlacementDef> Npcs { get; set; } = new();
 
     /// <summary>
@@ -147,7 +179,7 @@ public sealed class GameObjectDef
     /// (grafted onto rather than created; its subtree uses local transforms).
     /// Blank for ordinary GameObjects.
     /// </summary>
-    [JsonProperty("role", Order = 16)]
+    [JsonProperty("role", Order = 20)]
     public string Role { get; set; } = "";
 
     /// <summary>
@@ -161,7 +193,7 @@ public sealed class GameObjectDef
     /// Objects whose conditions are mutually exclusive therefore take turns
     /// automatically, with no cascade and no bookkeeping.
     /// </summary>
-    [JsonProperty("activeConditions", Order = 17)]
+    [JsonProperty("activeConditions", Order = 21)]
     public List<NodeConditionDef> ActiveConditions { get; set; } = new();
 
     /// <summary>
@@ -171,7 +203,7 @@ public sealed class GameObjectDef
     /// False latches it: it turns on the first time they pass and stays on,
     /// for one-way reveals. Ignored when there are no conditions.
     /// </summary>
-    [JsonProperty("deactivateWhenUnmet", Order = 18)]
+    [JsonProperty("deactivateWhenUnmet", Order = 22)]
     public bool DeactivateWhenUnmet { get; set; } = true;
 
     /// <summary>
@@ -192,20 +224,20 @@ public sealed class GameObjectDef
     /// rather than created — "bind" is a claim that it already exists, and
     /// silently creating one would mask a renamed or moved target.
     /// </summary>
-    [JsonProperty("bind", Order = 19)]
+    [JsonProperty("bind", Order = 23)]
     public bool Bind { get; set; } = false;
 
     /// <summary>Apply this node's position / rotation / scale to the bound
     /// object (as LOCAL values). Off = leave the existing transform alone.
     /// Only meaningful with <see cref="Bind"/>.</summary>
-    [JsonProperty("overrideTransform", Order = 20)]
+    [JsonProperty("overrideTransform", Order = 24)]
     public bool OverrideTransform { get; set; } = false;
 
     /// <summary>Apply this node's <see cref="StartActive"/> to the bound
     /// object. Off = leave it however the scene had it. Only meaningful with
     /// <see cref="Bind"/> — and unnecessary when
     /// <see cref="ActiveConditions"/> are driving the object.</summary>
-    [JsonProperty("overrideActive", Order = 21)]
+    [JsonProperty("overrideActive", Order = 25)]
     public bool OverrideActive { get; set; } = false;
 
     /// <summary>
@@ -299,6 +331,12 @@ public sealed class GameObjectDef
     public bool ShouldSerializeScaleY() => MayOmit(AppliesTransform) && ScaleY != 1f;
     public bool ShouldSerializeSortingOrder() => MayOmit(AppliesOwnVisuals);
     public bool ShouldSerializeParallaxDisabled() => MayOmit(AppliesOwnVisuals);
+    // The settings only mean anything while the effect runs, so a node that
+    // switched it off writes the switch alone rather than three dead values.
+    // An unset strength is absence, not a number — see ParallaxStrength.
+    public bool ShouldSerializeParallaxStrength() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxStrength.HasValue;
+    public bool ShouldSerializeParallaxReversed() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxReversed;
+    public bool ShouldSerializeParallaxIsUI() => MayOmit(AppliesOwnVisuals) && !ParallaxDisabled && ParallaxIsUI;
     public bool ShouldSerializeStartActive() => MayOmit(!Bind || OverrideActive);
     public bool ShouldSerializeStartAlpha() => MayOmit(AppliesOwnVisuals);
     public bool ShouldSerializeMask() => MayOmit(AppliesOwnVisuals) && !string.IsNullOrEmpty(Mask);

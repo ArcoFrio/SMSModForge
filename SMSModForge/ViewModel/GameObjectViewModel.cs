@@ -363,7 +363,60 @@ public sealed class GameObjectViewModel : ObservableObject
     public bool ParallaxDisabled
     {
         get => Model.ParallaxDisabled;
-        set { Model.ParallaxDisabled = value; OnPropertyChanged(); }
+        set
+        {
+            Model.ParallaxDisabled = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxEnabled));
+        }
+    }
+
+    /// <summary>Positive sense of <see cref="ParallaxDisabled"/>, so the editor
+    /// can offer "Parallax" as something you switch ON and hang its settings
+    /// off, rather than a double negative.</summary>
+    public bool ParallaxEnabled
+    {
+        get => !Model.ParallaxDisabled;
+        set => ParallaxDisabled = !value;
+    }
+
+    /// <summary>Whether this object just drifts with the level, which is what a
+    /// created object did before it could say otherwise.</summary>
+    public bool ParallaxInherits
+    {
+        get => Model.ParallaxStrength == null;
+        set
+        {
+            Model.ParallaxStrength = value ? null : 0.75f;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxStrength));
+        }
+    }
+
+    /// <summary>The object's own strength; 0.75 stands in for display while it
+    /// inherits, since that is what every vanilla level's sprite uses. Setting
+    /// it always means "I want my own value".</summary>
+    public float ParallaxStrength
+    {
+        get => Model.ParallaxStrength ?? 0.75f;
+        set
+        {
+            Model.ParallaxStrength = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ParallaxInherits));
+        }
+    }
+
+    public bool ParallaxReversed
+    {
+        get => Model.ParallaxReversed;
+        set { Model.ParallaxReversed = value; OnPropertyChanged(); }
+    }
+
+    public bool ParallaxIsUI
+    {
+        get => Model.ParallaxIsUI;
+        set { Model.ParallaxIsUI = value; OnPropertyChanged(); }
     }
 
     public bool StartActive

@@ -83,7 +83,16 @@ namespace SMSModForge.PackPlugin
                 return false;
             }
             string displayName = (string)p["displayName"] ?? internalName;
+            // The depth IS the difference between these two: vanilla pins the
+            // main sprite at 0.75 and moves the backdrop at something else
+            // (0.1 / 0.5 / 1.5). Driving both from one number, which is all this
+            // used to be able to do, slides the level as a single flat card.
+            // An absent secondary still does exactly that, so packs written
+            // before the split are untouched.
             float parallax = (float?)p["parallaxStrength"] ?? 0.75f;
+            bool parallaxRev = (bool?)p["parallaxReversed"] ?? false;
+            float parallax2 = (float?)p["parallaxSecondaryStrength"] ?? parallax;
+            bool parallax2Rev = (bool?)p["parallaxSecondaryReversed"] ?? false;
             bool keepAudio = (bool?)p["keepAudio"] ?? false;
             bool keepSeagulls = (bool?)p["keepSeagulls"] ?? false;
             string weatherStr = (string)p["weatherType"] ?? "None";
@@ -105,7 +114,8 @@ namespace SMSModForge.PackPlugin
             string goName = absoluteIndex + "_" + internalName;
 
             // Level
-            GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel, parallax, keepAudio, keepSeagulls);
+            GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel,
+                                                  parallax, parallaxRev, parallax2, parallax2Rev, keepAudio, keepSeagulls);
             DestroyComponentByName(level, "Trigger"); // the prototype carries a Trigger we don't want
 
             // The place's whole GameObject hierarchy: layered sprite objects,
@@ -133,12 +143,13 @@ namespace SMSModForge.PackPlugin
 
         private static GameObject CloneAndDressLevel(GameObject beach, Transform parent,
             string goName, PackManifest pack, string baseRel, string secondRel, string maskRel,
-            float parallax, bool keepAudio, bool keepSeagulls)
+            float parallax, bool parallaxRev, float parallax2, bool parallax2Rev,
+            bool keepAudio, bool keepSeagulls)
         {
             GameObject newLevel = Object.Instantiate(beach, parent);
             newLevel.name = goName;
 
-            SetParallax(newLevel, parallax);
+            SetParallax(newLevel, parallax, parallaxRev, null);
 
             // The Beach prototype has its main sprite + a secondary sprite as
             // child(1) + an NPCs container as child(2). Mirror Places.cs:
@@ -148,7 +159,7 @@ namespace SMSModForge.PackPlugin
             {
                 var secondary = newLevel.transform.GetChild(1).gameObject;
                 secondary.name = goName;
-                SetParallax(secondary, parallax);
+                SetParallax(secondary, parallax2, parallax2Rev, null);
             }
             if (newLevel.transform.childCount > 2)
             {
@@ -354,12 +365,22 @@ namespace SMSModForge.PackPlugin
                 }
 
                 // Parallax belongs to the existing object as well — a bound node
-                // shouldn't silently disable the vanilla level's own effect.
-                bool parallaxDisabled = !bind && ((bool?)ov["parallaxDisabled"] ?? true);
-                if (parallaxDisabled)
+                // shouldn't silently disable, or retune, the vanilla level's own
+                // effect. A created node clones the prototype's component, so
+                // enabling is a matter of leaving it on and dressing it; there is
+                // nothing to add.
+                if (!bind)
                 {
+                    bool parallaxDisabled = (bool?)ov["parallaxDisabled"] ?? true;
                     var pe = go.GetComponent("ParallaxMouseEffect");
-                    if (pe is Behaviour b) b.enabled = false;
+                    if (pe is Behaviour b) b.enabled = !parallaxDisabled;
+                    // Nulls inherit: an unset field keeps whatever the cloned
+                    // level sprite had, so an overlay in a 0.05 room drifts with
+                    // the room instead of snapping to a default of its own.
+                    if (!parallaxDisabled)
+                        SetParallax(go, (float?)ov["parallaxStrength"],
+                                        (bool?)ov["parallaxReversed"],
+                                        (bool?)ov["parallaxIsUI"]);
                 }
 
                 // Same opt-in rule as the transform: listing an existing object
@@ -449,12 +470,28 @@ namespace SMSModForge.PackPlugin
             return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 70.32f);
         }
 
-        private static void SetParallax(GameObject go, float strength)
+        /// <summary>
+        /// Push settings onto an object's existing <c>ParallaxMouseEffect</c>.
+        /// These three fields are everything the effect serializes.
+        /// <para/>
+        /// A null argument LEAVES THAT FIELD ALONE, which is what makes an older
+        /// pack behave identically: an object is cloned from the level's own
+        /// sprite, component and all, so inheriting is the meaningful default
+        /// and every setting here is an override on top of it.
+        /// <para/>
+        /// Set by reflection because the component belongs to the game, not to
+        /// us. The names come straight from the extraction, and a field that
+        /// isn't found is skipped rather than throwing, so a future build that
+        /// renames one degrades instead of breaking the level.
+        /// </summary>
+        private static void SetParallax(GameObject go, float? strength, bool? reversed, bool? isUI)
         {
             var p = go.GetComponent("ParallaxMouseEffect");
             if (p == null) return;
-            var f = p.GetType().GetField("parallaxStrength");
-            f?.SetValue(p, strength);
+            var t = p.GetType();
+            if (strength.HasValue) t.GetField("parallaxStrength")?.SetValue(p, strength.Value);
+            if (reversed.HasValue) t.GetField("reversed")?.SetValue(p, reversed.Value);
+            if (isUI.HasValue) t.GetField("isUI")?.SetValue(p, isUI.Value);
         }
 
         // ─────────────────────────────── Button construction ───────────

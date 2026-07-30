@@ -1438,17 +1438,38 @@
                                  ToolTip="SpriteRenderer sorting order (lower draws further back)."/>
                     </WrapPanel>
 
-                    <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
-                                Orientation="Horizontal" Margin="0,4,0,0">
-                        <CheckBox Content="Parallax off" IsChecked="{Binding ParallaxDisabled}"
-                                  VerticalAlignment="Center"
-                                  ToolTip="Disable the mouse-parallax effect on this overlay."/>
-                        <CheckBox Content="Start active" IsChecked="{Binding StartActive}"
-                                  VerticalAlignment="Center" Margin="12,0,0,0"
-                                  ToolTip="Uncheck for overlays a dialogue reveals later (Flash, Portal)."/>
-                        <TextBlock Text="Alpha" VerticalAlignment="Center" Margin="12,0,2,0"/>
-                        <TextBox Text="{Binding StartAlpha, UpdateSourceTrigger=PropertyChanged}" Width="45"
-                                 ToolTip="Initial alpha 0..1 (start at 0 for fade-in overlays like the Portal)."/>
+                    <!-- Row 4 nests its own rows rather than claiming more of the
+                         outer Grid: the parallax settings only appear when the
+                         effect is on, and a collapsed child costs no layout. -->
+                    <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,4,0,0">
+                        <StackPanel Orientation="Horizontal">
+                            <CheckBox Content="Parallax" IsChecked="{Binding ParallaxEnabled}"
+                                      VerticalAlignment="Center"
+                                      ToolTip="Let this object drift with the mouse. Off (the default) pins it to the level, which is what almost every overlay wants."/>
+                            <CheckBox Content="Start active" IsChecked="{Binding StartActive}"
+                                      VerticalAlignment="Center" Margin="12,0,0,0"
+                                      ToolTip="Uncheck for overlays a dialogue reveals later (Flash, Portal)."/>
+                            <TextBlock Text="Alpha" VerticalAlignment="Center" Margin="12,0,2,0"/>
+                            <TextBox Text="{Binding StartAlpha, UpdateSourceTrigger=PropertyChanged}" Width="45"
+                                     ToolTip="Initial alpha 0..1 (start at 0 for fade-in overlays like the Portal)."/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="16,4,0,0"
+                                    Visibility="{Binding ParallaxEnabled, Converter={StaticResource BoolToVisibility}}">
+                            <CheckBox Content="Drift with the level" IsChecked="{Binding ParallaxInherits}" VerticalAlignment="Center"
+                                      ToolTip="On (the default) keeps the level's own strength, which is what a created object always did. Turn it off to set this object's depth independently."/>
+                            <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Width="45" Margin="10,0,0,0"
+                                     IsEnabled="{Binding ParallaxInherits, Converter={StaticResource InverseBoolConverter}}"
+                                     ToolTip="Depth relative to the level's main sprite, which every vanilla level fixes at 0.75: lower sits further away and lags behind the room, higher sits nearer and overshoots. Vanilla objects use 0.1, 0.5, 0.75 and 1.5."/>
+                            <Slider Value="{Binding ParallaxStrength}" Minimum="0" Maximum="1.5" Width="110"
+                                    VerticalAlignment="Center" Margin="6,0,0,0"
+                                    IsEnabled="{Binding ParallaxInherits, Converter={StaticResource InverseBoolConverter}}"/>
+                            <CheckBox Content="Reversed" IsChecked="{Binding ParallaxReversed}"
+                                      VerticalAlignment="Center" Margin="12,0,0,0"
+                                      ToolTip="Drift WITH the cursor instead of against it."/>
+                            <CheckBox Content="UI space" IsChecked="{Binding ParallaxIsUI}"
+                                      VerticalAlignment="Center" Margin="12,0,0,0"
+                                      ToolTip="Only for an object under a Canvas — it switches the effect to canvas coordinates. A pack's own GameObjects are world sprites, so leave this off unless you're binding to a canvas object."/>
+                        </StackPanel>
                     </StackPanel>
 
                     <TextBlock Text="Mask (opt):" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
@@ -3047,19 +3068,43 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="Parallax strength:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <Slider view:IssueTarget.Field="parallaxStrength" Value="{Binding ParallaxStrength}" Minimum="0" Maximum="1.0" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBlock Text="Parallax — main sprite:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <Slider view:IssueTarget.Field="parallaxStrength" Value="{Binding ParallaxStrength}" Minimum="0" Maximum="1.5" Grid.Row="0" Grid.Column="1"
+                                            ToolTip="How far the level's main art slides with the cursor. Every vanilla level uses 0.75."/>
                                     <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2"/>
+                                    <TextBlock Text="Parallax — backdrop:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,4,0,0">
+                                        <CheckBox Content="Same as main" IsChecked="{Binding ParallaxSecondaryLinked}" VerticalAlignment="Center"
+                                                  ToolTip="On (the default for an existing place) makes the backdrop copy the main sprite, exactly as before this setting existed. Turn it off to give the level depth."/>
+                                        <Slider view:IssueTarget.Field="parallaxSecondaryStrength" Value="{Binding ParallaxSecondaryStrength}" Minimum="0" Maximum="1.5"
+                                                Width="150" VerticalAlignment="Center" Margin="10,0,0,0"
+                                                IsEnabled="{Binding ParallaxSecondaryLinked, Converter={StaticResource InverseBoolConverter}}"
+                                                ToolTip="The secondary (distance) sprite. THIS is what creates the depth — set it away from the main sprite. Vanilla uses 0.1 or 0.5 for a far background, 1.5 for one that overshoots the room."/>
+                                        <TextBox Text="{Binding ParallaxSecondaryStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}"
+                                                 Width="60" VerticalAlignment="Center" Margin="6,0,0,0"
+                                                 IsEnabled="{Binding ParallaxSecondaryLinked, Converter={StaticResource InverseBoolConverter}}"/>
+                                    </StackPanel>
+                                    <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,4,0,0">
+                                        <CheckBox Content="Reverse main" IsChecked="{Binding ParallaxReversed}"
+                                                  ToolTip="Main sprite drifts WITH the cursor instead of against it."/>
+                                        <CheckBox Content="Reverse backdrop" IsChecked="{Binding ParallaxSecondaryReversed}" Margin="12,0,0,0"
+                                                  ToolTip="Backdrop drifts opposite the room in front of it. Vanilla does this once, in 53_Hotelroom."/>
+                                    </StackPanel>
+                                    <TextBlock Text="Equal values slide the level as one flat card — the difference between them is the effect."
+                                               Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                                     <CheckBox Content="Keep beach audio (ocean ambience)"
                                               IsChecked="{Binding KeepAudio}"
-                                              Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"/>
+                                              Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"/>
                                     <CheckBox Content="Keep seagulls (particle system from Beach)"
                                               IsChecked="{Binding KeepSeagulls}"
-                                              Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,4,0,0"/>
-                                    <TextBlock Text="Weather:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
+                                              Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,4,0,0"/>
+                                    <TextBlock Text="Weather:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
                                     <ComboBox SelectedItem="{Binding WeatherType}"
-                                              Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
+                                              Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
                                         <ComboBox.ItemsSource>
                                             <x:Array Type="{x:Type model:WeatherType}">
                                                 <model:WeatherType>None</model:WeatherType>
