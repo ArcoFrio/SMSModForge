@@ -1098,6 +1098,19 @@ public sealed class PlacePreview : Grid
         set => SetValue(ShadersProperty, value);
     }
 
+    /// <summary>The place's mask sprite. Drives the level's Milking pass, and is
+    /// otherwise unused by the preview — the mask changes nothing about a flat
+    /// drawing, which is exactly why it was invisible here until now.</summary>
+    public static readonly DependencyProperty MaskSpriteProperty =
+        DependencyProperty.Register(nameof(MaskSprite), typeof(string), typeof(PlacePreview),
+            new PropertyMetadata("", OnInputChanged));
+
+    public string MaskSprite
+    {
+        get => (string)GetValue(MaskSpriteProperty);
+        set => SetValue(MaskSpriteProperty, value);
+    }
+
     public static readonly DependencyProperty LevelArtOrderProperty =
         DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
             new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
@@ -1196,6 +1209,16 @@ public sealed class PlacePreview : Grid
         }
         drawables.Add((LevelArtOrder, 0, _baseImage));
         TrackParallax(_baseImage, baseGain);
+        // Unlike the NPC images, this one outlives the rebuild, so switching the
+        // shader off has to hand its flat bitmap back — otherwise the level
+        // stays frozen on the last frame the pass drew.
+        bool levelShaded = Shaders && !string.IsNullOrWhiteSpace(root)
+            && !string.IsNullOrWhiteSpace(BaseSprite) && !string.IsNullOrWhiteSpace(MaskSprite)
+            && TrackLevelShader(_baseImage, Path.Combine(root, Normalize(BaseSprite)),
+                                Path.Combine(root, Normalize(MaskSprite)));
+        if (!levelShaded && _baseImage.Source is WriteableBitmap && !string.IsNullOrWhiteSpace(root)
+            && !string.IsNullOrWhiteSpace(BaseSprite))
+            _baseImage.Source = LoadCachedBitmap(Path.Combine(root, Normalize(BaseSprite)));
 
         if (!string.IsNullOrEmpty(root) && _placeholder.Visibility != Visibility.Visible)
         {
@@ -1488,7 +1511,10 @@ public sealed class PlacePreview : Grid
         public Image Image = null!;
         public byte[] Base = null!, Mask = null!, Output = null!;
         public int SrcW, SrcH, OutW, OutH;
-        public JiggleParams Params = null!;
+        /// <summary>Set for a bust-family object (NPCs). Null means the level
+        /// family — the two use genuinely different shaders.</summary>
+        public JiggleParams? Params;
+        public MilkingShader.Settings Milking;
         public (float r, float g, float b, float a) Tint;
         public WriteableBitmap Bitmap = null!;
     }
@@ -1528,6 +1554,37 @@ public sealed class PlacePreview : Grid
         return true;
     }
 
+    /// <summary>
+    /// Put the level's base art through the Milking pass its material really
+    /// runs, driven by the place's own mask sprite.
+    /// <para/>
+    /// The base art only — the backdrop keeps a plain material, and so does
+    /// every GameObject that hasn't been given a mask of its own.
+    /// </summary>
+    private bool TrackLevelShader(Image img, string baseAbs, string maskAbs)
+    {
+        var basePx = LoadBgraAtNative(baseAbs, out int w, out int h);
+        if (basePx == null || w <= 0 || h <= 0) return false;
+        var maskPx = LoadBgraScaled(maskAbs, w, h);
+        if (maskPx == null) return false;
+
+        // Level art is the largest thing on screen and the displacement is
+        // tiny (0.004 UV), so it gets the same output cap as everything else.
+        double k = Math.Min(1.0, (double)ShaderMaxEdge / Math.Max(w, h));
+        int outW = Math.Max(1, (int)Math.Round(w * k));
+        int outH = Math.Max(1, (int)Math.Round(h * k));
+
+        var bmp = new WriteableBitmap(outW, outH, 96, 96, PixelFormats.Pbgra32, null);
+        img.Source = bmp;
+        _shaderTargets.Add(new ShaderTarget
+        {
+            Image = img, Base = basePx, Mask = maskPx, SrcW = w, SrcH = h,
+            OutW = outW, OutH = outH, Output = new byte[outW * 4 * outH],
+            Params = null, Milking = MilkingShader.Settings.Level, Bitmap = bmp,
+        });
+        return true;
+    }
+
     /// <summary>Start or stop the animation loop to match what was just built.</summary>
     private void SyncShaderTimer()
     {
@@ -1556,8 +1613,12 @@ public sealed class PlacePreview : Grid
         float t = (float)_shaderClock.Elapsed.TotalSeconds;
         foreach (var s in _shaderTargets)
         {
-            JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
-                                s.Output, s.OutW, s.OutH, superSample: false);
+            if (s.Params != null)
+                JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
+                                    s.Output, s.OutW, s.OutH, superSample: false);
+            else
+                MilkingShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Milking, t,
+                                     s.Output, s.OutW, s.OutH);
             s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
         }
     }
