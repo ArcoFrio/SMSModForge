@@ -2401,21 +2401,14 @@
                                    Text="{Binding SelectedCharacter.IsPackBust,
                                           Converter={x:Static conv:PreviewHeaderConverter.Instance}}"/>
                         <Border DockPanel.Dock="Top" Background="#222" Padding="4" ClipToBounds="True">
-                            <Grid>
-                                <!-- The jiggle pass needs this pack's sprites, which a
-                                     vanilla outfit has none of - it names a bust the game
-                                     already ships. So that case renders from the shipped
-                                     bust art instead, rather than showing an empty box. -->
-                                <ctl:BustPreview MainViewModel="{Binding DataContext,
-                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
-                                                 BustKey="{Binding SelectedOutfit.GameObjectName}"
-                                                 ExpressionKey="{Binding ElementName=ExpressionPicker, Path=SelectedItem.Content, Mode=OneWay, FallbackValue=None}"
-                                                 Visibility="{Binding SelectedCharacter.IsVanillaBust,
-                                                              Converter={StaticResource BoolToVisibility}}"/>
+                            <!-- One preview for both kinds. A borrowed bust feeds
+                                 the same control from the shipped vanilla art, so
+                                 it sits in the same place and blinks, mouths and
+                                 breathes the same way; only the jiggle is absent,
+                                 since no mask is exported for those. -->
                             <ctl:JigglePreview x:Name="PreviewControl"
-                                               Visibility="{Binding SelectedCharacter.IsPackBust,
-                                                            Converter={StaticResource BoolToVisibility}}"
                                                Margin="0,12,0,-20"
+                                               VanillaBustKey="{Binding VanillaPreviewBustKey}"
                                                Outfit="{Binding SelectedOutfit}"
                                                PackRoot="{Binding PackRoot}"
                                                SelectedExpression="{Binding ElementName=ExpressionPicker, Path=SelectedItem.Content, Mode=OneWay, FallbackValue=None}"
@@ -2424,7 +2417,6 @@
                                                Yapping="{Binding ElementName=YappingToggle, Path=IsChecked, Mode=OneWay}"
                                                Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"
                                                BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
-                            </Grid>
                         </Border>
                         <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
                             <Grid.ColumnDefinitions>

@@ -408,6 +408,7 @@ public sealed class MainViewModel : ObservableObject
         {
             _selectedOutfit = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(VanillaPreviewBustKey));
             // Picking an outfit implies its owner. The reverse is not true, so
             // the character is stored rather than derived — see below.
             if (value != null)
@@ -417,6 +418,17 @@ public sealed class MainViewModel : ObservableObject
             }
         }
     }
+
+    /// <summary>
+    /// The vanilla bust the preview should render, or null to preview the
+    /// pack's own sprites.
+    /// <para/>
+    /// Resolved here rather than in the view because it depends on two things
+    /// at once — the character's source and the selected outfit — and a XAML
+    /// multi-binding for that reads far worse than the sentence it replaces.
+    /// </summary>
+    public string? VanillaPreviewBustKey
+        => SelectedCharacter?.IsVanillaBust == true ? SelectedOutfit?.GameObjectName : null;
 
     private CharacterViewModel? _selectedCharacter;
 
@@ -437,12 +449,14 @@ public sealed class MainViewModel : ObservableObject
             if (ReferenceEquals(_selectedCharacter, value)) return;
             _selectedCharacter = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(VanillaPreviewBustKey));
             // A stale outfit from the previously selected character would leave
             // the sprite editor showing art that belongs to someone else.
             if (value != null && _selectedOutfit != null && !value.Outfits.Contains(_selectedOutfit))
             {
                 _selectedOutfit = value.Outfits.FirstOrDefault();
                 OnPropertyChanged(nameof(SelectedOutfit));
+                OnPropertyChanged(nameof(VanillaPreviewBustKey));
             }
         }
     }

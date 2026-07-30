@@ -38,6 +38,25 @@ public sealed class JigglePreview : Image
         set => SetValue(PackRootProperty, value);
     }
 
+    /// <summary>
+    /// Render one of the game's own busts by name, from the shipped art,
+    /// instead of the pack's sprites. Blank means the ordinary pack path.
+    /// <para/>
+    /// Set for a character that borrows a vanilla bust. Everything else about
+    /// the control is unchanged, so a borrowed bust blinks, mouths and breathes
+    /// exactly as a pack-drawn one does — the alternative was a second, lesser
+    /// preview that only did expressions.
+    /// </summary>
+    public static readonly DependencyProperty VanillaBustKeyProperty =
+        DependencyProperty.Register(nameof(VanillaBustKey), typeof(string), typeof(JigglePreview),
+            new PropertyMetadata(null, (d, e) => ((JigglePreview)d).ReloadTextures()));
+
+    public string? VanillaBustKey
+    {
+        get => (string?)GetValue(VanillaBustKeyProperty);
+        set => SetValue(VanillaBustKeyProperty, value);
+    }
+
     public static readonly DependencyProperty SelectedExpressionProperty =
         DependencyProperty.Register(nameof(SelectedExpression), typeof(string), typeof(JigglePreview),
             new PropertyMetadata("None"));
@@ -265,6 +284,7 @@ public sealed class JigglePreview : Image
     private void ReloadTextures()
     {
         _renderGeneration++;
+        if (!string.IsNullOrWhiteSpace(VanillaBustKey)) { ReloadVanillaTextures(); return; }
         if (Outfit == null || PackRoot == null)
         {
             // Clear the cached buffers too: leaving them set is what let a
@@ -286,6 +306,41 @@ public sealed class JigglePreview : Image
         if (m.Expression.Enabled)
             foreach (var name in ExpressionSpec.Names)
                 _expressions[name] = LoadIfExists(Path.Combine(PackRoot, Normalize(m.Expression.Prefix) + name + ".PNG")) ?? Empty();
+    }
+
+    /// <summary>
+    /// Load a borrowed bust from the shipped vanilla art instead of the pack.
+    /// <para/>
+    /// The layout is fixed rather than authored — Base, Blink, Mouth1..4 and
+    /// Expression&lt;Name&gt; under a folder named for the bust — so there is no
+    /// OutfitDef to read paths off, and none is invented. Everything downstream
+    /// is identical to a pack bust, which is the point: blink, mouth and
+    /// breathing behave the same because it is the same code.
+    /// <para/>
+    /// No mask is exported, and none is faked. The shader treats an absent mask
+    /// as zero displacement, so a vanilla bust simply does not jiggle here —
+    /// preferable to inventing motion the game does not have.
+    /// </summary>
+    private void ReloadVanillaTextures()
+    {
+        _base = _mask = _blink = null;
+        for (int i = 1; i <= 4; i++) _mouth[i] = null;
+        _expressions.Clear();
+
+        string? root = Rendering.VanillaArtResolver.FindArtRoot();
+        if (root == null) return;
+        string dir = Path.Combine(root, VanillaBustKey);
+        if (!Directory.Exists(dir)) return;
+
+        _base  = LoadIfExists(Path.Combine(dir, "Base.PNG"));
+        _blink = LoadIfExists(Path.Combine(dir, "Blink.PNG"));
+        for (int i = 1; i <= 4; i++)
+            _mouth[i] = LoadIfExists(Path.Combine(dir, "Mouth" + i + ".PNG"));
+        foreach (var name in ExpressionSpec.Names)
+        {
+            var px = LoadIfExists(Path.Combine(dir, "Expression" + name + ".PNG"));
+            if (px != null) _expressions[name] = px;
+        }
     }
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";
