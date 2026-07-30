@@ -292,14 +292,60 @@ namespace SMSModForge.PackPlugin
                         // load by DailyChanceRegistry from its position in the
                         // manifest, so each gate rolls independently without the
                         // author naming anything.
-                        return StableRoll(thisPackId, (string)p[DailyChanceRegistry.IdParam] ?? "",
-                                          CurrentRollDay(), vars?.RollSeed ?? 0) < dchance;
+                        string rollId = (string)p[DailyChanceRegistry.IdParam] ?? "";
+                        int rollDay = CurrentRollDay();
+                        float rolled = StableRoll(thisPackId, rollId, rollDay, vars?.RollSeed ?? 0);
+                        LogRollOnce(thisPackId, rollId, (string)p[DailyChanceRegistry.LabelParam],
+                                    rolled, dpercent, rollDay, log);
+                        return rolled < dchance;
                     }
                 default:
                     log?.LogWarning("[SMSModForge.PackPlugin] Unknown condition type '" + type + "' — treating as false");
                     return false;
             }
         }
+
+        /// <summary>
+        /// Report a DailyChance the first time it is consulted on a given day.
+        /// <para/>
+        /// The value is derived, not rolled at a moment, and these conditions are
+        /// polled every frame by the rules tick — logging each evaluation would
+        /// bury the console within seconds. Keying on (pack, roll, day) reports
+        /// every gate exactly once per in-game day, at the point something
+        /// actually asked, which is what "when it rolled" means for a value that
+        /// is computed on demand. The day is part of the key, so a new day
+        /// reports afresh with nothing to reset.
+        /// </summary>
+        private static void LogRollOnce(string packId, string rollId, string label,
+                                        float rolled, float percent, int day, ManualLogSource log)
+        {
+            if (log == null) return;
+            string key = packId + "|" + rollId + "|" + day;
+            lock (_loggedRolls) { if (!_loggedRolls.Add(key)) return; }
+
+            var inv = CultureInfo.InvariantCulture;
+            log.LogInfo("[SMSModForge.PackPlugin] " + packId + ": DailyChance " +
+                        (string.IsNullOrEmpty(label) ? rollId : label) +
+                        " (" + percent.ToString("0.##", inv) + "%) — rolled " +
+                        (rolled * 100f).ToString("0.#", inv) + "% → " +
+                        (rolled * 100f < percent ? "PASS" : "fail") +
+                        " for day " + day + ".");
+        }
+
+        private static readonly HashSet<string> _loggedRolls = new HashSet<string>();
+
+        /// <summary>Record that a roll has already been reported for this day,
+        /// so the first evaluation doesn't print it a second time. Called by the
+        /// whole-day calendar report, which covers every registered gate at
+        /// once; anything it didn't cover still speaks for itself when asked.</summary>
+        internal static void MarkRollLogged(string packId, string rollId, int day)
+        {
+            lock (_loggedRolls) _loggedRolls.Add(packId + "|" + rollId + "|" + day);
+        }
+
+        /// <summary>Forget which rolls have been reported. Called on scene load
+        /// so the set can't grow without bound across a long session.</summary>
+        internal static void ResetRollLog() { lock (_loggedRolls) _loggedRolls.Clear(); }
 
         /// <summary>The in-game day a DailyChance roll is keyed to.
         /// <c>DaysPassed</c> (monotonic), not <c>Day</c> (the 1-7 weekday),

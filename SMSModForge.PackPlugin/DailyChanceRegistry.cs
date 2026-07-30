@@ -29,6 +29,11 @@ namespace SMSModForge.PackPlugin
         /// to mark it as runtime-injected rather than authored.</summary>
         public const string IdParam = "_rollId";
 
+        /// <summary>Params key holding the human label, stamped beside the id so
+        /// an evaluation can name itself in the log without reaching back into
+        /// the registry. Runtime-injected, like the id.</summary>
+        public const string LabelParam = "_rollLabel";
+
         public sealed class Entry
         {
             /// <summary>Seed for <see cref="ConditionEvaluator.StableRoll"/>.</summary>
@@ -38,6 +43,9 @@ namespace SMSModForge.PackPlugin
             public string Label;
             /// <summary>Chance as a whole percentage (0..100).</summary>
             public float Percent;
+            /// <summary>The condition's own params, so the final label can be
+            /// stamped back once the "#n" suffixes are settled.</summary>
+            internal JObject Params;
         }
 
         private readonly List<Entry> _entries = new List<Entry>();
@@ -62,8 +70,13 @@ namespace SMSModForge.PackPlugin
             // Only add the "#n" suffix where an entity actually has several
             // gates — a lone gate reads better as just its entity name.
             foreach (var e in _entries)
+            {
                 if (_perEntity.TryGetValue(EntityOf(e.Id), out var n) && n == 1)
                     e.Label = EntityOf(e.Id);
+                // Stamp the settled label onto the condition, so it can name
+                // itself when it is evaluated.
+                if (e.Params != null) e.Params[LabelParam] = e.Label;
+            }
         }
 
         private readonly Dictionary<string, int> _perEntity = new Dictionary<string, int>();
@@ -101,7 +114,7 @@ namespace SMSModForge.PackPlugin
 
                     string id = entity + "#" + n.ToString(CultureInfo.InvariantCulture);
                     p[IdParam] = id;   // in-memory only — the pack file is untouched
-                    _entries.Add(new Entry { Id = id, Label = entity + " #" + n, Percent = percent });
+                    _entries.Add(new Entry { Id = id, Label = entity + " #" + n, Percent = percent, Params = p });
                 }
 
                 foreach (var prop in o.Properties()) Walk(prop.Value, entity);

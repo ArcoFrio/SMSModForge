@@ -402,6 +402,7 @@ namespace SMSModForge.PackPlugin
             _dayTurnoverProc = false;
             _sleepDay = -1;
             _dailyCatchUpDone = false;
+            ConditionEvaluator.ResetRollLog();
             AutosaveProcedThisSession = false;
             // Reset slot tracking so the next CoreGameScene fresh-loads
             // the active slot's file (the player might have switched
@@ -1011,6 +1012,7 @@ namespace SMSModForge.PackPlugin
             foreach (var e in c.DailyChances.All)
             {
                 float roll = ConditionEvaluator.StableRoll(c.PackId, e.Id, rollDay, c.Vars?.RollSeed ?? 0) * 100f;
+                ConditionEvaluator.MarkRollLogged(c.PackId, e.Id, rollDay);
                 Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId + ": DailyChance " + e.Label +
                                " (" + e.Percent.ToString("0.##", inv) + "%) — rolled " +
                                roll.ToString("0.#", inv) + "% → " + (roll < e.Percent ? "PASS" : "fail") +
@@ -1085,12 +1087,20 @@ namespace SMSModForge.PackPlugin
 
             foreach (var c in _contexts)
             {
-                if (c.Vars == null || c.Vars.LastRefreshDay == day) continue;
-                Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId +
-                               ": loaded save was last refreshed for day " + c.Vars.LastRefreshDay +
-                               " but it is day " + day + " — running the daily refresh now.");
-                c.Vars.RefreshOnDayChange(day);
-                c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
+                if (c.Vars != null && c.Vars.LastRefreshDay != day)
+                {
+                    Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId +
+                                   ": loaded save was last refreshed for day " + c.Vars.LastRefreshDay +
+                                   " but it is day " + day + " — running the daily refresh now.");
+                    c.Vars.RefreshOnDayChange(day);
+                    c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
+                }
+
+                // Report the day's gates whether or not the refresh was owed.
+                // Sleeping prints them at turnover, but a session that starts
+                // mid-day never passed through one, and the outcomes hold for
+                // the rest of the day — so print the calendar on every load.
+                LogDailyChances(c);
             }
         }
 
