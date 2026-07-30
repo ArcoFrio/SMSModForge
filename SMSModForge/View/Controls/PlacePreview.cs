@@ -1123,6 +1123,29 @@ public sealed class PlacePreview : Grid
         set => SetValue(SecondaryMaskSpriteProperty, value);
     }
 
+    /// <summary>The base mask as it is being painted, or null to read the file.
+    /// Set while a mask editor is open on it.</summary>
+    public static readonly DependencyProperty LiveMaskBgraProperty =
+        DependencyProperty.Register(nameof(LiveMaskBgra), typeof(byte[]), typeof(PlacePreview),
+            new PropertyMetadata(null, OnInputChanged));
+
+    public byte[]? LiveMaskBgra
+    {
+        get => (byte[]?)GetValue(LiveMaskBgraProperty);
+        set => SetValue(LiveMaskBgraProperty, value);
+    }
+
+    /// <summary>Same, for the backdrop's mask.</summary>
+    public static readonly DependencyProperty LiveSecondaryMaskBgraProperty =
+        DependencyProperty.Register(nameof(LiveSecondaryMaskBgra), typeof(byte[]), typeof(PlacePreview),
+            new PropertyMetadata(null, OnInputChanged));
+
+    public byte[]? LiveSecondaryMaskBgra
+    {
+        get => (byte[]?)GetValue(LiveSecondaryMaskBgraProperty);
+        set => SetValue(LiveSecondaryMaskBgraProperty, value);
+    }
+
     public static readonly DependencyProperty LevelArtOrderProperty =
         DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
             new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
@@ -1222,9 +1245,10 @@ public sealed class PlacePreview : Grid
             // Same restore rule as the base image: it survives the rebuild, so
             // it has to be handed its flat bitmap back when the shader is off.
             bool secShaded = Shaders && !string.IsNullOrWhiteSpace(root)
-                && !string.IsNullOrWhiteSpace(SecondarySprite) && !string.IsNullOrWhiteSpace(SecondaryMaskSprite)
+                && !string.IsNullOrWhiteSpace(SecondarySprite)
+                && (LiveSecondaryMaskBgra != null || !string.IsNullOrWhiteSpace(SecondaryMaskSprite))
                 && TrackLevelShader(_secondaryImage, Path.Combine(root, Normalize(SecondarySprite)),
-                                    Path.Combine(root, Normalize(SecondaryMaskSprite)));
+                                    Path.Combine(root, Normalize(SecondaryMaskSprite)), LiveSecondaryMaskBgra);
             if (!secShaded && _secondaryImage.Source is WriteableBitmap && !string.IsNullOrWhiteSpace(root)
                 && !string.IsNullOrWhiteSpace(SecondarySprite))
                 _secondaryImage.Source = LoadCachedBitmap(Path.Combine(root, Normalize(SecondarySprite)));
@@ -1235,9 +1259,10 @@ public sealed class PlacePreview : Grid
         // shader off has to hand its flat bitmap back — otherwise the level
         // stays frozen on the last frame the pass drew.
         bool levelShaded = Shaders && !string.IsNullOrWhiteSpace(root)
-            && !string.IsNullOrWhiteSpace(BaseSprite) && !string.IsNullOrWhiteSpace(MaskSprite)
+            && !string.IsNullOrWhiteSpace(BaseSprite)
+            && (LiveMaskBgra != null || !string.IsNullOrWhiteSpace(MaskSprite))
             && TrackLevelShader(_baseImage, Path.Combine(root, Normalize(BaseSprite)),
-                                Path.Combine(root, Normalize(MaskSprite)));
+                                Path.Combine(root, Normalize(MaskSprite)), LiveMaskBgra);
         if (!levelShaded && _baseImage.Source is WriteableBitmap && !string.IsNullOrWhiteSpace(root)
             && !string.IsNullOrWhiteSpace(BaseSprite))
             _baseImage.Source = LoadCachedBitmap(Path.Combine(root, Normalize(BaseSprite)));
@@ -1538,6 +1563,14 @@ public sealed class PlacePreview : Grid
         public Image Image = null!;
         public byte[] Base = null!, Mask = null!, Output = null!;
         public int SrcW, SrcH, OutW, OutH;
+        /// <summary>Mask dimensions, which need not match the art's — the level
+        /// pass samples it in UV space. Zero means "same as the source", which
+        /// is what the bust pass requires.</summary>
+        public int MaskW, MaskH;
+        /// <summary>Set when the mask is the editor's live buffer. That array is
+        /// mutated in place as strokes land, so holding the reference is all the
+        /// live update needs: the next tick already sees the new paint.</summary>
+        public bool LiveMask;
         /// <summary>Set for a bust-family object (NPCs). Null means the level
         /// family — the two use genuinely different shaders.</summary>
         public JiggleParams? Params;
@@ -1588,12 +1621,28 @@ public sealed class PlacePreview : Grid
     /// The base art only — the backdrop keeps a plain material, and so does
     /// every GameObject that hasn't been given a mask of its own.
     /// </summary>
-    private bool TrackLevelShader(Image img, string baseAbs, string maskAbs)
+    private bool TrackLevelShader(Image img, string baseAbs, string maskAbs, byte[]? liveMask)
     {
         var basePx = LoadBgraAtNative(baseAbs, out int w, out int h);
         if (basePx == null || w <= 0 || h <= 0) return false;
-        var maskPx = LoadBgraScaled(maskAbs, w, h);
-        if (maskPx == null) return false;
+
+        // A mask being painted right now wins over the one on disk, and is used
+        // AT ITS OWN SIZE — the pass samples in UV space, so the editor's square
+        // buffer drives the art directly with nothing in between to keep in
+        // step. The array is the editor's own and is mutated as strokes land,
+        // so the running loop shows each one without being told.
+        int maskW, maskH;
+        byte[]? maskPx;
+        if (liveMask != null && liveMask.Length == Rendering.MaskBuffer.Size * Rendering.MaskBuffer.Size * 4)
+        {
+            maskPx = liveMask;
+            maskW = maskH = Rendering.MaskBuffer.Size;
+        }
+        else
+        {
+            maskPx = LoadBgraAtNative(maskAbs, out maskW, out maskH, cached: false);
+        }
+        if (maskPx == null || maskW <= 0 || maskH <= 0) return false;
 
         // Level art renders at its OWN resolution, unlike the NPC passes.
         // Shrinking it destroys the effect twice over: the displacement peaks
@@ -1612,6 +1661,7 @@ public sealed class PlacePreview : Grid
         _shaderTargets.Add(new ShaderTarget
         {
             Image = img, Base = basePx, Mask = maskPx, SrcW = w, SrcH = h,
+            MaskW = maskW, MaskH = maskH, LiveMask = liveMask != null,
             OutW = outW, OutH = outH, Output = new byte[outW * 4 * outH],
             Params = null, Milking = MilkingShader.Settings.Level, Bitmap = bmp,
         });
@@ -1650,8 +1700,8 @@ public sealed class PlacePreview : Grid
                 JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
                                     s.Output, s.OutW, s.OutH, superSample: false);
             else
-                MilkingShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Milking, t,
-                                     s.Output, s.OutW, s.OutH);
+                MilkingShader.Render(s.Base, s.SrcW, s.SrcH, s.Mask, s.MaskW, s.MaskH,
+                                     s.Milking, t, s.Output, s.OutW, s.OutH);
             s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
         }
     }
@@ -3150,10 +3200,15 @@ public sealed class PlacePreview : Grid
 
     /// <summary>Decode a PNG to premultiplied BGRA at its own size, which is the
     /// buffer shape the shader port expects.</summary>
-    private static byte[]? LoadBgraAtNative(string abs, out int w, out int h)
+    private static byte[]? LoadBgraAtNative(string abs, out int w, out int h, bool cached = true)
     {
         w = h = 0;
-        var src = LoadCachedBitmap(abs);
+        // Masks bypass the cache. It is keyed by path with no invalidation, so
+        // a mask re-saved from the editor would keep previewing at its old
+        // content for the rest of the session. They are 256px and read once per
+        // rebuild rather than per frame, so decoding afresh costs nothing worth
+        // protecting — unlike the level art, which is 2048px and stays cached.
+        var src = cached ? LoadCachedBitmap(abs) : (File.Exists(abs) ? TryLoad(abs) : null);
         if (src == null) return null;
         w = src.PixelWidth; h = src.PixelHeight;
         return CopyBgra(src, w, h);
@@ -3163,7 +3218,8 @@ public sealed class PlacePreview : Grid
     /// jiggle mask on its pose's pixel grid.</summary>
     private static byte[]? LoadBgraScaled(string abs, int w, int h)
     {
-        var src = LoadCachedBitmap(abs);
+        // Uncached for the same reason as above — this only ever loads masks.
+        var src = File.Exists(abs) ? TryLoad(abs) : null;
         if (src == null) return null;
         int sw = src.PixelWidth, sh = src.PixelHeight;
         var srcPx = CopyBgra(src, sw, sh);

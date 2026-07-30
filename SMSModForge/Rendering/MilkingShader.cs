@@ -59,17 +59,21 @@ public static class MilkingShader
 
     /// <summary>
     /// Displace <paramref name="baseTex"/> by the mask and write the result.
-    /// Both source buffers are premultiplied BGRA at <paramref name="srcW"/>×<paramref name="srcH"/>;
+    /// Both are premultiplied BGRA, at their OWN sizes: the mask is sampled in
+    /// UV space exactly as the GPU samples it, so a 256² mask drives 2048-wide
+    /// art with no resampling step in between. That is also what lets the mask
+    /// editor's live buffer be handed straight in while it is being painted.
     /// <paramref name="output"/> is <paramref name="outW"/>×<paramref name="outH"/>.
     /// <paramref name="time"/> is the shader's <c>_Time.y</c>.
     /// </summary>
-    public static void Render(byte[] baseTex, byte[] maskTex, int srcW, int srcH,
+    public static void Render(byte[] baseTex, int srcW, int srcH,
+                              byte[] maskTex, int maskW, int maskH,
                               in Settings s, float time,
                               byte[] output, int outW, int outH)
     {
-        int srcStride = srcW * 4, outStride = outW * 4;
+        int srcStride = srcW * 4, maskStride = maskW * 4, outStride = outW * 4;
         if (baseTex.Length != srcStride * srcH) throw new ArgumentException("baseTex bad size", nameof(baseTex));
-        if (maskTex.Length != srcStride * srcH) throw new ArgumentException("maskTex bad size", nameof(maskTex));
+        if (maskTex.Length != maskStride * maskH) throw new ArgumentException("maskTex bad size", nameof(maskTex));
         if (output.Length != outStride * outH) throw new ArgumentException("output bad size", nameof(output));
 
         // timePhase = _Time.y * _JiggleSpeed + _JigglePhaseOffset
@@ -115,9 +119,9 @@ public static class MilkingShader
                 float u = (ox + 0.5f) / outW;
 
                 // amp = (1 + variation*sin(u*PI)) * mask.a * strength
-                int mx = Math.Min(srcW - 1, (int)(u * srcW));
-                int my = Math.Min(srcH - 1, (int)(v * srcH));
-                float maskA = maskTex[my * srcStride + mx * 4 + 3] / 255f;
+                int mx = Math.Min(maskW - 1, (int)(u * maskW));
+                int my = Math.Min(maskH - 1, (int)(v * maskH));
+                float maskA = maskTex[my * maskStride + mx * 4 + 3] / 255f;
                 float ampVar = variation == 0f ? 1f : 1f + variation * MathF.Sin(u * Pi);
                 float amp = ampVar * maskA * strength;
 

@@ -183,6 +183,28 @@ public sealed class PlaceViewModel : ObservableObject
     /// <summary>Mask-editor host for the BACKDROP's mask.</summary>
     public IMaskEditorHost SecondaryMaskHost => new PlaceMaskHost(this, secondary: true);
 
+    private byte[]? _liveBaseMask, _liveSecondaryMask;
+
+    /// <summary>
+    /// The base mask as an open editor is painting it, or null.
+    /// <para/>
+    /// The array itself is the editor's and is mutated in place as strokes
+    /// land, so the preview holds the reference and simply keeps drawing. Only
+    /// gaining or losing the buffer is a change worth announcing.
+    /// </summary>
+    public byte[]? LiveBaseMask
+    {
+        get => _liveBaseMask;
+        set { _liveBaseMask = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Same, for the backdrop's mask.</summary>
+    public byte[]? LiveSecondaryMask
+    {
+        get => _liveSecondaryMask;
+        set { _liveSecondaryMask = value; OnPropertyChanged(); }
+    }
+
     /// <summary>
     /// Adapts one of a place's two masks to the editor.
     /// <para/>
@@ -208,9 +230,17 @@ public sealed class PlaceViewModel : ObservableObject
             set { if (_secondary) _place.SecondaryMaskSprite = value; else _place.MaskSprite = value; }
         }
 
-        // The place preview reads masks from disk on rebuild rather than from a
-        // live buffer, so these just satisfy the interface.
-        public byte[]? LiveMaskBgra { get; set; }
+        /// <summary>Forwarded to the place so the preview can draw the mask
+        /// while it is still being painted.</summary>
+        public byte[]? LiveMaskBgra
+        {
+            get => _secondary ? _place.LiveSecondaryMask : _place.LiveBaseMask;
+            set { if (_secondary) _place.LiveSecondaryMask = value; else _place.LiveBaseMask = value; }
+        }
+
+        /// <summary>Bumped per stroke. Nothing needs to watch it here: the
+        /// buffer above is mutated in place and the preview's shader loop is
+        /// already redrawing, so each stroke appears on the next tick.</summary>
         public int LiveMaskRevision { get; set; }
 
         public Rendering.MaskKind MaskKind => Rendering.MaskKind.LevelAlpha;
