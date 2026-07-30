@@ -128,11 +128,18 @@ public static class CharacterMerge
         var player = existing[0];
         for (int i = 1; i < existing.Count; i++) pack.Characters.Remove(existing[i]);
 
-        player.Key = CharacterDef.PlayerKey;
-        player.BustSource = BustSource.None;
+        // Overwritten, not filled in. The whole point is that every pack shows
+        // the same person the same way, so a manifest carrying a divergent name
+        // or colour — hand-edited, or written before this was reserved — is
+        // corrected on load rather than honoured.
+        var canonical = CharacterDef.NewPlayer();
+        player.Key = canonical.Key;
+        player.Name = canonical.Name;
+        player.DisplayName = canonical.DisplayName;
+        player.NameColor = canonical.NameColor;
+        player.BustSource = canonical.BustSource;
         player.Outfits.Clear();
-        if (string.IsNullOrWhiteSpace(player.DisplayName)) player.DisplayName = "You";
-        if (string.IsNullOrWhiteSpace(player.Name)) player.Name = "You";
+        player.GiftLikes.Clear();
     }
 
     /// <summary>Every bust an actor could be shown as: its default first, then

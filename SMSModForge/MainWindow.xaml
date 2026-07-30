@@ -2168,9 +2168,11 @@
                                     <TextBlock Text="Name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox Grid.Row="0" Grid.Column="1"
                                              Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}"
+                                             IsEnabled="{Binding CanEditIdentity}"
                                              ToolTip="What the player reads on a speech line. The only name you need to write — the internal ones are derived from it."/>
                                     <TextBlock Text="Name colour:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
+                                    <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal"
+                                                IsEnabled="{Binding CanEditIdentity}">
                                         <Border Width="22" Height="18" BorderBrush="#888" BorderThickness="1"
                                                 Background="{Binding NameColorBrush}" VerticalAlignment="Center"/>
                                         <TextBox Text="{Binding NameColor, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="6,0,0,0"
@@ -2201,7 +2203,7 @@
 
                                     <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
                                                Visibility="{Binding IsPlayer, Converter={StaticResource BoolToVisibility}}"
-                                               Text="The player is built in and shared by every pack, so its key and source are fixed — a dialogue in any mod that addresses 'you' reaches this same character. Its name, colour and voice are yours to set."/>
+                                               Text="The player is built in and shared by every pack: a dialogue in any mod that addresses 'you' reaches this same character, and shows the same name in the same colour. Name, colour, key and source are all fixed for that reason. The typing voice is still yours to set."/>
                                     <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
                                                Visibility="{Binding HasNoBust, Converter={StaticResource BoolToVisibility}}"
                                                Text="This character speaks with no bust shown. Dialogue lines, name colour and voice all work; nothing is drawn."/>

@@ -1422,17 +1422,6 @@ namespace SMSModForge.PackPlugin
             if (m.Root["actors"] is Newtonsoft.Json.Linq.JArray legacy)
                 foreach (var a in legacy) speakers.Add(a);
 
-            // The player is addressable from every pack and declared by none of
-            // them, so it is registered here rather than being something each
-            // manifest has to remember. Declared FIRST so a pack that does ship
-            // its own entry overwrites this one and keeps its name colour and
-            // voice — the reserved key is the contract, not the settings.
-            ctx.Actors.Declare(new Newtonsoft.Json.Linq.JObject
-            {
-                ["key"] = PlayerCharacterKey,
-                ["displayName"] = "You",
-                ["bustSource"] = "None",
-            });
 
             var actors = speakers;
             if (actors != null)
@@ -1461,6 +1450,19 @@ namespace SMSModForge.PackPlugin
                     }
                 }
             }
+
+            // The player is addressable from every pack and owned by none, so it
+            // is registered here rather than being something each manifest has
+            // to remember. Declared LAST on purpose: a manifest carrying its own
+            // player entry — hand-edited, or written before the key was reserved
+            // — must not be able to give the shared character a different name.
+            // Its typing voice still registers from the loop above, by key.
+            ctx.Actors.Declare(new Newtonsoft.Json.Linq.JObject
+            {
+                ["key"] = PlayerCharacterKey,
+                ["displayName"] = "You",
+                ["bustSource"] = "None",
+            });
 
             // Build dialogues.
             var dialogues = m.Root["dialogues"] as Newtonsoft.Json.Linq.JArray;
