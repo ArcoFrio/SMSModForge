@@ -2996,6 +2996,7 @@
                                                       BaseSprite="{Binding BaseSprite}"
                                                       SecondarySprite="{Binding SecondarySprite}"
                                                       MaskSprite="{Binding MaskSprite}"
+                                                      SecondaryMaskSprite="{Binding SecondaryMaskSprite}"
                                                       Buttons="{Binding NavigatorButtons}"
                                                       DimUnderInactiveParent="{Binding IsChecked, ElementName=PlaceDimParent}"
                                                       DimInactive="{Binding IsChecked, ElementName=PlaceDimSelf}"
@@ -3060,6 +3061,7 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Base sprite (2048×1136):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ctl:PathPickerBox view:IssueTarget.Field="baseSprite"
@@ -3071,8 +3073,8 @@
                                                        PathText="{Binding SecondarySprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="1" Grid.Column="1"/>
-                                    <TextBlock Text="Sorting order:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
-                                    <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" Margin="0,6,0,0">
+                                    <TextBlock Text="Sorting order:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
+                                    <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal" Margin="0,6,0,0">
                                         <TextBlock Text="base" VerticalAlignment="Center" Margin="0,0,4,0"/>
                                         <TextBox Text="{Binding BaseSortingOrder, UpdateSourceTrigger=PropertyChanged}" Width="55"
                                                  ToolTip="SpriteRenderer sorting order of the base art. −10 is the prototype's, and what all but four vanilla levels use. Lower it to park objects behind the level art."/>
@@ -3081,15 +3083,20 @@
                                                  ToolTip="Sorting order of the secondary sprite. −12 is the prototype's; vanilla backdrops sit at −12 or −15."/>
                                     </StackPanel>
                                     <TextBlock Text="Every sprite in the game shares one sorting layer, so order alone decides what draws in front."
-                                               Grid.Row="5" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                                               Grid.Row="6" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,2,0,0"/>
                                     <TextBlock Text="Mask sprite (256×143):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ctl:PathPickerBox view:IssueTarget.Field="maskSprite"
                                                        PathText="{Binding MaskSprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="2" Grid.Column="1"
                                                        ToolTip="Bound as _MaskTex on the BASE sprite's material only. The backdrop and every GameObject in the place are unaffected. Loaded as linear data, not colour, because it carries amounts rather than pixels."/>
-                                    <TextBlock Grid.Row="3" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
-                                               Text="The mod clones the Beach level and swaps in these PNGs. The mask applies to the base sprite's own material (_MaskTex) — not the backdrop, not GameObjects; the material is cloned per level, so it can't leak into the vanilla levels that share Beach's."/>
+                                    <TextBlock Text="Backdrop mask (opt):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <ctl:PathPickerBox PathText="{Binding SecondaryMaskSprite, UpdateSourceTrigger=PropertyChanged}"
+                                                       PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                       Grid.Row="3" Grid.Column="1"
+                                                       ToolTip="Optional. Vanilla leaves the backdrop on a plain material with nothing to displace it; setting a mask here gives it its own clone of the level's jiggle material, so water or foliage behind the room can move independently. Blank = vanilla behaviour."/>
+                                    <TextBlock Grid.Row="4" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                               Text="The mod clones the Beach level and swaps in these PNGs. Each mask binds as _MaskTex on its own sprite's material, cloned per level so it can't leak into the vanilla levels that share Beach's. Only the mask's ALPHA is read — this shader has no R/G/B channels."/>
                                 </Grid>
                             </GroupBox>
 

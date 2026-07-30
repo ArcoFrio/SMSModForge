@@ -163,6 +163,20 @@ public sealed class PlaceViewModel : ObservableObject
         set { Model.MaskSprite = value; OnPropertyChanged(); }
     }
 
+    public string SecondaryMaskSprite
+    {
+        get => Model.SecondaryMaskSprite;
+        set
+        {
+            Model.SecondaryMaskSprite = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasSecondaryMask));
+        }
+    }
+
+    /// <summary>Whether the backdrop has been given a jiggle of its own.</summary>
+    public bool HasSecondaryMask => !string.IsNullOrWhiteSpace(Model.SecondaryMaskSprite);
+
     /// <summary>The Beach prototype's own sorting orders, which a place keeps
     /// until it says otherwise. Also what the preview draws the art at.</summary>
     public const int DefaultBaseSortingOrder = -10;

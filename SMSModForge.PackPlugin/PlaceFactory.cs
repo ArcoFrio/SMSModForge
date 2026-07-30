@@ -102,6 +102,9 @@ namespace SMSModForge.PackPlugin
             string baseRel   = (string)p["baseSprite"];
             string secondRel = (string)p["secondarySprite"];
             string maskRel   = (string)p["maskSprite"];
+            // Optional, and deliberately not part of the required-sprite guard
+            // below: a place without one keeps a vanilla, undisplaced backdrop.
+            string secondMaskRel = (string)p["secondaryMaskSprite"];
 
             if (!pack.Has(baseRel) || !pack.Has(secondRel) || !pack.Has(maskRel))
             {
@@ -114,7 +117,7 @@ namespace SMSModForge.PackPlugin
             string goName = absoluteIndex + "_" + internalName;
 
             // Level
-            GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel,
+            GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel, secondMaskRel,
                                                   parallax, parallaxRev, parallax2, parallax2Rev,
                                                   (int?)p["baseSortingOrder"], (int?)p["secondarySortingOrder"],
                                                   keepAudio, keepSeagulls);
@@ -144,7 +147,7 @@ namespace SMSModForge.PackPlugin
         // ─────────────────────────────── Level construction ────────────
 
         private static GameObject CloneAndDressLevel(GameObject beach, Transform parent,
-            string goName, PackManifest pack, string baseRel, string secondRel, string maskRel,
+            string goName, PackManifest pack, string baseRel, string secondRel, string maskRel, string secondMaskRel,
             float parallax, bool parallaxRev, float parallax2, bool parallax2Rev,
             int? baseOrder, int? secondOrder, bool keepAudio, bool keepSeagulls)
         {
@@ -201,18 +204,24 @@ namespace SMSModForge.PackPlugin
                 {
                     sr2.sprite = LoadLevelSprite(pack, secondRel, 2048, 1136, FilterMode.Point);
                     if (secondOrder.HasValue) sr2.sortingOrder = secondOrder.Value;
+
+                    // Vanilla leaves the backdrop on plain Sprite-Lit-Default,
+                    // with no mask and nothing to displace it. A pack that
+                    // authors a secondary mask is asking for the backdrop to
+                    // move too, so it gets its OWN clone of the level's jiggle
+                    // material — its own clone, or the two sprites would share
+                    // one mask and the whole point would be lost. Without a
+                    // mask authored, the renderer is left exactly as it was.
+                    if (pack.Has(secondMaskRel))
+                    {
+                        Material mat2 = new Material(mat);
+                        mat2.SetTexture("_MaskTex", LoadMaskTexture(pack, secondMaskRel));
+                        sr2.material = mat2;
+                    }
                 }
             }
-            // linear: the mask carries displacement amounts, not colour. As sRGB
-            // a painted 0.5 samples as ~0.22 and the effect stops resembling the
-            // authored mask. See BustFactory.LoadTexture.
-            var maskTex = new Texture2D(256, 143, TextureFormat.RGBA32, false, true);
-            byte[] maskBytes = pack.ReadBytes(maskRel);
-            if (maskBytes != null) maskTex.LoadImage(maskBytes);
-            maskTex.filterMode = FilterMode.Point;
-            mat.SetTexture("_MaskTex", maskTex);
+            mat.SetTexture("_MaskTex", LoadMaskTexture(pack, maskRel));
             sr.material = mat;
-            sr.material.SetTexture("_MaskTex", maskTex);
 
             newLevel.SetActive(false);
             return newLevel;
@@ -493,6 +502,25 @@ namespace SMSModForge.PackPlugin
         /// isn't found is skipped rather than throwing, so a future build that
         /// renames one degrades instead of breaking the level.
         /// </summary>
+        /// <summary>
+        /// Load a mask PNG as a texture the jiggle shader can read.
+        /// <para/>
+        /// Linear, not sRGB: the mask carries displacement amounts rather than
+        /// colour, and read as sRGB a painted 0.5 samples as about 0.22, so the
+        /// effect stops resembling what was authored. Point-filtered for the
+        /// same reason. See BustFactory.LoadTexture.
+        /// </summary>
+        private static Texture2D LoadMaskTexture(PackManifest pack, string rel)
+        {
+            // The 256x143 is a placeholder — LoadImage resizes to the PNG's own
+            // dimensions, so a mask may be authored at any resolution.
+            var tex = new Texture2D(256, 143, TextureFormat.RGBA32, false, true);
+            byte[] bytes = pack.ReadBytes(rel);
+            if (bytes != null) tex.LoadImage(bytes);
+            tex.filterMode = FilterMode.Point;
+            return tex;
+        }
+
         private static void SetParallax(GameObject go, float? strength, bool? reversed, bool? isUI)
         {
             var p = go.GetComponent("ParallaxMouseEffect");

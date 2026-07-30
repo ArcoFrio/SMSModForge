@@ -1111,6 +1111,18 @@ public sealed class PlacePreview : Grid
         set => SetValue(MaskSpriteProperty, value);
     }
 
+    /// <summary>Optional mask for the backdrop. Absent leaves it undisplaced,
+    /// which is what vanilla does.</summary>
+    public static readonly DependencyProperty SecondaryMaskSpriteProperty =
+        DependencyProperty.Register(nameof(SecondaryMaskSprite), typeof(string), typeof(PlacePreview),
+            new PropertyMetadata("", OnInputChanged));
+
+    public string SecondaryMaskSprite
+    {
+        get => (string)GetValue(SecondaryMaskSpriteProperty);
+        set => SetValue(SecondaryMaskSpriteProperty, value);
+    }
+
     public static readonly DependencyProperty LevelArtOrderProperty =
         DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
             new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
@@ -1206,6 +1218,16 @@ public sealed class PlacePreview : Grid
             // depth effect.
             TrackParallax(_secondaryImage,
                 baseGain + ParallaxGain(LevelParallaxSecondary, LevelParallaxSecondaryReversed, WorldPpu));
+
+            // Same restore rule as the base image: it survives the rebuild, so
+            // it has to be handed its flat bitmap back when the shader is off.
+            bool secShaded = Shaders && !string.IsNullOrWhiteSpace(root)
+                && !string.IsNullOrWhiteSpace(SecondarySprite) && !string.IsNullOrWhiteSpace(SecondaryMaskSprite)
+                && TrackLevelShader(_secondaryImage, Path.Combine(root, Normalize(SecondarySprite)),
+                                    Path.Combine(root, Normalize(SecondaryMaskSprite)));
+            if (!secShaded && _secondaryImage.Source is WriteableBitmap && !string.IsNullOrWhiteSpace(root)
+                && !string.IsNullOrWhiteSpace(SecondarySprite))
+                _secondaryImage.Source = LoadCachedBitmap(Path.Combine(root, Normalize(SecondarySprite)));
         }
         drawables.Add((LevelArtOrder, 0, _baseImage));
         TrackParallax(_baseImage, baseGain);

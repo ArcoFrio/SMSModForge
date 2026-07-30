@@ -59,6 +59,23 @@ public sealed class PlaceDef
     public string MaskSprite { get; set; } = "";
 
     /// <summary>
+    /// Optional mask for the SECONDARY sprite, giving the backdrop a jiggle of
+    /// its own.
+    /// <para/>
+    /// This goes beyond what vanilla does: a level's backdrop ships on plain
+    /// <c>Sprite-Lit-Default</c>, with no mask and no displacement, and only the
+    /// base art carries the jiggle material. Setting this hands the backdrop a
+    /// clone of the level's own jiggle material so it can be displaced too —
+    /// which is how you get water or foliage moving at a different depth from
+    /// the room in front of it. Blank leaves the backdrop exactly as vanilla
+    /// has it, so no existing place changes.
+    /// </summary>
+    [JsonProperty("secondaryMaskSprite", Order = 7, NullValueHandling = NullValueHandling.Ignore)]
+    public string SecondaryMaskSprite { get; set; } = "";
+
+    public bool ShouldSerializeSecondaryMaskSprite() => !string.IsNullOrEmpty(SecondaryMaskSprite);
+
+    /// <summary>
     /// SpriteRenderer sorting order of the base level art. Null keeps the Beach
     /// prototype's −10, which is what every vanilla level but four uses.
     /// <para/>
@@ -66,19 +83,19 @@ public sealed class PlaceDef
     /// sorting order is the only thing that decides it, since every sprite in
     /// the game — all 734 of them — is on the one "Default" sorting layer.
     /// </summary>
-    [JsonProperty("baseSortingOrder", Order = 7, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("baseSortingOrder", Order = 8, NullValueHandling = NullValueHandling.Ignore)]
     public int? BaseSortingOrder { get; set; }
 
     /// <summary>Sorting order of the secondary (distance) sprite. Null keeps the
     /// prototype's −12. Vanilla backdrops sit at −12 or −15, i.e. behind the base
     /// art but in front of anything deliberately parked below them.</summary>
-    [JsonProperty("secondarySortingOrder", Order = 8, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("secondarySortingOrder", Order = 9, NullValueHandling = NullValueHandling.Ignore)]
     public int? SecondarySortingOrder { get; set; }
 
     /// <summary>Strength of the parallax-mouse effect on the level's MAIN
     /// sprite. Every vanilla level uses 0.75 here — the depth comes from the
     /// backdrop moving differently, not from this.</summary>
-    [JsonProperty("parallaxStrength", Order = 9)]
+    [JsonProperty("parallaxStrength", Order = 10)]
     public float ParallaxStrength { get; set; } = 0.75f;
 
     /// <summary>
@@ -98,25 +115,25 @@ public sealed class PlaceDef
     /// default would have thrown wide open. Vanilla's own backdrops are 0.1,
     /// 0.5 or 1.5; 0.5 is the most common.
     /// </summary>
-    [JsonProperty("parallaxSecondaryStrength", Order = 10, NullValueHandling = NullValueHandling.Ignore)]
+    [JsonProperty("parallaxSecondaryStrength", Order = 11, NullValueHandling = NullValueHandling.Ignore)]
     public float? ParallaxSecondaryStrength { get; set; }
 
     /// <summary>Invert the main sprite's parallax direction — it moves WITH the
     /// cursor rather than against it.</summary>
-    [JsonProperty("parallaxReversed", Order = 11)]
+    [JsonProperty("parallaxReversed", Order = 12)]
     public bool ParallaxReversed { get; set; } = false;
 
     /// <summary>Invert the secondary sprite's parallax direction. Vanilla uses
     /// this once (53_Hotelroom's backdrop), to make a background drift opposite
     /// the room in front of it.</summary>
-    [JsonProperty("parallaxSecondaryReversed", Order = 12)]
+    [JsonProperty("parallaxSecondaryReversed", Order = 13)]
     public bool ParallaxSecondaryReversed { get; set; } = false;
 
     /// <summary>
     /// If true, the cloned level keeps the Beach prototype's <c>Audio Source</c>
     /// (ocean ambience loop). False for indoor rooms.
     /// </summary>
-    [JsonProperty("keepAudio", Order = 13)]
+    [JsonProperty("keepAudio", Order = 14)]
     public bool KeepAudio { get; set; } = false;
 
     /// <summary>
@@ -124,7 +141,7 @@ public sealed class PlaceDef
     /// <c>Particle System (2)</c> (seagulls flying overhead). Independent
     /// of <see cref="KeepAudio"/>.
     /// </summary>
-    [JsonProperty("keepSeagulls", Order = 14)]
+    [JsonProperty("keepSeagulls", Order = 15)]
     public bool KeepSeagulls { get; set; } = false;
 
     /// <summary>
@@ -133,7 +150,7 @@ public sealed class PlaceDef
     /// <c>Inside</c> = indoor rain/snow particles, <c>Outside</c> =
     /// outdoor rain/snow particles.
     /// </summary>
-    [JsonProperty("weatherType", Order = 15)]
+    [JsonProperty("weatherType", Order = 16)]
     [JsonConverter(typeof(StringEnumConverter))]
     public WeatherType WeatherType { get; set; } = WeatherType.None;
 
@@ -142,7 +159,7 @@ public sealed class PlaceDef
     /// active level</em>. Each button targets another place by stable
     /// reference (vanilla name or pack-scoped key).
     /// </summary>
-    [JsonProperty("navigatorButtons", Order = 16)]
+    [JsonProperty("navigatorButtons", Order = 17)]
     public List<NavigatorButtonDef> NavigatorButtons { get; set; } = new();
 
     /// <summary>
@@ -153,7 +170,7 @@ public sealed class PlaceDef
     /// container subtree hosts the NPC placements. Each node is named so
     /// dialogue actions can show/hide/fade/move/spin it.
     /// </summary>
-    [JsonProperty("gameObjects", Order = 17)]
+    [JsonProperty("gameObjects", Order = 18)]
     public List<GameObjectDef> GameObjects { get; set; } = new();
 
     /// <summary>
@@ -162,11 +179,11 @@ public sealed class PlaceDef
     /// moment; passing groups execute their actions. Re-entering the level
     /// runs them again (gate with variables for one-time effects).
     /// </summary>
-    [JsonProperty("onEnter", Order = 18)]
+    [JsonProperty("onEnter", Order = 19)]
     public List<LevelHookDef> OnEnter { get; set; } = new();
 
     /// <summary>Same as <see cref="OnEnter"/>, on the active→inactive edge.</summary>
-    [JsonProperty("onExit", Order = 19)]
+    [JsonProperty("onExit", Order = 20)]
     public List<LevelHookDef> OnExit { get; set; } = new();
 
     // Off is the overwhelming default (vanilla reverses exactly one sprite in
