@@ -1080,6 +1080,24 @@ public sealed class PlacePreview : Grid
         if (d is PlacePreview p && !(bool)e.NewValue) p.ResetParallax();
     }
 
+    /// <summary>
+    /// Run the real shaders over the preview instead of drawing flat sprites.
+    /// Off by default: it is an animated, CPU-side pass, and a still picture is
+    /// what you want while positioning things.
+    /// <para/>
+    /// Toggling rebuilds, because the shader targets are established as the
+    /// scene is laid out.
+    /// </summary>
+    public static readonly DependencyProperty ShadersProperty =
+        DependencyProperty.Register(nameof(Shaders), typeof(bool), typeof(PlacePreview),
+            new PropertyMetadata(false, OnInputChanged));
+
+    public bool Shaders
+    {
+        get => (bool)GetValue(ShadersProperty);
+        set => SetValue(ShadersProperty, value);
+    }
+
     public static readonly DependencyProperty LevelArtOrderProperty =
         DependencyProperty.Register(nameof(LevelArtOrder), typeof(int), typeof(PlacePreview),
             new PropertyMetadata(LevelBaseSortingOrder, OnInputChanged));
@@ -1164,6 +1182,7 @@ public sealed class PlacePreview : Grid
         var drawables = new System.Collections.Generic.List<(int Order, int Tie, UIElement Element)>();
 
         _parallaxTargets.Clear();
+        _shaderTargets.Clear();
 
         double baseGain = ParallaxGain(LevelParallax, LevelParallaxReversed, PixelsPerUnit);
         if (_secondaryImage.Source != null)
@@ -1267,6 +1286,7 @@ public sealed class PlacePreview : Grid
             _worldLayer.Children.Add(d.Element);
 
         UpdateWetTimer();
+        SyncShaderTimer();
         RefreshGizmo();
         // The object set only changes on structural rebuilds, not per drag frame.
         if (_activeHandle == GizmoHandle.None) RefreshObjectMenu();
@@ -1439,6 +1459,108 @@ public sealed class PlacePreview : Grid
     /// <summary>Elements that drift, each with the transform it was laid out
     /// with and its gain. Rebuilt with the scene; empty means nothing drifts.</summary>
     private readonly List<(UIElement Element, Matrix Base, double Gain)> _parallaxTargets = new();
+
+    // ══ Shaders ═════════════════════════════════════════════════════════
+    //
+    // A pack NPC is built with the game's JiggleSprite material and the pack's
+    // own uniforms (NpcFactory hands them to BustFactory.ApplyJiggle), and that
+    // shader is already ported to the CPU for the bust preview. So a placed NPC
+    // can be shown running the SAME code with the SAME numbers it will run with
+    // in game — not an impression of it.
+    //
+    // Cost is governed by the OUTPUT grid, not the source: the pass walks output
+    // pixels and samples the pose. Poses are authored large, so the pass renders
+    // into a small buffer and lets WPF scale it — an NPC occupies a few hundred
+    // pixels of the preview, and paying for 1024² per frame per character to
+    // show that would be absurd.
+
+    /// <summary>Longest edge of a shader pass. A placed NPC is drawn far smaller
+    /// than its authored pose, and the cost is per output pixel.</summary>
+    private const int ShaderMaxEdge = 384;
+
+    /// <summary>Refresh rate for the animated passes. The jiggle is a slow
+    /// wobble — a third of a display refresh reads as continuous and leaves the
+    /// UI thread alone for everything else.</summary>
+    private static readonly TimeSpan ShaderTick = TimeSpan.FromMilliseconds(33);
+
+    private sealed class ShaderTarget
+    {
+        public Image Image = null!;
+        public byte[] Base = null!, Mask = null!, Output = null!;
+        public int SrcW, SrcH, OutW, OutH;
+        public JiggleParams Params = null!;
+        public (float r, float g, float b, float a) Tint;
+        public WriteableBitmap Bitmap = null!;
+    }
+
+    private readonly List<ShaderTarget> _shaderTargets = new();
+    private DispatcherTimer? _shaderTimer;
+    private readonly System.Diagnostics.Stopwatch _shaderClock = new();
+
+    /// <summary>
+    /// Put an NPC's pose through the jiggle shader, if it has a mask to drive
+    /// one. Returns false when there is nothing to animate, leaving the caller's
+    /// flat bitmap in place.
+    /// </summary>
+    private bool TrackShader(Image img, string poseAbs, string maskAbs, JiggleParams p)
+    {
+        var basePx = LoadBgraAtNative(poseAbs, out int w, out int h);
+        if (basePx == null || w <= 0 || h <= 0) return false;
+        // The mask has to land on the pose's grid: the CPU port samples both
+        // from one array shape, where the GPU would resample in UV space.
+        var maskPx = LoadBgraScaled(maskAbs, w, h);
+        if (maskPx == null) return false;
+
+        double k = (double)ShaderMaxEdge / Math.Max(w, h);
+        int outW = Math.Max(1, (int)Math.Round(w * Math.Min(1.0, k)));
+        int outH = Math.Max(1, (int)Math.Round(h * Math.Min(1.0, k)));
+
+        var bmp = new WriteableBitmap(outW, outH, 96, 96, PixelFormats.Pbgra32, null);
+        img.Source = bmp;
+        var (tr, tg, tb, ta) = BustComposer.ParseTint(p.Tint);
+
+        _shaderTargets.Add(new ShaderTarget
+        {
+            Image = img, Base = basePx, Mask = maskPx, SrcW = w, SrcH = h,
+            OutW = outW, OutH = outH, Output = new byte[outW * 4 * outH],
+            Params = p, Tint = (tr, tg, tb, ta), Bitmap = bmp,
+        });
+        return true;
+    }
+
+    /// <summary>Start or stop the animation loop to match what was just built.</summary>
+    private void SyncShaderTimer()
+    {
+        if (_shaderTargets.Count == 0)
+        {
+            _shaderTimer?.Stop();
+            _shaderClock.Reset();
+            return;
+        }
+        if (!_shaderClock.IsRunning) _shaderClock.Restart();
+        if (_shaderTimer == null)
+        {
+            _shaderTimer = new DispatcherTimer(DispatcherPriority.Background) { Interval = ShaderTick };
+            _shaderTimer.Tick += (_, _) => StepShaders();
+        }
+        _shaderTimer.Interval = ShaderTick;
+        _shaderTimer.Start();
+        StepShaders();          // draw once now rather than after the first tick
+    }
+
+    private void StepShaders()
+    {
+        // Nothing to show while the control is off screen, and a background
+        // tab should not be burning a core on invisible pixels.
+        if (!IsVisible) return;
+        float t = (float)_shaderClock.Elapsed.TotalSeconds;
+        foreach (var s in _shaderTargets)
+        {
+            JiggleShader.Render(s.Base, s.Mask, s.SrcW, s.SrcH, s.Params, s.Tint, t,
+                                s.Output, s.OutW, s.OutH, superSample: false);
+            s.Bitmap.WritePixels(new Int32Rect(0, 0, s.OutW, s.OutH), s.Output, s.OutW * 4, 0);
+        }
+    }
 
     /// <summary>Register an element to drift, unless it has no reason to.</summary>
     private void TrackParallax(UIElement element, double gain)
@@ -1749,7 +1871,8 @@ public sealed class PlacePreview : Grid
                 ExpandBounds(mShadow, circlePx, circlePx, ref minX, ref minY, ref maxX, ref maxY);
             }
 
-            // Body pose (still). The animated jiggle preview lives on the NPCs tab.
+            // Body pose. Still by default; with shaders on it runs the same
+            // JiggleSprite pass, and the same uniforms, the runtime gives it.
             var bmp = string.IsNullOrWhiteSpace(def.Sprite) ? null
                     : LoadCachedBitmap(Path.Combine(root, Normalize(def.Sprite)));
             if (bmp != null)
@@ -1766,6 +1889,12 @@ public sealed class PlacePreview : Grid
                     ToolTip = tip,
                 };
                 RenderOptions.SetBitmapScalingMode(img, BitmapScalingMode.HighQuality);
+                // The shader draws into its own smaller buffer, so the Image
+                // keeps the pose's layout size and WPF scales the result — the
+                // object stays exactly where and how big it was.
+                if (Shaders && !string.IsNullOrWhiteSpace(def.Mask))
+                    TrackShader(img, Path.Combine(root, Normalize(def.Sprite)),
+                                Path.Combine(root, Normalize(def.Mask)), def.Model.Jiggle);
                 var plForClick = pl;
                 var plPathForClick = entry.Path;
                 img.MouseLeftButtonDown += (_, e) => { SelectPlacement(plForClick, plPathForClick); e.Handled = true; };
@@ -2923,6 +3052,61 @@ public sealed class PlacePreview : Grid
         };
         b.Click += (_, _) => onClick();
         return b;
+    }
+
+    /// <summary>Decode a PNG to premultiplied BGRA at its own size, which is the
+    /// buffer shape the shader port expects.</summary>
+    private static byte[]? LoadBgraAtNative(string abs, out int w, out int h)
+    {
+        w = h = 0;
+        var src = LoadCachedBitmap(abs);
+        if (src == null) return null;
+        w = src.PixelWidth; h = src.PixelHeight;
+        return CopyBgra(src, w, h);
+    }
+
+    /// <summary>Decode a PNG and resample it onto a given grid — used to put a
+    /// jiggle mask on its pose's pixel grid.</summary>
+    private static byte[]? LoadBgraScaled(string abs, int w, int h)
+    {
+        var src = LoadCachedBitmap(abs);
+        if (src == null) return null;
+        int sw = src.PixelWidth, sh = src.PixelHeight;
+        var srcPx = CopyBgra(src, sw, sh);
+        if (srcPx == null) return null;
+        if (sw == w && sh == h) return srcPx;
+
+        // Resampled here rather than through a TransformedBitmap: the port
+        // requires the mask to be EXACTLY the pose's grid, and a scale transform
+        // rounds its output dimensions, which lands a pixel out often enough to
+        // matter. Nearest-neighbour is also the right filter — a mask carries
+        // per-channel amounts, and blending them invents displacements that were
+        // never painted.
+        var dst = new byte[w * 4 * h];
+        for (int y = 0; y < h; y++)
+        {
+            int sy = Math.Min(sh - 1, (int)((long)y * sh / h));
+            int srcRow = sy * sw * 4, dstRow = y * w * 4;
+            for (int x = 0; x < w; x++)
+            {
+                int sx = Math.Min(sw - 1, (int)((long)x * sw / w));
+                Buffer.BlockCopy(srcPx, srcRow + sx * 4, dst, dstRow + x * 4, 4);
+            }
+        }
+        return dst;
+    }
+
+    private static byte[]? CopyBgra(BitmapSource src, int w, int h)
+    {
+        try
+        {
+            var conv = src.Format == PixelFormats.Pbgra32
+                ? src : new FormatConvertedBitmap(src, PixelFormats.Pbgra32, null, 0);
+            var buf = new byte[w * 4 * h];
+            conv.CopyPixels(buf, w * 4, 0);
+            return buf;
+        }
+        catch { return null; }
     }
 
     private static string Normalize(string p) => p?.Replace('/', Path.DirectorySeparatorChar) ?? "";

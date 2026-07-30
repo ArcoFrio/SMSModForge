@@ -2902,6 +2902,7 @@
                                                           LevelParallaxReversed="{Binding PreviewLevelParallaxReversed}"
                                                           LevelParallaxSecondaryReversed="{Binding PreviewLevelParallaxSecondaryReversed}"
                                                           ParallaxPreview="{Binding IsChecked, ElementName=ExtParallaxPreview}"
+                                                          Shaders="{Binding IsChecked, ElementName=ExtShaders}"
                                                           LevelArtPpu="{Binding PreviewArtPpu}"
                                                           LevelScale="{Binding PreviewLevelScale}"
                                                           DimUnderInactiveParent="{Binding IsChecked, ElementName=ExtDimParent}"
@@ -2916,6 +2917,8 @@
                                                       ToolTip="Objects parked for a rule to switch on. Untick to see them at full strength while you place them."/>
                                             <CheckBox x:Name="ExtParallaxPreview" IsChecked="False" Content="Preview parallax" Margin="12,0,0,0"
                                                       ToolTip="Drift the scene with the cursor, as the game does — including each vanilla object's own effect, read from the extraction. Viewing only. Leave off while positioning."/>
+                                            <CheckBox x:Name="ExtShaders" IsChecked="False" Content="Apply shaders" Margin="12,0,0,0"
+                                                      ToolTip="Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms. Animated, so it costs a little CPU; leave off while positioning."/>
                                         </StackPanel>
                                         <TextBlock Text="{Binding CatalogSummary}" Foreground="Gray"
                                                    FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
@@ -3003,6 +3006,7 @@
                                                       LevelParallaxReversed="{Binding ParallaxReversed}"
                                                       LevelParallaxSecondaryReversed="{Binding ParallaxSecondaryReversed}"
                                                       ParallaxPreview="{Binding IsChecked, ElementName=PlaceParallaxPreview}"
+                                                      Shaders="{Binding IsChecked, ElementName=PlaceShaders}"
                                                       NpcCatalog="{Binding DataContext.Npcs,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
@@ -3012,6 +3016,8 @@
                                                   ToolTip="Objects parked for a rule to switch on. Untick to see them at full strength while you place them."/>
                                         <CheckBox x:Name="PlaceParallaxPreview" IsChecked="False" Content="Preview parallax" Margin="12,0,0,0"
                                                   ToolTip="Drift the scene with the cursor, as the game does. Each layer moves by its own strength plus every parent's, and vertical travel is half horizontal. Viewing only — nothing moves in the pack. Leave off while positioning."/>
+                                        <CheckBox x:Name="PlaceShaders" IsChecked="False" Content="Apply shaders" Margin="12,0,0,0"
+                                                  ToolTip="Run the real JiggleSprite pass over NPCs that have a jiggle mask, using this pack's own uniforms — the same code and the same numbers the game runs. Animated, so it costs a little CPU; leave off while positioning."/>
                                     </StackPanel>
                                 </StackPanel>
                             </GroupBox>
