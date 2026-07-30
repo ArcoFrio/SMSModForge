@@ -1501,6 +1501,11 @@ public sealed class PlacePreview : Grid
     /// than its authored pose, and the cost is per output pixel.</summary>
     private const int ShaderMaxEdge = 384;
 
+    /// <summary>Ceiling for the LEVEL pass, which renders at its source
+    /// resolution. Base art is 2048×1136, so this is a guard against an
+    /// unusually large sprite rather than a reduction in the normal case.</summary>
+    private const int LevelShaderMaxEdge = 2048;
+
     /// <summary>Refresh rate for the animated passes. The jiggle is a slow
     /// wobble — a third of a display refresh reads as continuous and leaves the
     /// UI thread alone for everything else.</summary>
@@ -1568,9 +1573,15 @@ public sealed class PlacePreview : Grid
         var maskPx = LoadBgraScaled(maskAbs, w, h);
         if (maskPx == null) return false;
 
-        // Level art is the largest thing on screen and the displacement is
-        // tiny (0.004 UV), so it gets the same output cap as everything else.
-        double k = Math.Min(1.0, (double)ShaderMaxEdge / Math.Max(w, h));
+        // Level art renders at its OWN resolution, unlike the NPC passes.
+        // Shrinking it destroys the effect twice over: the displacement peaks
+        // at about four source pixels, so at a reduced grid it is smaller than
+        // one output pixel and aliases away to nothing, and the layer is drawn
+        // with NearestNeighbor scaling, so the small buffer then comes back up
+        // as hard blocks. Full size costs more per frame, but the wave terms
+        // are tabulated per frame rather than evaluated per pixel, which is
+        // what makes it affordable.
+        double k = Math.Min(1.0, (double)LevelShaderMaxEdge / Math.Max(w, h));
         int outW = Math.Max(1, (int)Math.Round(w * k));
         int outH = Math.Max(1, (int)Math.Round(h * k));
 

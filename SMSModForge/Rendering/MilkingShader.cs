@@ -87,6 +87,23 @@ public static class MilkingShader
         float variation = s.AmplitudeVariation, strength = s.Strength;
         float waveCount = s.WaveCount, compressionRatio = s.CompressionRatio;
 
+        // Every wave term depends on the pixel ONLY through t = dot(uv, dir),
+        // so they are tabulated once per frame instead of evaluated per pixel.
+        // Level art is millions of pixels and this collapses six sines each into
+        // a lookup; t spans [0, |dx|+|dy|] for uv in the unit square.
+        float tMax = Math.Abs(dx) + Math.Abs(dy);
+        var slideT = new float[WaveTable];
+        var crossT = new float[WaveTable];
+        for (int i = 0; i < WaveTable; i++)
+        {
+            float t = tMax * i / (WaveTable - 1);
+            float waveArg = t * waveCount * Pi - 2f * timePhase;
+            slideT[i] = 0.5f * MathF.Sin(t * waveCount + timePhase);
+            crossT[i] = MathF.Sin(waveArg) * compressionRatio
+                      + 0.4f * MathF.Sin(waveArg * 1.7f + timePhase * 0.8f);
+        }
+        float tScale = tMax > 0 ? (WaveTable - 1) / tMax : 0f;
+
         Parallel.For(0, outH, oy =>
         {
             // Output pixel centres in UV, so a reduced-size pass samples the
@@ -101,37 +118,56 @@ public static class MilkingShader
                 int mx = Math.Min(srcW - 1, (int)(u * srcW));
                 int my = Math.Min(srcH - 1, (int)(v * srcH));
                 float maskA = maskTex[my * srcStride + mx * 4 + 3] / 255f;
-                float ampVar = 1f + variation * MathF.Sin(u * Pi);
+                float ampVar = variation == 0f ? 1f : 1f + variation * MathF.Sin(u * Pi);
                 float amp = ampVar * maskA * strength;
 
-                float t = u * dx + v * dy;                       // along the milking axis
-                float waveArg = t * waveCount * Pi - 2f * timePhase;
+                // Interpolated so the wave stays smooth between table entries —
+                // the whole displacement is only a few pixels, and quantising it
+                // would show up as banding rather than motion.
+                float ft = (u * dx + v * dy) * tScale;
+                int i0 = (int)ft; if (i0 < 0) i0 = 0;
+                if (i0 > WaveTable - 2) i0 = WaveTable - 2;
+                float fr = ft - i0;
+                float slide = amp * (slideT[i0] + (slideT[i0 + 1] - slideT[i0]) * fr);
+                float cross = amp * (crossT[i0] + (crossT[i0 + 1] - crossT[i0]) * fr);
 
-                // Compression across the axis, and a slower slide along it.
-                float compression = amp * MathF.Sin(waveArg) * compressionRatio;
-                float slide = 0.5f * amp * MathF.Sin(t * waveCount + timePhase);
-
-                // Secondary ripple, also across the axis. Its 1.7 / 0.8 / 0.4
-                // are literals in the bytecode, not material settings.
-                float secondary = 0.4f * MathF.Sin(waveArg * 1.7f + timePhase * 0.8f);
-
-                float offU = slide * dx + compression * px + amp * secondary * px;
-                float offV = slide * dy + compression * py + amp * secondary * py;
+                float offU = slide * dx + cross * px;
+                float offV = slide * dy + cross * py;
 
                 // add_sat: the displaced UV is saturated, not wrapped, so the
                 // edges smear rather than showing the opposite side.
                 float su = Math.Clamp(u + offU, 0f, 1f);
                 float sv = Math.Clamp(v + offV, 0f, 1f);
 
-                int sx = Math.Min(srcW - 1, (int)(su * srcW));
-                int sy = Math.Min(srcH - 1, (int)(sv * srcH));
-                int si = sy * srcStride + sx * 4;
-                int di = outRow + ox * 4;
-                output[di] = baseTex[si];
-                output[di + 1] = baseTex[si + 1];
-                output[di + 2] = baseTex[si + 2];
-                output[di + 3] = baseTex[si + 3];
+                // Bilinear, because the game imports level art with
+                // FilterMode.Bilinear and because the displacement peaks at a
+                // few pixels: point sampling quantises that to whole texels and
+                // the art reads as juddering rather than drifting.
+                SampleBilinear(baseTex, srcW, srcH, srcStride, su, sv, output, outRow + ox * 4);
             }
         });
+    }
+
+    /// <summary>Table resolution for the wave terms. The wave repeats every
+    /// <c>2/waveCount</c> in t, so a few thousand entries put many samples in
+    /// every cycle at any sane wave count.</summary>
+    private const int WaveTable = 4096;
+
+    private static void SampleBilinear(byte[] src, int w, int h, int stride,
+                                       float u, float v, byte[] dst, int di)
+    {
+        float fx = u * w - 0.5f, fy = v * h - 0.5f;
+        int x0 = (int)MathF.Floor(fx), y0 = (int)MathF.Floor(fy);
+        float ax = fx - x0, ay = fy - y0;
+        int x1 = Math.Min(w - 1, x0 + 1), y1 = Math.Min(h - 1, y0 + 1);
+        x0 = Math.Clamp(x0, 0, w - 1); y0 = Math.Clamp(y0, 0, h - 1);
+        int r00 = y0 * stride, r10 = y1 * stride;
+        int i00 = r00 + x0 * 4, i01 = r00 + x1 * 4, i10 = r10 + x0 * 4, i11 = r10 + x1 * 4;
+        for (int c = 0; c < 4; c++)
+        {
+            float top = src[i00 + c] + (src[i01 + c] - src[i00 + c]) * ax;
+            float bot = src[i10 + c] + (src[i11 + c] - src[i10 + c]) * ax;
+            dst[di + c] = (byte)(top + (bot - top) * ay + 0.5f);
+        }
     }
 }
