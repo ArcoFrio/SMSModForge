@@ -44,12 +44,12 @@
                         <ToggleButton x:Name="ShowRToggle" IsChecked="True"
                                       Width="22" Height="22" Click="ShowR_Click"
                                       ToolTip="Show Bounce channel">
-                            <TextBlock Text="●" FontSize="14" Foreground="#F66"/>
+                            <TextBlock x:Name="ShowRDot" Text="●" FontSize="14" Foreground="#F66"/>
                         </ToggleButton>
                         <RadioButton GroupName="ActiveChannel" x:Name="ActiveR" IsChecked="True"
                                      Margin="8,0,0,0" VerticalAlignment="Center"
                                      Checked="ActiveR_Checked" Background="#F0F0F0" BorderBrush="#FFFFFF">
-                            <TextBlock Text="Bounce(R)" FontSize="13" FontWeight="Bold" Foreground="#FF6666"/>
+                            <TextBlock x:Name="ActiveRLabel" Text="Bounce(R)" FontSize="13" FontWeight="Bold" Foreground="#FF6666"/>
                         </RadioButton>
                     </StackPanel>
                 </Border>

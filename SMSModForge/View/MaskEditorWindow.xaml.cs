@@ -62,10 +62,24 @@ public partial class MaskEditorWindow : Window
         _mask = new MaskBuffer(host.MaskKind);
         if (_mask.ChannelCount == 1)
         {
-            // Nothing to choose between, and the remaining plane is not "red".
-            ActiveG.Visibility = Visibility.Collapsed;
-            ActiveB.Visibility = Visibility.Collapsed;
-            ActiveR.Content = "Intensity";
+            // A level mask has one plane, so the other two layer panels go
+            // entirely — not just their radio buttons, or their swatches and
+            // show/hide toggles are left behind advertising channels that do
+            // nothing here.
+            LayerG.Visibility = Visibility.Collapsed;
+            LayerB.Visibility = Visibility.Collapsed;
+
+            // Restyle the surviving panel rather than replacing its content:
+            // dropping a bare string into the RadioButton loses the label's
+            // styling and leaves it near-unreadable against the panel. The red
+            // is dropped too — it meant "the R channel", which this mask has no
+            // concept of, so the panel goes neutral.
+            ActiveRLabel.Text = "Intensity";
+            ActiveRLabel.Foreground = Brushes.White;
+            ShowRDot.Foreground = Brushes.White;
+            ShowRToggle.ToolTip = "Show the mask";
+            LayerR.BorderBrush = new SolidColorBrush(Color.FromRgb(0x88, 0x88, 0x88));
+            LayerR.Background = new SolidColorBrush(Color.FromRgb(0x2A, 0x2A, 0x2A));
             _activeChannel = 0;
         }
         _viewBitmap = new WriteableBitmap(MaskBuffer.Size, MaskBuffer.Size, 96, 96, PixelFormats.Bgra32, null);
@@ -129,13 +143,24 @@ public partial class MaskEditorWindow : Window
             case Key.E: SetTool(eraser: true);  e.Handled = true; break;
 
             // ── Channel selection ───────────────────────────────────
+            // 2 and 3 are inert on a one-plane mask. Collapsing a RadioButton
+            // does not stop IsChecked from taking, so without this the key
+            // would select a channel that does not exist and Channel() would
+            // throw on the next stroke.
             case Key.D1: case Key.NumPad1: ActiveR.IsChecked = true; e.Handled = true; break;
-            case Key.D2: case Key.NumPad2: ActiveG.IsChecked = true; e.Handled = true; break;
-            case Key.D3: case Key.NumPad3: ActiveB.IsChecked = true; e.Handled = true; break;
+            case Key.D2: case Key.NumPad2:
+                if (_mask.ChannelCount > 1) ActiveG.IsChecked = true;
+                e.Handled = true; break;
+            case Key.D3: case Key.NumPad3:
+                if (_mask.ChannelCount > 2) ActiveB.IsChecked = true;
+                e.Handled = true; break;
 
             // ── Channel visibility toggles ──────────────────────────
             case Key.R: _showR = !_showR; ShowRToggle.IsChecked = _showR; RecomposeAll(); e.Handled = true; break;
-            case Key.G: _showG = !_showG; ShowGToggle.IsChecked = _showG; RecomposeAll(); e.Handled = true; break;
+            case Key.G:
+                if (_mask.ChannelCount > 1)
+                { _showG = !_showG; ShowGToggle.IsChecked = _showG; RecomposeAll(); }
+                e.Handled = true; break;
             case Key.D: _showDiffuse = !_showDiffuse; ShowDiffuseToggle.IsChecked = _showDiffuse; RecomposeAll(); e.Handled = true; break;
 
             // ── Brush size ──────────────────────────────────────────
