@@ -2172,7 +2172,7 @@
                                              ToolTip="What the player reads on a speech line. The only name you need to write — the internal ones are derived from it."/>
                                     <TextBlock Text="Name colour:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal"
-                                                IsEnabled="{Binding CanEditIdentity}">
+                                                IsEnabled="{Binding CanEditNameColor}">
                                         <Border Width="22" Height="18" BorderBrush="#888" BorderThickness="1"
                                                 Background="{Binding NameColorBrush}" VerticalAlignment="Center"/>
                                         <TextBox Text="{Binding NameColor, UpdateSourceTrigger=PropertyChanged}" Width="90" Margin="6,0,0,0"
@@ -2197,6 +2197,9 @@
                                         </ComboBox>
                                     </StackPanel>
 
+                                    <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
+                                               Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"
+                                               Text="The name colour belongs to the game for a borrowed character, so it is not this pack's to change."/>
                                     <TextBlock Margin="0,6,0,0" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
                                                Visibility="{Binding IsVanillaBust, Converter={StaticResource BoolToVisibility}}"
                                                Text="This character wears the game's own busts. Its outfits are bust names and nothing else — add one per bust it can appear as, and pick which from the list in the outfit editor."/>
@@ -2394,9 +2397,24 @@
                          columns 2 and 3 — this panel is intentionally fixed
                          (see the columns block above for why). -->
                     <DockPanel Grid.Column="3" Margin="8">
-                        <TextBlock DockPanel.Dock="Top" Text="Preview (live JiggleSprite)" FontWeight="Bold" Margin="0,0,0,4"/>
+                        <TextBlock DockPanel.Dock="Top" FontWeight="Bold" Margin="0,0,0,4"
+                                   Text="{Binding SelectedCharacter.IsPackBust,
+                                          Converter={x:Static conv:PreviewHeaderConverter.Instance}}"/>
                         <Border DockPanel.Dock="Top" Background="#222" Padding="4" ClipToBounds="True">
+                            <Grid>
+                                <!-- The jiggle pass needs this pack's sprites, which a
+                                     vanilla outfit has none of - it names a bust the game
+                                     already ships. So that case renders from the shipped
+                                     bust art instead, rather than showing an empty box. -->
+                                <ctl:BustPreview MainViewModel="{Binding DataContext,
+                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
+                                                 BustKey="{Binding SelectedOutfit.GameObjectName}"
+                                                 ExpressionKey="{Binding ElementName=ExpressionPicker, Path=SelectedItem.Content, Mode=OneWay, FallbackValue=None}"
+                                                 Visibility="{Binding SelectedCharacter.IsVanillaBust,
+                                                              Converter={StaticResource BoolToVisibility}}"/>
                             <ctl:JigglePreview x:Name="PreviewControl"
+                                               Visibility="{Binding SelectedCharacter.IsPackBust,
+                                                            Converter={StaticResource BoolToVisibility}}"
                                                Margin="0,12,0,-20"
                                                Outfit="{Binding SelectedOutfit}"
                                                PackRoot="{Binding PackRoot}"
@@ -2406,6 +2424,7 @@
                                                Yapping="{Binding ElementName=YappingToggle, Path=IsChecked, Mode=OneWay}"
                                                Breathing="{Binding ElementName=BreathingToggle, Path=IsChecked, Mode=OneWay}"
                                                BreathingAmplitude="{Binding ElementName=BreathingDepth, Path=Value, Mode=OneWay}"/>
+                            </Grid>
                         </Border>
                         <Grid DockPanel.Dock="Top" Margin="0,8,0,0">
                             <Grid.ColumnDefinitions>

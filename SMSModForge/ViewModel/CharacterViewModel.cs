@@ -95,16 +95,25 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     /// <summary>
     /// The reserved player character, which every pack shares.
     /// <para/>
-    /// Its key is the contract between packs, so the editor shows it but does
-    /// not let it be renamed, re-sourced or deleted — a pack that changed any of
-    /// those would simply stop addressing the same person as everyone else. The
-    /// name colour and voice remain editable, since those are presentation and
-    /// a pack is entitled to its own.
+    /// Everything that decides WHO it is — key, name, colour, bust source — is
+    /// fixed, because a pack that changed any of them would stop showing the
+    /// player the same person as every other pack does. Only the typing voice
+    /// is per-pack.
     /// </summary>
     public bool IsPlayer => Model.IsPlayer;
 
     /// <summary>Inverse of <see cref="IsPlayer"/>, for binding enabled-ness.</summary>
     public bool CanEditIdentity => !Model.IsPlayer;
+
+    /// <summary>
+    /// Whether this pack may set the speaker-name colour.
+    /// <para/>
+    /// It may not for a borrowed character: the colour belongs to the game
+    /// along with the bust, and a pack tinting Anna's name differently from
+    /// every other appearance of Anna would be a bug rather than a style. Nor
+    /// for the player, whose whole identity is shared.
+    /// </summary>
+    public bool CanEditNameColor => !Model.IsPlayer && Model.BustSource != BustSource.Vanilla;
 
     /// <summary>Whether the names are still tracking the display name — shown
     /// in the advanced panel so it is clear why they move on their own.</summary>
@@ -135,6 +144,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
             OnPropertyChanged(nameof(IsPackBust));
             OnPropertyChanged(nameof(IsVanillaBust));
             OnPropertyChanged(nameof(HasNoBust));
+            OnPropertyChanged(nameof(CanEditNameColor));
             OnPropertyChanged(nameof(WearableBusts));
             BustSourceChanged?.Invoke(this, EventArgs.Empty);
         }
