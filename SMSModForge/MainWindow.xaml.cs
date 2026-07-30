@@ -423,6 +423,46 @@ public partial class MainWindow : Window
         win.Show();
     }
 
+    private void EditPlaceMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: false);
+
+    private void EditPlaceBackdropMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: true);
+
+    /// <summary>
+    /// Open the mask editor on one of the selected place's two masks.
+    /// <para/>
+    /// Keyed by (place, which) rather than by the host object, because the hosts
+    /// are lightweight adapters minted per call — keying on those would open a
+    /// second window every time instead of raising the one already up.
+    /// </summary>
+    private void OpenPlaceMask(bool secondary)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        var place = vm.SelectedPlace;
+        if (place is null) return;
+        if (string.IsNullOrWhiteSpace(vm.PackRoot))
+        {
+            MessageBox.Show(this,
+                "Save the pack to disk first — the mask editor needs a folder to read the level art from and to save the mask into.",
+                "Mask Editor", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        var key = (place, secondary);
+        if (_placeMaskEditors.TryGetValue(key, out var existing))
+        {
+            existing.Activate();
+            return;
+        }
+
+        var host = secondary ? place.SecondaryMaskHost : place.BaseMaskHost;
+        var win = new MaskEditorWindow(host, vm.PackRoot) { Owner = this };
+        _placeMaskEditors[key] = win;
+        win.Closed += (_, _) => _placeMaskEditors.Remove(key);
+        win.Show();
+    }
+
+    private readonly Dictionary<(PlaceViewModel Place, bool Secondary), MaskEditorWindow> _placeMaskEditors = new();
+
     private void EditNpcMask_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;

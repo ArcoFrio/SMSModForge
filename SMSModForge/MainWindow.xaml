@@ -3053,6 +3053,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="160"/>
                                         <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="Auto"/>
@@ -3090,11 +3091,17 @@
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="2" Grid.Column="1"
                                                        ToolTip="Bound as _MaskTex on the BASE sprite's material only. The backdrop and every GameObject in the place are unaffected. Loaded as linear data, not colour, because it carries amounts rather than pixels."/>
+                                    <Button Content="Edit…" Grid.Row="2" Grid.Column="2" Margin="4,0,0,0" Padding="8,0"
+                                            Click="EditPlaceMask_Click"
+                                            ToolTip="Paint this mask over the base art. One intensity plane, authored in alpha — the level shader reads nothing else."/>
                                     <TextBlock Text="Backdrop mask (opt):" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ctl:PathPickerBox PathText="{Binding SecondaryMaskSprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="3" Grid.Column="1"
                                                        ToolTip="Optional. Vanilla leaves the backdrop on a plain material with nothing to displace it; setting a mask here gives it its own clone of the level's jiggle material, so water or foliage behind the room can move independently. Blank = vanilla behaviour."/>
+                                    <Button Content="Edit…" Grid.Row="3" Grid.Column="2" Margin="4,0,0,0" Padding="8,0"
+                                            Click="EditPlaceBackdropMask_Click"
+                                            ToolTip="Paint the backdrop's mask over the secondary art."/>
                                     <TextBlock Grid.Row="4" Grid.Column="1" Foreground="Gray" FontSize="10" TextWrapping="Wrap"
                                                Text="The mod clones the Beach level and swaps in these PNGs. Each mask binds as _MaskTex on its own sprite's material, cloned per level so it can't leak into the vanilla levels that share Beach's. Only the mask's ALPHA is read — this shader has no R/G/B channels."/>
                                 </Grid>

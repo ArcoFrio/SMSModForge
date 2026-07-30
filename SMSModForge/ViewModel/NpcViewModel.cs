@@ -19,6 +19,11 @@ public interface IMaskEditorHost
     byte[]? LiveMaskBgra { get; set; }
     /// <summary>Bumped whenever the live buffer changes.</summary>
     int LiveMaskRevision { get; set; }
+
+    /// <summary>Which shader this mask feeds. Busts and NPCs are the default;
+    /// a level mask is authored in alpha instead. Defaulted so the NPC hosts
+    /// need say nothing.</summary>
+    Rendering.MaskKind MaskKind => Rendering.MaskKind.BustRgb;
 }
 
 /// <summary>

@@ -22,7 +22,7 @@ public partial class MaskEditorWindow : Window
 {
     private readonly IMaskEditorHost _host;
     private readonly string _packRoot;
-    private readonly MaskBuffer _mask = new();
+    private readonly MaskBuffer _mask;
     private readonly MaskHistory _history = new();
     private readonly WriteableBitmap _viewBitmap;
     private readonly byte[] _liveBgra = new byte[MaskBuffer.Size * MaskBuffer.Size * 4];
@@ -56,6 +56,18 @@ public partial class MaskEditorWindow : Window
         InitializeComponent();
         _host = host;
         _packRoot = packRoot;
+        // A level mask is one intensity plane authored in ALPHA; a bust mask is
+        // three planes in R/G/B. The buffer has to know which before anything
+        // loads into it.
+        _mask = new MaskBuffer(host.MaskKind);
+        if (_mask.ChannelCount == 1)
+        {
+            // Nothing to choose between, and the remaining plane is not "red".
+            ActiveG.Visibility = Visibility.Collapsed;
+            ActiveB.Visibility = Visibility.Collapsed;
+            ActiveR.Content = "Intensity";
+            _activeChannel = 0;
+        }
         _viewBitmap = new WriteableBitmap(MaskBuffer.Size, MaskBuffer.Size, 96, 96, PixelFormats.Bgra32, null);
     }
 
@@ -468,9 +480,21 @@ public partial class MaskEditorWindow : Window
                 int srcIdx = srcRowBase + x;
                 int dstIdx = dstRowBase + (x - x0) * 4;
 
-                float mr = _showR ? _mask.R[srcIdx] / 255f : 0;
-                float mg = _showG ? _mask.G[srcIdx] / 255f : 0;
-                float mb = _showB ? _mask.B[srcIdx] / 255f : 0;
+                // A level mask has one plane and it lives in alpha, so it is
+                // drawn as a neutral wash rather than through the R/G/B split —
+                // tinting it red would imply a "bounce" channel that this
+                // shader has no concept of.
+                float mr, mg, mb;
+                if (_mask.ChannelCount == 1)
+                {
+                    mr = mg = mb = _showR ? _mask.A[srcIdx] / 255f : 0;
+                }
+                else
+                {
+                    mr = _showR ? _mask.R[srcIdx] / 255f : 0;
+                    mg = _showG ? _mask.G[srcIdx] / 255f : 0;
+                    mb = _showB ? _mask.B[srcIdx] / 255f : 0;
+                }
                 float cov = mr > mg ? mr : mg;
                 if (mb > cov) cov = mb;
 
@@ -624,7 +648,7 @@ public partial class MaskEditorWindow : Window
         // XAML's RadioButton.IsChecked="True" fires Checked during
         // InitializeComponent — earlier than StatusText is assigned. Guard it.
         if (StatusText is null) return;
-        string chName = _activeChannel switch { 0 => "Bounce", 1 => "Sway", _ => "Wave" };
+        string chName = _mask.ChannelName(_activeChannel);
         string tool = _eraser ? "Eraser" : "Brush";
         string state = _dirty ? " — unsaved" : "";
         StatusText.Text = $"{tool} → {chName}{state}" + (note != null ? $"  ·  {note}" : "");

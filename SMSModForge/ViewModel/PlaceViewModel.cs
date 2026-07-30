@@ -177,6 +177,45 @@ public sealed class PlaceViewModel : ObservableObject
     /// <summary>Whether the backdrop has been given a jiggle of its own.</summary>
     public bool HasSecondaryMask => !string.IsNullOrWhiteSpace(Model.SecondaryMaskSprite);
 
+    /// <summary>Mask-editor host for the BASE art's mask.</summary>
+    public IMaskEditorHost BaseMaskHost => new PlaceMaskHost(this, secondary: false);
+
+    /// <summary>Mask-editor host for the BACKDROP's mask.</summary>
+    public IMaskEditorHost SecondaryMaskHost => new PlaceMaskHost(this, secondary: true);
+
+    /// <summary>
+    /// Adapts one of a place's two masks to the editor.
+    /// <para/>
+    /// The editor only ever needed a name, the art to paint over, and somewhere
+    /// to put the path — so a place plugs into it the same way an NPC does, with
+    /// the sprite behind the brush being whichever of the two this mask belongs
+    /// to. The kind is what makes it author alpha rather than R/G/B.
+    /// </summary>
+    private sealed class PlaceMaskHost : IMaskEditorHost
+    {
+        private readonly PlaceViewModel _place;
+        private readonly bool _secondary;
+
+        public PlaceMaskHost(PlaceViewModel place, bool secondary)
+        { _place = place; _secondary = secondary; }
+
+        public string Key => _place.Key + (_secondary ? "_backdropmask" : "_mask");
+        public string PoseSpritePath => _secondary ? _place.SecondarySprite : _place.BaseSprite;
+
+        public string MaskPath
+        {
+            get => _secondary ? _place.SecondaryMaskSprite : _place.MaskSprite;
+            set { if (_secondary) _place.SecondaryMaskSprite = value; else _place.MaskSprite = value; }
+        }
+
+        // The place preview reads masks from disk on rebuild rather than from a
+        // live buffer, so these just satisfy the interface.
+        public byte[]? LiveMaskBgra { get; set; }
+        public int LiveMaskRevision { get; set; }
+
+        public Rendering.MaskKind MaskKind => Rendering.MaskKind.LevelAlpha;
+    }
+
     /// <summary>The Beach prototype's own sorting orders, which a place keeps
     /// until it says otherwise. Also what the preview draws the art at.</summary>
     public const int DefaultBaseSortingOrder = -10;
