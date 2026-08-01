@@ -985,6 +985,7 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand AddVanillaCharacterCommand { get; }
     public RelayCommand AddVoiceCharacterCommand { get; }
     public RelayCommand AddVanillaOutfitCommand { get; }
+    public RelayCommand AddCharacterExpressionCommand { get; }
     public RelayCommand AddOutfitCommand { get; }
     public RelayCommand AddPlaceCommand { get; }
     public RelayCommand RemovePlaceCommand { get; }
@@ -1166,6 +1167,10 @@ public sealed class MainViewModel : ObservableObject
         AddVanillaOutfitCommand    = new RelayCommand(
             () => { var o = SelectedCharacter?.AddOutfit(); if (o != null) SelectedOutfit = o; },
             () => SelectedCharacter != null);
+        AddCharacterExpressionCommand = new RelayCommand(
+            () => SelectedCharacter?.AddExpression(),
+            () => SelectedCharacter != null);
+
         AddOutfitCommand   = new RelayCommand(AddOutfit, () => SelectedOutfit != null || Characters.Count > 0);
         AddPlaceCommand    = new RelayCommand(AddPlace);
         RemovePlaceCommand = new RelayCommand(RemovePlace, () => SelectedPlace != null || PlaceTree.Selected is UnitFolderNode);

@@ -314,7 +314,18 @@ public sealed class ActorOutfitViewModel : ObservableObject
 public sealed class ActorExpressionViewModel : ObservableObject
 {
     public ActorExpressionDef Model { get; }
-    public ActorExpressionViewModel(ActorExpressionDef model) { Model = model; }
+
+    public ActorExpressionViewModel(ActorExpressionDef model, System.Action<ActorExpressionViewModel>? remove = null)
+    {
+        Model = model;
+        // Per-row, like ActorOutfitViewModel's: the row knows how to delete
+        // itself, so the template needs no CommandParameter plumbing back up to
+        // a list it cannot see.
+        RemoveCommand = new RelayCommand(() => remove?.Invoke(this), () => remove != null);
+    }
+
+    /// <summary>Deletes this row. Disabled when the owner supplied no callback.</summary>
+    public RelayCommand RemoveCommand { get; }
 
     public string Key
     {

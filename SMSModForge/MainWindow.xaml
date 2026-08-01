@@ -2229,6 +2229,103 @@
                                 </StackPanel>
                             </GroupBox>
 
+                            <!-- Everything below came from the Actors tab. It is
+                                 character-level, not outfit-level, so it binds to
+                                 SelectedCharacter through the window rather than to
+                                 this pane's outfit DataContext. -->
+                            <GroupBox Header="Default outfit"
+                                      DataContext="{Binding DataContext.SelectedCharacter,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <StackPanel>
+                                    <TextBlock Foreground="Gray" FontSize="10" Margin="0,0,0,6" TextWrapping="Wrap"
+                                               Text="Which bust this character appears in before any dialogue changes it. Blank means the first outfit in the list."/>
+                                    <ComboBox ItemsSource="{Binding WearableBusts}"
+                                              SelectedItem="{Binding DefaultOutfit}"
+                                              IsEditable="True"
+                                              ToolTip="One of this character's outfits. Editable, so a bust built elsewhere can be named directly."/>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="Voice (typewriter blip)"
+                                      DataContext="{Binding DataContext.SelectedCharacter,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <StackPanel>
+                                    <TextBlock Foreground="Gray" FontSize="10" Margin="0,0,0,6" TextWrapping="Wrap"
+                                               Text="The blip that plays as this character's line types out. Pick a preset or dial in a custom pitch range. Frequency is how often the blip fires; pitch randomises between min and max. Editing a value switches the template to Custom."/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,6"
+                                                  Content="Enable typewriter voice" IsChecked="{Binding TypewriterEnabled}"
+                                                  ToolTip="When off, this character's line types out silently."/>
+                                        <TextBlock Grid.Row="1" Grid.Column="0" Text="Template:" VerticalAlignment="Center"/>
+                                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,4"
+                                                  ItemsSource="{Binding VoiceTemplates}"
+                                                  SelectedItem="{Binding VoiceTemplate}"
+                                                  ToolTip="Male → freq 45, pitch 0.6–0.9. Female → freq 45, pitch 1.0–1.5. Custom → your own values."/>
+                                        <TextBlock Grid.Row="2" Grid.Column="0" Text="Frequency:" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,4"
+                                                 Text="{Binding TypewriterFrequencyText, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="How often the blip fires as text types (GC2 Typewriter frequency). Preset value: 45."/>
+                                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Pitch min:" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,0,4"
+                                                 Text="{Binding TypewriterPitchMinText, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="Low end of the random pitch range. Male 0.6, Female 1.0."/>
+                                        <TextBlock Grid.Row="4" Grid.Column="0" Text="Pitch max:" VerticalAlignment="Center"/>
+                                        <TextBox Grid.Row="4" Grid.Column="1"
+                                                 Text="{Binding TypewriterPitchMaxText, UpdateSourceTrigger=PropertyChanged}"
+                                                 ToolTip="High end of the random pitch range. Male 0.9, Female 1.5."/>
+                                    </Grid>
+                                </StackPanel>
+                            </GroupBox>
+
+                            <GroupBox Header="Speech expressions (per-node key → bust expression child)"
+                                      DataContext="{Binding DataContext.SelectedCharacter,
+                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                      Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
+                                <DockPanel>
+                                    <Button DockPanel.Dock="Bottom" Content="+ Add expression"
+                                            Command="{Binding DataContext.AddCharacterExpressionCommand,
+                                                              RelativeSource={RelativeSource AncestorType=Window}}"
+                                            HorizontalAlignment="Left" Margin="0,6,0,0" Padding="8,2"/>
+                                    <TextBlock DockPanel.Dock="Top" Foreground="Gray" FontSize="10" Margin="0,0,0,4"
+                                               TextWrapping="Wrap"
+                                               Text="What a dialogue node's Expression field selects. If empty, the four standard expressions (Happy/Angry/Sad/Flirty) each map by name to a child of the bust's MBase1/Expressions/. Add entries to override those or to add custom ones."/>
+                                    <ItemsControl ItemsSource="{Binding Expressions}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate DataType="{x:Type vm:ActorExpressionViewModel}">
+                                                <Grid Margin="0,0,0,4">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="8"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBox Grid.Column="0" Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}"
+                                                             ToolTip="Pack-local expression key (e.g. Happy)"/>
+                                                    <TextBox Grid.Column="2" Text="{Binding ExpressionGoName, UpdateSourceTrigger=PropertyChanged}"
+                                                             ToolTip="Child name under MBase1/Expressions/ on the bust"/>
+                                                    <Button Grid.Column="3" Content="−" Width="22" Margin="4,0,0,0"
+                                                            Command="{Binding RemoveCommand}"
+                                                            ToolTip="Remove this expression"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </DockPanel>
+                            </GroupBox>
+
                             <GroupBox Header="Identity"
                                       Visibility="{Binding Converter={x:Static conv:NullToVisibilityConverter.Instance}}">
                                 <Grid>

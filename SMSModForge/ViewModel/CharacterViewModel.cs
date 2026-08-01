@@ -45,7 +45,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         ViewSort.Alphabetical(Outfits, nameof(OutfitViewModel.Key));
 
         Expressions = new ObservableCollection<ActorExpressionViewModel>(
-            model.Expressions.Select(e => new ActorExpressionViewModel(e)));
+            model.Expressions.Select(e => new ActorExpressionViewModel(e, RemoveExpression)));
     }
 
     // ── Identity ──────────────────────────────────────────────────────────
@@ -353,7 +353,7 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     {
         var def = new ActorExpressionDef { Key = "Happy", ExpressionGoName = "Happy" };
         Model.Expressions.Add(def);
-        var vm = new ActorExpressionViewModel(def);
+        var vm = new ActorExpressionViewModel(def, RemoveExpression);
         Expressions.Add(vm);
         return vm;
     }
