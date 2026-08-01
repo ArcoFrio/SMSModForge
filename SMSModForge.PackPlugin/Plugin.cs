@@ -129,20 +129,20 @@ namespace SMSModForge.PackPlugin
         /// that writes into this store after our turnover does so within one
         /// frame of it:
         /// <list type="bullet">
-        ///   <item>The host mod's whole after-sleep block is synchronous, in
-        ///   the same frame the Saved UI appears. It refreshes its proxy
-        ///   variables and writes GiftShop_BuildCounter and HarborHome_Slept
-        ///   straight through ModForgeBridge, with no coroutine or Invoke
-        ///   between. It only needs a frame at all because the order of two
-        ///   MonoBehaviours' Update within one frame is not defined, so its
-        ///   writes may land after ours.</item>
+        ///   <item>The host mod's whole after-sleep turnover is synchronous, in
+        ///   the same frame the Saved UI appears: it writes
+        ///   <c>GiftShop_BuildCounter</c>, <c>HarborHome_Slept</c> and
+        ///   <c>HarborHome_SleepCD</c> straight through ModForgeBridge, with no
+        ///   coroutine or Invoke anywhere in the block. It needs a frame at all
+        ///   only because the order of two MonoBehaviours' Update within one
+        ///   frame is not defined, so its writes may land after ours.</item>
         ///   <item>Our own OnDayChange rules are armed at the turnover and fire
         ///   from the next Tick, one frame later.</item>
         /// </list>
-        /// The host's one deferred call, <c>Invoke(UpdateScheduleInvoke, 1.0f)</c>,
-        /// is NOT a reason to wait a second: it runs
-        /// <c>Schedule.UpdateScheduleForDay</c>, which sets in-memory schedule
-        /// state and writes no pack variable at all.
+        /// Nothing on the host side defers a pack write past that frame. Its
+        /// schedule simulation — which once did, and was the reason this wait
+        /// was ever measured in seconds — is pack-owned now; the plugin's
+        /// <c>Schedule</c> is a load-order latch that writes nothing.
         /// <para/>
         /// Anything that writes later than this is not sleep turnover; it is
         /// ordinary play, which vanilla persists at the NEXT sleep by design.
