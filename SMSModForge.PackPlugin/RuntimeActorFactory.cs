@@ -47,6 +47,16 @@ namespace SMSModForge.PackPlugin
         private static readonly FieldInfo _fldTwGibberish =
             typeof(Typewriter).GetField("m_Gibberish", BindingFlags.Instance | BindingFlags.NonPublic);
 
+        /// <summary>
+        /// What a character with no authored <c>typewriter</c> gets. Kept equal
+        /// to the editor's TypewriterDef defaults on purpose: the editor shows
+        /// those numbers in the Voice panel whether or not they were ever
+        /// written to the manifest, so anything else here makes the panel lie.
+        /// </summary>
+        public const int DefaultFrequency = 45;
+        public const float DefaultPitchMin = 1.0f;
+        public const float DefaultPitchMax = 1.5f;
+
         private struct TwConfig { public bool Enabled; public int Frequency; public float PitchMin; public float PitchMax; }
         private readonly Dictionary<string, TwConfig> _twByKey = new Dictionary<string, TwConfig>();
 
@@ -146,9 +156,14 @@ namespace SMSModForge.PackPlugin
             _fldTwUse?.SetValue(tw, enabled);
             if (!enabled) return;
 
-            int freq = hasCfg ? cfg.Frequency : 45;
-            float pmin = hasCfg ? cfg.PitchMin : 1f;
-            float pmax = hasCfg ? cfg.PitchMax : 1f;
+            // The fallback has to be what the EDITOR shows for a character that
+            // has never had its voice touched, which is TypewriterDef's own
+            // defaults: 45, 1.0–1.5. It used to be 1.0–1.0, and min == max is a
+            // monotone blip — so a character with no typewriter object read as
+            // having a pitch range in the editor and had none in the game.
+            int freq = hasCfg ? cfg.Frequency : DefaultFrequency;
+            float pmin = hasCfg ? cfg.PitchMin : DefaultPitchMin;
+            float pmax = hasCfg ? cfg.PitchMax : DefaultPitchMax;
             _fldTwFreq?.SetValue(tw, freq);
             _fldTwPitch?.SetValue(tw, new Vector2(pmin, pmax));
 

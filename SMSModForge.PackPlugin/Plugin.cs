@@ -1507,10 +1507,14 @@ namespace SMSModForge.PackPlugin
                     string actorKey = (string)ao["key"];
                     if (!string.IsNullOrEmpty(actorKey) && ao["typewriter"] is Newtonsoft.Json.Linq.JObject tw)
                     {
+                        // Per-field fallbacks match the no-object ones, so a
+                        // typewriter that omits a key lands where a character
+                        // with no typewriter at all lands — and both land where
+                        // the editor says they will.
                         bool enabled = tw["enabled"] == null || (bool)tw["enabled"];
-                        int freq = tw["frequency"] != null ? (int)tw["frequency"] : 45;
-                        float pmin = tw["pitchMin"] != null ? (float)tw["pitchMin"] : 1f;
-                        float pmax = tw["pitchMax"] != null ? (float)tw["pitchMax"] : 1f;
+                        int freq = tw["frequency"] != null ? (int)tw["frequency"] : RuntimeActorFactory.DefaultFrequency;
+                        float pmin = tw["pitchMin"] != null ? (float)tw["pitchMin"] : RuntimeActorFactory.DefaultPitchMin;
+                        float pmax = tw["pitchMax"] != null ? (float)tw["pitchMax"] : RuntimeActorFactory.DefaultPitchMax;
                         ctx.ActorFactory?.RegisterTypewriter(actorKey, enabled, freq, pmin, pmax);
                     }
                 }
