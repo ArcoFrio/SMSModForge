@@ -3391,10 +3391,11 @@
                                               IsChecked="{Binding DisableVanillaTrigger}"
                                               Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"
                                               ToolTip="Stops the parent roomtalk's default Trigger from auto-firing its own dialogue. Use for vanilla rooms whose entry dialogue you want to suppress."/>
-                                    <CheckBox Content="One-shot (don't replay)"
-                                              IsChecked="{Binding OneShot}"
+                                    <CheckBox Content="Also leave on the Talk button (replayable)"
+                                              IsChecked="{Binding ReplayOnTalk}"
+                                              IsEnabled="{Binding Queued, Converter={StaticResource InverseBoolConverter}}"
                                               Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"
-                                              ToolTip="Normally a dialogue re-fires every time its conditions go from failing to passing — leave the room and come back and it plays again. This stops that: once it has played, it won't start again. Remembered for the current visit to the level only, so it can play again after a save is loaded; to retire it for good, set a pack variable on its last node and test that variable in the start conditions."/>
+                                              ToolTip="Play on arrival like normal, AND stay on the vanilla Talk button so the player can hear it again — for as long as its start conditions still hold. Without this a dialogue interrupts once and is then gone until its conditions fail and pass again. Greyed out when 'Wait for Talk button' is on, which already leaves it there."/>
                                     <CheckBox Content="Wait for Talk button (no auto-play)"
                                               IsChecked="{Binding Queued}"
                                               Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"

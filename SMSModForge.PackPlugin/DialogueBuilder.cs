@@ -30,7 +30,9 @@ namespace SMSModForge.PackPlugin
         {
             public string PackId;
             public string Key;
-            public bool OneShot;
+            /// <summary>Stay on the Talk button after auto-playing, so the
+            /// player can replay it while the conditions still hold.</summary>
+            public bool ReplayOnTalk;
             public bool Queued;
             public bool DisableVanillaTrigger;
             /// <summary>Author opted this dialogue into the F12 condition-state dump.</summary>
@@ -62,7 +64,7 @@ namespace SMSModForge.PackPlugin
             /// playing and this one doesn't <see cref="QueueBehind"/> — the
             /// trigger is spent. Cleared on the falling edge so a fresh
             /// conditions cycle can fire it again. Kept separate from
-            /// <see cref="HasPlayed"/> so a missed OneShot isn't permanently
+            /// <see cref="HasPlayed"/> so a trigger isn't permanently
             /// consumed without ever playing.
             /// </summary>
             public bool MissedWindow;
@@ -92,15 +94,13 @@ namespace SMSModForge.PackPlugin
             /// false→true edge of the conditions: HasPlayed latches at
             /// start, then resets when conditions stop matching (e.g.
             /// the player leaves the level), letting the dialogue
-            /// re-trigger on the next visit. <see cref="OneShot"/>
-            /// blocks that reset.
+            /// re-trigger on the next visit.
             /// <para/>
-            /// Runtime-only, and NOT persisted: every BuiltDialogue is
-            /// rebuilt from the manifest on each CoreGameScene load, so
-            /// a OneShot dialogue is spent for the current visit to the
-            /// level, not for the save. Retiring one permanently is a
-            /// pack-authoring matter — set a variable on the last node
-            /// and test it in the start conditions.
+            /// Runtime-only and never persisted: every BuiltDialogue is
+            /// rebuilt from the manifest on each CoreGameScene load.
+            /// Retiring a dialogue for good is a pack-authoring matter —
+            /// set a variable on its last node and test that in the
+            /// start conditions.
             /// </summary>
             public bool HasPlayed;
 
@@ -169,7 +169,7 @@ namespace SMSModForge.PackPlugin
             {
                 PackId = ctx.PackId,
                 Key = key,
-                OneShot = (bool?)manifest["oneShot"] ?? false,
+                ReplayOnTalk = (bool?)manifest["replayOnTalk"] ?? false,
                 Queued = (bool?)manifest["queued"] ?? false,
                 QueueBehind = (bool?)manifest["queueBehind"] ?? false,
                 Priority = (int?)manifest["priority"] ?? 0,

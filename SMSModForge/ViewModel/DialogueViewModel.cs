@@ -110,10 +110,10 @@ public sealed class DialogueViewModel : ObservableObject
         set { Model.DisableVanillaTrigger = value; OnPropertyChanged(); }
     }
 
-    public bool OneShot
+    public bool ReplayOnTalk
     {
-        get => Model.OneShot;
-        set { Model.OneShot = value; OnPropertyChanged(); }
+        get => Model.ReplayOnTalk;
+        set { Model.ReplayOnTalk = value; OnPropertyChanged(); }
     }
 
     public bool Queued

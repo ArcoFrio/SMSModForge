@@ -46,21 +46,27 @@ public sealed class DialogueDef
     public List<NodeConditionDef> StartConditions { get; set; } = new();
 
     /// <summary>
-    /// One-shot vs repeatable.
+    /// Leave the dialogue on the Talk button after it auto-plays, so the player
+    /// can hear it again.
     /// <para/>
-    /// A repeatable dialogue fires on every rising edge of its start
-    /// conditions — leave the level and return and it plays again. Setting
-    /// this blocks that: once played, it will not start again.
+    /// Fills the gap between the two behaviours that already existed: a plain
+    /// dialogue interrupts the moment its conditions pass and is then gone
+    /// until the next rising edge, while <see cref="Queued"/> waits for the
+    /// Talk button and never interrupts. This is both — it plays on arrival AND
+    /// stays available to replay for as long as its conditions hold.
     /// <para/>
-    /// The "already played" mark is runtime state, held per built dialogue and
-    /// rebuilt from the manifest on each scene load, so it lasts for the
-    /// current visit rather than for the save. Permanence is authored, not
-    /// flagged: set a variable with
-    /// <see cref="NodeActionTypes.SetVariable"/> on the final node and test it
-    /// in <see cref="StartConditions"/>.
+    /// Implied by <see cref="Queued"/>, which already re-arms on finish, so the
+    /// two together mean nothing more than <see cref="Queued"/> alone.
+    /// <para/>
+    /// Replaces the old <c>oneShot</c>, which suppressed the replay a dialogue
+    /// gets on its next rising edge. That was near-useless in practice: the
+    /// mark was runtime-only and rebuilt from the manifest on every scene load,
+    /// so it never survived loading a save, and anything wanting to retire a
+    /// dialogue for good has to set a variable on its last node and test that
+    /// in <see cref="StartConditions"/> — which works regardless.
     /// </summary>
-    [JsonProperty("oneShot", Order = 6, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
-    public bool OneShot { get; set; } = false;
+    [JsonProperty("replayOnTalk", Order = 6, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool ReplayOnTalk { get; set; } = false;
 
     /// <summary>
     /// "Wait for Talk button (no auto-play)": instead of auto-starting when its

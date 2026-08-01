@@ -104,7 +104,7 @@ namespace SMSModForge.PackPlugin
                 bool wouldFire = all && !b.HasPlayed && !b.MissedWindow && !IsAnyDialoguePlaying();
                 _ctx.Log?.LogInfo("[CondDebug] ── " + _ctx.PackId + "." + b.Key +
                                   " — conditions " + (all ? "PASS" : "FAIL") +
-                                  " | HasPlayed=" + b.HasPlayed + " OneShot=" + b.OneShot +
+                                  " | HasPlayed=" + b.HasPlayed + " ReplayOnTalk=" + b.ReplayOnTalk +
                                   " MissedWindow=" + b.MissedWindow + " QueueBehind=" + b.QueueBehind +
                                   " ArmedForTalk=" + b.ArmedForTalk + " Priority=" + b.Priority +
                                   " dialoguePlaying=" + IsAnyDialoguePlaying() +
@@ -313,9 +313,9 @@ namespace SMSModForge.PackPlugin
         ///   we don't want to call it twice if multiple dialogues
         ///   transition on the same tick.</item>
         ///   <item><b>Falling</b> (true→false): clears <c>HasPlayed</c>
-        ///   for non-<see cref="DialogueBuilder.BuiltDialogue.OneShot"/>
-        ///   dialogues so the next rising edge fires again. OneShot
-        ///   keeps the latch forever (per save).</item>
+        ///   so the next rising edge fires again, and disarms the Talk
+        ///   button — a dialogue is only replayable while the conditions
+        ///   that introduced it still hold.</item>
         /// </list>
         /// </summary>
         private void UpdateConditionEdges()
@@ -328,11 +328,11 @@ namespace SMSModForge.PackPlugin
                     // Falling edge → the player left; a queued dialogue that was
                     // parked behind the Talk button disarms (it re-arms on the
                     // next visit via the rising edge), a missed window re-arms
-                    // for the next conditions cycle, and non-OneShot dialogues
-                    // clear HasPlayed so they can fire again next time.
+                    // for the next conditions cycle, and HasPlayed clears so
+                    // the dialogue can fire again next time.
                     b.ArmedForTalk = false;
                     b.MissedWindow = false;
-                    if (!b.OneShot) b.HasPlayed = false;
+                    b.HasPlayed = false;
                 }
                 b.LastConditionsPassed = nowPassing;
             }
@@ -492,12 +492,15 @@ namespace SMSModForge.PackPlugin
             // Dialogue.Stop also raises EventFinish.
             ActionRuntime.EmitSignal("FadeUI", _ctx);
 
-            // Talk-button dialogues are repeatable within a visit: re-arm on
-            // finish (unless OneShot) so the next click can replay it — the
-            // consume pass re-checks conditions and disarms a stale arm on its
-            // own. Any click made WHILE the dialogue played is discarded so
+            // Put it back on the Talk button so the next click can replay it —
+            // the consume pass re-checks conditions and disarms a stale arm on
+            // its own. Any click made WHILE the dialogue played is discarded so
             // finishing doesn't instantly chain into another Talk dialogue.
-            if (built.Queued && !built.OneShot) built.ArmedForTalk = true;
+            //
+            // Queued dialogues live on that button by definition. ReplayOnTalk
+            // ones auto-played on arrival and asked to stay reachable
+            // afterwards, which is the whole of what it does.
+            if (built.Queued || built.ReplayOnTalk) built.ArmedForTalk = true;
             GameVariableBridge.SetBool("talkbutton-signal", false);
 
             // Clear any dialogue-wide sprite focus so the cast returns to its
