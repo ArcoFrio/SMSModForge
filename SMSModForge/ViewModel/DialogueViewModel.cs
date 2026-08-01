@@ -113,13 +113,38 @@ public sealed class DialogueViewModel : ObservableObject
     public bool ReplayOnTalk
     {
         get => Model.ReplayOnTalk;
-        set { Model.ReplayOnTalk = value; OnPropertyChanged(); }
+        set { Model.ReplayOnTalk = value; OnPropertyChanged(); NotifyStartModeGating(); }
     }
 
     public bool Queued
     {
         get => Model.Queued;
-        set { Model.Queued = value; OnPropertyChanged(); }
+        set { Model.Queued = value; OnPropertyChanged(); NotifyStartModeGating(); }
+    }
+
+    // ── Start-mode gating ────────────────────────────────────────────────
+    //
+    // Queued and ReplayOnTalk are alternatives, not a combination: Queued means
+    // "never interrupt, wait for the button", ReplayOnTalk means "interrupt AND
+    // stay on the button". Ticking both is not a third behaviour — the runtime
+    // takes the Queued branch and ReplayOnTalk silently does nothing — so each
+    // greys the other out.
+    //
+    // The gate is deliberately NOT a plain "other is off". A box that is
+    // ALREADY TICKED stays enabled, so a manifest that somehow arrived with
+    // both set can be corrected; disabling on the other alone would grey both
+    // at once and leave no way back out of that state.
+
+    /// <summary>Whether the Wait-for-Talk box can be toggled right now.</summary>
+    public bool CanEditQueued => Queued || !ReplayOnTalk;
+
+    /// <summary>Whether the replay box can be toggled right now.</summary>
+    public bool CanEditReplayOnTalk => ReplayOnTalk || !Queued;
+
+    private void NotifyStartModeGating()
+    {
+        OnPropertyChanged(nameof(CanEditQueued));
+        OnPropertyChanged(nameof(CanEditReplayOnTalk));
     }
 
     public bool DebugConditions
