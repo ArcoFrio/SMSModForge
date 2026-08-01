@@ -75,27 +75,59 @@ namespace SMSModForge.PackPlugin
         /// post-sleep <c>AfterSleepEvents</c> canvas runs first, then the
         /// <c>Saved</c> confirmation UI flashes as the slot is written. We
         /// latch once <see cref="_afterSleepEvents"/> goes active, then commit
-        /// when <see cref="_savedUI"/> finishes (its falling edge) — requiring
-        /// the latch first is what distinguishes a sleep autosave from a manual
-        /// save (which shows the Saved UI with no after-sleep sequence).
+        /// the moment <see cref="_savedUI"/> appears — requiring the latch first
+        /// is what distinguishes a sleep autosave from a manual save (which
+        /// shows the Saved UI with no after-sleep sequence).
         /// <para/>
-        /// Committing on the Saved-UI <em>falling</em> edge (rather than when
-        /// it first appears) matters because the host mod's own after-sleep
-        /// turnover (list rebuilds, counters, …) writes pack variables —
-        /// through <c>ModForgeBridge</c> into this very store — while the Saved
-        /// flash is up. Flushing after the flash ends guarantees those same
-        /// night writes are in the committed file. Both objects are resolved
-        /// lazily and cached per CoreGameScene.
+        /// A SECOND commit follows a second later, because the host mod's own
+        /// after-sleep turnover (list rebuilds, counters, …) writes pack
+        /// variables — through <c>ModForgeBridge</c> into this very store —
+        /// during the sequence, as do the OnDayChange rules armed at turnover.
+        /// It is on a timer rather than on the Saved UI going away: that UI
+        /// stands for about two seconds, all of it time the player could quit
+        /// with those last values unwritten, and it may be dismissed by a
+        /// parent going inactive, in which case a falling-edge test never fires
+        /// at all.
+        /// <para/>
+        /// Both objects are resolved lazily, cached per CoreGameScene, and read
+        /// through <c>activeInHierarchy</c> — whether a panel is on screen is a
+        /// question about its whole ancestor chain, not its own flag.
         /// </summary>
         private static GameObject _afterSleepEvents;
         private static GameObject _savedUI;
         private static bool _afterSleepProc;
-        private static bool _savedUiWasActive;
 
-        /// <summary>True once this sleep's gameplay turnover (daily variable
-        /// refresh + OnDayChange arming) has run, so it fires once per sleep
-        /// while the Saved UI is up rather than every frame of the flash.</summary>
-        private static bool _dayTurnoverProc;
+        /// <summary>
+        /// <c>DaysPassed</c> as of the last turnover, so one runs per in-game
+        /// day rather than once per detected edge.
+        /// <para/>
+        /// A plain "already done" flag was cleared on the Saved UI going
+        /// inactive, which is not something that can be relied on: the game is
+        /// free to hide that UI by switching off a PARENT, leaving the object
+        /// itself active, and then the flag never cleared and every later sleep
+        /// in the session silently did nothing — no refresh, no commit, no
+        /// OnDayChange rules. Keyed on the day, the gate cannot wedge: a new day
+        /// is always allowed exactly one turnover however the UI behaved.
+        /// </summary>
+        private static int _turnoverDaysPassed = -1;
+
+        /// <summary>
+        /// Unscaled time at which to write the follow-up commit, or <c>-1</c>
+        /// when none is pending. See <see cref="SecondCommitDelay"/>.
+        /// </summary>
+        private static float _pendingCommitAt = -1f;
+
+        /// <summary>
+        /// How long after the turnover to write again, picking up what the host
+        /// mod and the OnDayChange rules wrote during the sequence.
+        /// <para/>
+        /// This used to wait for the Saved UI to go away, which is about two
+        /// seconds of the player being able to quit with those last values
+        /// still only in memory — and it never happened at all if the UI was
+        /// hidden by a parent. A second is far longer than the frame or two
+        /// that work actually takes, and asks nothing of the UI.
+        /// </summary>
+        private const float SecondCommitDelay = 1.0f;
 
         /// <summary>
         /// The in-game day as read at this sleep's turnover, carried to the
@@ -398,8 +430,8 @@ namespace SMSModForge.PackPlugin
             _afterSleepEvents = null;
             _savedUI = null;
             _afterSleepProc = false;
-            _savedUiWasActive = false;
-            _dayTurnoverProc = false;
+            _turnoverDaysPassed = -1;
+            _pendingCommitAt = -1f;
             _sleepDay = -1;
             _dailyCatchUpDone = false;
             ConditionEvaluator.ResetRollLog();
@@ -889,16 +921,22 @@ namespace SMSModForge.PackPlugin
 
             // Stage 1 — the after-sleep sequence has begun; latch it so the
             // upcoming Saved-UI flash is attributed to a sleep, not a manual save.
-            if (_afterSleepEvents.activeSelf && !_afterSleepProc)
+            //
+            // activeInHierarchy, not activeSelf: "is this on screen" is a
+            // question about the whole ancestor chain, and the game may show or
+            // hide either of these by switching a PARENT. Reading the object's
+            // own flag then reports a panel as visible while it is not, and
+            // misses the moment it goes away.
+            if (_afterSleepEvents.activeInHierarchy && !_afterSleepProc)
                 _afterSleepProc = true;
 
-            bool savedActive = _savedUI.activeSelf;
+            bool savedActive = _savedUI.activeInHierarchy;
 
             // Stage 2 — GAMEPLAY turnover, the moment the Saved UI appears.
             //
-            // This is the host mod's gate exactly: SaveManager latches on
-            // afterSleepEvents and runs its turnover on `savedUI.activeSelf`,
-            // not on the flash ending. Doing our day-change work at the END of
+            // This is the host mod's gate: SaveManager latches on
+            // afterSleepEvents and runs its turnover when the Saved UI appears,
+            // not when it goes away. Doing our day-change work at the END of
             // the flash instead left several seconds in which the player has
             // control while every Daily variable still holds yesterday's value
             // — long enough to walk into a room, or open the map, and act on
@@ -906,15 +944,16 @@ namespace SMSModForge.PackPlugin
             //
             // Nothing the host writes here is a Daily variable, so running the
             // refresh alongside its turnover cannot clobber it.
-            if (savedActive && _afterSleepProc && !_dayTurnoverProc)
+            int daysPassed = ConditionEvaluator.CurrentRollDay();
+            if (savedActive && _afterSleepProc && daysPassed != _turnoverDaysPassed)
             {
-                _dayTurnoverProc = true;
+                _turnoverDaysPassed = daysPassed;
 
                 // Read the day HERE, where the host mod reads it, and carry the
-                // answer to the commit below. Deciding "is it Monday" at the
-                // falling edge instead meant the weekly backup was gated on a
-                // reading taken seconds later than the daily one it is supposed
-                // to accompany — the two could disagree, and slot 2 would be
+                // answer to the follow-up commit. Deciding "is it Monday" at
+                // that later commit instead gated the weekly backup on a
+                // reading taken seconds after the daily one it is supposed to
+                // accompany — the two could disagree, and slot 2 would be
                 // skipped on a day slot 1 was written.
                 _sleepDay = (int)GameVariableBridge.GetNumber("Day");
                 foreach (var c in _contexts)
@@ -942,23 +981,28 @@ namespace SMSModForge.PackPlugin
                 // file, and a second write of a few KB costs nothing.
                 CommitSleepSave("turnover");
                 AutosaveProcedThisSession = true;
+                _pendingCommitAt = Time.unscaledTime + SecondCommitDelay;
             }
 
-            // Stage 4 — re-commit when the flash ends. Everything is already on
-            // disk from stage 3; this second pass exists to catch what landed
-            // DURING the flash — the host mod's own turnover writes pack
-            // variables through ModForgeBridge into this store, and the
-            // OnDayChange rules armed above repopulate schedules a tick later.
-            // Missing this pass costs the night's last few values, not the
-            // night, which is the right way round.
-            bool fallingEdge = _savedUiWasActive && !savedActive;
-            _savedUiWasActive = savedActive;
-            if (!(fallingEdge && _afterSleepProc)) return;
+            // Stage 4 — re-commit a moment later. Everything is already on disk
+            // from stage 3; this second pass catches what landed DURING the
+            // sequence — the host mod's own turnover writes pack variables
+            // through ModForgeBridge into this store, and the OnDayChange rules
+            // armed above repopulate schedules a tick later. Missing this pass
+            // costs the night's last few values, not the night, which is the
+            // right way round.
+            //
+            // On a timer rather than on the Saved UI going away. That UI is up
+            // for around two seconds, all of which the player could spend
+            // quitting with those values unwritten, and it may be dismissed by
+            // a parent going inactive — in which case the old falling-edge test
+            // never fired and this pass simply never ran.
+            if (_pendingCommitAt < 0f || Time.unscaledTime < _pendingCommitAt) return;
+            _pendingCommitAt = -1f;
             _afterSleepProc = false;
-            _dayTurnoverProc = false;
             AutosaveProcedThisSession = true;
 
-            CommitSleepSave("flash ended");
+            CommitSleepSave("settled");
             _sleepDay = -1;
         }
 
