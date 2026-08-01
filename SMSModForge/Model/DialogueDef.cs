@@ -46,10 +46,18 @@ public sealed class DialogueDef
     public List<NodeConditionDef> StartConditions { get; set; } = new();
 
     /// <summary>
-    /// One-shot vs repeatable. When set, the plugin remembers the dialogue
-    /// has played at least once and won't re-trigger; pair with a
-    /// <see cref="NodeActionTypes.SetVariable"/> action on the final node
-    /// for finer-grained gating.
+    /// One-shot vs repeatable.
+    /// <para/>
+    /// A repeatable dialogue fires on every rising edge of its start
+    /// conditions — leave the level and return and it plays again. Setting
+    /// this blocks that: once played, it will not start again.
+    /// <para/>
+    /// The "already played" mark is runtime state, held per built dialogue and
+    /// rebuilt from the manifest on each scene load, so it lasts for the
+    /// current visit rather than for the save. Permanence is authored, not
+    /// flagged: set a variable with
+    /// <see cref="NodeActionTypes.SetVariable"/> on the final node and test it
+    /// in <see cref="StartConditions"/>.
     /// </summary>
     [JsonProperty("oneShot", Order = 6, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool OneShot { get; set; } = false;

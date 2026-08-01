@@ -93,8 +93,14 @@ namespace SMSModForge.PackPlugin
             /// start, then resets when conditions stop matching (e.g.
             /// the player leaves the level), letting the dialogue
             /// re-trigger on the next visit. <see cref="OneShot"/>
-            /// blocks the reset, so OneShot dialogues only fire once
-            /// per save.
+            /// blocks that reset.
+            /// <para/>
+            /// Runtime-only, and NOT persisted: every BuiltDialogue is
+            /// rebuilt from the manifest on each CoreGameScene load, so
+            /// a OneShot dialogue is spent for the current visit to the
+            /// level, not for the save. Retiring one permanently is a
+            /// pack-authoring matter — set a variable on the last node
+            /// and test it in the start conditions.
             /// </summary>
             public bool HasPlayed;
 
