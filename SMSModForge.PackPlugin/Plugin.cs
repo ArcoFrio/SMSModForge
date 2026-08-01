@@ -83,11 +83,11 @@ namespace SMSModForge.PackPlugin
         /// after-sleep turnover (list rebuilds, counters, …) writes pack
         /// variables — through <c>ModForgeBridge</c> into this very store —
         /// during the sequence, as do the OnDayChange rules armed at turnover.
-        /// It is on a timer rather than on the Saved UI going away: that UI
-        /// stands for about two seconds, all of it time the player could quit
-        /// with those last values unwritten, and it may be dismissed by a
-        /// parent going inactive, in which case a falling-edge test never fires
-        /// at all.
+        /// It lands two FRAMES later rather than when the Saved UI goes away:
+        /// that UI stands for about two seconds, all of it time the player
+        /// could quit with those last values unwritten, and it may be dismissed
+        /// by a parent going inactive, in which case a falling-edge test never
+        /// fires at all.
         /// <para/>
         /// Both objects are resolved lazily, cached per CoreGameScene, and read
         /// through <c>activeInHierarchy</c> — whether a panel is on screen is a
@@ -112,22 +112,42 @@ namespace SMSModForge.PackPlugin
         private static int _turnoverDaysPassed = -1;
 
         /// <summary>
-        /// Unscaled time at which to write the follow-up commit, or <c>-1</c>
-        /// when none is pending. See <see cref="SecondCommitDelay"/>.
+        /// Frame on which to write the follow-up commit, or <c>-1</c> when none
+        /// is pending. See <see cref="SecondCommitFrames"/>.
         /// </summary>
-        private static float _pendingCommitAt = -1f;
+        private static int _pendingCommitFrame = -1;
 
         /// <summary>
-        /// How long after the turnover to write again, picking up what the host
-        /// mod and the OnDayChange rules wrote during the sequence.
+        /// Frames to wait after the turnover before writing again.
         /// <para/>
-        /// This used to wait for the Saved UI to go away, which is about two
-        /// seconds of the player being able to quit with those last values
-        /// still only in memory — and it never happened at all if the UI was
-        /// hidden by a parent. A second is far longer than the frame or two
-        /// that work actually takes, and asks nothing of the UI.
+        /// Counted in FRAMES rather than seconds because the thing being waited
+        /// for is other components' <c>Update</c> running, which is a frame
+        /// event; a wall-clock delay only approximates it, and approximates it
+        /// worst on a slow machine, where it matters most.
+        /// <para/>
+        /// Two is enough, and it is enough for a checkable reason. Everything
+        /// that writes into this store after our turnover does so within one
+        /// frame of it:
+        /// <list type="bullet">
+        ///   <item>The host mod's whole after-sleep block is synchronous, in
+        ///   the same frame the Saved UI appears. It refreshes its proxy
+        ///   variables and writes GiftShop_BuildCounter and HarborHome_Slept
+        ///   straight through ModForgeBridge, with no coroutine or Invoke
+        ///   between. It only needs a frame at all because the order of two
+        ///   MonoBehaviours' Update within one frame is not defined, so its
+        ///   writes may land after ours.</item>
+        ///   <item>Our own OnDayChange rules are armed at the turnover and fire
+        ///   from the next Tick, one frame later.</item>
+        /// </list>
+        /// The host's one deferred call, <c>Invoke(UpdateScheduleInvoke, 1.0f)</c>,
+        /// is NOT a reason to wait a second: it runs
+        /// <c>Schedule.UpdateScheduleForDay</c>, which sets in-memory schedule
+        /// state and writes no pack variable at all.
+        /// <para/>
+        /// Anything that writes later than this is not sleep turnover; it is
+        /// ordinary play, which vanilla persists at the NEXT sleep by design.
         /// </summary>
-        private const float SecondCommitDelay = 1.0f;
+        private const int SecondCommitFrames = 2;
 
         /// <summary>
         /// The in-game day as read at this sleep's turnover, carried to the
@@ -431,7 +451,7 @@ namespace SMSModForge.PackPlugin
             _savedUI = null;
             _afterSleepProc = false;
             _turnoverDaysPassed = -1;
-            _pendingCommitAt = -1f;
+            _pendingCommitFrame = -1;
             _sleepDay = -1;
             _dailyCatchUpDone = false;
             ConditionEvaluator.ResetRollLog();
@@ -981,7 +1001,7 @@ namespace SMSModForge.PackPlugin
                 // file, and a second write of a few KB costs nothing.
                 CommitSleepSave("turnover");
                 AutosaveProcedThisSession = true;
-                _pendingCommitAt = Time.unscaledTime + SecondCommitDelay;
+                _pendingCommitFrame = Time.frameCount + SecondCommitFrames;
             }
 
             // Stage 4 — re-commit a moment later. Everything is already on disk
@@ -992,13 +1012,14 @@ namespace SMSModForge.PackPlugin
             // costs the night's last few values, not the night, which is the
             // right way round.
             //
-            // On a timer rather than on the Saved UI going away. That UI is up
+            // Two frames later, not when the Saved UI goes away. That UI stands
             // for around two seconds, all of which the player could spend
-            // quitting with those values unwritten, and it may be dismissed by
+            // quitting with these values unwritten, and it may be dismissed by
             // a parent going inactive — in which case the old falling-edge test
-            // never fired and this pass simply never ran.
-            if (_pendingCommitAt < 0f || Time.unscaledTime < _pendingCommitAt) return;
-            _pendingCommitAt = -1f;
+            // never fired and this pass simply never ran. Two frames covers
+            // every writer there actually is; see SecondCommitFrames.
+            if (_pendingCommitFrame < 0 || Time.frameCount < _pendingCommitFrame) return;
+            _pendingCommitFrame = -1;
             _afterSleepProc = false;
             AutosaveProcedThisSession = true;
 
