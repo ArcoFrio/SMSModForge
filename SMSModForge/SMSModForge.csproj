@@ -54,6 +54,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <!--
+      Jiggle.txt sits beside the PNGs and is NOT one, so the glob above misses
+      it. It carries the bust material's shader uniforms, and without it a
+      borrowed bust jiggles to the editor's defaults rather than the game's
+      own numbers — motion that looks deliberate and is not, which is worse
+      than the mask being absent entirely. _contents.txt is deliberately left
+      behind: it documents the extraction and nothing reads it at run time.
+    -->
+    <Content Include="Resources\VanillaBustArt\**\Jiggle.txt">
+      <Link>VanillaBustArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <!--
       Ship the vanilla frame catalog alongside the editor exe. The PNGs in
       Resources/VanillaFrames/ are hand-curated (see VanillaFrames.cs). The
       pack plugin reads matching filenames from its own bundled
