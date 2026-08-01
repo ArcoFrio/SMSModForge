@@ -44,6 +44,37 @@ public partial class MaskEditorWindow : Window
     /// XAML gives CanvasHost, or the first zoom would jump.</summary>
     private const double BaseDisplaySize = MaskBuffer.Size * 2;
 
+    /// <summary>
+    /// Width over height of the art being painted on, for the CANVAS only.
+    /// <para/>
+    /// The buffer stays square, and must: the shader samples a mask in UV
+    /// space, so a square mask stretched over a 16:9 quad already lands
+    /// correctly, and reshaping the buffer would change nothing but the file.
+    /// What the square cost was the VIEW — a level squeezed into it reads as
+    /// cropped and paints nothing like it looks. So the canvas takes the art's
+    /// shape while the pixels behind it stay square. 1.0 for a bust, which is
+    /// what every previous mask was, so nothing there moves.
+    /// </summary>
+    private double _referenceAspect = 1.0;
+
+    /// <summary>The reference PNG's own proportions, read from its header
+    /// rather than from the loaded buffer — that has already been squashed to
+    /// the square, which is precisely the information needed back.</summary>
+    private static double ReadAspect(string absPath)
+    {
+        try
+        {
+            using var stream = File.OpenRead(absPath);
+            var frame = System.Windows.Media.Imaging.BitmapFrame.Create(
+                stream, System.Windows.Media.Imaging.BitmapCreateOptions.DelayCreation,
+                System.Windows.Media.Imaging.BitmapCacheOption.OnLoad);
+            if (frame.PixelHeight > 0 && frame.PixelWidth > 0)
+                return frame.PixelWidth / (double)frame.PixelHeight;
+        }
+        catch { /* unreadable — fall back to square */ }
+        return 1.0;
+    }
+
     // Stroke state
     private bool _drawing;
     private bool _dirty;
@@ -94,7 +125,11 @@ public partial class MaskEditorWindow : Window
         var basePath = Path.Combine(_packRoot, Normalize(_host.PoseSpritePath));
         var maskPath = Path.Combine(_packRoot, Normalize(_host.MaskPath));
         if (File.Exists(basePath))
+        {
             _diffuse = BustComposer.LoadPng(basePath);
+            _referenceAspect = ReadAspect(basePath);
+            ApplyZoomSize();
+        }
         if (!string.IsNullOrWhiteSpace(_host.MaskPath) && File.Exists(maskPath))
             _mask.FromBgra(BustComposer.LoadPng(maskPath));
 
@@ -451,21 +486,26 @@ public partial class MaskEditorWindow : Window
 
     private void UpdateBrushCursor(Point p)
     {
-        // At zoom level _zoom, 1 texture pixel = _zoom display pixels.
-        double scale = CanvasHost.ActualWidth / MaskBuffer.Size;
-        double radius = SizeSlider.Value * scale;
-        double hardR = radius * HardnessSlider.Value;
+        // One texture pixel is this many display pixels — separately per axis,
+        // because the canvas takes the reference art's shape. The brush is a
+        // circle in TEXTURE space, so on a wide canvas it must be drawn as the
+        // ellipse that circle actually covers, or the cursor stops describing
+        // what the stroke will do.
+        double scaleX = CanvasHost.ActualWidth / MaskBuffer.Size;
+        double scaleY = CanvasHost.ActualHeight / MaskBuffer.Size;
+        double rx = SizeSlider.Value * scaleX, ry = SizeSlider.Value * scaleY;
+        double hx = rx * HardnessSlider.Value, hy = ry * HardnessSlider.Value;
 
-        BrushCursor.Width = BrushCursor.Height = radius * 2;
-        Canvas.SetLeft(BrushCursor, p.X - radius);
-        Canvas.SetTop(BrushCursor, p.Y - radius);
+        BrushCursor.Width = rx * 2; BrushCursor.Height = ry * 2;
+        Canvas.SetLeft(BrushCursor, p.X - rx);
+        Canvas.SetTop(BrushCursor, p.Y - ry);
         BrushCursor.Visibility = Visibility.Visible;
 
         if (HardnessSlider.Value < 0.995)
         {
-            BrushCursorHard.Width = BrushCursorHard.Height = hardR * 2;
-            Canvas.SetLeft(BrushCursorHard, p.X - hardR);
-            Canvas.SetTop(BrushCursorHard, p.Y - hardR);
+            BrushCursorHard.Width = hx * 2; BrushCursorHard.Height = hy * 2;
+            Canvas.SetLeft(BrushCursorHard, p.X - hx);
+            Canvas.SetTop(BrushCursorHard, p.Y - hy);
             BrushCursorHard.Visibility = Visibility.Visible;
         }
         else BrushCursorHard.Visibility = Visibility.Hidden;
@@ -727,7 +767,17 @@ public partial class MaskEditorWindow : Window
     /// </summary>
     private void ApplyZoomSize()
     {
-        CanvasHost.Width = BaseDisplaySize * _zoom;
-        CanvasHost.Height = BaseDisplaySize * _zoom;
+        // Fitted inside the square so a wide reference gets shorter rather than
+        // wider — growing it would push a level off both edges at 100%, which
+        // is the thing being fixed.
+        double w = BaseDisplaySize * _zoom;
+        double h = w / (_referenceAspect > 0 ? _referenceAspect : 1.0);
+        if (h > BaseDisplaySize * _zoom)
+        {
+            h = BaseDisplaySize * _zoom;
+            w = h * _referenceAspect;
+        }
+        CanvasHost.Width = w;
+        CanvasHost.Height = h;
     }
 }
