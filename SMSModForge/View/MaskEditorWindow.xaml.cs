@@ -486,11 +486,13 @@ public partial class MaskEditorWindow : Window
 
     private void UpdateBrushCursor(Point p)
     {
-        // One texture pixel is this many display pixels — separately per axis,
+        // One texture pixel is this many canvas pixels — separately per axis,
         // because the canvas takes the reference art's shape. The brush is a
         // circle in TEXTURE space, so on a wide canvas it must be drawn as the
         // ellipse that circle actually covers, or the cursor stops describing
-        // what the stroke will do.
+        // what the stroke will do. Zoom is deliberately absent: this is drawn
+        // in the canvas's own space and the render transform scales it along
+        // with everything else.
         double scaleX = CanvasHost.ActualWidth / MaskBuffer.Size;
         double scaleY = CanvasHost.ActualHeight / MaskBuffer.Size;
         double rx = SizeSlider.Value * scaleX, ry = SizeSlider.Value * scaleY;
@@ -731,12 +733,10 @@ public partial class MaskEditorWindow : Window
     {
         e.Handled = true;
 
-        // Where the cursor is on the canvas, as a fraction of it, captured
-        // before the resize so the same point can be put back under the cursor.
+        // The cursor in the canvas's OWN coordinates, which a render transform
+        // leaves untouched — so this is the texture-space point to pin.
         var p = e.GetPosition(CanvasHost);
-        double u = CanvasHost.Width > 0 ? p.X / CanvasHost.Width : 0.5;
-        double v = CanvasHost.Height > 0 ? p.Y / CanvasHost.Height : 0.5;
-        double wasW = CanvasHost.Width, wasH = CanvasHost.Height;
+        double before = _zoom;
 
         // Multiplicative, like the Places preview: a fixed increment feels
         // coarse zoomed out and glacial zoomed in, and at 25% steps the
@@ -745,12 +745,14 @@ public partial class MaskEditorWindow : Window
 
         ApplyZoomSize();
 
-        // The canvas is centred in its host, so it grows about its middle;
-        // shifting the pan by how far the cursor's point moved keeps that point
-        // still. Without this, zooming in walks the area of interest off-screen
-        // and every zoom has to be followed by a hunt with the pan.
-        PanTransform.X += (u - 0.5) * (wasW - CanvasHost.Width);
-        PanTransform.Y += (v - 0.5) * (wasH - CanvasHost.Height);
+        // Scaling happens about the canvas's centre, so a point at distance d
+        // from that centre moves by d * (new - old). Cancelling that with the
+        // pan keeps whatever is under the cursor exactly where it is; without
+        // it, zooming in walks the area of interest off screen and every zoom
+        // has to be followed by a hunt.
+        double dz = _zoom - before;
+        PanTransform.X -= (p.X - CanvasHost.Width / 2.0) * dz;
+        PanTransform.Y -= (p.Y - CanvasHost.Height / 2.0) * dz;
 
         // Recompose the bitmap at the new zoom level.
         RecomposeAll();
@@ -767,17 +769,18 @@ public partial class MaskEditorWindow : Window
     /// </summary>
     private void ApplyZoomSize()
     {
-        // Fitted inside the square so a wide reference gets shorter rather than
-        // wider — growing it would push a level off both edges at 100%, which
-        // is the thing being fixed.
-        double w = BaseDisplaySize * _zoom;
+        // The LAYOUT size never changes with zoom — see the transform block in
+        // the XAML for why. It only tracks the reference art's shape, fitted
+        // inside the square so a wide reference gets shorter rather than wider.
+        double w = BaseDisplaySize;
         double h = w / (_referenceAspect > 0 ? _referenceAspect : 1.0);
-        if (h > BaseDisplaySize * _zoom)
+        if (h > BaseDisplaySize)
         {
-            h = BaseDisplaySize * _zoom;
+            h = BaseDisplaySize;
             w = h * _referenceAspect;
         }
         CanvasHost.Width = w;
         CanvasHost.Height = h;
+        ZoomTransform.ScaleX = ZoomTransform.ScaleY = _zoom;
     }
 }

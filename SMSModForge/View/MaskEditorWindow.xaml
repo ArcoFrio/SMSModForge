@@ -99,17 +99,29 @@
                 Background="#1a1a1a" Padding="8" ClipToBounds="True">
             <Grid HorizontalAlignment="Center" VerticalAlignment="Center"
                   x:Name="CanvasHost" Width="512" Height="512"
+                  RenderTransformOrigin="0.5,0.5"
                   Background="Transparent" Focusable="True"
                   MouseDown="Canvas_MouseDown" MouseMove="Canvas_MouseMove"
                   MouseUp="Canvas_MouseUp" MouseLeave="Canvas_MouseLeave"
                   MouseEnter="Canvas_MouseEnter" MouseWheel="Canvas_MouseWheel"
                   Cursor="None">
-                <!-- Pan offset. A render transform rather than a layout change so
-                     it costs no re-measure while dragging, and so GetPosition
-                     against this Grid keeps returning texture-space coordinates
-                     — the brush keeps landing where the cursor is. -->
+                <!-- Zoom AND pan are render transforms, never layout changes.
+                     Growing Width/Height instead is what made zooming useless:
+                     once an element with an explicit size exceeds its arrange
+                     slot, WPF clips it to that slot automatically, and a render
+                     transform is applied after layout — so panning slid the
+                     already-clipped rectangle around instead of revealing what
+                     was outside it. Scaling leaves the layout size alone, so
+                     there is no layout clip and only the window trims.
+                     It also keeps GetPosition against this Grid returning
+                     texture-space coordinates, since render transforms sit
+                     outside an element's own coordinate space — the brush
+                     lands where the cursor is at any zoom, for free. -->
                 <Grid.RenderTransform>
-                    <TranslateTransform x:Name="PanTransform"/>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="ZoomTransform"/>
+                        <TranslateTransform x:Name="PanTransform"/>
+                    </TransformGroup>
                 </Grid.RenderTransform>
                 <Image x:Name="MaskImage" Stretch="Fill" SnapsToDevicePixels="True"
                        RenderOptions.BitmapScalingMode="NearestNeighbor"/>
