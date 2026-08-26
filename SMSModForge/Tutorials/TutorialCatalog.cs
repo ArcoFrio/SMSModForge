@@ -9,6 +9,12 @@ namespace SMSModForge.Tutorials;
 /// taken. Each covers ground the ones before it did not, and none tries to
 /// cover everything.
 /// <para/>
+/// A step's check asks about the PACK, not the click: it is satisfied by the
+/// state actually changing, so an author who gets there by another route is
+/// never told they did it wrong. That is also why a check has to be specific
+/// enough to fail — one that a freshly added, still-empty row satisfies
+/// teaches nothing and passes on arrival.
+/// <para/>
 /// Baselines live in the per-run <see cref="TutorialScratch"/> rather than in
 /// fields here, so a check can ask whether something was ADDED — which is
 /// almost always the real question, and is not the same as asking whether it
