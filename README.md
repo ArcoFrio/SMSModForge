@@ -99,7 +99,7 @@ The editor manages this for you — it is here so you can read a pack by hand.
   Sprites/
     MyGirl/
       Base.PNG                 ← bust art, 256×256 RGBA
-      Mask.PNG                 ← jiggle mask: R/G/B = Bounce/Sway/Wave, A scales all three
+      Mask.PNG                 ← jiggle mask: R/G/B = Bounce/Wave/Noise, A scales all three
       Blink.PNG                ← optional
       Mouth1.PNG … Mouth4.PNG  ← optional
       ExpressionHappy.PNG …    ← optional: Happy / Angry / Sad / Flirty

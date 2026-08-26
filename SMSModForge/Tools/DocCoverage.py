@@ -117,7 +117,17 @@ def labels_and_buttons():
             tag = d.tag.rsplit("}", 1)[-1]
             if tag == "TextBlock":
                 t = (d.attrib.get("Text") or "").strip()
-                if t.endswith(":") and 2 < len(t) < 34 and not t.startswith("{"):
+                if not t or t.startswith("{") or not (2 < len(t) < 34):
+                    continue
+                # A trailing colon is the usual sign of a field label, but not
+                # every tab writes one: the Characters jiggle grid labels its
+                # rows "Speed", "Strength", "Noise scale" with no punctuation,
+                # so a colon-only rule scored that whole panel as nonexistent
+                # and reported 100% on fields nobody had documented. Sitting in
+                # a grid's label column, or carrying a tooltip of its own, is
+                # the same claim by other means.
+                label = d.attrib.get("Grid.Column") == "0"
+                if t.endswith(":") or label or d.attrib.get("ToolTip"):
                     found.add(t.rstrip(":"))
             elif tag in ("CheckBox", "Button", "RadioButton"):
                 c = (d.attrib.get("Content") or "").strip()

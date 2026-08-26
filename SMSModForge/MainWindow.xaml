@@ -2761,22 +2761,22 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="Speed"        Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Speed"        Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed."/>
                                     <Slider Value="{Binding JiggleSpeed}"    Minimum="0" Maximum="10" Grid.Row="0" Grid.Column="1"/>
                                     <TextBox Text="{Binding JiggleSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2"/>
-                                    <TextBlock Text="Strength"     Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Strength"     Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength."/>
                                     <Slider view:TutorialAnchor.Id="field:jiggle" view:IssueTarget.Field="jiggle.strength" Value="{Binding JiggleStrength}" Minimum="-0.5" Maximum="0.5" Grid.Row="1" Grid.Column="1"/>
                                     <TextBox Text="{Binding JiggleStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2"/>
-                                    <TextBlock Text="Frequency"    Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Wave frequency" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only."/>
                                     <Slider Value="{Binding JiggleFrequency}" Minimum="0" Maximum="40" Grid.Row="2" Grid.Column="1"/>
                                     <TextBox Text="{Binding JiggleFrequency, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2"/>
-                                    <TextBlock Text="Noise Scale"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Noise scale"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fine the noise grain is. Drives the Noise layer only."/>
                                     <Slider Value="{Binding NoiseScale}" Minimum="0" Maximum="80" Grid.Row="3" Grid.Column="1"/>
                                     <TextBox Text="{Binding NoiseScale, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="2"/>
-                                    <TextBlock Text="Noise Speed"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Noise speed"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the noise drifts. Drives the Noise layer only."/>
                                     <Slider Value="{Binding NoiseSpeed}" Minimum="0" Maximum="5" Grid.Row="4" Grid.Column="1"/>
                                     <TextBox Text="{Binding NoiseSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="2"/>
-                                    <TextBlock Text="Noise Strength" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Noise strength" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" ToolTip="How much of the noise shows through. Drives the Noise layer only."/>
                                     <Slider view:IssueTarget.Field="jiggle.noiseStrength" Value="{Binding NoiseStrength}" Minimum="0" Maximum="0.5" Grid.Row="5" Grid.Column="1"/>
                                     <TextBox Text="{Binding NoiseStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"/>
                                     <TextBlock Text="Tint (hex)"   Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
@@ -2990,17 +2990,17 @@
                                         <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <TextBlock Text="Bounce speed:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Speed:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed."/>
                                     <TextBox Text="{Binding JiggleSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
-                                    <TextBlock Text="Bounce strength:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Strength:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength."/>
                                     <TextBox Text="{Binding JiggleStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
-                                    <TextBlock Text="Wave frequency:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Wave frequency:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only."/>
                                     <TextBox Text="{Binding JiggleFrequency, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
-                                    <TextBlock Text="Noise scale:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Noise scale:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fine the noise grain is. Drives the Noise layer only."/>
                                     <TextBox Text="{Binding NoiseScale, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
-                                    <TextBlock Text="Noise speed:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Noise speed:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the noise drifts. Drives the Noise layer only."/>
                                     <TextBox Text="{Binding NoiseSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
-                                    <TextBlock Text="Noise strength:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Noise strength:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" ToolTip="How much of the noise shows through. Drives the Noise layer only."/>
                                     <TextBox Text="{Binding NoiseStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1"/>
                                     <TextBlock Text="Tint (hex RGBA):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox Text="{Binding JiggleTint, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1"/>

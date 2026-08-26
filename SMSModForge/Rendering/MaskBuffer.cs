@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace SMSModForge.Rendering;
 
@@ -14,8 +14,8 @@ namespace SMSModForge.Rendering;
 /// Channel-to-effect mapping (matches <see cref="JiggleShader"/>):
 /// <list type="bullet">
 ///   <item>R → bounce</item>
-///   <item>G → sway</item>
-///   <item>B → wave (gradient noise)</item>
+///   <item>G → wave</item>
+///   <item>B → noise (gradient noise)</item>
 /// </list>
 /// </summary>
 /// <summary>
@@ -49,7 +49,7 @@ public sealed class MaskBuffer
     /// <summary>Names matching what each plane actually drives.</summary>
     public string ChannelName(int idx) => Kind == MaskKind.LevelAlpha
         ? "Intensity"
-        : idx switch { 0 => "Bounce", 1 => "Sway", _ => "Wave" };
+        : idx switch { 0 => "Bounce", 1 => "Wave", _ => "Noise" };
 
     public byte[] R { get; } = new byte[Size * Size];
     public byte[] G { get; } = new byte[Size * Size];

@@ -268,7 +268,7 @@ internal static class TutorialsPart2
                 {
                     Title = "What the Jiggle numbers do",
                     Body = "The mask says WHERE the sprite moves; these say how. Strength is how " +
-                           "far the pixels travel and Speed how fast the cycle runs. Frequency " +
+                           "far the pixels travel and Speed how fast the cycle runs. Wave frequency " +
                            "is how many waves fit across the sprite, so a low number sways and a " +
                            "high one ripples. The three Noise settings keep it from ticking like " +
                            "a metronome — Scale is how fine the grain is, Speed how fast it " +
