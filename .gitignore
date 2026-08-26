@@ -1,4 +1,4 @@
-# ── Build output / IDE ────────────────────────────────────────────────
+﻿# ── Build output / IDE ────────────────────────────────────────────────
 [Bb]in/
 [Oo]bj/
 .vs/
@@ -18,7 +18,12 @@ SMSAndroidsPack.smspack
 SMSAndroidsActors.json
 SMSAndroidsDialogues.json
 modpack BAK.json
-Tools/
+# Tools/ used to be ignored wholesale. That took the build's own scripts with
+# it: MakeArtThumbnails.py regenerates the art a release ships, the
+# Tools/UnityEditor extractors are the only way to refresh the vanilla
+# catalogs, and none of it existed anywhere but one machine. Tracked now.
+__pycache__/
+*.pyc
 DIALOGUE_AUDIT.md
 GENERIC_CANDIDATES.md
 INTEGRATION.md

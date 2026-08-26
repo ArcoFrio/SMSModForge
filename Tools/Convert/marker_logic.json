@@ -1,0 +1,3734 @@
+{
+ "AmberDialogueHospitalhallway01": {
+  "gating": [
+   "case:Hospitalhallway",
+   "SaveManager.GetBool(\"Event_SeenAmberHospitalHallway01\")",
+   "Places.levelHospitalHallway.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "amberEventHospitalhallwayScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "amberEventHospitalhallwayScene02",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "amberCoatless"
+    },
+    {
+     "op": "leaveBust",
+     "char": "doctorFrost"
+    },
+    {
+     "op": "scene",
+     "field": "amberEventHospitalhallwayScene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "amberEventHospitalhallwayScene02",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "amberLocation",
+     "value": "MountainLab"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenAmberHospitalHallway01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "amberHospitalhallwayEvent01Dialogue"
+ },
+ "AnisDialogueAffection01": {
+  "gating": [
+   "case:Downtown",
+   "SaveManager.GetInt(\"Affection_Anis\") >=2",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "Places.levelDowntown.activeSelf"
+  ],
+  "markers": {
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeInSignal"
+    },
+    {
+     "op": "emitSignalDelayed",
+     "signal": "FadeOut2025",
+     "seconds": 1.5
+    }
+   ],
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisAffection01Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisAffection01Scene02",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "anis"
+    },
+    {
+     "op": "conditional",
+     "cond": "Scenes.anisAffection01Scene01.activeSelf",
+     "then": [
+      {
+       "op": "setVar",
+       "name": "Affection_Anis_Seen1",
+       "value": "true",
+       "vtype": "bool"
+      }
+     ]
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection01Scene02",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    }
+   ]
+  },
+  "fieldName": "anisAffection01Dialogue"
+ },
+ "AnisDialogueAffection02": {
+  "gating": [
+   "case:Mall",
+   "SaveManager.GetBool(\"Event_SeenAnisMall01\")",
+   "SaveManager.GetInt(\"Affection_Anis\") >= 4",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "Places.levelMall.activeSelf"
+  ],
+  "markers": {
+   "Scene6": [
+    {
+     "op": "leaveBust",
+     "char": "kate"
+    }
+   ],
+   "Scene7": [
+    {
+     "op": "bustActive",
+     "char": "anis",
+     "active": false
+    },
+    {
+     "op": "emitSignalField",
+     "field": "fadeInSignal"
+    },
+    {
+     "op": "goActive",
+     "level": "levelCinema",
+     "child": "Dark_Cinema",
+     "active": true
+    },
+    {
+     "op": "transitionLevels",
+     "signal": "FadeOut2025",
+     "fromLevel": "levelMall",
+     "toLevel": "levelCinema",
+     "seconds": 1.5
+    }
+   ],
+   "Scene1": [
+    {
+     "op": "bustActive",
+     "char": "anis",
+     "active": true
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene02",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene03",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene04",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene05",
+     "active": true
+    }
+   ],
+   "Scene8": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeInSignal"
+    },
+    {
+     "op": "transitionLevels",
+     "signal": "FadeOut2025",
+     "fromLevel": "levelCinema",
+     "toLevel": "levelMall",
+     "seconds": 1.5
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene04",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection02Scene05",
+     "active": false
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "conditional",
+     "cond": "this.dialogueToActivate.transform.Find(\"MouthActivator\").gameObject.activeSelf",
+     "then": [
+      {
+       "op": "setVar",
+       "name": "Affection_Anis_Seen2",
+       "value": "true",
+       "vtype": "bool"
+      }
+     ]
+    },
+    {
+     "op": "leaveBust",
+     "char": "anis"
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    }
+   ],
+   "MouthActivator": [
+    {
+     "op": "setVar",
+     "name": "Affection_Anis_Seen2",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "anisAffection02Dialogue"
+ },
+ "AnisRandom67": {
+  "gating": [
+   "case:Mall",
+   "SaveManager.GetBool(\"Event_SeenAnisMall01\")",
+   "SaveManager.GetInt(\"Affection_Anis\") >= 4",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "Places.levelMall.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "anis"
+    },
+    {
+     "op": "leaveBust",
+     "char": "kate"
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    }
+   ]
+  },
+  "fieldName": "anisRandomDialogue67"
+ },
+ "AnisDialogueMall01": {
+  "gating": [
+   "case:Mall",
+   "SaveManager.GetBool(\"Event_SeenAnisMall01\")",
+   "SaveManager.GetInt(\"Affection_Anis\") >= 4",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "Places.levelMall.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisEventMallScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "kate",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "anis"
+    },
+    {
+     "op": "leaveBust",
+     "char": "kate"
+    },
+    {
+     "op": "scene",
+     "field": "anisEventMallScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenAnisMall01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "anisMallEvent01Dialogue"
+ },
+ "CentiDialogueKenshome01": {
+  "gating": [
+   "case:Kenshome",
+   "SaveManager.GetBool(\"Event_SeenCentiKensHome01\")",
+   "Places.levelKensHome.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenCenti\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "centiEventKenshomeScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "centi",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "leaveBust",
+     "char": "centi"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "samSwim"
+    },
+    {
+     "op": "scene",
+     "field": "centiEventKenshomeScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "centiLocation",
+     "value": "MountainLabRoomNikkeCenti"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenCentiKensHome01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "centiKenshomeEvent01Dialogue"
+ },
+ "DorothyDialoguePark01": {
+  "gating": [
+   "case:Park",
+   "SaveManager.GetBool(\"Event_SeenDorothyPark01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenDorothy\")",
+   "Places.levelPark.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "dorothyEventParkScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "river",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "leaveBust",
+     "char": "river"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "dorothy"
+    },
+    {
+     "op": "scene",
+     "field": "dorothyEventParkScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "dorothyLocation",
+     "value": "MountainLabRoomNikkeDorothy"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenDorothyPark01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "dorothyParkEvent01Dialogue"
+ },
+ "EleggDialogueDowntown01": {
+  "gating": [
+   "case:Downtown",
+   "SaveManager.GetBool(\"Event_SeenEleggDowntown01\")",
+   "Places.levelDowntown.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenElegg\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "eleggEventDowntownScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "elegg",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "leaveBust",
+     "char": "elegg"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "bustActive",
+     "char": "adrian",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "adrian"
+    },
+    {
+     "op": "scene",
+     "field": "eleggEventDowntownScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "eleggLocation",
+     "value": "MountainLabRoomNikkeElegg"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenEleggDowntown01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "eleggDowntownEvent01Dialogue"
+ },
+ "FrimaDialogueHotel01": {
+  "gating": [
+   "case:Hotel",
+   "SaveManager.GetBool(\"Event_SeenFrimaHotel01\")",
+   "Places.levelHotel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenFrima\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "frimaEventHotelScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "leaveBust",
+     "char": "frima"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "isabella"
+    },
+    {
+     "op": "scene",
+     "field": "frimaEventHotelScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "frimaLocation",
+     "value": "MountainLabRoomNikkeFrima"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenFrimaHotel01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "frimaHotelEvent01Dialogue"
+ },
+ "GuiltyDialogueParkinglot01": {
+  "gating": [
+   "case:Parkinglot",
+   "SaveManager.GetBool(\"Event_SeenGuiltyParkingLot01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenGuilty\")",
+   "Places.levelParkingLot.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "guiltyEventParkinglotScene01",
+     "active": true
+    },
+    {
+     "op": "bustActive",
+     "char": "mobsterBlonde",
+     "active": false
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "mobsterBlonde",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "guilty"
+    },
+    {
+     "op": "scene",
+     "field": "guiltyEventParkinglotScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "guiltyLocation",
+     "value": "MountainLabRoomNikkeGuilty"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenGuiltyParkingLot01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "guiltyParkinglotEvent01Dialogue"
+ },
+ "HelmDialogueBeach01": {
+  "gating": [
+   "case:Beach",
+   "SaveManager.GetBool(\"Event_SeenHelmBeach01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenHelm\")",
+   "Places.levelBeach.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "helmEventBeachScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "emmaSwim",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "helm"
+    },
+    {
+     "op": "leaveBust",
+     "char": "emmaSwim"
+    },
+    {
+     "op": "scene",
+     "field": "helmEventBeachScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "helmLocation",
+     "value": "MountainLabRoomNikkeHelm"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenHelmBeach01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "helmBeachEvent01Dialogue"
+ },
+ "MaidenDialogueAlley01": {
+  "gating": [
+   "case:Alley",
+   "SaveManager.GetBool(\"Event_SeenMaidenAlley01\")",
+   "Places.levelAlley.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenMaiden\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "maidenEventAlleyScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "toni",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "maiden"
+    },
+    {
+     "op": "leaveBust",
+     "char": "toni"
+    },
+    {
+     "op": "scene",
+     "field": "maidenEventAlleyScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "maidenLocation",
+     "value": "MountainLabRoomNikkeMaiden"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenMaidenAlley01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "maidenAlleyEvent01Dialogue"
+ },
+ "MaryDialogueHospitalhallway01": {
+  "gating": [
+   "case:Hospitalhallway",
+   "SaveManager.GetBool(\"Event_SeenMaryHospitalHallway01\")",
+   "Places.levelHospitalHallway.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenMary\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "maryEventHospitalhallwayScene01",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "anna"
+    },
+    {
+     "op": "leaveBust",
+     "char": "mary"
+    },
+    {
+     "op": "scene",
+     "field": "maryEventHospitalhallwayScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "maryLocation",
+     "value": "MountainLabRoomNikkeMary"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenMaryHospitalHallway01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "maryHospitalhallwayEvent01Dialogue"
+ },
+ "MastDialogueBeach01": {
+  "gating": [
+   "case:Beach",
+   "SaveManager.GetBool(\"Event_SeenMastBeach01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenMast\")",
+   "Places.levelBeach.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "mastEventBeachScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "ameliaSwim",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "mast",
+     "toBust": "mastShirtless"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "ameliaSwim"
+    },
+    {
+     "op": "leaveBust",
+     "char": "mastShirtless"
+    },
+    {
+     "op": "scene",
+     "field": "mastEventBeachScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "mastLocation",
+     "value": "MountainLabRoomNikkeMast"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenMastBeach01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "mastBeachEvent01Dialogue"
+ },
+ "NeonDialogueTemple01": {
+  "gating": [
+   "case:Temple",
+   "SaveManager.GetBool(\"Event_SeenNeonTemple01\")",
+   "Places.levelTemple.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "neonEventTempleScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "masterZhen",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "masterZhen"
+    },
+    {
+     "op": "leaveBust",
+     "char": "neon"
+    },
+    {
+     "op": "scene",
+     "field": "neonEventTempleScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "neonLocation",
+     "value": "MountainLabRoomNikkeNeon"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenNeonTemple01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "neonTempleEvent01Dialogue"
+ },
+ "PepperDialogueHospital01": {
+  "gating": [
+   "case:Hospital",
+   "SaveManager.GetBool(\"Event_SeenPepperHospital01\")",
+   "Places.levelHospital.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenPepper\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "pepperEventHospitalScene01",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "pepper"
+    },
+    {
+     "op": "scene",
+     "field": "pepperEventHospitalScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "pepperLocation",
+     "value": "MountainLabRoomNikkePepper"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenPepperHospital01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "pepperHospitalEvent01Dialogue"
+ },
+ "RapiDialogueGasstation01": {
+  "gating": [
+   "case:Gasstation",
+   "SaveManager.GetBool(\"Event_SeenRapiGasStation01\")",
+   "Places.levelGasStation.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "rapiEventGasstationScene01",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "rapi"
+    },
+    {
+     "op": "leaveBust",
+     "char": "sofia"
+    },
+    {
+     "op": "scene",
+     "field": "rapiEventGasstationScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "rapiLocation",
+     "value": "MountainLabRoomNikkeRapi"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenRapiGasStation01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "rapiGasstationEvent01Dialogue"
+ },
+ "RosannaDialogueGabrielsmansion01": {
+  "gating": [
+   "case:Gabrielsmansion",
+   "SaveManager.GetBool(\"Event_SeenRosannaGabrielsMansion01\")",
+   "Places.levelGabrielsMansion.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenRosanna\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "rosannaEventGabrielsmansionScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "gabriel",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "gabriel"
+    },
+    {
+     "op": "leaveBust",
+     "char": "rosanna"
+    },
+    {
+     "op": "scene",
+     "field": "rosannaEventGabrielsmansionScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "rosannaLocation",
+     "value": "MountainLabRoomNikkeRosanna"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenRosannaGabrielsMansion01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "rosannaGabrielsmansionEvent01Dialogue"
+ },
+ "SakuraDialogueForest01": {
+  "gating": [
+   "case:Forest",
+   "SaveManager.GetBool(\"Event_SeenSakuraForest01\")",
+   "Places.levelForest.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenSakura\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "sakuraEventForestScene01",
+     "active": true
+    },
+    {
+     "op": "changeBust",
+     "fromBust": "sakura",
+     "toBust": "sakuraUnderwear"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "sakuraUnderwear"
+    },
+    {
+     "op": "scene",
+     "field": "sakuraEventForestScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "sakuraLocation",
+     "value": "MountainLabRoomNikkeSakura"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenSakuraForest01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "sakuraForestEvent01Dialogue"
+ },
+ "ToveDialogueTrail01": {
+  "gating": [
+   "case:Trail",
+   "Places.levelTrail.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenTove\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "toveEventTrailScene01",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeInSignal"
+    },
+    {
+     "op": "emitSignalDelayed",
+     "signal": "FadeOut2025",
+     "seconds": 1.5
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "blinkSignal"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "tove"
+    },
+    {
+     "op": "scene",
+     "field": "toveEventTrailScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "toveLocation",
+     "value": "MountainLabRoomNikkeTove"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenToveTrail01",
+     "value": "true",
+     "vtype": "bool"
+    },
+    {
+     "op": "setVar",
+     "name": "DailyProc_Tove-Trail-1",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "toveTrailEvent01Dialogue"
+ },
+ "ViperDialogueVilla01": {
+  "gating": [
+   "case:Villa",
+   "SaveManager.GetBool(\"Event_SeenViperVilla01\")",
+   "Places.levelVilla.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenViper\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "viperEventVillaScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "bustActive",
+     "char": "katarina",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "leaveBust",
+     "char": "viper"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "katarina"
+    },
+    {
+     "op": "scene",
+     "field": "viperEventVillaScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "viperLocation",
+     "value": "MountainLabRoomNikkeViper"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenViperVilla01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "viperVillaEvent01Dialogue"
+ },
+ "YanDialogueMall01": {
+  "gating": [
+   "case:Mall",
+   "SaveManager.GetBool(\"Event_SeenYanMall01\")",
+   "Places.levelMall.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenYan\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "yanEventMallScene01",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "yan"
+    },
+    {
+     "op": "scene",
+     "field": "yanEventMallScene01",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "yanLocation",
+     "value": "MountainLabRoomNikkeYan"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenYanMall01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "yanMallEvent01Dialogue"
+ },
+ "SnekForest": {
+  "gating": [
+   "case:Forest",
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "raw",
+     "text": "Color c = Places.solid.GetComponent<SpriteRenderer>().color"
+    },
+    {
+     "op": "raw",
+     "text": "c.a = Mathf.MoveTowards(c.a, 1f, 1f * Time.deltaTime)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.solid.GetComponent<SpriteRenderer>().color = c"
+    },
+    {
+     "op": "raw",
+     "text": "snekIsSolid = true"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "raw",
+     "text": "snekIsSolid = false"
+    },
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "solidSnake"
+    },
+    {
+     "op": "setSchedule",
+     "field": "snekLocation",
+     "value": "Unknown"
+    },
+    {
+     "op": "setVar",
+     "name": "Event_SeenIt01",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "snekForestEgg01Dialogue"
+ },
+ "AmberDialogueDefault": {
+  "gating": [],
+  "markers": {
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeUISignal"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "raw",
+     "text": "amberDefaultDiagQueued = false"
+    }
+   ]
+  }
+ },
+ "ClaireDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenAmberHospitalHallway01\")",
+   "Places.levelHospitalHallway.activeSelf",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "Places.mountainLabLevel.activeSelf",
+   "Places.giftShopInteriorRoomtalk.activeSelf",
+   "SaveManager.GetInt(\"GiftShop_BuildCounter\") >= 2"
+  ],
+  "markers": {
+   "Scene5": [
+    {
+     "op": "raw",
+     "text": "Places.ActivateShop(Places.giftStore)"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "claireDefaultDialogue"
+ },
+ "AnisDialogueAffection03": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene02",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene03",
+     "active": true
+    },
+    {
+     "op": "changeBust",
+     "fromBust": "anisSwim",
+     "toBust": "anisSwimSlip"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene04",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene05",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "anisSwimSlip"
+    },
+    {
+     "op": "conditional",
+     "cond": "Scenes.anisAffection03Scene05.activeSelf",
+     "then": [
+      {
+       "op": "setVar",
+       "name": "Affection_Anis_Seen3",
+       "value": "true",
+       "vtype": "bool"
+      }
+     ]
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene04",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisAffection03Scene05",
+     "active": false
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    }
+   ]
+  },
+  "fieldName": "anisAffection03Dialogue"
+ },
+ "AnisRandomSleep01": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene02",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene03",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene04",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene05",
+     "active": true
+    }
+   ],
+   "Scene6": [
+    {
+     "op": "emitSignalField",
+     "field": "kissSignal"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "raw",
+     "text": "Core.afterSleepEvents.GetComponent<CanvasGroup>().alpha = 1"
+    },
+    {
+     "op": "raw",
+     "text": "Core.afterSleepEvents.GetComponent<CanvasGroup>().interactable = true"
+    },
+    {
+     "op": "raw",
+     "text": "//Characters.anisCoatless.transform.Find(\"MBase1\").Find(\"Leave\").gameObject.SetActive(true)"
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene04",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBedroom01Scene05",
+     "active": false
+    },
+    {
+     "op": "raw",
+     "text": "Places.harborHomeBedroomButtonCanvas.SetActive(true)"
+    }
+   ]
+  },
+  "fieldName": "anisRandomDialogueHHBedroomSleep01Dialogue"
+ },
+ "AnisDialogueHHDefault": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf",
+   "Places.harborHomePoolLevel.activeSelf"
+  ],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "setVar",
+     "name": "HarborHome_Visit_Anis",
+     "value": "false",
+     "vtype": "bool"
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisDefaultLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    },
+    {
+     "op": "raw",
+     "text": "Dialogues.UpdateHHTalkPanel(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Schedule.anisHHOutfit.transform.Find(\"MBase1\").Find(\"Leave\").gameObject.SetActive(true)"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeUISignal"
+    },
+    {
+     "op": "raw",
+     "text": "Dialogues.giftUI.SetActive(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyProxyVariableString(\"Gifting_Target\", \"Anis\")"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "HarborHome_TalkSelected",
+     "value": "",
+     "vtype": "string"
+    },
+    {
+     "op": "conditional",
+     "cond": "!Dialogues.giftUI.activeSelf",
+     "then": [
+      {
+       "op": "raw",
+       "text": "Core.DisableAllActiveBustChildren()"
+      }
+     ]
+    },
+    {
+     "op": "raw",
+     "text": "Places.harborHomeBedroomButtonCanvas.SetActive(true)"
+    }
+   ]
+  },
+  "fieldName": "anisDefaultHHDialogue"
+ },
+ "AnisDialogueGift": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf",
+   "Places.harborHomePoolLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_TV\")",
+   "Places.mountainLabRoomNikkeAnisRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "Scene5": [
+    {
+     "op": "raw",
+     "text": "Core.affectionIncrease.SetActive(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Core.affectionIncrease.SetActive(true)"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "HarborHome_TalkSelected",
+     "value": "",
+     "vtype": "string"
+    },
+    {
+     "op": "raw",
+     "text": "Schedule.anisHHOutfit.SetActive(false)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.harborHomeBedroomButtonCanvas.SetActive(true)"
+    },
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "anisGiftDialogue"
+ },
+ "AnisRandomShower01": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene02",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene03",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene04",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene05",
+     "active": true
+    }
+   ],
+   "Scene6": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene06",
+     "active": true
+    }
+   ],
+   "Scene7": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene04",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene07",
+     "active": true
+    }
+   ],
+   "Scene8": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene05",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene08",
+     "active": true
+    }
+   ],
+   "Scene9": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene06",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene09",
+     "active": true
+    }
+   ],
+   "Scene10": [
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene07",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene10",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "HarborHome_TalkSelected",
+     "value": "",
+     "vtype": "string"
+    },
+    {
+     "op": "raw",
+     "text": "Schedule.anisHHOutfit.transform.Find(\"MBase1\").Find(\"Leave\").gameObject.SetActive(true)"
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene04",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene05",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene06",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene07",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene08",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene09",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHBathroom01Scene10",
+     "active": false
+    },
+    {
+     "op": "raw",
+     "text": "Places.harborHomeBedroomButtonCanvas.SetActive(true)"
+    }
+   ]
+  },
+  "fieldName": "anisRandomDialogueHHBathroomShower01Dialogue"
+ },
+ "AnisRandomMovie01": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf",
+   "Places.harborHomePoolLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_TV\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom01Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom02Scene01",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom03Scene01",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom04Scene01",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom05Scene01",
+     "active": true
+    }
+   ],
+   "Scene6": [
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom06Scene01",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom01Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom02Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom03Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom04Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom05Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHLivingroom06Scene01",
+     "active": false
+    },
+    {
+     "op": "raw",
+     "text": "Schedule.anisHHOutfit.transform.Find(\"MBase1\").Find(\"Leave\").gameObject.SetActive(true)"
+    }
+   ]
+  },
+  "fieldName": "anisRandomDialogueHHLivingroomMovie01Dialogue"
+ },
+ "AnisDialogueHHDefaultMovie": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf"
+  ],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "setVar",
+     "name": "HarborHome_Visit_Anis",
+     "value": "false",
+     "vtype": "bool"
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisDefaultLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    },
+    {
+     "op": "setSchedule",
+     "field": "anisLocation",
+     "value": "MountainLabRoomNikkeAnis"
+    },
+    {
+     "op": "raw",
+     "text": "Dialogues.UpdateHHTalkPanel(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Schedule.anisHHOutfit.transform.Find(\"MBase1\").Find(\"Leave\").gameObject.SetActive(true)"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeUISignal"
+    },
+    {
+     "op": "raw",
+     "text": "Dialogues.giftUI.SetActive(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyProxyVariableString(\"Gifting_Target\", \"Anis\")"
+    }
+   ],
+   "Scene20": [
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyVariableBool(\"watching-porn\",false)"
+    },
+    {
+     "op": "raw",
+     "text": "//Core.FindAndModifyVariableDouble(\"random-1-of-10\", 0)"
+    },
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyVariableDouble(\"incoming-movie\", 0)"
+    }
+   ],
+   "Scene19": [
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyVariableDouble(\"incoming-movie\", 1)"
+    }
+   ],
+   "Scene18": [
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyVariableDouble(\"incoming-movie\", 3)"
+    }
+   ],
+   "Scene17": [
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyVariableDouble(\"incoming-movie\", 2)"
+    }
+   ],
+   "Scene16": [
+    {
+     "op": "raw",
+     "text": "StartMovieSequence()"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "HarborHome_TalkSelected",
+     "value": "",
+     "vtype": "string"
+    },
+    {
+     "op": "conditional",
+     "cond": "!Dialogues.giftUI.activeSelf",
+     "then": [
+      {
+       "op": "raw",
+       "text": "Core.DisableAllActiveBustChildren()"
+      }
+     ]
+    },
+    {
+     "op": "raw",
+     "text": "Places.harborHomeBedroomButtonCanvas.SetActive(true)"
+    }
+   ]
+  },
+  "fieldName": "anisDefaultHHMovieDialogue"
+ },
+ "AnisDialogueHHDefaultPool": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf",
+   "Places.harborHomePoolLevel.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisHHPool01Scene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisHHPool02Scene01",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisHHPool03Scene01",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "setVar",
+     "name": "DailyProc_Anis_Massage",
+     "value": "true",
+     "vtype": "bool"
+    },
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyProxyVariableString(\"Minigame_Massage_Character\", \"Anis\")"
+    },
+    {
+     "op": "raw",
+     "text": "Minigames.Instance.StartMinigame(Minigames.minigameMassage)"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "scene",
+     "field": "anisHHPool01Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHPool02Scene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisHHPool03Scene01",
+     "active": false
+    },
+    {
+     "op": "setVar",
+     "name": "HarborHome_TalkSelected",
+     "value": "",
+     "vtype": "string"
+    },
+    {
+     "op": "raw",
+     "text": "Schedule.anisHHOutfit.transform.Find(\"MBase1\").Find(\"Leave\").gameObject.SetActive(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.harborHomeBedroomButtonCanvas.SetActive(true)"
+    }
+   ]
+  },
+  "fieldName": "anisDefaultHHPoolDialogue"
+ },
+ "AnisRandomChill01": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf",
+   "Places.harborHomePoolLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_TV\")",
+   "Places.mountainLabRoomNikkeAnisRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene01",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene02",
+     "active": true
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene03",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene04",
+     "active": true
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene05",
+     "active": true
+    }
+   ],
+   "Scene6": [
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene06",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "DailyProc_Anis-Chill-1",
+     "value": "true",
+     "vtype": "bool"
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene01",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene02",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene03",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene04",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene05",
+     "active": false
+    },
+    {
+     "op": "scene",
+     "field": "anisChillToplessScene06",
+     "active": false
+    },
+    {
+     "op": "conditional",
+     "cond": "!SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+     "then": [
+      {
+       "op": "leaveBust",
+       "char": "anisTopless"
+      }
+     ]
+    }
+   ]
+  },
+  "fieldName": "anisRandomDialogueLabRoomChill01Dialogue"
+ },
+ "AnisDialogueDefault": {
+  "gating": [
+   "SaveManager.GetInt(\"Affection_Anis\") >= 5",
+   "SaveManager.GetBool(\"Affection_Anis_Seen1\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen2\")",
+   "SaveManager.GetBool(\"Affection_Anis_Seen3\")",
+   "Places.secretBeachLevel.activeSelf",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Default\"",
+   "SaveManager.GetString(\"HarborHome_Outfit_Anis\") == \"Swim\"",
+   "Places.harborHomeBedroomLevel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenAnis\")",
+   "SaveManager.GetBool(\"HarborHome_Visit_Anis\")",
+   "SaveManager.GetBool(\"HarborHome_SleepCD\")",
+   "SaveManager.GetString(\"HarborHome_TalkSelected\") == \"Anis\"",
+   "Places.harborHomeBathroomLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_Shower\")",
+   "Places.harborHomeLivingroomLevel.activeSelf",
+   "Places.harborHomePoolLevel.activeSelf",
+   "SaveManager.GetBool(\"DailyProc_Anis_TV\")",
+   "Places.mountainLabRoomNikkeAnisRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "setVar",
+     "name": "HarborHome_Visit_Anis",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeUISignal"
+    },
+    {
+     "op": "raw",
+     "text": "Dialogues.giftUI.SetActive(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyProxyVariableString(\"Gifting_Target\", \"Anis\")"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "anisDefaultDialogue"
+ },
+ "CentiDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenCentiKensHome01\")",
+   "Places.levelKensHome.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenCenti\")",
+   "Places.mountainLabRoomNikkeCentiRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "centiDefaultDialogue"
+ },
+ "DorothyDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenDorothyPark01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenDorothy\")",
+   "Places.levelPark.activeSelf",
+   "Places.mountainLabRoomNikkeDorothyRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "dorothyDefaultDialogue"
+ },
+ "EleggDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenEleggDowntown01\")",
+   "Places.levelDowntown.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenElegg\")",
+   "Places.mountainLabRoomNikkeEleggRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "eleggDefaultDialogue"
+ },
+ "FrimaDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenFrimaHotel01\")",
+   "Places.levelHotel.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenFrima\")",
+   "Places.mountainLabRoomNikkeFrimaRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "frimaDefaultDialogue"
+ },
+ "GuiltyDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenGuiltyParkingLot01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenGuilty\")",
+   "Places.levelParkingLot.activeSelf",
+   "Places.mountainLabRoomNikkeGuiltyRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "guiltyDefaultDialogue"
+ },
+ "HelmDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenHelmBeach01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenHelm\")",
+   "Places.levelBeach.activeSelf",
+   "Places.mountainLabRoomNikkeHelmRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "helmDefaultDialogue"
+ },
+ "MaidenDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenMaidenAlley01\")",
+   "Places.levelAlley.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenMaiden\")",
+   "Places.mountainLabRoomNikkeMaidenRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "maidenDefaultDialogue"
+ },
+ "MaryDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenMaryHospitalHallway01\")",
+   "Places.levelHospitalHallway.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenMary\")",
+   "Places.mountainLabRoomNikkeMaryRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "maryDefaultDialogue"
+ },
+ "MastDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenMastBeach01\")",
+   "SaveManager.GetBool(\"Voyeur_SeenMast\")",
+   "Places.levelBeach.activeSelf",
+   "Places.mountainLabRoomNikkeMastRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "mastDefaultDialogue"
+ },
+ "NeonDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenNeonTemple01\")",
+   "Places.levelTemple.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "Places.mountainLabRoomNikkeNeonRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenNeon\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "neonDefaultDialogue"
+ },
+ "PepperDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenPepperHospital01\")",
+   "Places.levelHospital.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenPepper\")",
+   "Places.mountainLabRoomNikkePepperRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "pepperDefaultDialogue"
+ },
+ "RapiDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenRapiGasStation01\")",
+   "Places.levelGasStation.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "Places.mountainLabRoomNikkeRapiRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenRapi\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "rapiDefaultDialogue"
+ },
+ "RosannaDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenRosannaGabrielsMansion01\")",
+   "Places.levelGabrielsMansion.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenRosanna\")",
+   "Places.mountainLabRoomNikkeRosannaRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "rosannaDefaultDialogue"
+ },
+ "SakuraDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenSakuraForest01\")",
+   "Places.levelForest.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenSakura\")",
+   "Places.mountainLabRoomNikkeSakuraRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "sakuraDefaultDialogue"
+ },
+ "ToveDialogueDefault": {
+  "gating": [
+   "Places.levelTrail.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenTove\")",
+   "Places.mountainLabRoomNikkeToveRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "toveDefaultDialogue"
+ },
+ "ViperDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenViperVilla01\")",
+   "Places.levelVilla.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenViper\")",
+   "Places.mountainLabRoomNikkeViperRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "viperDefaultDialogue"
+ },
+ "YanDialogueDefault": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenYanMall01\")",
+   "Places.levelMall.activeSelf",
+   "SaveManager.GetBool(\"Voyeur_SeenYan\")",
+   "Places.mountainLabRoomNikkeYanRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "yanDefaultDialogue"
+ },
+ "GSDialogueStory05": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")"
+  ],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "leaveBust",
+     "char": "centi"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "raw",
+     "text": "Core.affectionIncrease.SetActive(true)"
+    },
+    {
+     "op": "setVar",
+     "name": "Affection_Yan",
+     "value": "SaveManager.GetInt(\"Affection_Yan\") + 1",
+     "vtype": "int"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "GiftShop_FirstVisited",
+     "value": "true",
+     "vtype": "bool"
+    },
+    {
+     "op": "leaveBust",
+     "char": "yan"
+    }
+   ]
+  },
+  "fieldName": "gSDialogueMainFirst"
+ },
+ "SarahDialogueBuyHH": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")"
+  ],
+  "markers": {
+   "Scene5": [
+    {
+     "op": "bustActive",
+     "char": "sarah",
+     "active": true
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "raw",
+     "text": "Core.FindAndModifyVariableDouble(\"Cash\", Core.GetVariableNumber(\"Cash\") - 5000000)"
+    },
+    {
+     "op": "setVar",
+     "name": "HarborHome_Bought",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "conditional",
+     "cond": "!SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+     "then": [
+      {
+       "op": "setVar",
+       "name": "HarborHome_FirstVisited",
+       "value": "true",
+       "vtype": "bool"
+      }
+     ]
+    }
+   ]
+  },
+  "fieldName": "sarahDialogueBuyHH"
+ },
+ "MLDialogueStory02": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "leaveBust",
+     "char": "amberSwim"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "raw",
+     "text": "Core.affectionIncrease.SetActive(true)"
+    },
+    {
+     "op": "setVar",
+     "name": "Affection_Amber",
+     "value": "SaveManager.GetInt(\"Affection_Amber\") + 1",
+     "vtype": "int"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "MountainLab_FirstVisited",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "mLDialogueMainFirst"
+ },
+ "MLDialogueStory03": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "MountainLab_FirstVisitor",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "mLDialogueMainStory03"
+ },
+ "MLDialogueStory04": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "leaveBust",
+     "char": "anis"
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "leaveBust",
+     "char": "neon"
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "leaveBust",
+     "char": "rapi"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "raw",
+     "text": "Core.affectionIncrease.SetActive(true)"
+    },
+    {
+     "op": "setVar",
+     "name": "Affection_Rapi",
+     "value": "SaveManager.GetInt(\"Affection_Rapi\") + 1",
+     "vtype": "int"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "MountainLab_GKExplanation",
+     "value": "true",
+     "vtype": "bool"
+    }
+   ]
+  },
+  "fieldName": "mLDialogueMainStory04"
+ },
+ "BadWeather": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "SaveManager.GetInt(\"Affection_Rapi\") + 1",
+   "Places.secretBeachRoomtalk.activeSelf"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    }
+   ]
+  },
+  "fieldName": "badWeatherDialogue"
+ },
+ "SBDialogueMainFirst": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "SaveManager.GetInt(\"Affection_Rapi\") + 1",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"SecretBeach_FirstVisited\")"
+  ],
+  "markers": {
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "setVar",
+     "name": "SecretBeach_FirstVisited",
+     "value": "true",
+     "vtype": "bool"
+    },
+    {
+     "op": "raw",
+     "text": "actionTodaySB = true"
+    }
+   ]
+  },
+  "fieldName": "sBDialogueMainFirst"
+ },
+ "SBDialogueMain": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "SaveManager.GetInt(\"Affection_Rapi\") + 1",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"SecretBeach_FirstVisited\")",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") != 2",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\") != true",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") > 2",
+   "Places.secretBeachLevel.activeSelf"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "setVar",
+     "name": "SecretBeach_RelaxedAmount",
+     "value": "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") + 1",
+     "vtype": "int"
+    },
+    {
+     "op": "raw",
+     "text": "relaxed = true"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "conditional",
+     "cond": "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") > 2 && voyeurLotteryNumber <= 50 && relaxed && voyeurTargetsLeft.Count != 0",
+     "then": [
+      {
+       "op": "raw",
+       "text": "currentVoyeurTarget = ChooseVoyeurTarget()"
+      },
+      {
+       "op": "raw",
+       "text": "if (this.dialogueToActivate != null)\n                                {\n                                    foreach (Transform child in this.dialogueToActivate.transform)\n                                    {\n                                        child.gameObject.SetActive(false);\n                                    }\n                                }\n                                relaxed = false"
+      },
+      {
+       "op": "raw",
+       "text": "Places.secretBeachRoomtalk.SetActive(true)"
+      },
+      {
+       "op": "raw",
+       "text": "Core.bustManager.Find(currentVoyeurTarget + \"Swim\").gameObject.SetActive(true)"
+      },
+      {
+       "op": "raw",
+       "text": "currentActiveBust = Core.bustManager.Find(currentVoyeurTarget + \"Swim\").gameObject"
+      },
+      {
+       "op": "raw",
+       "text": "currentActiveBustMBase = currentActiveBust.transform.Find(\"MBase1\").gameObject"
+      },
+      {
+       "op": "raw",
+       "text": "this.dialogueToActivate = Places.secretBeachRoomtalk.transform.Find(currentVoyeurTarget + \"DialogueSecretbeach01\").gameObject"
+      },
+      {
+       "op": "raw",
+       "text": "currentActiveDialogue = Places.secretBeachRoomtalk.transform.Find(currentVoyeurTarget + \"DialogueSecretbeach01\").gameObject"
+      },
+      {
+       "op": "raw",
+       "text": "currentActiveDialogueSpriteFocus = currentActiveDialogue.transform.Find(\"SpriteFocus\").gameObject"
+      },
+      {
+       "op": "raw",
+       "text": "Invoke(nameof(PlayDialogueStep), 1.0f)"
+      },
+      {
+       "op": "raw",
+       "text": "voyeurDialoguePlaying = true"
+      },
+      {
+       "op": "raw",
+       "text": "}\n                            else\n                            {\n                                Invoke(nameof(EndDialogueSequence), 1.0f);\n                                actionTodaySB = true;\n                            }"
+      }
+     ]
+    }
+   ]
+  },
+  "fieldName": "sBDialogueMain"
+ },
+ "SBDialogueMainGatekeeper": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "SaveManager.GetInt(\"Affection_Rapi\") + 1",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"SecretBeach_FirstVisited\")",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") != 2",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\") != true",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") > 2",
+   "Places.secretBeachLevel.activeSelf",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") + 1",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") == 2"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "setVar",
+     "name": "SecretBeach_RelaxedAmount",
+     "value": "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") + 1",
+     "vtype": "int"
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "raw",
+     "text": "Places.secretBeachLevel.GetComponent<ParallaxMouseEffect>().enabled = false"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachLevelBG.GetComponent<ParallaxMouseEffect>().enabled = false"
+    },
+    {
+     "op": "conditional",
+     "cond": "Places.secretBeachLevel.transform.position.y > -17",
+     "then": [
+      {
+       "op": "raw",
+       "text": "Places.secretBeachLevel.transform.position = Vector2.SmoothDamp(Places.secretBeachLevel.transform.position, new Vector2(0, -17), ref refVelocity, 1.5f)"
+      }
+     ]
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "raw",
+     "text": "Places.secretBeachLevel.transform.position = new Vector2(Places.secretBeachLevel.transform.position.x, -17)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachGatekeeperB.SetActive(true)"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "raw",
+     "text": "Places.secretBeachFlash.SetActive(true)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachGatekeeper.SetActive(false)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachGatekeeperB.SetActive(false)"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "conditional",
+     "cond": "Places.secretBeachLevel.transform.position.y < 0",
+     "then": [
+      {
+       "op": "raw",
+       "text": "Places.secretBeachLevel.transform.position = Vector2.SmoothDamp(Places.secretBeachLevel.transform.position, new Vector2(0, 7), ref refVelocity, 1f)"
+      }
+     ]
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachLevel.transform.position = new Vector2(Places.secretBeachLevel.transform.position.x, 0)"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachLevel.GetComponent<ParallaxMouseEffect>().enabled = true"
+    },
+    {
+     "op": "raw",
+     "text": "Places.secretBeachLevelBG.GetComponent<ParallaxMouseEffect>().enabled = true"
+    },
+    {
+     "op": "raw",
+     "text": "actionTodaySB = true"
+    }
+   ]
+  },
+  "fieldName": "sBDialogueMainGK"
+ },
+ "SBDialogueStory01": {
+  "gating": [
+   "SaveManager.GetBool(\"Event_SeenIt01\")",
+   "Places.levelForest.activeSelf",
+   "Places.giftShopRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"GiftShop_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Yan\") + 1",
+   "Places.harborHouseEntranceRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"HarborHome_Bought\")",
+   "SaveManager.GetBool(\"HarborHome_FirstVisited\")",
+   "Places.mountainLabRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\")",
+   "SaveManager.GetInt(\"Affection_Amber\") + 1",
+   "SaveManager.GetBool(\"MountainLab_FirstVisitor\")",
+   "SaveManager.GetBool(\"MountainLab_GKExplanation\")",
+   "SaveManager.GetInt(\"Affection_Rapi\") + 1",
+   "Places.secretBeachRoomtalk.activeSelf",
+   "SaveManager.GetBool(\"SecretBeach_FirstVisited\")",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") != 2",
+   "SaveManager.GetBool(\"MountainLab_FirstVisited\") != true",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") > 2",
+   "Places.secretBeachLevel.activeSelf",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") + 1",
+   "SaveManager.GetInt(\"SecretBeach_RelaxedAmount\") == 2",
+   "SaveManager.GetBool(\"SecretBeach_UnlockedLab\") != true"
+  ],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "bustActive",
+     "char": "amberSwim",
+     "active": true
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "scene",
+     "field": "amberStorySecretbeachScene01",
+     "active": true
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "endDialogue"
+    },
+    {
+     "op": "leaveBust",
+     "char": "amberSwim"
+    },
+    {
+     "op": "scene",
+     "field": "amberStorySecretbeachScene01",
+     "active": false
+    },
+    {
+     "op": "raw",
+     "text": "actionTodaySB = true"
+    }
+   ]
+  },
+  "fieldName": "sBDialogueStory01"
+ },
+ "AnisDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene2": [
+    {
+     "op": "changeBust",
+     "fromBust": "anisSwim",
+     "toBust": "anisSwimWet"
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "anisSwimWet",
+     "toBust": "anisSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "anisSwimSlip"
+    }
+   ]
+  }
+ },
+ "CentiDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene2": [
+    {
+     "op": "changeBust",
+     "fromBust": "centiSwim",
+     "toBust": "centiSwimShirtless"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "centiSwimShirtless",
+     "toBust": "centiSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "centiSwimSlip"
+    }
+   ]
+  }
+ },
+ "DorothyDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene2": [
+    {
+     "op": "changeBust",
+     "fromBust": "dorothySwim",
+     "toBust": "dorothySwimWet"
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "dorothySwimWet",
+     "toBust": "dorothySwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "dorothySwimSlip"
+    }
+   ]
+  }
+ },
+ "EleggDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "eleggSwim",
+     "toBust": "eleggSwimSlip"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "leaveBust",
+     "char": "eleggSwim"
+    }
+   ],
+   "Scene6": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeInSignal"
+    },
+    {
+     "op": "emitSignalDelayed",
+     "signal": "FadeOut2025",
+     "seconds": 1.5
+    }
+   ],
+   "Scene7": [
+    {
+     "op": "bustActive",
+     "char": "eleggSwim",
+     "active": true
+    }
+   ],
+   "Scene8": [
+    {
+     "op": "leaveBust",
+     "char": "eleggSwimSlip"
+    }
+   ]
+  }
+ },
+ "FrimaDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene2": [
+    {
+     "op": "changeBust",
+     "fromBust": "frimaSwim",
+     "toBust": "frimaSwimShirtless"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "frimaSwimShirtless",
+     "toBust": "frimaSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "frimaSwimSlip"
+    }
+   ]
+  }
+ },
+ "GuiltyDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "guiltySwim",
+     "toBust": "guiltySwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "guiltySwimSlip"
+    }
+   ]
+  }
+ },
+ "HelmDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene2": [
+    {
+     "op": "changeBust",
+     "fromBust": "helmSwim",
+     "toBust": "helmSwimWet"
+    }
+   ],
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "helmSwimWet",
+     "toBust": "helmSwimShirtless"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "helmSwimShirtless",
+     "toBust": "helmSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "helmSwimSlip"
+    }
+   ]
+  }
+ },
+ "MaidenDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "maidenSwim",
+     "toBust": "maidenSwimSlip"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "fadeInSignal"
+    },
+    {
+     "op": "emitSignalDelayed",
+     "signal": "FadeOut2025",
+     "seconds": 1.5
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "maidenSwimSlip"
+    }
+   ]
+  }
+ },
+ "MaryDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "marySwim",
+     "toBust": "marySwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "marySwimSlip"
+    }
+   ]
+  }
+ },
+ "MastDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "mastSwim",
+     "toBust": "mastSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "mastSwimSlip"
+    }
+   ]
+  }
+ },
+ "NeonDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "neonSwim",
+     "toBust": "neonSwimWet"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "neonSwimWet",
+     "toBust": "neonSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "neonSwimSlip"
+    }
+   ]
+  }
+ },
+ "PepperDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene3": [
+    {
+     "op": "changeBust",
+     "fromBust": "pepperSwim",
+     "toBust": "pepperSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "pepperSwimSlip"
+    }
+   ]
+  }
+ },
+ "RapiDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "rapiSwim",
+     "toBust": "rapiSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "rapiSwimSlip"
+    }
+   ]
+  }
+ },
+ "RosannaDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "rosannaSwim",
+     "toBust": "rosannaSwimSlip"
+    }
+   ],
+   "Scene5": [
+    {
+     "op": "emitSignalField",
+     "field": "blinkSignal"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "rosannaSwimSlip"
+    }
+   ]
+  }
+ },
+ "SakuraDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "sakuraSwim",
+     "toBust": "sakuraSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "sakuraSwimSlip"
+    }
+   ]
+  }
+ },
+ "ToveDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "toveSwim",
+     "toBust": "toveSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "toveSwimSlip"
+    }
+   ]
+  }
+ },
+ "ViperDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene1": [
+    {
+     "op": "changeBust",
+     "fromBust": "viperSwim",
+     "toBust": "viperSwimShirtless"
+    }
+   ],
+   "Scene2": [
+    {
+     "op": "changeBust",
+     "fromBust": "viperSwimShirtless",
+     "toBust": "viperSwimWet"
+    }
+   ],
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "viperSwimWet",
+     "toBust": "viperSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "viperSwimSlip"
+    }
+   ]
+  }
+ },
+ "YanDialogueSecretbeach01": {
+  "gating": [],
+  "markers": {
+   "Scene4": [
+    {
+     "op": "changeBust",
+     "fromBust": "yanSwim",
+     "toBust": "yanSwimSlip"
+    }
+   ],
+   "DialogueFinisher": [
+    {
+     "op": "leaveBust",
+     "char": "yanSwimSlip"
+    }
+   ]
+  }
+ }
+}
