@@ -2,6 +2,13 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
+    <!-- One source of truth for the version. The About line and the title
+         bar read it back off the assembly, so they cannot drift from what
+         was actually built. -->
+    <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
+    <FileVersion>1.0.0.0</FileVersion>
+    <Product>SMSModForge</Product>
     <TargetFramework>net8.0-windows</TargetFramework>
     <RootNamespace>SMSModForge</RootNamespace>
     <AssemblyName>SMSModForge</AssemblyName>

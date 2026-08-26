@@ -1,4 +1,4 @@
-using BepInEx;
+﻿using BepInEx;
 using GameCreator.Runtime.Dialogue;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,10 @@ namespace SMSModForge.PackPlugin
     {
         public const string pluginGuid = "treboy.starmakerstory.smsmodforge.packplugin";
         public const string pluginName = "SMSModForge Pack Plugin";
-        public const string pluginVersion = "1.1.0";
+        // Matches the editor. The two ship together and a pack written by one
+        // is loaded by the other, so a reader comparing them should not have to
+        // work out which numbering applies to which half.
+        public const string pluginVersion = "1.0.0";
 
         public static bool loaded;
         public static Scene currentScene;

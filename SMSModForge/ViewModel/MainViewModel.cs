@@ -395,7 +395,32 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
-    public string Title => $"SMSModForge for {ModPack.CurrentGameVersion} — {Pack.PackId}" + (PackRoot is null ? " (unsaved)" : $" — {PackRoot}");
+    /// <summary>
+    /// The editor's own version, read back off the built assembly rather than
+    /// written out a second time here — a number kept in two places is a number
+    /// that eventually disagrees with itself.
+    /// <para/>
+    /// InformationalVersion carries a "+commit" suffix on some build
+    /// configurations, which is noise in a title bar, so it is trimmed.
+    /// </summary>
+    public static string AppVersion
+    {
+        get
+        {
+            var asm = System.Reflection.Assembly.GetExecutingAssembly();
+            var info = System.Reflection.CustomAttributeExtensions
+                .GetCustomAttribute<System.Reflection.AssemblyInformationalVersionAttribute>(asm)?
+                .InformationalVersion;
+            if (!string.IsNullOrEmpty(info))
+            {
+                int plus = info.IndexOf('+');
+                return plus > 0 ? info.Substring(0, plus) : info;
+            }
+            return asm.GetName().Version?.ToString(3) ?? "";
+        }
+    }
+
+    public string Title => $"SMSModForge {AppVersion} for {ModPack.CurrentGameVersion} — {Pack.PackId}" + (PackRoot is null ? " (unsaved)" : $" — {PackRoot}");
 
     /// <summary>Menu-bar corner label: the game build this editor targets.</summary>
     public string GameVersionHeader => $"for Starmaker Story {ModPack.CurrentGameVersion}";
