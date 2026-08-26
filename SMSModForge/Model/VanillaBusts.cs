@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace SMSModForge.Model;
 
@@ -14,9 +14,19 @@ namespace SMSModForge.Model;
 /// remembering the exact name.
 /// <para/>
 /// Derived from <c>a decompiled scene-hierarchy dump of the target game</c>
-/// (lines 30323–45446). Refresh this list when the target game version
-/// adds or removes busts — re-run the awk extraction in the
-/// SMSModForge dev notes.
+/// (lines 30323–45446).
+/// <para/>
+/// NOT every bust in that dump is listed here, and refreshing this list is
+/// therefore not a matter of re-running the extraction. A number of busts
+/// sit in the scene without any content that shows them — unreleased work,
+/// which this tool has no business advertising. They are excluded
+/// deliberately and are not named anywhere in this repository.
+/// <para/>
+/// To refresh against a new game version: run the bust audit in the
+/// SMSDiagDebug plugin (F9 scans what references each bust, F11 exports the
+/// art of the ones nothing references), review the shortlist with the game
+/// authors, and add only what is confirmed shipped. Pasting the raw
+/// extraction back in would undo this.
 /// </summary>
 public static class VanillaBusts
 {
@@ -37,7 +47,6 @@ public static class VanillaBusts
         new("Anna_GreyHoodie",                            "Anna"),
         new("AnnaBedroom",                                "Anna"),
         new("AnnaWedding",                                "Anna"),
-        new("Anna_Weddinglingerie",                       "Anna"),
         new("Anna_Wine",                                  "Anna"),
         new("Anna_YellowSexy",                            "Anna"),
         new("Anna_Towel",                                 "Anna"),
@@ -47,17 +56,13 @@ public static class VanillaBusts
         new("Anna_Black_Lingerie",                        "Anna"),
         new("Anna_Swimwear",                              "Anna"),
         new("Anna_Red_Pullover",                          "Anna"),
-        new("Anna_Supervillain",                          "Anna"),
         new("Anna_GoldenBikini",                          "Anna"),
         new("Anna_CoolOutfit",                            "Anna"),
         new("Anna_RedTanktopo",                           "Anna"),
         new("Anna_RedOfficesuit",                         "Anna"),
         new("Anna_Maid",                                  "Anna"),
         new("Anna_Bimb",                                  "Anna"),
-        new("Anna_Videogame",                             "Anna"),
-        new("Anna_Starandstripes",                        "Anna"),
         new("Anna_Elf",                                   "Anna"),
-        new("Anna_Scifi",                                 "Anna"),
         new("Anna_Hiking",                                "Anna"),
         new("Anna_LoveRoute",                             "Anna"),
         new("Anna_SlutRoute",                             "Anna"),
@@ -75,7 +80,6 @@ public static class VanillaBusts
         new("Anna_TropicalDress",                         "Anna"),
         new("Anna_WhiteSwimsuitTropical",                 "Anna"),
         new("Anna_WinterOutfit",                          "Anna"),
-        new("Anna_WinterRobe",                            "Anna"),
         new("Anna_GoddessBikini",                         "Anna"),
         new("Anna_SilverDressDeluxe",                     "Anna"),
         new("Anna_YogaOutfit",                            "Anna"),
@@ -96,7 +100,6 @@ public static class VanillaBusts
         new("Anna_BlackBoxersBust",                       "Anna"),
         new("Anna_MegaBoobsBust",                         "Anna"),
         new("Anna_FutaBust",                              "Anna"),
-        new("Anna_FishnetBraBust",                        "Anna"),
         new("Anna_SlutRouteFishnetBust",                  "Anna"),
         new("Anna_LoveRouteRedSwimsuitBust",              "Anna"),
         new("AnnaBust_TightBust_Purpledress",             "Anna"),
@@ -106,7 +109,6 @@ public static class VanillaBusts
         new("Nikki_Bust_Default",                         "Nikki"),
         new("Nikki_Bust_Topless",                         "Nikki"),
         new("Android_normaloutfit",                       "Android"),
-        new("Android_ClothedBust",                        "Android"),
         new("CharlotteBust",                              "Charlotte"),
         new("Charlotte_Nude",                             "Charlotte"),
         new("Charlotte_Dress",                            "Charlotte"),
@@ -131,17 +133,13 @@ public static class VanillaBusts
         new("JosefDout",                                  "Josef"),
         new("Josef_ChristmasBust",                        "Josef"),
         new("Josef_HalloweenBust",                        "Josef"),
-        new("Josef_BustNude",                             "Josef"),
         new("Josef_CasualShirtBust",                      "Josef"),
         new("Adrian_bust",                                "Adrian"),
         new("Adrian_Suit",                                "Adrian"),
         new("Adrian_Sport",                               "Adrian"),
         new("Adrian_SemiNude",                            "Adrian"),
         new("Adrian_HalloweenBust",                       "Adrian"),
-        new("Adrian_SwimtrunksBust",                      "Adrian"),
-        new("Adrian_NudeBust",                            "Adrian"),
         new("Isabella",                                   "Isabella"),
-        new("Isabella_Nude",                              "Isabella"),
         new("Isabella_Swimsuit",                          "Isabella"),
         new("Isabella_Lingerie",                          "Isabella"),
         new("Sofia_Police",                               "Sofia"),
@@ -191,28 +189,21 @@ public static class VanillaBusts
         new("Amelia_defaultbust",                         "Amelia"),
         new("Amelia_Barista",                             "Amelia"),
         new("Amelia_Beach",                               "Amelia"),
-        new("Amelia_Nude",                                "Amelia"),
         new("Amelia_Carwash",                             "Amelia"),
         new("Amelia_NewYearsEveBust",                     "Amelia"),
         new("Amelia_Cowbust",                             "Amelia"),
         new("Amelia_BaristaMilkyBust",                    "Amelia"),
         new("Amelia_BrownJacketBust",                     "Amelia"),
-        new("Amelia_ElegantCasualBust",                   "Amelia"),
-        new("Amelia_RedLingerieBust",                     "Amelia"),
         new("Ken",                                        "Ken"),
         new("Ken_D_Out",                                  "Ken"),
         new("Ken_Swimsuit",                               "Ken"),
         new("Zuri",                                       "Zuri"),
-        new("Zuri_Beachbust",                             "Zuri"),
         new("Zuri_CasualBarBust",                         "Zuri"),
         new("Zuri_MotelBust",                             "Zuri"),
         new("AliceBust",                                  "Alice"),
         new("AliceDress",                                 "Alice"),
         new("AliceSexy",                                  "Alice"),
         new("AliceSwimwear",                              "Alice"),
-        new("AlicePure_Dress",                            "Alice"),
-        new("AlicePure_Casual",                           "Alice"),
-        new("AlicePure_Bikini",                           "Alice"),
         new("Alice_GhostBust",                            "Alice"),
         new("Alice_GhostFaceOutBust",                     "Alice"),
         new("NorahDefault_Bust",                          "Norah"),
@@ -223,14 +214,11 @@ public static class VanillaBusts
         new("SamanthaBust",                               "Samantha"),
         new("Samantha_Swimsuit",                          "Samantha"),
         new("Samantha_SwimsuitSlutty",                    "Samantha"),
-        new("Samantha_Lingerie",                          "Samantha"),
         new("Samantha_Nude",                              "Samantha"),
         new("Samantha_Gaming",                            "Samantha"),
-        new("Samantha_FishnetBraBust",                    "Samantha"),
         new("SamanthaBust_ComfyCasualOutside",            "Samantha"),
         new("PhoenixBust",                                "Phoenix"),
         new("Phoenixbust_Casual",                         "Phoenix"),
-        new("PhoenixBust_Dress",                          "Phoenix"),
         new("PhoenixBust_Suit",                           "Phoenix"),
         new("PhoenixBust_Swimsuit",                       "Phoenix"),
         new("JoeyBust",                                   "Joey"),
@@ -259,7 +247,6 @@ public static class VanillaBusts
         new("doctorfrost_privatelabbust",                 "Doctor Frost"),
         new("doctorfrost_privatelab_Pregbust",            "Doctor Frost"),
         new("Vanessa_Bust_Nun",                           "Vanessa"),
-        new("Vanessa_Bust_NunLewd",                       "Vanessa"),
         new("Vanessa_Bust_LibraryOutfit",                 "Vanessa"),
         new("S_Bouncer",                                  "Bouncer"),
         new("S_Elbandito",                                "El Bandito"),
@@ -278,7 +265,6 @@ public static class VanillaBusts
         new("V_LeilaniBikiniBust",                        "Leilani (Vacation)"),
         new("V_MeiDefault",                               "Mei (Vacation)"),
         new("V_MeiRedDress",                              "Mei (Vacation)"),
-        new("V_MeiRedLingerie",                           "Mei (Vacation)"),
         new("V_MeiNude",                                  "Mei (Vacation)"),
         new("V_MichelleDefault",                          "Michelle (Vacation)"),
         new("V_RikuDefault",                              "Riku (Vacation)"),
@@ -325,17 +311,13 @@ public static class VanillaBusts
         new("S_Minitalk_NPC_CityGingerGlasse",            "City Ginger Glasses"),
         new("S_Minitalk_NPC_RedShirtCityGuy",             "Red-Shirt City Guy"),
         new("S_Minitalk_NPC_ShyCityGuy",                  "Shy City Guy"),
-        new("S_Minitalk_NPC_CoolBeachGuy",                "Cool Beach Guy"),
         new("S_Minitalk_NPC_OldCityGentleman",            "Old City Gentleman"),
         new("S_Minitalk_NPC_ChubbyBackpackGuy",           "Chubby Backpack Guy"),
         new("S_Minitalk_NPC_RedhairMaleModel",            "Redhair Male Model"),
-        new("S_Minitalk_NPC_GyaruGilf",                   "Gyaru GILF"),
         new("S_Minitalk_NPC_NeonRowPinkWorker",           "Neon Row Pink Worker"),
         new("S_Minitalk_NPC_BlondeNeonRowWorker",         "Blonde Neon Row Worker"),
         new("S_Minitalk_NPC_UsedBoobaWorker",             "Used-Booba Worker"),
-        new("S_Minitalk_NPC_BeachBeauty",                 "Beach Beauty"),
         new("S_Minitalk_NPC_AverageWoman",                "Average Woman"),
-        new("S_Minitalk_NPC_RichCustomer",                "Rich Customer"),
         new("S_Minitalk_NPC_RichCustomerFemale",          "Rich Customer (Female)"),
         new("S_Minitalk_NPC_KateFriend",                  "Kate's Friend"),
         new("S_BigFootBust",                              "BigFoot"),
@@ -345,7 +327,6 @@ public static class VanillaBusts
         new("S_Poolchick_Reddie",                         "Pool Chick (Reddie)"),
         new("S_Bust_Mini_Mallwaifu_BlueHair",             "Mall Waifu (Blue Hair)"),
         new("S_Bust_Mini_Mallwaifu_Blonde",               "Mall Waifu (Blonde)"),
-        new("S_Bust_Mini_Mall_MegaDouche",                "Mall Mega-Douche"),
     };
 
     /// <summary>Lookup by GO name. Returns null if the name isn't in the catalog.</summary>

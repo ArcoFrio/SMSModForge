@@ -154,6 +154,63 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
+        /// A hash over the name and value of EVERY global variable the game
+        /// currently holds, plus how many there are. Same numbers → almost
+        /// certainly the same state; different numbers → something moved.
+        /// <para/>
+        /// Exists so a caller can tell whether the vanilla save has finished
+        /// restoring. There is no "loaded" flag to read, and sampling a couple
+        /// of variables only proves those two settled — the values are restored
+        /// as a batch, so watching the whole set is what actually answers the
+        /// question. Returns <c>(0, 0)</c> while the manager is unreachable,
+        /// which reads as "not settled" to a caller comparing successive
+        /// samples.
+        /// <para/>
+        /// Walks every variable, so it is meant for the handful of frames
+        /// before a caller latches — not for per-frame use forever.
+        /// </summary>
+        public static void StateFingerprint(out int hash, out int count)
+        {
+            hash = 0;
+            count = 0;
+            Init();
+            if (_manager == null || _valuesProp == null) return;
+            try
+            {
+                var values = _valuesProp.GetValue(_manager) as IDictionary;
+                if (values == null) return;
+
+                int h = 17;
+                int n = 0;
+                foreach (DictionaryEntry pair in values)
+                {
+                    // Each NameVariableRuntime enumerates its NameVariables, and
+                    // NameVariable.Title is already "<name>: <value>" — so one
+                    // string per variable covers both without reaching into the
+                    // value's type.
+                    if (!(pair.Value is IEnumerable vars)) continue;
+                    foreach (var v in vars)
+                    {
+                        if (v == null) continue;
+                        if (_titleProp == null)
+                            _titleProp = v.GetType().GetProperty("Title",
+                                BindingFlags.Instance | BindingFlags.Public | BindingFlags.FlattenHierarchy);
+                        var title = _titleProp?.GetValue(v) as string;
+                        h = unchecked(h * 31 + (title == null ? 0 : title.GetHashCode()));
+                        n++;
+                    }
+                }
+                hash = h;
+                count = n;
+            }
+            catch { hash = 0; count = 0; }
+        }
+
+        /// <summary>Cached <c>TVariable.Title</c> getter, resolved off the first
+        /// variable seen (the concrete type isn't known up front).</summary>
+        private static PropertyInfo _titleProp;
+
+        /// <summary>
         /// Writes a value into a GC2 global variable using the public
         /// <c>NameVariableRuntime.Set(string, object)</c> method. This
         /// properly sets the value AND fires <c>EventChange</c> so GC2

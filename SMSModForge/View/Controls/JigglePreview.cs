@@ -470,16 +470,28 @@ public sealed class JigglePreview : Image
         return 0;
     }
 
+    /// <summary>
+    /// Composite one overlay onto the already-displaced body, shifted by the
+    /// jiggle evaluated at that overlay's own centroid — the game's per-object
+    /// displacement, as opposed to the body's per-pixel one.
+    /// </summary>
+    private static void CompositeOverlay(byte[] output, byte[]? overlay, byte[] mask,
+                                         JiggleParams jiggle, float time)
+    {
+        if (overlay == null) return;
+        // Composited where it was authored, undisplaced — the game leaves bust
+        // overlays out of the jiggle (see BustFactory's applyToOverlays, now off
+        // by default), so displacing them here would show motion that does not
+        // happen. Still composited AFTER the shader pass rather than layered
+        // into it: that keeps them undeformed, which is the point.
+        BustComposer.Composite(output, overlay);
+    }
+
     /// <summary>All-zero mask: alpha 0 everywhere, so every displacement term
     /// falls out and the base renders undistorted. Shared and never written.</summary>
     private static readonly byte[] NoMask = new byte[JiggleShader.Stride * JiggleShader.Size];
 
     private bool _bitmapCleared;
-
-    /// <summary>Scratch buffer holding the body with its overlays layered on,
-    /// which is what the jiggle pass actually displaces. Reused between frames —
-    /// it's fully overwritten each time.</summary>
-    private byte[] _composed;
 
     /// <summary>Blank the preview. The bitmap holds the last frame written to
     /// it, so a bust with nothing to draw has to be actively cleared or the
@@ -555,25 +567,29 @@ public sealed class JigglePreview : Image
         // the switch — the old bust reappearing over the new one.
         int generation = _renderGeneration;
 
-        byte[] composed = _composed ??= new byte[JiggleShader.Stride * JiggleShader.Size];
-
         Task.Run(() =>
         {
-            // Layer the overlays onto the body FIRST, then displace the result.
+            // Body first, displaced per pixel — then each overlay composited on
+            // top with its OWN rigid offset.
             //
-            // In game every overlay renderer shares the body's jiggle material,
-            // so the eyes, mouth and expression are displaced along with it.
-            // Compositing after the shader instead left them pinned in place
-            // over a moving chest — the preview's own drift from the game, not
-            // the mask failing to cover them. Same field, same UVs, so one pass
-            // over the composite is equivalent to displacing each separately.
-            Buffer.BlockCopy(baseSnap, 0, composed, 0, composed.Length);
-            // Expression composites first (below blink and mouth).
-            if (expression != null) BustComposer.CompositeStraight(composed, expression);
-            if (blink != null) BustComposer.CompositeStraight(composed, blink);
-            if (mouth != null) BustComposer.CompositeStraight(composed, mouth);
+            // This mirrors what the game does. Overlays don't carry the jiggle
+            // material: its lit pass gathers the sprite's own texture weighted by
+            // (1 - alpha), so a mouth covering a fraction of a percent of its
+            // canvas gets lit as though floating in void and shifts colour, where
+            // the body covers about 27%. The game therefore leaves them on the
+            // stock sprite shader and moves each one rigidly by the jiggle
+            // sampled at its own centroid.
+            //
+            // The preview used to layer the overlays onto the body and displace
+            // the lot in one pass, which matched the old share-the-material
+            // build. Against the current runtime that overstates the motion — it
+            // deforms overlays per pixel where the game translates them whole.
+            JiggleShader.Render(baseSnap, maskSnap, jiggle, tint, time, output, superSample);
 
-            JiggleShader.Render(composed, maskSnap, jiggle, tint, time, output, superSample);
+            // Expression composites first (below blink and mouth).
+            CompositeOverlay(output, expression, maskSnap, jiggle, time);
+            CompositeOverlay(output, blink, maskSnap, jiggle, time);
+            CompositeOverlay(output, mouth, maskSnap, jiggle, time);
         }).ContinueWith(t =>
         {
             try

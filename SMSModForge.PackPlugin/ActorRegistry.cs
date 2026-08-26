@@ -131,32 +131,6 @@ namespace SMSModForge.PackPlugin
 
         public ActorEntry GetOrNull(string key) => _byKey.TryGetValue(key, out var a) ? a : null;
 
-        /// <summary>
-        /// Override the bust for an actor (via the SetActorBust action). If the
-        /// actor's current bust is <em>on screen</em>, the swap is applied
-        /// immediately — deactivate the old, activate the new — so a non-speaking
-        /// actor can change outfit mid-scene (e.g. a watched character the
-        /// narrator describes). If they're not on screen, the new bust is just
-        /// recorded so they appear in it next time. Per-actor, so it's correct
-        /// with any number of actors sharing the stage.
-        /// </summary>
-        public void SetBust(string actorKey, string bustKey)
-        {
-            if (!_byKey.TryGetValue(actorKey, out var entry)) return;
-            if (!string.IsNullOrEmpty(bustKey) && !string.IsNullOrEmpty(entry.CurrentBustKey) &&
-                !string.Equals(bustKey, entry.CurrentBustKey, System.StringComparison.OrdinalIgnoreCase))
-            {
-                var bustManager = GameObject.Find("2_Bust_Manager")?.transform;
-                var oldBust = bustManager?.FindChildIgnoreCase(entry.CurrentBustKey)?.gameObject;
-                if (oldBust != null && oldBust.activeSelf)
-                {
-                    oldBust.SetActive(false);
-                    var newBust = bustManager?.FindChildIgnoreCase(bustKey)?.gameObject;
-                    if (newBust != null) newBust.SetActive(true);
-                }
-            }
-            entry.CurrentBustKey = bustKey;
-        }
 
         /// <summary>
         /// Apply visual state for one node: optionally switch the speaker's
@@ -168,7 +142,7 @@ namespace SMSModForge.PackPlugin
         /// deactivated and <see cref="ActorEntry.CurrentBustKey"/> moves to
         /// the new one. Only the speaking actor's own old bust is touched —
         /// <em>other</em> actors' busts stay on screen until the author
-        /// explicitly removes them with a <c>DeactivateBust</c> or
+        /// explicitly removes them with a
         /// <c>LeaveBust</c> node action, matching the host mod pattern
         /// where multiple busts can share the stage.
         /// </summary>
@@ -215,7 +189,7 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>
         /// Find the bust GameObject currently representing the actor (under
-        /// <c>2_Bust_Manager</c>). Used by the <c>DeactivateBust</c> /
+        /// <c>2_Bust_Manager</c>). Used by the
         /// <c>LeaveBust</c> action handlers. Null when the actor key isn't
         /// declared or the bust GO can't be located.
         /// </summary>

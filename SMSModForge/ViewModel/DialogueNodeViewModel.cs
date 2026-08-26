@@ -118,6 +118,7 @@ public sealed class DialogueNodeViewModel : ObservableObject
         {
             Model.Actor = value;
             OnPropertyChanged();
+            OnPropertyChanged(nameof(SpeakerPrefix));
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(ActorTintBrush));
         }
@@ -133,10 +134,25 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// </summary>
     public static System.Func<string, System.Windows.Media.Color?>? ActorColorProvider;
 
+    /// <summary>
+    /// Resolves a speaker key to the character's display name. Same reasoning as
+    /// <see cref="ActorColorProvider"/>: the node holds only the key, and the
+    /// key is what the pack ships, but it is not what an author wants to read
+    /// down a list of lines.
+    /// </summary>
+    public static System.Func<string, string>? ActorDisplayNameProvider;
+
     /// <summary>Re-read the tint. Called by the MainViewModel when an actor's
     /// colour changes — pushed rather than a static event the nodes subscribe
     /// to, because node VMs churn and would leak into it.</summary>
-    public void RefreshActorTint() => OnPropertyChanged(nameof(ActorTintBrush));
+    public void RefreshActorTint()
+    {
+        OnPropertyChanged(nameof(ActorTintBrush));
+        // The row label carries the speaker's NAME, so renaming a character has
+        // to redraw it as well as the tint.
+        OnPropertyChanged(nameof(SpeakerPrefix));
+        OnPropertyChanged(nameof(Display));
+    }
 
     /// <summary>
     /// Faint wash of the speaking actor's colour, so a change of speaker reads
@@ -185,7 +201,13 @@ public sealed class DialogueNodeViewModel : ObservableObject
     public string Text
     {
         get => Model.Text;
-        set { Model.Text = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            Model.Text = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(TextPreview));
+            OnPropertyChanged(nameof(Display));
+        }
     }
 
     public string Tag
@@ -277,27 +299,53 @@ public sealed class DialogueNodeViewModel : ObservableObject
     /// </summary>
     public Thickness IndentMargin => new Thickness(Depth * 16, 0, 0, 0);
 
-    /// <summary>One-line preview the node list uses as its item template. The
-    /// Kind is conveyed by <see cref="KindGlyph"/> in the row, so it's not
-    /// repeated here.</summary>
-    public string Display
+    /// <summary>
+    /// The line itself, collapsed to one row's worth. Split out from
+    /// <see cref="Display"/> so the node list can put it in its own element and
+    /// run the spell checker over it — the speaker prefix must stay out of that,
+    /// or every character name in the pack sits under a red squiggle.
+    /// <para/>
+    /// Deliberately NOT length-clamped: the row trims at the actual column width
+    /// and the full text is on the row's ToolTip. A fixed character cut would put
+    /// the cut far short of the real edge no matter how wide the pane.
+    /// </summary>
+    public string TextPreview
     {
         get
         {
-            // Collapse newline/whitespace runs so the row stays a single line, but
-            // DON'T clamp the length here — the node card trims with an ellipsis at
-            // the actual column width (TextTrimming in the item template, with the
-            // full text on the row's ToolTip). A fixed character cut here would make
-            // the "…" appear far short of the real edge no matter how wide the pane.
             string raw = string.IsNullOrEmpty(Text) ? "" : Text;
             string preview = System.Text.RegularExpressions.Regex.Replace(raw, @"\s+", " ").Trim();
-            if (preview.Length == 0) preview = "(no text)";
-            string speaker = string.IsNullOrEmpty(Actor) ? "" : "[" + Actor + "] ";
-            // The node id is bookkeeping the author never types — jumps target a
-            // Tag, not an id — so the row shows the line, not the number.
-            return speaker + preview;
+            return preview.Length == 0 ? "(no text)" : preview;
         }
     }
+
+    /// <summary>
+    /// <c>"[Name]"</c> for the speaking character, or empty. Shows the
+    /// character's NAME, not the key the node stores: keys are stable
+    /// identifiers ("solidsnake", "mobster"), the name is what the author
+    /// recognises scanning a list of lines.
+    /// <para/>
+    /// No trailing space, deliberately. The row renders this next to a TextBox,
+    /// and a TextBox insets its text a couple of pixels from its own left edge —
+    /// a trailing space on top of that inset reads as a double gap.
+    /// </summary>
+    public string SpeakerPrefix
+    {
+        get
+        {
+            string speakerName = string.IsNullOrEmpty(Actor)
+                ? ""
+                : (ActorDisplayNameProvider?.Invoke(Actor) ?? Actor);
+            return string.IsNullOrEmpty(speakerName) ? "" : "[" + speakerName + "]";
+        }
+    }
+
+    /// <summary>Whole row as one string. The node list renders
+    /// <see cref="SpeakerPrefix"/> and <see cref="TextPreview"/> separately now,
+    /// so this is what the row's ToolTip shows — and the node id stays out of it,
+    /// since jumps target a Tag and the author never types an id.</summary>
+    public string Display =>
+        SpeakerPrefix.Length == 0 ? TextPreview : SpeakerPrefix + " " + TextPreview;
 
     /// <summary>Whether this node carries a jump Tag, i.e. something else can
     /// jump to it. Drives the tag chip on the node row.</summary>

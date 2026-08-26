@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="SMSModForge.View.Controls.TutorialOverlay"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Visibility="Collapsed"
+             UseLayoutRounding="True" SnapsToDevicePixels="True"
+             TextOptions.TextFormattingMode="Display"
+             TextOptions.TextRenderingMode="ClearType">
+    <!--
+        Sits over the whole window as a sibling of the save toast. Two pieces:
+        the dim, which is one Path with the spotlight cut out of it, and the
+        callout beside it. Positions come from TutorialOverlay.xaml.cs, in
+        device-independent units, so scaling needs nothing special here.
+    -->
+    <Grid x:Name="Root">
+        <!-- The dim. Hit-test visible on purpose: it swallows clicks outside
+             the lit area, which is what keeps a step on rails. The holes are
+             absent from the geometry, so clicks there fall through by
+             themselves.
+             ~
+             That makes the lit area a PERMISSION, not just a highlight — so a
+             step must light every control its instruction names. "Add a root
+             node, then set its actor and text" spans two group boxes, and
+             lighting only the + button left the rest unclickable. Steps like
+             that list the others in TutorialStep.AlsoAllow, and each gets its
+             own hole. -->
+        <Path x:Name="Dim" Fill="#B4000000"/>
+
+        <!-- The ring around the spotlight, echoing the amber flash used when
+             jumping to a validation issue, so "look here" reads the same way
+             everywhere in the editor. -->
+        <Rectangle x:Name="Ring" HorizontalAlignment="Left" VerticalAlignment="Top"
+                   IsHitTestVisible="False" RadiusX="4" RadiusY="4"
+                   Stroke="#FFC428" StrokeThickness="2" Visibility="Collapsed">
+            <Rectangle.Effect>
+                <DropShadowEffect x:Name="RingGlow" Color="#FFC428" ShadowDepth="0"
+                                  BlurRadius="14" Opacity="0.85"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Border x:Name="Callout" HorizontalAlignment="Left" VerticalAlignment="Top"
+                MaxWidth="380" CornerRadius="6" Padding="16,13,16,13"
+                Background="{DynamicResource Theme.Surface}"
+                BorderBrush="#FFC428" BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect Color="#000000" ShadowDepth="3" BlurRadius="18" Opacity="0.5"/>
+            </Border.Effect>
+            <StackPanel>
+                <DockPanel Margin="0,0,0,6">
+                    <TextBlock x:Name="Progress" DockPanel.Dock="Right" Opacity="0.6"
+                               FontSize="11" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                    <TextBlock x:Name="Title" FontWeight="Bold" FontSize="14"
+                               TextWrapping="Wrap"/>
+                </DockPanel>
+
+                <TextBlock x:Name="Body" TextWrapping="Wrap" LineHeight="19"/>
+
+                <Border x:Name="HintBox" Margin="0,8,0,0" Padding="8,5" CornerRadius="3"
+                        Background="#22FFC428" Visibility="Collapsed">
+                    <TextBlock x:Name="Hint" TextWrapping="Wrap" FontSize="11" Opacity="0.85"/>
+                </Border>
+
+                <DockPanel Margin="0,12,0,0">
+                    <Button x:Name="ExitBtn" DockPanel.Dock="Left" Content="Exit tutorial"
+                            Padding="10,3" Click="Exit_Click"/>
+                    <StackPanel DockPanel.Dock="Right" Orientation="Horizontal"
+                                HorizontalAlignment="Right">
+                        <TextBlock x:Name="Waiting" VerticalAlignment="Center" FontSize="11"
+                                   FontStyle="Italic" Opacity="0.7" Margin="0,0,10,0"/>
+                        <Button x:Name="BackBtn" Content="Back" Padding="10,3" Margin="0,0,6,0"
+                                Click="Back_Click"/>
+                        <Button x:Name="NextBtn" Content="Next" Padding="14,3"
+                                Click="Next_Click"/>
+                    </StackPanel>
+                    <ContentControl/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+    </Grid>
+</UserControl>

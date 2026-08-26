@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
 
@@ -177,8 +177,23 @@ public sealed class NpcShadowDef
 /// </summary>
 public sealed class NpcWetDef
 {
+    /// <summary>
+    /// Whether the droplet child is built at all. Off by default.
+    /// <para/>
+    /// It used to default on, inherited from the bust prototype the particle
+    /// system is cloned from — but a bust that wants droplets is a swim or
+    /// shower variant, and an NPC is usually a dressed figure standing in a
+    /// room, where the effect reads as rain indoors. The reference pack bears
+    /// that out: 30 of its 33 NPCs turn this off, so the default was wrong for
+    /// all but a handful and every one of them had to be corrected by hand.
+    /// <para/>
+    /// Safe to flip: this property has no ShouldSerialize, so it is always
+    /// written out. Every pack authored before this carries an explicit
+    /// <c>"enabled"</c> and keeps exactly the behaviour it had — only newly
+    /// added NPCs see the new default.
+    /// </summary>
     [JsonProperty("enabled", Order = 1)]
-    public bool Enabled { get; set; } = true;
+    public bool Enabled { get; set; } = false;
 
     /// <summary>Whether the particle GameObject starts active.</summary>
     [JsonProperty("startActive", Order = 2)]

@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.IO;
 using TMPro;
@@ -50,12 +50,29 @@ namespace SMSModForge.PackPlugin
                 return;
             }
 
+            // ONE housekeeping roomtalk for the whole pack, not one per place.
+            //
+            // A place's roomtalk does no place-specific work: it is a clone of
+            // the Beach one with its Conditions stripped, so all that survives
+            // is the room-entry housekeeping its Trigger performs — Lock-Game
+            // true then false, stored-talk = Self (what the vanilla Talk button
+            // activates), talk-button = true, After-Talk-Transition = false —
+            // ending with SetActive(Self, false). Nothing in that reads which
+            // place it belongs to, only one place is ever being entered, and it
+            // switches itself off when done, so a single instance serves every
+            // place in the pack and is ready for the next entry.
+            //
+            // It is also NOT where dialogues live any more, so re-entering a
+            // room can no longer collide with a pack dialogue hosted on it.
+            GameObject sharedRoomTalk = CloneRoomTalk(beachRoomTalk, roomTalkRoot,
+                                                      "SMSModForge_" + pack.PackId + "_RoomTalk");
+
             int built = 0;
             foreach (var p in places)
             {
                 try
                 {
-                    if (BuildOne((JObject)p, pack, level5, mapButtons, roomTalkRoot, beachLevel, beachButton, beachRoomTalk, npcCtx, logger))
+                    if (BuildOne((JObject)p, pack, level5, mapButtons, sharedRoomTalk, beachLevel, beachButton, npcCtx, logger))
                         built++;
                 }
                 catch (System.Exception ex)
@@ -70,8 +87,8 @@ namespace SMSModForge.PackPlugin
         }
 
         private static bool BuildOne(JObject p, PackManifest pack,
-            Transform level5, Transform mapButtons, Transform roomTalkRoot,
-            GameObject beachLevel, GameObject beachButton, GameObject beachRoomTalk,
+            Transform level5, Transform mapButtons, GameObject sharedRoomTalk,
+            GameObject beachLevel, GameObject beachButton,
             NpcFactory.Context npcCtx, ManualLogSource logger)
         {
             string key = (string)p["key"];
@@ -106,7 +123,10 @@ namespace SMSModForge.PackPlugin
             // below: a place without one keeps a vanilla, undisplaced backdrop.
             string secondMaskRel = (string)p["secondaryMaskSprite"];
 
-            if (!pack.Has(baseRel) || !pack.Has(secondRel) || !pack.Has(maskRel))
+            // maskSprite is deliberately NOT required: an unset mask means the
+            // level art does not jiggle, and LoadMaskTexture hands the shader a
+            // transparent one. It used to be grounds for skipping the place.
+            if (!pack.Has(baseRel) || !pack.Has(secondRel))
             {
                 logger.LogWarning("[SMSModForge.PackPlugin] Place '" + key + "' in " + pack.PackId + " missing sprite(s) in archive — skipping.");
                 return false;
@@ -117,7 +137,7 @@ namespace SMSModForge.PackPlugin
             string goName = absoluteIndex + "_" + internalName;
 
             // Level
-            GameObject level = CloneAndDressLevel(beachLevel, level5, goName, pack, baseRel, secondRel, maskRel, secondMaskRel,
+            GameObject level = CloneAndDressLevel(beachLevel, level5, goName, internalName, pack, baseRel, secondRel, maskRel, secondMaskRel,
                                                   parallax, parallaxRev, parallax2, parallax2Rev,
                                                   (int?)p["baseSortingOrder"], (int?)p["secondarySortingOrder"],
                                                   keepAudio, keepSeagulls);
@@ -136,10 +156,7 @@ namespace SMSModForge.PackPlugin
             // the navigator graph, one by the host mod's legacy per-frame
             // block — for every destination.
 
-            // RoomTalk
-            GameObject roomTalk = CloneRoomTalk(beachRoomTalk, roomTalkRoot, internalName);
-
-            PlaceRegistry.RegisterPackPlace(pack.PackId, key ?? internalName, absoluteIndex, level, roomTalk, weatherStr,
+            PlaceRegistry.RegisterPackPlace(pack.PackId, key ?? internalName, absoluteIndex, level, sharedRoomTalk, weatherStr,
                                             p["onEnter"] as JArray, p["onExit"] as JArray);
             return true;
         }
@@ -147,12 +164,32 @@ namespace SMSModForge.PackPlugin
         // ─────────────────────────────── Level construction ────────────
 
         private static GameObject CloneAndDressLevel(GameObject beach, Transform parent,
-            string goName, PackManifest pack, string baseRel, string secondRel, string maskRel, string secondMaskRel,
+            string goName, string internalName, PackManifest pack, string baseRel, string secondRel, string maskRel, string secondMaskRel,
             float parallax, bool parallaxRev, float parallax2, bool parallax2Rev,
             int? baseOrder, int? secondOrder, bool keepAudio, bool keepSeagulls)
         {
             GameObject newLevel = Object.Instantiate(beach, parent);
             newLevel.name = goName;
+
+            // Centre the level on the WORLD origin — not on its parent.
+            //
+            // 5_Levels is itself at roughly (0.6846, -0.2), so local and world
+            // are not the same frame here. A vanilla level's own local offset is
+            // what cancels that: 14_Beach sits at local (-0.6846, -0.0569),
+            // which lands its art at world X 0 — and world X 0 is what the
+            // editor preview draws the backdrop around, and what the camera
+            // frames. Cloning Beach inherits that cancellation in X but leaves
+            // Y at -0.257, which is a small constant vertical drift; zeroing the
+            // LOCAL position instead removes the cancellation entirely and
+            // throws the art 0.68 units right, which is much worse.
+            //
+            // Objects on a level are placed in WORLD space (see ApplyTransform:
+            // a level object uses transform.position, not localPosition), so
+            // putting the level's own origin at world zero is what makes an
+            // authored coordinate mean the same thing in the preview and in the
+            // game. Z is left as inherited — it carries the level's depth.
+            var lp = newLevel.transform.position;
+            newLevel.transform.position = new Vector3(0f, 0f, lp.z);
 
             SetParallax(newLevel, parallax, parallaxRev, null);
 
@@ -163,7 +200,13 @@ namespace SMSModForge.PackPlugin
             if (newLevel.transform.childCount > 1)
             {
                 var secondary = newLevel.transform.GetChild(1).gameObject;
-                secondary.name = goName;
+                // Named for the PLACE, not the level. It used to take the level's
+                // own name — index prefix and all — which made it both a
+                // duplicate of its parent's name and impossible to address from
+                // a pack, since the index is allocated at build time. Actions
+                // like SetSprite need to reach it; everything internal uses
+                // GetChild(1) and is unaffected.
+                secondary.name = internalName + "_Secondary";
                 SetParallax(secondary, parallax2, parallax2Rev, null);
             }
             if (newLevel.transform.childCount > 2)
@@ -512,6 +555,13 @@ namespace SMSModForge.PackPlugin
         /// </summary>
         private static Texture2D LoadMaskTexture(PackManifest pack, string rel)
         {
+            // The 256x143 is a placeholder — LoadImage resizes to the PNG's own
+            // dimensions, so a mask may be authored at any resolution.
+            // No mask authored, or the file is not in the archive: bind the
+            // shared transparent one rather than a freshly allocated texture
+            // whose contents are undefined.
+            if (!MaskTextures.IsAuthored(pack, rel)) return MaskTextures.None();
+
             // The 256x143 is a placeholder — LoadImage resizes to the PNG's own
             // dimensions, so a mask may be authored at any resolution.
             var tex = new Texture2D(256, 143, TextureFormat.RGBA32, false, true);

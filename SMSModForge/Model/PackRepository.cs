@@ -133,35 +133,15 @@ public static class PackRepository
     }
 
     /// <summary>
-    /// Creates a blank pack in memory with one starter character/outfit so the
-    /// editor opens to something the user can immediately edit. Places start
-    /// empty — the user adds them on the Places tab.
+    /// A new pack, with nothing in it.
+    /// <para/>
+    /// Deliberately empty. It used to arrive with a placeholder character
+    /// pointing at sprite paths that did not exist in the author's folder, so
+    /// a brand-new pack failed its own validation and the first thing anyone
+    /// had to do was work out whether the errors were theirs. An empty pack
+    /// says what it is.
     /// </summary>
-    public static ModPack CreateEmpty(string packId) => new()
-    {
-        PackId = packId,
-        Characters =
-        {
-            new CharacterDef
-            {
-                Name = "Newgirl",
-                DisplayName = "New Girl",
-                Outfits =
-                {
-                    new OutfitDef
-                    {
-                        Key = "newgirl",
-                        GameObjectName = "NewgirlBase",
-                        BaseSprite  = "Sprites/Newgirl/Newgirl00.PNG",
-                        MaskSprite  = "Sprites/Newgirl/Newgirl00Mask.PNG",
-                        BlinkSprite = "Sprites/Newgirl/NewgirlBlink.PNG",
-                        Mouth      = { Prefix = "Sprites/Newgirl/Mouth" },
-                        Expression = { Prefix = "Sprites/Newgirl/Expression" },
-                    }
-                }
-            }
-        }
-    };
+    public static ModPack CreateEmpty(string packId) => new() { PackId = packId };
 
     // ── Active pack tracking for cross-VM lookups ────────────────────────
 

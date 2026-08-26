@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SMSModForge.Model;
@@ -56,8 +56,9 @@ public static class PackValidator
                 }
 
                 CheckFile(packRoot, outfit.BaseSprite,  $"{oWhere}.baseSprite",  issues);
-                CheckFile(packRoot, outfit.MaskSprite,  $"{oWhere}.maskSprite",  issues);
-                CheckFile(packRoot, outfit.BlinkSprite, $"{oWhere}.blinkSprite", issues);
+                CheckOptionalFile(packRoot, outfit.MaskSprite, $"{oWhere}.maskSprite", issues);
+                if (outfit.BlinkEnabled)
+                    CheckFile(packRoot, outfit.BlinkSprite, $"{oWhere}.blinkSprite", issues);
 
                 if (outfit.Mouth.Enabled)
                 {
@@ -107,7 +108,7 @@ public static class PackValidator
 
             CheckFile(packRoot, place.BaseSprite,      $"{pWhere}.baseSprite",      issues);
             CheckFile(packRoot, place.SecondarySprite, $"{pWhere}.secondarySprite", issues);
-            CheckFile(packRoot, place.MaskSprite,      $"{pWhere}.maskSprite",      issues);
+            CheckOptionalFile(packRoot, place.MaskSprite, $"{pWhere}.maskSprite",     issues);
 
             // 1.5 is a real vanilla value (a backdrop that overshoots the room in
             // front of it), so the old 0..1 ceiling flagged legitimate settings.
@@ -334,44 +335,21 @@ public static class PackValidator
             else if (!seenDialogueKeys.Add(d.Key))
                 issues.Add(new(Severity.Error, dWhere, $"Duplicate dialogue key '{d.Key}'"));
 
-            // RoomTalk target: vanilla:<name> or place:<key>
-            if (string.IsNullOrWhiteSpace(d.RoomTalk))
+            // The level is what a dialogue is anchored to now — the roomtalk is
+            // derived from it and only used for "Prioritize over vanilla", so
+            // there is nothing to validate about the roomtalk itself.
+            if (string.IsNullOrWhiteSpace(d.LevelToken))
             {
-                issues.Add(new(Severity.Error, $"{dWhere}.roomTalk",
-                    "RoomTalk target is required — pick a vanilla:* or place:* token"));
+                issues.Add(new(Severity.Error, $"{dWhere}.startConditions",
+                    "Pick a level — the required level condition decides where this dialogue can start"));
             }
-            else
+            else if (d.DisableVanillaTrigger && !d.VanillaRoomTalkAvailable)
             {
-                int colon = d.RoomTalk.IndexOf(':');
-                if (colon <= 0 || colon == d.RoomTalk.Length - 1)
-                {
-                    issues.Add(new(Severity.Error, $"{dWhere}.roomTalk",
-                        $"RoomTalk '{d.RoomTalk}' is malformed (expected 'vanilla:<name>' or 'place:<key>')"));
-                }
-                else
-                {
-                    var scheme = d.RoomTalk.Substring(0, colon);
-                    var rest = d.RoomTalk.Substring(colon + 1);
-                    if (scheme == "vanilla")
-                    {
-                        // A pack-registered custom roomtalk is intentional (the runtime
-                        // creates it on the fly), so it's not an "unknown vanilla name".
-                        if (VanillaRoomTalks.FindByName(rest) == null && !pack.CustomRoomTalks.Contains(rest))
-                            issues.Add(new(Severity.Warning, $"{dWhere}.roomTalk",
-                                $"Vanilla roomtalk '{rest}' is not in the 1.8E catalog"));
-                    }
-                    else if (scheme == "place")
-                    {
-                        if (!placeKeysInPack.Contains(rest))
-                            issues.Add(new(Severity.Error, $"{dWhere}.roomTalk",
-                                $"place:{rest} has no matching place in this pack"));
-                    }
-                    else
-                    {
-                        issues.Add(new(Severity.Error, $"{dWhere}.roomTalk",
-                            $"Unknown roomtalk scheme '{scheme}'"));
-                    }
-                }
+                // Not an error: the dialogue still works, the checkbox just has
+                // nothing to act on, which is worth saying out loud because the
+                // author ticked it expecting an effect.
+                issues.Add(new(Severity.Warning, $"{dWhere}.disableVanillaTrigger",
+                    "'Prioritize this dialogue over vanilla' has no effect here — this level has no vanilla entry dialogue to suppress"));
             }
 
             foreach (var c in d.StartConditions)
@@ -399,9 +377,35 @@ public static class PackValidator
                 issues.Add(new(Severity.Warning, $"{dWhere}.rootNodeIds",
                     "Dialogue has nodes but no root — runtime will pick the first node as root"));
 
+            // Which nodes are options on a Choice. A choice child's text is
+            // the label on the button the player clicks, so an empty one is a
+            // blank button rather than a missing line.
+            var choiceChildren = new HashSet<int>();
+            foreach (var n in d.Nodes)
+                if (n.Kind == DialogueNodeKind.Choice)
+                    foreach (var cid in n.Children) choiceChildren.Add(cid);
+
             foreach (var n in d.Nodes)
             {
                 var nWhere = $"{dWhere}.nodes[id={n.Id}]";
+
+                // An empty line is the one thing that reaches the game looking
+                // like a crash rather than a mistake, and nothing here used to
+                // catch it. A node carrying only actions is a real pattern
+                // though, so silence is fine when it has some.
+                if (string.IsNullOrWhiteSpace(n.Text))
+                {
+                    if (choiceChildren.Contains(n.Id))
+                        issues.Add(new(Severity.Error, $"{nWhere}.text",
+                            "This node is an option on a Choice, so its text is the button label — an empty one shows the player a blank button"));
+                    else if (n.Kind == DialogueNodeKind.Choice)
+                        issues.Add(new(Severity.Warning, $"{nWhere}.text",
+                            "A Choice node's text is the prompt shown beneath its options, so an empty one leaves a blank line under them"));
+                    else if (n.Kind == DialogueNodeKind.Text &&
+                             n.ActionsOnStart.Count == 0 && n.ActionsOnFinish.Count == 0)
+                        issues.Add(new(Severity.Warning, $"{nWhere}.text",
+                            "Text node has no line and no actions, so it has nothing to do"));
+                }
 
                 // Actor + expression sanity.
                 if (!string.IsNullOrEmpty(n.Actor) && !actorKeysInPack.Contains(n.Actor))
@@ -457,7 +461,143 @@ public static class PackValidator
                                           issues, ConditionContext.Rule);
         }
 
+        CheckLevelTokens(pack, issues);
+
         return issues;
+    }
+
+    // ── Level tokens ─────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Params that name a level but aren't declared on a schema: the Set-Active
+    /// family's targeting row supplies <c>overlayLevel</c> itself, so a
+    /// schema-driven sweep alone would miss it.
+    /// </summary>
+    private static readonly string[] UnschemadLevelParams = { "overlayLevel" };
+
+    /// <summary>
+    /// Resolves every level token in the pack and reports the ones that can't
+    /// point at anything.
+    /// <para/>
+    /// This is the quietest failure the format has. A <c>LevelActive</c> whose
+    /// token names no real level simply never passes, so the dialogue never
+    /// starts — no error, no warning, nothing in the log, just a scene that
+    /// doesn't happen. Real examples cost a playtest each:
+    /// <c>vanilla:Downtown</c> for <c>26_Downtown</c>, and <c>vanilla:54_Mall</c>
+    /// where the Mall is <c>25_Mall</c>.
+    /// <para/>
+    /// Driven off <see cref="ParamType.LevelRef"/> rather than a list of param
+    /// names, so a new action or condition that takes a level is covered the day
+    /// it's added.
+    /// <para/>
+    /// Deliberately NOT checking <c>roomTalk</c>: it also uses a
+    /// <c>vanilla:</c> prefix but names a roomtalk NODE
+    /// (<c>vanilla:Mall</c>), not a level GameObject (<c>vanilla:25_Mall</c>).
+    /// Both are right in their own field, and validating one against the other's
+    /// catalog would flag most of the pack.
+    /// </summary>
+    private static void CheckLevelTokens(ModPack pack, List<ValidationIssue> issues)
+    {
+        var goNames = new HashSet<string>(
+            VanillaPlaces.All.Select(p => p.GoName), System.StringComparer.OrdinalIgnoreCase);
+        if (VanillaLevelCatalog.IsAvailable)
+            foreach (var l in VanillaLevelCatalog.All) goNames.Add(l.GoName);
+        var placeKeys = new HashSet<string>(
+            pack.Places.Select(p => p.Key), System.StringComparer.OrdinalIgnoreCase);
+
+        void CheckToken(string token, string where)
+        {
+            if (string.IsNullOrWhiteSpace(token)) return;
+            int colon = token.IndexOf(':');
+            if (colon <= 0) return;                       // not a token; other rules cover shape
+            var scheme = token.Substring(0, colon);
+            var body = token.Substring(colon + 1);
+            if (body.Length == 0 || IsTemplated(body) || body.StartsWith("$")) return;
+
+            if (scheme.Equals("vanilla", System.StringComparison.OrdinalIgnoreCase))
+            {
+                if (goNames.Contains(body)) return;
+                // The usual slip is dropping or mistyping the numeric prefix, so
+                // match on the part after it and offer the real name.
+                var bare = body.Contains('_') ? body.Substring(body.IndexOf('_') + 1) : body;
+                var near = goNames.Where(v =>
+                        v.Equals(bare, System.StringComparison.OrdinalIgnoreCase) ||
+                        v.EndsWith("_" + bare, System.StringComparison.OrdinalIgnoreCase))
+                    .OrderBy(v => v).Take(3).ToList();
+                issues.Add(new(Severity.Error, where,
+                    $"Level '{token}' doesn't exist — this condition can never pass" +
+                    (near.Count > 0 ? $". Did you mean {string.Join(" or ", near.Select(n => "vanilla:" + n))}?" : "")));
+            }
+            else if (scheme.Equals("place", System.StringComparison.OrdinalIgnoreCase))
+            {
+                if (!placeKeys.Contains(body))
+                    issues.Add(new(Severity.Error, where,
+                        $"Level '{token}' names no place in this pack — this condition can never pass"));
+            }
+        }
+
+        void CheckParams(System.Collections.Generic.Dictionary<string, string> ps,
+                         ParamSchema[] schema, string where)
+        {
+            if (ps == null) return;
+            foreach (var s in schema)
+                if (s.Type == ParamType.LevelRef && ps.TryGetValue(s.Key, out var v))
+                    CheckToken(v, $"{where}.{s.Key}");
+            foreach (var key in UnschemadLevelParams)
+                if (ps.TryGetValue(key, out var v)) CheckToken(v, $"{where}.{key}");
+        }
+
+        void WalkCondition(NodeConditionDef c, string where)
+        {
+            if (c == null) return;
+            var cw = $"{where}.{c.Type}";
+            if (NodeConditionTypes.IsGroup(c.Type))
+            {
+                if (c.Conditions != null)
+                    foreach (var child in c.Conditions) WalkCondition(child, cw);
+                return;
+            }
+            CheckParams(c.Params, ConditionSchemas.For(c.Type), cw);
+        }
+
+        void WalkAction(NodeActionDef a, string where)
+        {
+            if (a == null) return;
+            var aw = $"{where}.{a.Type}";
+            CheckParams(a.Params, ActionSchemas.For(a.Type), aw);
+            if (a.Branches != null)
+                for (int i = 0; i < a.Branches.Count; i++)
+                    WalkAction(a.Branches[i].Action, $"{aw}.branch[{i + 1}]");
+        }
+
+        foreach (var d in pack.Dialogues)
+        {
+            var dw = $"dialogues.{d.Key}";
+            foreach (var c in d.StartConditions) WalkCondition(c, $"{dw}.startConditions");
+            foreach (var n in d.Nodes)
+            {
+                var nw = $"{dw}.nodes[{n.Id}]";
+                foreach (var c in n.Conditions) WalkCondition(c, $"{nw}.conditions");
+                foreach (var a in n.ActionsOnStart) WalkAction(a, $"{nw}.actionsOnStart");
+                foreach (var a in n.ActionsOnFinish) WalkAction(a, $"{nw}.actionsOnFinish");
+            }
+        }
+
+        foreach (var r in pack.IntegrationRules)
+        {
+            var rw = $"integrationRules.{r.Key}";
+            foreach (var c in r.Conditions) WalkCondition(c, $"{rw}.conditions");
+            foreach (var a in r.Actions) WalkAction(a, $"{rw}.actions");
+            for (int i = 0; i < r.Branches.Count; i++)
+            {
+                foreach (var c in r.Branches[i].Conditions) WalkCondition(c, $"{rw}.branches[{i}].conditions");
+                foreach (var a in r.Branches[i].Actions) WalkAction(a, $"{rw}.branches[{i}].actions");
+            }
+        }
+
+        foreach (var w in pack.Wallpapers)
+            foreach (var c in w.UnlockConditions)
+                WalkCondition(c, $"wallpapers.{w.Key}.unlockConditions");
     }
 
     /// <summary>
@@ -730,9 +870,6 @@ public static class PackValidator
                 if (a.Type == NodeActionTypes.IncrementVariable && !a.Params.ContainsKey("delta"))
                     issues.Add(new(Severity.Warning, aWhere, "Param 'delta' is required"));
                 break;
-            case NodeActionTypes.SetActorBust:
-            case NodeActionTypes.SetActorExpression:
-            case NodeActionTypes.DeactivateBust:
             case NodeActionTypes.LeaveBust:
                 if (!a.Params.TryGetValue("actor", out var act) || string.IsNullOrWhiteSpace(act))
                     issues.Add(new(Severity.Error, aWhere, "Param 'actor' is required"));
@@ -845,6 +982,18 @@ public static class PackValidator
                 $"parallax strength {strength} is outside the 0..1.5 range vanilla levels use"));
     }
 
+    /// <summary>
+    /// Like <see cref="CheckFile"/>, but an empty path is a choice rather than
+    /// an omission — used for the mask fields, where blank means "this sprite
+    /// does not jiggle" and the runtime binds a fully transparent mask. A path
+    /// that IS set still has to resolve, because that is a typo either way.
+    /// </summary>
+    private static void CheckOptionalFile(string packRoot, string relPath, string where, List<ValidationIssue> issues)
+    {
+        if (string.IsNullOrWhiteSpace(relPath)) return;
+        CheckFile(packRoot, relPath, where, issues);
+    }
+
     private static void CheckFile(string packRoot, string relPath, string where, List<ValidationIssue> issues)
     {
         if (string.IsNullOrWhiteSpace(relPath))
@@ -852,6 +1001,12 @@ public static class PackValidator
             issues.Add(new(Severity.Warning, where, "Empty path"));
             return;
         }
+        // A pack that has never been saved has no folder to resolve against, so
+        // there is nothing to check the file against yet. Previously this threw
+        // out of Path.Combine and took the whole validation pass with it —
+        // reachable simply by typing a sprite path before the first save.
+        if (string.IsNullOrWhiteSpace(packRoot)) return;
+
         var abs = Path.Combine(packRoot, relPath.Replace('/', Path.DirectorySeparatorChar));
         if (!File.Exists(abs))
             issues.Add(new(Severity.Warning, where, $"File not found: {abs}"));

@@ -53,6 +53,21 @@ namespace SMSModForge.PackPlugin
             /// <summary>Placeholder name substituted per value, written <c>{name}</c>.</summary>
             public string ForEachAs = "item";
 
+            /// <summary>
+            /// "Set for condition debugging" in the editor. Logs what this rule
+            /// decided and why — see <see cref="TickOne"/>. Off by default and
+            /// meant to be switched on for one rule at a time; edge bugs are
+            /// invisible otherwise, because a rule that doesn't fire leaves no
+            /// trace at all.
+            /// </summary>
+            public bool DebugConditions;
+
+            /// <summary>Last selection actually written to the log, per item, so
+            /// a per-frame evaluation only produces a line when the outcome
+            /// CHANGES. Without it a WhilePassing rule would emit sixty lines a
+            /// second and bury the transition that matters.</summary>
+            public readonly Dictionary<string, int> LastLogged = new Dictionary<string, int>();
+
             /// <summary>Per-value expansion of <see cref="Branches"/> with the
             /// placeholder substituted, built lazily and reused. Keyed by value,
             /// so a value that leaves and returns keeps its identity.</summary>
@@ -193,6 +208,52 @@ namespace SMSModForge.PackPlugin
 
         /// <summary>Evaluate + fire one rule instance (one parameter value, or the
         /// whole rule when unparameterized).</summary>
+        /// <summary>
+        /// Report what a debug-flagged rule just decided. Logged only when the
+        /// SELECTION CHANGES (or on a fire), because that is the whole question
+        /// with an edge-triggered rule: it fires on the selection moving, so a
+        /// rule that "should have fired" either never changed selection, or
+        /// changed to a branch you didn't expect.
+        /// <para/>
+        /// On a non-selection every branch is dumped condition by condition, so
+        /// the failing one is named rather than inferred. On a selection that
+        /// did NOT fire, the previous selection is printed next to the current
+        /// one — that pair is the answer to "why was it skipped".
+        /// </summary>
+        private static void LogRuleDecision(Entry e, string item, List<Branch> branches,
+                                            int selected, int lastSelected, int fireBranch,
+                                            PackContext ctx)
+        {
+            string key = item ?? "";
+            bool changed = !e.LastLogged.TryGetValue(key, out var lastLogged) || lastLogged != selected;
+            if (!changed && fireBranch < 0) return;
+            e.LastLogged[key] = selected;
+
+            string who = ctx.PackId + "." + e.Key + (string.IsNullOrEmpty(item) ? "" : " [" + item + "]");
+            string verdict = fireBranch >= 0
+                ? "FIRED branch " + fireBranch
+                : selected < 0
+                    ? "no branch passes"
+                    : "branch " + selected + " passes but did NOT fire (same branch as last tick — " +
+                      e.Mode + " needs the selection to CHANGE)";
+
+            ctx.Log?.LogInfo("[CondDebug] ══ " + who + " (" + e.Mode + ") — " + verdict +
+                             " | selected=" + selected + " previous=" + lastSelected);
+
+            // Only itemise when nothing was selected; a fire is self-explanatory
+            // and dumping every branch on it would drown the interesting case.
+            if (selected >= 0) return;
+            for (int b = 0; b < branches.Count; b++)
+            {
+                ctx.Log?.LogInfo("[CondDebug]   branch " + b +
+                                 (branches[b].Conditions == null || branches[b].Conditions.Count == 0
+                                     ? " (no conditions — always passes)" : ""));
+                if (branches[b].Conditions == null) continue;
+                foreach (var c in branches[b].Conditions)
+                    ConditionEvaluator.DumpCondition(c as JObject, ctx, "     ");
+            }
+        }
+
         private void TickOne(Entry e, string item, List<Branch> branches,
                              PackContext ctx, ManualLogSource log)
         {
@@ -250,6 +311,9 @@ namespace SMSModForge.PackPlugin
                         }
                         break;
                 }
+                if (e.DebugConditions)
+                    LogRuleDecision(e, item, branches, selected, lastSelected, fireBranch, ctx);
+
                 e.LastSelected[item] = selected;
 
                 if (fireBranch >= 0)

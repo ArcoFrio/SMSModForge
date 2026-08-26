@@ -18,6 +18,172 @@ namespace SMSModForge.PackPlugin
     // Configure()/OnEnable lands last kicks the effect off, so attach-order vs.
     // active-state never matters.
 
+    /// <summary>
+    /// Keeps a renderer's <c>_RendererColor</c> in step with its
+    /// <see cref="SpriteRenderer.color"/>.
+    /// <para/>
+    /// The bust jiggle shader (<c>Sprites/JiggleSprite_FakeGI_2DLit</c>) declares
+    /// <c>_RendererColor</c> with only the HideInInspector flag — unlike
+    /// <c>_MainTex</c>, which is properly PerRendererData. So the tint the
+    /// SpriteRenderer would normally push through that property is read from the
+    /// material's own constant buffer instead, and every renderer sharing a
+    /// material draws at whatever colour the material happens to store.
+    /// <para/>
+    /// The body never shows this: its colour is opaque white anyway. The
+    /// overlays are precisely what the game animates through
+    /// <c>SpriteRenderer.color</c> — blink alpha, mouth frames, expression
+    /// cross-fades — so handing them the body's material made all of them draw
+    /// opaque simultaneously, stacked, which is the white-out that kept
+    /// "apply to overlays" switched off.
+    /// <para/>
+    /// Each overlay already gets its own material instance, so mirroring the
+    /// colour across is enough. Idempotent by construction: where Unity does
+    /// deliver the property itself, this writes the identical value.
+    /// </summary>
+    public sealed class RendererColorSync : MonoBehaviour
+    {
+        private static readonly int RendererColorId = Shader.PropertyToID("_RendererColor");
+
+        private SpriteRenderer _sr;
+        private Material _mat;
+        private Color _last = new Color(-1f, -1f, -1f, -1f);
+
+        private void Awake()
+        {
+            _sr = GetComponent<SpriteRenderer>();
+            _mat = _sr != null ? _sr.sharedMaterial : null;
+        }
+
+        // LateUpdate so we run after whatever animated the colour this frame.
+        private void LateUpdate()
+        {
+            if (_sr == null) return;
+            // The renderer's material can be swapped out from under us (outfit
+            // changes rebuild busts), so re-read rather than trusting Awake.
+            if (_mat != _sr.sharedMaterial)
+            {
+                _mat = _sr.sharedMaterial;
+                _last = new Color(-1f, -1f, -1f, -1f);
+            }
+            if (_mat == null || !_mat.HasProperty(RendererColorId)) return;
+
+            Color c = _sr.color;
+            if (c == _last) return;
+            _last = c;
+            _mat.SetColor(RendererColorId, c);
+        }
+    }
+
+    /// <summary>
+    /// Moves a bust overlay (blink / mouth / expression) with the body's jiggle
+    /// WITHOUT putting the jiggle shader on it.
+    /// <para/>
+    /// The shader route works but recolours these sprites: its lit pass runs a
+    /// 193-tap "fake GI" gather weighted by <c>1 - alpha</c>, which measures how
+    /// much empty canvas surrounds a pixel. The body fills 27.5% of its frame
+    /// and lands at 0.13–0.33 openness; an overlay fills 0.02–0.26% and lands at
+    /// 0.68–1.00, so it gets lit as though floating in void. That gather is in
+    /// all 64 lit shader variants and the URP 2D renderer only dispatches the
+    /// lit pass, so it can be neither keyword-gated nor bypassed.
+    /// <para/>
+    /// So the overlays keep their own <c>Sprite-Lit-Default</c> material — vanilla
+    /// lighting, vanilla colour — and this reproduces the displacement on the
+    /// CPU instead, as a rigid offset of the whole GameObject. The mask never
+    /// changes at runtime, so its four channels are sampled ONCE at build time
+    /// at the sprite's opaque centroid: no per-frame texture reads, just a
+    /// couple of sines and one transform write. That is strictly cheaper than
+    /// the gather it replaces.
+    /// <para/>
+    /// The fidelity trade: the shader displaces per pixel, this displaces per
+    /// object. An overlay small enough that the mask barely varies across it —
+    /// which is every mouth, eye and expression — is visually equivalent. One
+    /// spanning a strong mask gradient would slide where the shader would
+    /// squash.
+    /// </summary>
+    public sealed class OverlayJiggle : MonoBehaviour
+    {
+        // Mask channels at this overlay's centroid: R=bounce, G=wave, B=noise,
+        // A=intensity — the same meaning the shader gives them.
+        public float MaskR, MaskG, MaskB, MaskA;
+        public Vector2 Uv;
+
+        public float Speed = 3f, Strength = -0.02f, Frequency = 4f;
+        public float NoiseScale = 5f, NoiseSpeed = 0.5f, NoiseStrength = 0.06f;
+
+        /// <summary>Sprite extent in local units — converts the shader's UV-space
+        /// offset into a position offset.</summary>
+        public Vector2 SpriteSize = Vector2.one;
+
+        private Vector3 _rest;
+        private bool _haveRest;
+
+        private void OnEnable()
+        {
+            if (!_haveRest) { _rest = transform.localPosition; _haveRest = true; }
+        }
+
+        private void OnDisable()
+        {
+            if (_haveRest) transform.localPosition = _rest;
+        }
+
+        private void LateUpdate()
+        {
+            if (!_haveRest) return;
+
+            // Shader gate: mask.a * (r+g+b) > 0.001.
+            if (MaskA * (MaskR + MaskG + MaskB) <= 0.001f)
+            {
+                transform.localPosition = _rest;
+                return;
+            }
+
+            float t = Time.time * Speed;                       // _Time.y * _JiggleSpeed
+            float offY = MaskR * Mathf.Sin(t) * Strength;      // bounce, red
+            float offX = MaskG * Mathf.Sin(Uv.y * Frequency + t) * Strength;   // wave, green
+
+            if (MaskB > 0.01f)                                 // noise, blue
+            {
+                float nt = t * NoiseSpeed;
+                float n = ValueNoise(Uv.x * NoiseScale + nt, Uv.y * NoiseScale + nt);
+                offX += Mathf.Sin(Uv.y * Mathf.PI + t * 0.5f) * 0.15f * NoiseStrength * MaskB;
+                offY += (n - 0.5f) * NoiseStrength * MaskB;
+            }
+
+            // uv += offset * mask.a. Shifting the SAMPLE uv by +du moves the
+            // visible image by -du, hence the negation.
+            float du = offX * MaskA, dv = offY * MaskA;
+            transform.localPosition = _rest +
+                new Vector3(-du * SpriteSize.x, -dv * SpriteSize.y, 0f);
+        }
+
+        // Value noise on the same hash the shader uses (the 0.1031 / 33.33
+        // constants are Hoskins' hash12) with smoothstep interpolation. The
+        // shader layers several octaves; one is kept here — the term is a small
+        // high-frequency jitter scaled by _NoiseStrength, and extra octaves of it
+        // read as buzz once the displacement is rigid rather than per-pixel.
+        private static float ValueNoise(float x, float y)
+        {
+            float ix = Mathf.Floor(x), iy = Mathf.Floor(y);
+            float fx = x - ix, fy = y - iy;
+            fx = fx * fx * (3f - 2f * fx);
+            fy = fy * fy * (3f - 2f * fy);
+            float a = Hash(ix, iy), b = Hash(ix + 1f, iy);
+            float c = Hash(ix, iy + 1f), d = Hash(ix + 1f, iy + 1f);
+            return Mathf.Lerp(Mathf.Lerp(a, b, fx), Mathf.Lerp(c, d, fx), fy);
+        }
+
+        private static float Hash(float x, float y)
+        {
+            float px = Frac(x * 0.1031f), py = Frac(y * 0.1031f), pz = Frac(x * 0.1031f);
+            float dot = px * (py + 33.33f) + py * (pz + 33.33f) + pz * (px + 33.33f);
+            px += dot; py += dot; pz += dot;
+            return Frac((px + py) * pz);
+        }
+
+        private static float Frac(float v) => v - Mathf.Floor(v);
+    }
+
     /// <summary>Fades a <see cref="SpriteRenderer"/> in — alpha 0 → target over
     /// a duration, after an optional delay.</summary>
     public sealed class FadeInSprite : MonoBehaviour

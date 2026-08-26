@@ -338,6 +338,11 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
         Model.Outfits.Add(def);
         var vm = new OutfitViewModel(def);
         Outfits.Add(vm);
+        // A character with outfits but no default has nothing to wear: the
+        // runtime falls back to the first outfit anyway (ActorRegistry.Declare),
+        // so leaving it blank only hides which one that is. Adopt the first one
+        // added rather than making the author notice a field they never set.
+        if (string.IsNullOrWhiteSpace(DefaultOutfit)) DefaultOutfit = def.GameObjectName;
         OnPropertyChanged(nameof(WearableBusts));
         return vm;
     }
@@ -346,6 +351,9 @@ public sealed class CharacterViewModel : ObservableObject, IFilterableTreeNode
     {
         Model.Outfits.Remove(vm.Model);
         Outfits.Remove(vm);
+        // Don't leave the default pointing at an outfit that no longer exists.
+        if (string.Equals(DefaultOutfit, vm.GameObjectName, StringComparison.OrdinalIgnoreCase))
+            DefaultOutfit = Outfits.Count > 0 ? Outfits[0].GameObjectName : "";
         OnPropertyChanged(nameof(WearableBusts));
     }
 

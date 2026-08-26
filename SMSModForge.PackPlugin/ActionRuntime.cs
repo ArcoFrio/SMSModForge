@@ -69,18 +69,6 @@ namespace SMSModForge.PackPlugin
                         return ctx.Vars.Increment(name, delta);
                     }
 
-                case "SetActorBust":
-                    // bustKey accepts a $varName, so an action can pick the
-                    // outfit dynamically from a pack variable (literal names
-                    // pass through Deref unchanged).
-                    ctx.Actors.SetBust((string)p["actor"] ?? "", DerefParam(p, "bustKey", ctx));
-                    return false;
-
-                case "SetActorExpression":
-                    // Apply immediately so the visual updates even between nodes.
-                    ctx.Actors.ApplyNodeVisuals((string)p["actor"] ?? "", (string)p["expression"] ?? "");
-                    return false;
-
                 case "SetSpriteFocus":
                     {
                         // Raise/lower the whole cast's busts over the CG layer —
@@ -89,15 +77,6 @@ namespace SMSModForge.PackPlugin
                         // per-actor target); the dispatcher resets it on end.
                         bool.TryParse((string)p["focused"] ?? "true", out var focused);
                         ctx.Actors.SetSpriteFocusAll(focused);
-                        return false;
-                    }
-
-                case "DeactivateBust":
-                    {
-                        var bust = ctx.Actors.GetCurrentBustGo((string)p["actor"] ?? "");
-                        if (bust != null) bust.SetActive(false);
-                        else ctx.Log?.LogWarning("[SMSModForge.PackPlugin] DeactivateBust: no current bust for actor '" +
-                                                 (string)p["actor"] + "'");
                         return false;
                     }
 
@@ -174,7 +153,22 @@ namespace SMSModForge.PackPlugin
                             }
 
                             GameObject go;
-                            if (levelGo != null)
+                            if (kind == "Places")
+                            {
+                                // The target is a place TOKEN (place:Key / vanilla:GoName),
+                                // not a GameObject name — the level's actual GO carries a
+                                // build-time index prefix, so a plain name lookup never
+                                // finds it. Same resolution ResolveByKind uses for the
+                                // Fade/Move/Spin family, so a level is addressed
+                                // identically whichever action is acting on it.
+                                var level5 = GameObject.Find("5_Levels")?.transform;
+                                go = Plugin.ResolveLevelTarget(target, ctx.PackId, level5)
+                                     ?? TransformExtensions.ResolveGameObject(target);
+                                if (go == null)
+                                    ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetGameObjectActive: level '" +
+                                        target + "' not found");
+                            }
+                            else if (levelGo != null)
                             {
                                 go = TransformExtensions.FindDescendantIncludingInactive(levelGo.transform, target);
                                 if (go == null)
@@ -192,8 +186,113 @@ namespace SMSModForge.PackPlugin
                         return false;
                     }
 
+                case "SetSprite":
+                    {
+                        // Same kind-dispatched targeting as SetGameObjectActive,
+                        // so a sprite swap addresses a bust / level GameObject /
+                        // scene / raw path exactly the way an activation does.
+                        var go = (string)p["kind"] == "Scene"
+                            ? ResolveSceneGo(DerefParam(p, "target", ctx), ctx)
+                            : ResolveByKind(p, ctx);
+                        if (go == null)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: target '" +
+                                                DerefParam(p, "target", ctx) + "' not found.");
+                            return false;
+                        }
+
+                        var sr = go.GetComponent<SpriteRenderer>();
+                        if (sr == null)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" + go.name +
+                                                "' has no SpriteRenderer — nothing to change.");
+                            return false;
+                        }
+
+                        string spriteRel = DerefParam(p, "sprite", ctx);
+                        if (!string.IsNullOrEmpty(spriteRel))
+                        {
+                            var tex = LoadPackTexture(ctx, spriteRel, linear: false);
+                            if (tex == null)
+                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" +
+                                                    spriteRel + "' is not in the pack archive.");
+                            else
+                            {
+                                // Inherit the geometry of the sprite being replaced.
+                                // A Sprite's world size is pixels / pixelsPerUnit, and
+                                // different kinds of art are authored at different
+                                // scales — level art at 70.32, busts and scenes at
+                                // 100. Letting Sprite.Create fall back to its own
+                                // default of 100 rendered swapped level art at 70%
+                                // size, with the camera's clear colour showing around
+                                // the edges.
+                                //
+                                // Reading it off the renderer rather than hardcoding a
+                                // number keeps this action generic: whatever the target
+                                // was drawn at, the replacement matches, including for
+                                // vanilla sprites this pack never created.
+                                var old = sr.sprite;
+                                float ppu = old != null ? old.pixelsPerUnit : 100f;
+                                // Sprite.pivot is in pixels; Sprite.Create wants it
+                                // normalised to the rect.
+                                Vector2 pivot = old != null && old.rect.width > 0f && old.rect.height > 0f
+                                    ? new Vector2(old.pivot.x / old.rect.width, old.pivot.y / old.rect.height)
+                                    : new Vector2(0.5f, 0.5f);
+                                sr.sprite = Sprite.Create(
+                                    tex, new Rect(0, 0, tex.width, tex.height), pivot, ppu);
+                            }
+                        }
+
+                        // Optional mask. Generic on purpose: any material with a
+                        // _MaskTex takes one, which is every jiggle-shaded bust
+                        // and level sprite. Anything else says so rather than
+                        // failing quietly — the author asked for a mask and did
+                        // not get one.
+                        string maskRel = DerefParam(p, "mask", ctx);
+                        if (!string.IsNullOrEmpty(maskRel))
+                        {
+                            var mat = sr.sharedMaterial;
+                            if (mat == null)
+                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: '" + go.name +
+                                                    "' has no material, so its mask cannot be set.");
+                            else if (!mat.HasProperty("_MaskTex"))
+                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: the material on '" +
+                                                    go.name + "' (" + (mat.shader != null ? mat.shader.name : "no shader") +
+                                                    ") has no _MaskTex, so its mask cannot be set.");
+                            else
+                            {
+                                // Mask loaded LINEAR: its channels are displacement
+                                // amounts the shader multiplies, not a colour. As
+                                // sRGB a painted 0.5 samples as about 0.22 and the
+                                // effect comes out nothing like the mask drawn.
+                                var maskTex = LoadPackTexture(ctx, maskRel, linear: true);
+                                if (maskTex == null)
+                                    ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetSprite: mask '" +
+                                                        maskRel + "' is not in the pack archive.");
+                                else
+                                {
+                                    // Clone before writing: materials are shared
+                                    // between every renderer using them, so
+                                    // setting the mask in place would repaint
+                                    // every other bust wearing the same one.
+                                    var clone = new Material(mat);
+                                    clone.SetTexture("_MaskTex", maskTex);
+                                    sr.sharedMaterial = clone;
+                                }
+                            }
+                        }
+                        return false;
+                    }
+
                 case "EmitSignal":
                     EmitGc2Signal((string)p["signal"], ctx);
+                    return false;
+
+                // Hand the faded gameplay UI to whatever this node just opened,
+                // so the dialogue's own ending doesn't fade it back in over the
+                // top. See DialogueDispatcher.ReleaseUiOwnership.
+                case "LeaveUiFaded":
+                    DialogueDispatcher.ReleaseUiOwnership();
                     return false;
 
                 case "EmitSignalDelayed":
@@ -255,6 +354,79 @@ namespace SMSModForge.PackPlugin
                         if (ctx.Plugin != null)
                             ctx.Plugin.StartCoroutine(FadeSpriteCoroutine(sr, to, seconds));
                         return false;
+                    }
+
+                case "SetComponentProperty":
+                    {
+                        var go = ResolveByKind(p, ctx);
+                        if (go == null)
+                        {
+                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetComponentProperty: target '" +
+                                (string)p["target"] + "' not found.");
+                            return false;
+                        }
+                        string comp = ((string)p["component"] ?? "CanvasGroup").Trim();
+                        string prop = ((string)p["property"] ?? "").Trim();
+                        string raw = (string)p["value"] ?? "";
+                        float.TryParse((string)p["seconds"] ?? "0", NumberStyles.Float,
+                                        CultureInfo.InvariantCulture, out var propSecs);
+
+                        // One case per supported component. Deliberately not
+                        // reflection over an arbitrary type name: a typo would
+                        // then fail somewhere inside the engine instead of here,
+                        // and the editor could not offer a property list.
+                        switch (comp)
+                        {
+                            case "CanvasGroup":
+                                {
+                                    // Added when absent. A fresh CanvasGroup is
+                                    // inert (alpha 1, interactable, blocking), so
+                                    // adding one changes nothing until the write
+                                    // below — and without it the action would only
+                                    // work on panels the game happened to author
+                                    // one on.
+                                    var cg = go.GetComponent<CanvasGroup>() ?? go.AddComponent<CanvasGroup>();
+                                    switch (prop)
+                                    {
+                                        case "alpha":
+                                            if (!float.TryParse(raw, NumberStyles.Float,
+                                                                CultureInfo.InvariantCulture, out var alpha))
+                                            {
+                                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetComponentProperty: " +
+                                                    "CanvasGroup.alpha needs a number, got '" + raw + "'.");
+                                                return false;
+                                            }
+                                            if (propSecs > 0f && ctx.Plugin != null)
+                                                ctx.Plugin.StartCoroutine(FadeCanvasGroupCoroutine(cg, alpha, propSecs));
+                                            else
+                                                cg.alpha = Mathf.Clamp01(alpha);
+                                            return false;
+
+                                        case "interactable":
+                                        case "blocksRaycasts":
+                                            if (!bool.TryParse(raw, out var flag))
+                                            {
+                                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetComponentProperty: " +
+                                                    "CanvasGroup." + prop + " needs 'true' or 'false', got '" + raw + "'.");
+                                                return false;
+                                            }
+                                            if (prop == "interactable") cg.interactable = flag;
+                                            else cg.blocksRaycasts = flag;
+                                            return false;
+
+                                        default:
+                                            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetComponentProperty: " +
+                                                "CanvasGroup has no supported property '" + prop +
+                                                "' (alpha / interactable / blocksRaycasts).");
+                                            return false;
+                                    }
+                                }
+
+                            default:
+                                ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetComponentProperty: " +
+                                    "unsupported component '" + comp + "' (supported: CanvasGroup).");
+                                return false;
+                        }
                     }
 
                 case "MoveGameObject":
@@ -361,10 +533,6 @@ namespace SMSModForge.PackPlugin
                         }
                         return false;
                     }
-
-                case "EndDialogue":
-                    ctx.RequestStop = true;
-                    return false;
 
                 case "ActivateScene":
                     {
@@ -772,6 +940,26 @@ namespace SMSModForge.PackPlugin
         /// sprite being destroyed mid-tween — bails out cleanly if
         /// the renderer goes null.
         /// </summary>
+        /// <summary>Tween a CanvasGroup's alpha, mirroring
+        /// <see cref="FadeSpriteCoroutine"/>. Only the alpha moves — the input
+        /// flags were applied by the caller before this started.</summary>
+        private static IEnumerator FadeCanvasGroupCoroutine(CanvasGroup cg, float to, float seconds)
+        {
+            if (cg == null) yield break;
+            float startAlpha = cg.alpha;
+            float target = Mathf.Clamp01(to);
+            float t = 0f;
+            float dur = Mathf.Max(0.0001f, seconds);
+            while (t < dur)
+            {
+                if (cg == null) yield break;
+                t += Time.deltaTime;
+                cg.alpha = Mathf.Lerp(startAlpha, target, Mathf.Clamp01(t / dur));
+                yield return null;
+            }
+            if (cg != null) cg.alpha = target;
+        }
+
         private static IEnumerator FadeSpriteCoroutine(SpriteRenderer sr, float to, float seconds)
         {
             if (sr == null) yield break;
@@ -827,6 +1015,30 @@ namespace SMSModForge.PackPlugin
         private static bool IsOverlayKind(string kind)
             => kind == "GameObjects" || kind == "Level Overlay";
 
+        /// <summary>A pack scene's GameObject, by scene key.</summary>
+        private static GameObject ResolveSceneGo(string sceneKey, PackContext ctx)
+        {
+            if (ctx.Scenes != null && ctx.Scenes.TryGet(sceneKey, out var entry)) return entry.SceneGo;
+            return null;
+        }
+
+        /// <summary>
+        /// Load a PNG out of the pack archive at its own dimensions. Null when
+        /// the path is not in the archive, so callers can say which one missed
+        /// rather than silently drawing nothing.
+        /// </summary>
+        private static Texture2D LoadPackTexture(PackContext ctx, string rel, bool linear)
+        {
+            if (ctx.Pack == null || string.IsNullOrEmpty(rel) || !ctx.Pack.Has(rel)) return null;
+            byte[] bytes = ctx.Pack.ReadBytes(rel);
+            if (bytes == null) return null;
+            // Size is a placeholder — LoadImage resizes to the PNG's own.
+            var tex = new Texture2D(2, 2, TextureFormat.RGBA32, false, linear);
+            if (!tex.LoadImage(bytes)) return null;
+            tex.filterMode = FilterMode.Point;
+            return tex;
+        }
+
         private static GameObject ResolveByKind(JObject p, PackContext ctx)
         {
             // Same $varName support as the Set-Active path above.
@@ -851,8 +1063,17 @@ namespace SMSModForge.PackPlugin
                 case "Places":
                 {
                     var level5 = GameObject.Find("5_Levels")?.transform;
-                    return Plugin.ResolveLevelTarget(target, ctx.PackId, level5)
-                           ?? TransformExtensions.ResolveGameObject(target);
+                    var levelGo = Plugin.ResolveLevelTarget(target, ctx.PackId, level5)
+                                  ?? TransformExtensions.ResolveGameObject(target);
+                    if (levelGo == null) return null;
+                    // A level is drawn in two layers: Base on the level's own
+                    // GameObject, Secondary on a child behind it. 'layer' picks
+                    // which; absent means Base, so every manifest written before
+                    // this stays on the layer it had.
+                    string layer = Deref((string)p["layer"] ?? "", ctx);
+                    return string.Equals(layer, "Secondary", System.StringComparison.OrdinalIgnoreCase)
+                        ? ResolveSecondaryLayer(levelGo, ctx)
+                        : levelGo;
                 }
                 case "Bust":
                 {
@@ -863,6 +1084,28 @@ namespace SMSModForge.PackPlugin
                 default:
                     return ResolveActionTarget(target, ctx);
             }
+        }
+
+        /// <summary>
+        /// The level's second sprite layer — child index 1, which is where the
+        /// level prototype puts it and the same slot <c>PlaceFactory</c> writes
+        /// when it dresses a pack place (it renames that child
+        /// <c>&lt;Key&gt;_Secondary</c> purely so it can also be addressed by
+        /// name). Falls back to the level itself, with a warning, when the level
+        /// has no such child — better to repaint the base layer than to do
+        /// nothing silently.
+        /// </summary>
+        private static GameObject ResolveSecondaryLayer(GameObject levelGo, PackContext ctx)
+        {
+            var t = levelGo.transform;
+            if (t.childCount > 1)
+            {
+                var second = t.GetChild(1);
+                if (second.GetComponent<SpriteRenderer>() != null) return second.gameObject;
+            }
+            ctx.Log?.LogWarning("[SMSModForge.PackPlugin] Level '" + levelGo.name +
+                                "' has no second sprite layer — using its base layer instead.");
+            return levelGo;
         }
 
         /// <summary>
@@ -931,6 +1174,9 @@ namespace SMSModForge.PackPlugin
     public sealed class PackContext
     {
         public string PackId;
+        /// <summary>The pack archive, so actions can read authored art at
+        /// runtime (SetSprite). Assigned when the runtime is built.</summary>
+        public PackManifest Pack;
         public PackVariableStore Vars;
         public ActorRegistry Actors;
         public RuntimeActorFactory ActorFactory;
@@ -948,11 +1194,5 @@ namespace SMSModForge.PackPlugin
         public ManualLogSource Log;
         public MonoBehaviour Plugin;
 
-        /// <summary>
-        /// Set by actions like <c>EndDialogue</c> to request the
-        /// dispatcher stop the currently-playing dialogue. The
-        /// dispatcher inspects this flag after each node finishes.
-        /// </summary>
-        public bool RequestStop;
     }
 }

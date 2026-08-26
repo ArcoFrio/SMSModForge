@@ -186,4 +186,28 @@ public static class VanillaPlaces
             if (p.GoName == goName) return p;
         return null;
     }
+
+    /// <summary>
+    /// The roomtalk token for a level token, or "" when there is none.
+    /// <para/>
+    /// Only vanilla levels have one, and not even all of them — intro/ending
+    /// levels and sub-locations of larger areas have no roomtalk, so a dialogue
+    /// there simply has no vanilla entry dialogue to take priority over. A
+    /// pack-authored level (<c>place:</c>) has no vanilla roomtalk by
+    /// definition: the pack's own is shared housekeeping with its Conditions
+    /// stripped, so there is nothing there to suppress either.
+    /// </summary>
+    public static string RoomTalkTokenForLevel(string? levelToken)
+    {
+        if (string.IsNullOrWhiteSpace(levelToken)) return "";
+        const string prefix = "vanilla:";
+        if (!levelToken!.StartsWith(prefix, System.StringComparison.Ordinal)) return "";
+        var place = FindByGoName(levelToken.Substring(prefix.Length));
+        return string.IsNullOrEmpty(place?.RoomTalkName) ? "" : "vanilla:" + place!.RoomTalkName;
+    }
+
+    /// <summary>True when a level has a vanilla roomtalk, i.e. when
+    /// "Prioritize this dialogue over vanilla" can do anything there.</summary>
+    public static bool HasRoomTalk(string? levelToken) =>
+        !string.IsNullOrEmpty(RoomTalkTokenForLevel(levelToken));
 }

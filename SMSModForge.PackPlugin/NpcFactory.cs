@@ -270,7 +270,20 @@ namespace SMSModForge.PackPlugin
 
             var sr = go.AddComponent<SpriteRenderer>();
             sr.sprite = MakeSprite(pack, rel);
-            sr.sharedMaterial = parentSr.sharedMaterial;   // same jiggle material
+            // Its OWN clone of the jiggle material, not the parent's instance.
+            // BlinkingSprite closes the eyes by driving alpha through
+            // SpriteRenderer.color, and the jiggle shader reads that tint from
+            // _RendererColor — an ordinary material property here, not
+            // PerRendererData. Sharing one instance therefore both stopped the
+            // blink from ever hiding AND let its alpha bleed onto the body.
+            // RendererColorSync keeps the clone's copy in step (see PackComponents).
+            if (parentSr.sharedMaterial != null)
+            {
+                var m = new Material(parentSr.sharedMaterial);
+                if (m.HasProperty("_RendererColor")) m.SetColor("_RendererColor", sr.color);
+                sr.sharedMaterial = m;
+                go.AddComponent<RendererColorSync>();
+            }
             sr.sortingOrder = parentSr.sortingOrder + 1;
 
             // Eyes open for a random minWait..maxWait, then shut for hold.

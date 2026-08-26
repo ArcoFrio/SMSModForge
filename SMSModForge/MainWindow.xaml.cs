@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
@@ -23,12 +24,30 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+
+        // The tutorial overlay draws itself from the runner and reuses the same
+        // amber flash that jumping to a validation issue uses, so "look here"
+        // means one thing throughout the editor.
+        Loaded += (_, _) =>
+        {
+            if (DataContext is ViewModel.MainViewModel vm)
+            {
+                Tutorial.Flash = FlashElement;
+                Tutorial.SwitchTab = i => MainTabs.SelectedIndex = i;
+                Tutorial.Attach(vm.TutorialRunner);
+            }
+        };
         if (DataContext is MainViewModel vm)
         {
             vm.Saved += OnPackSaved;
             vm.PromptForText = (title, label, initial) => TextPromptWindow.Prompt(this, title, label, initial);
             vm.ShowInfo = (title, message) => MessageBox.Show(this, message, title,
                 MessageBoxButton.OK, MessageBoxImage.Information);
+            vm.ConfirmSave = (changes, packRoot) =>
+            {
+                bool ok = SaveConfirmWindow.Ask(this, changes, packRoot, out bool suppress);
+                return (ok, suppress);
+            };
             RegisterShortcuts(vm);
             RegisterListShortcuts(vm);
             // Switching tabs unloads the outgoing tab's visual tree, and a
@@ -68,6 +87,183 @@ public partial class MainWindow : Window
                 new RoutedEventHandler((_, _) => vm.Undo.Checkpoint()), handledEventsToo: true);
         }
         RestoreUiLayout();
+    }
+
+    // ── Spell check on the node Text box ─────────────────────────────────
+
+    /// <summary>
+    /// Offers to put every name this pack invents — characters, actors, places,
+    /// NPCs — into the Windows dictionary in one go, so the cast stops
+    /// squiggling without the author right-clicking each one.
+    /// <para/>
+    /// It asks first, and it is a menu item rather than something that happens
+    /// on load, because the destination is the author's machine-wide dictionary
+    /// shared with every other app. WPF's app-scoped alternative
+    /// (<c>SpellCheck.CustomDictionaries</c>) would have needed no permission at
+    /// all, but it is silently ignored on Windows 11 — see
+    /// <see cref="SMSModForge.Services.SpellingDictionary"/>.
+    /// </summary>
+    private void AddPackNamesToDictionary_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+
+        var words = SMSModForge.Services.SpellingDictionary.CollectPackWords(vm.Pack);
+        var known = new HashSet<string>(
+            SMSModForge.Services.SpellingDictionary.ReadWindowsUserDictionary(),
+            StringComparer.OrdinalIgnoreCase);
+        var pending = words.Where(w => !known.Contains(w)).ToList();
+
+        if (pending.Count == 0)
+        {
+            MessageBox.Show(this,
+                "Every name in this pack is already in your Windows dictionary.",
+                "Add pack names", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+
+        // Every name, never an "…and N more": this is a prompt to write to the
+        // author's machine-wide dictionary, so they get to read the whole list
+        // before agreeing to it. Broken into short lines rather than one
+        // paragraph — 60-odd comma-separated names are unreadable as prose.
+        const int perLine = 6;
+        string list = string.Join("\n", pending
+            .Select((w, i) => new { w, i })
+            .GroupBy(x => x.i / perLine)
+            .Select(g => string.Join(", ", g.Select(x => x.w))));
+
+        var answer = MessageBox.Show(this,
+            $"Add these {pending.Count} name(s) to your Windows dictionary?\n\n{list}\n\n" +
+            "This is the same dictionary Edge and Office use, so they'll be accepted " +
+            "everywhere on this PC — not just in ModForge.",
+            "Add pack names", MessageBoxButton.OKCancel, MessageBoxImage.Question);
+        if (answer != MessageBoxResult.OK) return;
+
+        int added = SMSModForge.Services.SpellingDictionary.AddToWindowsDictionary(pending);
+        if (added < 0)
+        {
+            MessageBox.Show(this,
+                "Couldn't write to the Windows dictionary at\n" +
+                SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath,
+                "Add pack names", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        // Windows' checker reloads the file on its own schedule (measured at
+        // 0.5–2.5s), so re-run the text through it once that's elapsed rather
+        // than leaving stale underlines on screen.
+        var timer = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = SMSModForge.Services.SpellingDictionary.ReloadDelay,
+        };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            var text = NodeTextBox.Text;
+            if (string.IsNullOrEmpty(text)) return;
+            NodeTextBox.Text = "";
+            NodeTextBox.Text = text;
+        };
+        timer.Start();
+
+        MessageBox.Show(this, $"Added {added} name(s) to your Windows dictionary.",
+            "Add pack names", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    /// <summary>
+    /// Builds the node Text box's context menu. WPF's own spelling menu is
+    /// internal and disappears the moment a control carries a ContextMenu of
+    /// its own, so the suggestions are reproduced here and joined by the two
+    /// commands the editor adds: ignore for this session, or add the word to the
+    /// Windows dictionary for good.
+    /// <para/>
+    /// Away from a misspelling this falls back to the ordinary editing
+    /// commands, which would otherwise be lost along with the built-in menu.
+    /// </summary>
+    private void NodeTextBox_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        var box = NodeTextBox;
+
+        // Right-clicking doesn't move the caret, so the word under the POINTER
+        // is what the user means. Keyboard-invoked menus (Shift+F10) report
+        // -1 for position; fall back to the caret there.
+        int index = e.CursorLeft < 0
+            ? box.CaretIndex
+            : box.GetCharacterIndexFromPoint(Mouse.GetPosition(box), snapToText: true);
+
+        var menu = new System.Windows.Controls.ContextMenu();
+        SpellingError? error = index >= 0 ? box.GetSpellingError(index) : null;
+
+        if (error != null)
+        {
+            var suggestions = error.Suggestions.Take(6).ToList();
+            if (suggestions.Count == 0)
+            {
+                menu.Items.Add(new MenuItem { Header = "(no suggestions)", IsEnabled = false });
+            }
+            else
+            {
+                foreach (var suggestion in suggestions)
+                {
+                    var item = new MenuItem { Header = suggestion, FontWeight = FontWeights.Bold };
+                    string chosen = suggestion;
+                    item.Click += (_, _) => error.Correct(chosen);
+                    menu.Items.Add(item);
+                }
+            }
+            menu.Items.Add(new Separator());
+
+            // The click lands wherever the pointer was, which is usually the
+            // MIDDLE of the word — ask for the error's real extent rather than
+            // slicing from the click position and capturing half a word.
+            int start = box.GetSpellingErrorStart(index);
+            int length = box.GetSpellingErrorLength(index);
+            string word = start >= 0 && length > 0 && start + length <= box.Text.Length
+                ? box.Text.Substring(start, length)
+                : "";
+
+            var ignore = new MenuItem { Header = "Ignore all", ToolTip = "Stop flagging this word for the rest of this session." };
+            ignore.Click += (_, _) => error.IgnoreAll();
+            menu.Items.Add(ignore);
+
+            var add = new MenuItem
+            {
+                Header = string.IsNullOrEmpty(word) ? "Add to dictionary" : $"Add \"{word}\" to dictionary",
+                IsEnabled = !string.IsNullOrEmpty(word),
+                ToolTip = "Add this word to your Windows dictionary — the same list Edge and " +
+                          "Office use, so it's accepted everywhere on this PC from now on.",
+            };
+            add.Click += (_, _) =>
+            {
+                if (!SMSModForge.Services.SpellingDictionary.AddToWindowsDictionary(word))
+                {
+                    MessageBox.Show(this,
+                        "Couldn't write to the Windows dictionary at\n" +
+                        SMSModForge.Services.SpellingDictionary.WindowsUserDictionaryPath,
+                        "Add to dictionary", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+                // The platform checker reloads the file on its own schedule, so
+                // the squiggle can linger for a moment after the write. Ignoring
+                // it clears the underline now; the dictionary entry is what makes
+                // it stick for every later session and every other app.
+                error.IgnoreAll();
+            };
+            menu.Items.Add(add);
+            menu.Items.Add(new Separator());
+        }
+
+        foreach (var (header, command) in new (string, RoutedUICommand)[]
+                 {
+                     ("Cut", ApplicationCommands.Cut),
+                     ("Copy", ApplicationCommands.Copy),
+                     ("Paste", ApplicationCommands.Paste),
+                     ("Select all", ApplicationCommands.SelectAll),
+                 })
+        {
+            menu.Items.Add(new MenuItem { Header = header, Command = command, CommandTarget = box });
+        }
+
+        box.ContextMenu = menu;
     }
 
     /// <summary>Restore user-adjusted resizable column widths from the last session.</summary>
@@ -171,6 +367,19 @@ public partial class MainWindow : Window
             list.InputBindings.Add(new KeyBinding(vm.PasteItemCommand, Key.V, ModifierKeys.Control));
             if (list.ToolTip == null) list.ToolTip = hint;
         }
+
+        // The dialogue node list is its own clipboard scope: Ctrl+C/V here move
+        // NODE SUBTREES, not pack units. Scoped to the control for the same
+        // reason as above — the two meanings of Ctrl+C must never race, and
+        // whichever list has focus is the one that answers.
+        //
+        // Paste always lands the subtree as a sibling directly below the
+        // selected node. The context menu still offers "as child" / "as new
+        // root" for the cases that need them, but those are deliberate choices,
+        // not what an unqualified Ctrl+V should guess at.
+        NodeList.InputBindings.Add(new KeyBinding(vm.CopyNodeCommand, Key.C, ModifierKeys.Control));
+        NodeList.InputBindings.Add(new KeyBinding(vm.PasteNodeSiblingCommand, Key.V, ModifierKeys.Control));
+        NodeList.InputBindings.Add(new KeyBinding(vm.RemoveDialogueNodeCommand, Key.Delete, ModifierKeys.None));
     }
 
     /// <summary>
@@ -429,7 +638,7 @@ public partial class MainWindow : Window
 
     private void EditPlaceMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: false);
 
-    private void EditPlaceBackdropMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: true);
+    private void EditPlaceSecondaryMask_Click(object sender, RoutedEventArgs e) => OpenPlaceMask(secondary: true);
 
     /// <summary>
     /// Open the mask editor on one of the selected place's two masks.
@@ -517,17 +726,34 @@ public partial class MainWindow : Window
     private void PickActorColor_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not System.Windows.Controls.Button { DataContext: ActorViewModel actor }) return;
-        var current = actor.NameColorValue;
+        if (PickColor(actor.NameColorValue) is { } picked) actor.NameColorValue = picked;
+    }
+
+    /// <summary>
+    /// Same picker for a character's speaker-name colour. Characters are the
+    /// speakers since the Actors tab was folded in, and the button never made
+    /// the move — the Characters tab was left with a hex box and a swatch.
+    /// </summary>
+    private void PickCharacterColor_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not System.Windows.Controls.Button { DataContext: CharacterViewModel ch }) return;
+        if (!ch.CanEditNameColor) return;
+        if (PickColor(ch.NameColorValue) is { } picked) ch.NameColorValue = picked;
+    }
+
+    /// <summary>Win32 RGB picker seeded with <paramref name="current"/>; null on cancel.</summary>
+    private static System.Windows.Media.Color? PickColor(System.Windows.Media.Color current)
+    {
         var dlg = new System.Windows.Forms.ColorDialog
         {
-            FullOpen = true,
+            FullOpen = true,          // opens straight onto the RGB panel
             AnyColor = true,
             SolidColorOnly = false,
             Color = System.Drawing.Color.FromArgb(current.A, current.R, current.G, current.B),
         };
-        if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
-        var picked = dlg.Color;
-        actor.NameColorValue = System.Windows.Media.Color.FromArgb(picked.A, picked.R, picked.G, picked.B);
+        if (dlg.ShowDialog() != System.Windows.Forms.DialogResult.OK) return null;
+        var p = dlg.Color;
+        return System.Windows.Media.Color.FromArgb(p.A, p.R, p.G, p.B);
     }
 
     /// <summary>

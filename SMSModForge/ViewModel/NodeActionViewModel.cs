@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using SMSModForge.Model;
@@ -103,10 +103,23 @@ public sealed class NodeActionViewModel : ObservableObject
     /// <summary>
     /// One row per declared param for the current <see cref="Type"/>.
     /// Repopulated by <see cref="RebuildParamRows"/> whenever Type
-    /// changes; an empty schema (e.g. <c>EndDialogue</c>) just leaves
+    /// changes; an empty schema (e.g. <c>DeactivateAllScenes</c>) just leaves
     /// the collection empty.
     /// </summary>
     public ObservableCollection<ParamRowViewModel> ParamRows { get; } = new();
+
+    /// <summary>
+    /// Param keys the shared Set-Active category row already renders (Category /
+    /// Level / Target / Active, plus the legacy spellings they migrated from).
+    /// Schema rows for these are skipped so the family's targeting isn't drawn
+    /// twice — but anything else a Set-Active-family action declares still gets a
+    /// field, which is how SetSprite's Sprite and Mask reach the UI.
+    /// </summary>
+    private static readonly HashSet<string> CategoryRowKeys = new()
+    {
+        "kind", "target", "overlayLevel", "active",
+        "path", "scene", "targetKind",   // legacy, migrated by NormalizeSetActive
+    };
 
     private void RebuildParamRows()
     {
@@ -114,6 +127,7 @@ public sealed class NodeActionViewModel : ObservableObject
         var schemas = ActionSchemas.For(Model.Type);
         foreach (var schema in schemas)
         {
+            if (IsSetActiveFamily && CategoryRowKeys.Contains(schema.Key)) continue;
             var paramType = schema.Type;
             ParamRowViewModel? capturedRow = null;
             var row = new ParamRowViewModel(
@@ -170,7 +184,7 @@ public sealed class NodeActionViewModel : ObservableObject
         }
     }
 
-    /// <summary>Bust GameObject name (the <c>bustKey</c> param on SetActorBust).</summary>
+    /// <summary>Bust GameObject name — any <c>BustRef</c> param.</summary>
     public string BustKey
     {
         get => Model.Params.TryGetValue("bustKey", out var v) ? v : "";
@@ -184,7 +198,7 @@ public sealed class NodeActionViewModel : ObservableObject
         }
     }
 
-    /// <summary>Actor expression key (the <c>expression</c> param on SetActorExpression).</summary>
+    /// <summary>Actor expression key — any <c>ExpressionRef</c> param.</summary>
     public string Expression
     {
         get => Model.Params.TryGetValue("expression", out var v) ? v : "";
@@ -261,9 +275,87 @@ public sealed class NodeActionViewModel : ObservableObject
     private static string NormalizeCategory(string kind)
         => kind == CatOverlayLegacy ? CatOverlay : kind;
 
-    /// <summary>The four Set-Active categories shown in the row's dropdown.</summary>
+    /// <summary>A whole level, addressed by its place token
+    /// (<c>place:Key</c> / <c>vanilla:GoName</c>). The level's own GameObject
+    /// carries the base backdrop's SpriteRenderer, so this is what a sprite swap
+    /// targets to repaint a place; its second layer is the sibling named
+    /// <c>&lt;Key&gt;_Secondary</c>, reachable through GameObjects.</summary>
+    public const string CatPlaces = "Places";
+
+    /// <summary>Categories offered when toggling something active. No Places:
+    /// activating or deactivating a whole level is the transition system's job,
+    /// not something an author should reach for from an action row.</summary>
     public static readonly IReadOnlyList<string> SetActiveCategories =
         new[] { CatBust, CatOverlay, CatScene, CatPath };
+
+    /// <summary>Categories offered when swapping a sprite. Places is the point of
+    /// the difference: a level's own GameObject carries the base backdrop's
+    /// SpriteRenderer, so repainting a place means targeting the level itself.</summary>
+    public static readonly IReadOnlyList<string> SetSpriteCategories =
+        new[] { CatBust, CatOverlay, CatPlaces, CatScene, CatPath };
+
+    /// <summary>
+    /// The category list for THIS row. The two actions share one row but not one
+    /// set of choices — see the two lists above. Instance-bound rather than
+    /// static so the dropdown re-reads when the Type combo changes.
+    /// </summary>
+    public IReadOnlyList<string> Categories =>
+        Model.Type == NodeActionTypes.SetSprite ||
+        Model.Type == NodeActionTypes.SetComponentProperty ? SetSpriteCategories : SetActiveCategories;
+
+    // ── Which of a level's two sprite layers to act on ───────────────────
+    //
+    // A level draws in two layers: the base backdrop lives on the level's own
+    // GameObject, the second sprite on a child. Picking a place alone is
+    // therefore ambiguous, so the Places category adds this.
+
+    // Stored words — the game's own, and what goes in the manifest.
+    public const string LayerBase = "Base";           // draws IN FRONT, order -10
+    public const string LayerSecondary = "Secondary"; // draws BEHIND,   order -12
+
+    // Shown words. The editor names both layers by where they draw, because
+    // "base" for the front layer reads backwards to everyone who meets it. The
+    // translation lives here and nowhere else.
+    public const string LayerFrontShown = "Front";
+    public const string LayerBackShown = "Back";
+
+    /// <summary>Dropdown contents, back to front — the order the Places tab
+    /// lists the two sprites in.</summary>
+    public static IReadOnlyList<string> PlaceLayerDisplays { get; } =
+        new[] { LayerBackShown, LayerFrontShown };
+
+    /// <summary>
+    /// What the Layer picker binds to. Translates both ways, so the manifest
+    /// keeps the words it always had: an action stored as
+    /// <c>layer=Secondary</c> shows as Back and saves as Secondary again.
+    /// </summary>
+    public string PlaceLayerShown
+    {
+        get => PlaceLayer == LayerSecondary ? LayerBackShown : LayerFrontShown;
+        set => PlaceLayer = value == LayerBackShown ? LayerSecondary : LayerBase;
+    }
+
+    /// <summary>Which sprite layer of the chosen place to act on. Stored as the
+    /// <c>layer</c> param; absent means <see cref="LayerBase"/>, so manifests
+    /// written before the layer existed keep the layer they had.</summary>
+    public string PlaceLayer
+    {
+        get => Model.Params.TryGetValue("layer", out var l) && !string.IsNullOrEmpty(l) ? l : LayerBase;
+        set
+        {
+            if (value == PlaceLayer) return;
+            // Base is the default — don't write it out.
+            if (string.IsNullOrEmpty(value) || value == LayerBase) Model.Params.Remove("layer");
+            else Model.Params["layer"] = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(PlaceLayerShown));
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    /// <summary>Whether the Layer picker applies — only a whole level has two
+    /// layers to choose between.</summary>
+    public bool ShowsPlaceLayer => Category == CatPlaces;
 
     /// <summary>Migrate any legacy Set-Active encoding to the canonical
     /// SetGameObjectActive { kind, target, active } shape. Idempotent — safe to
@@ -301,7 +393,17 @@ public sealed class NodeActionViewModel : ObservableObject
     /// defensively, a not-yet-migrated ActivateScene). Drives which controls the
     /// action row shows.</summary>
     public bool IsSetActiveFamily =>
-        Model.Type == NodeActionTypes.SetGameObjectActive || Model.Type == NodeActionTypes.ActivateScene;
+        Model.Type == NodeActionTypes.SetGameObjectActive ||
+        Model.Type == NodeActionTypes.ActivateScene ||
+        Model.Type == NodeActionTypes.SetSprite ||
+        Model.Type == NodeActionTypes.SetComponentProperty;
+
+    /// <summary>True only for the action that actually toggles something, so the
+    /// Active checkbox stays off the sprite-swap row — it shares the category
+    /// targeting but has nothing to activate.</summary>
+    public bool ShowsActiveToggle =>
+        Model.Type != NodeActionTypes.SetSprite &&
+        Model.Type != NodeActionTypes.SetComponentProperty;
 
     /// <summary>True when the Scene category is selected. (Scene supports both
     /// activate and deactivate, so this no longer hides the Active checkbox.)</summary>
@@ -317,10 +419,35 @@ public sealed class NodeActionViewModel : ObservableObject
         set
         {
             if (value == DisplayType) return;
-            if (value == NodeActionTypes.SetGameObjectActive) SetCategory(CatPath);  // enter Set-Active family
+            if (value == NodeActionTypes.SetGameObjectActive ||
+                value == NodeActionTypes.SetSprite) EnterCategoryFamily(value);
             else if (value == VariableFamilyType) SetVarOperation("Set");            // enter Variable family
             else Type = value;                                                       // leaving to a schema-driven type
         }
+    }
+
+    /// <summary>
+    /// Switch to one of the two actions that use the shared category row, keeping
+    /// the category already chosen (Direct Path for a row arriving from outside
+    /// the family). Sets the type FIRST so <see cref="SetCategory"/> preserves it,
+    /// then rebuilds the schema rows — swapping between these two changes which
+    /// extra fields the row needs (SetSprite adds Sprite + Mask), and
+    /// <see cref="SetCategory"/> writes <c>Model.Type</c> directly, bypassing the
+    /// Type setter that would otherwise do it.
+    /// </summary>
+    private void EnterCategoryFamily(string actionType)
+    {
+        Model.Type = actionType;
+        // Category reads the 'kind' param and falls back to Direct Path, so this
+        // keeps an existing choice and defaults a row arriving from outside the
+        // family. Coerced when the new action doesn't offer it — switching a
+        // Places sprite-swap to Set-Active would otherwise leave the dropdown
+        // blank on a value that isn't in its list.
+        var category = Category;
+        if (!System.Linq.Enumerable.Contains(Categories, category)) category = CatPath;
+        SetCategory(category);
+        RebuildParamRows();
+        OnPropertyChanged(nameof(Categories));
     }
 
     // ── Unified "Variable" presentation ─────────────────────────────────
@@ -435,7 +562,66 @@ public sealed class NodeActionViewModel : ObservableObject
 
     public bool IsVanillaSource => string.Equals(GetParam("source"), "vanilla", StringComparison.OrdinalIgnoreCase);
 
-    public string VarName  { get => GetParam("name");  set { SetParam("name", value);  OnPropertyChanged(); } }
+    public string VarName
+    {
+        get => GetParam("name");
+        set
+        {
+            SetParam("name", value);
+            OnPropertyChanged();
+            // Picking a different variable can change which editor belongs in
+            // the value cell, so the row has to be told to re-evaluate.
+            OnPropertyChanged(nameof(VarValueIsBool));
+            OnPropertyChanged(nameof(VarValueIsText));
+            OnPropertyChanged(nameof(VarValueBool));
+        }
+    }
+
+    // ── Bool variables get a tick box, not a text field ─────────────────
+    //
+    // "true" and "false" are the only two values a Bool accepts, and typing
+    // them by hand is the step in this editor most likely to go wrong: True,
+    // TRUE, 1 and yes all look reasonable and none of them match, because the
+    // runtime compares the stored string. A tick box cannot be spelled wrong.
+    //
+    // Resolved through a hook rather than a reference to the pack: an action
+    // row is constructed from a NodeActionDef alone and has no route to the
+    // variable catalog. MainViewModel installs the lookup at startup.
+
+    /// <summary>Reports whether a pack variable of this name is a Bool. Set by
+    /// MainViewModel; null before a pack is loaded, and treated as "not a
+    /// bool", so the text box remains the fallback in every uncertain case.</summary>
+    internal static Func<string, bool>? IsBoolVariableLookup;
+
+    /// <summary>True when the named variable is a Bool and this operation
+    /// writes a value to it.</summary>
+    public bool VarValueIsBool =>
+        IsBoolVariableLookup != null &&
+        !IsIncrement && !IsRandomFromList &&
+        !string.IsNullOrWhiteSpace(VarName) &&
+        IsBoolVariableLookup(VarName);
+
+    /// <summary>The complement, for the text box that would otherwise show
+    /// alongside it.</summary>
+    public bool VarValueIsText => !VarValueIsBool;
+
+    /// <summary>
+    /// The value as a tick box.
+    /// <para/>
+    /// Anything that is not exactly "true" reads as false, matching the
+    /// runtime's own comparison, and writing always produces the lower-case
+    /// spelling the runtime looks for.
+    /// </summary>
+    public bool VarValueBool
+    {
+        get => string.Equals(VarValue?.Trim(), "true", StringComparison.OrdinalIgnoreCase);
+        set
+        {
+            VarValue = value ? "true" : "false";
+            OnPropertyChanged();
+        }
+    }
+
     public string VarValue { get => GetParam("value"); set { SetParam("value", value); OnPropertyChanged(); } }
     public string VarDelta { get => GetParam("delta"); set { SetParam("delta", value); OnPropertyChanged(); } }
 
@@ -625,19 +811,37 @@ public sealed class NodeActionViewModel : ObservableObject
     private void SetCategory(string category)
     {
         var carried = Target;
-        Model.Type = NodeActionTypes.SetGameObjectActive;
+        // Keep the row's OWN action. Two actions share this category row —
+        // SetGameObjectActive and SetSprite — and unconditionally stamping the
+        // former here silently converted a sprite swap into an activation the
+        // moment its category (or its type) was picked. The row then showed the
+        // Active checkbox and no Sprite field, while the Type combo still read
+        // "SetSprite", because the correcting notification fires mid-binding and
+        // WPF discards it. Anything else (a legacy ActivateScene) still
+        // normalises to the unified action.
+        if (Model.Type != NodeActionTypes.SetSprite)
+            Model.Type = NodeActionTypes.SetGameObjectActive;
         Model.Params["kind"] = category;
         if (string.IsNullOrEmpty(carried)) Model.Params.Remove("target");
         else Model.Params["target"] = carried;
-        if (!Model.Params.ContainsKey("active")) Model.Params["active"] = "true";
+        // A sprite swap has nothing to activate — the row hides the checkbox, so
+        // carrying the param would only put a key in the manifest that nothing
+        // reads and that shows up in every save diff.
+        if (Model.Type == NodeActionTypes.SetSprite) Model.Params.Remove("active");
+        else if (!Model.Params.ContainsKey("active")) Model.Params["active"] = "true";
         // Drop any legacy keys so the row never round-trips a stale encoding.
         Model.Params.Remove("path");
         Model.Params.Remove("scene");
         Model.Params.Remove("targetKind");
         // overlayLevel only means something for Level Overlay.
         if (category != CatOverlay) Model.Params.Remove("overlayLevel");
+        // …and a layer only means something for a whole level.
+        if (category != CatPlaces) Model.Params.Remove("layer");
         OnPropertyChanged(nameof(Type));
         OnPropertyChanged(nameof(Category));
+        OnPropertyChanged(nameof(PlaceLayer));
+        OnPropertyChanged(nameof(PlaceLayerShown));
+        OnPropertyChanged(nameof(ShowsPlaceLayer));
         OnPropertyChanged(nameof(IsSceneCategory));
         OnPropertyChanged(nameof(Target));
         OnPropertyChanged(nameof(Active));
@@ -652,7 +856,9 @@ public sealed class NodeActionViewModel : ObservableObject
     private void NotifySetActiveFamily()
     {
         OnPropertyChanged(nameof(DisplayType));
+        OnPropertyChanged(nameof(Categories));   // the two actions offer different ones
         OnPropertyChanged(nameof(IsSetActiveFamily));
+        OnPropertyChanged(nameof(ShowsActiveToggle));
         OnPropertyChanged(nameof(IsSceneCategory));
         // Variable family too, so its row hides/shows the moment the Type
         // changes (otherwise Source/Operation linger until the row rebinds).

@@ -120,6 +120,22 @@ public sealed class UpdateRuleDef
     /// </summary>
     [JsonProperty("forEachAs", Order = 10, NullValueHandling = NullValueHandling.Ignore)]
     public string? ForEachAs { get; set; }
+
+    /// <summary>
+    /// Debugging aid: when true, the runtime logs what this rule decided every
+    /// time its decision CHANGES — which branch won, what won last tick, and
+    /// whether it fired. When no branch passes, every branch is dumped
+    /// condition by condition with live values.
+    /// <para/>
+    /// Unlike the dialogue flag this needs no keypress: an edge-triggered rule
+    /// that fails to fire produces no trace at all otherwise, and the moment
+    /// worth seeing is usually one frame during a day change. Logging on change
+    /// (rather than per frame) keeps it to a handful of lines.
+    /// <para/>
+    /// Purely diagnostic — no gameplay effect. Omitted from JSON when false.
+    /// </summary>
+    [JsonProperty("debugConditions", Order = 11, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
+    public bool DebugConditions { get; set; } = false;
 }
 
 /// <summary>

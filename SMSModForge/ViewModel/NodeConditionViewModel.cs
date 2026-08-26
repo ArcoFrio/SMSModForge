@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -339,7 +339,52 @@ public sealed class NodeConditionViewModel : ObservableObject
     /// <summary>The "exists" comparison takes no value — hide the value box for it.</summary>
     public bool ShowVariableValue => Model.Type != NodeConditionTypes.VariableExists;
 
-    public string VarName  { get => GetParam("name");  set { SetParam("name", value);  OnPropertyChanged(); } }
+    public string VarName
+    {
+        get => GetParam("name");
+        set
+        {
+            SetParam("name", value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(VarValueIsBool));
+            OnPropertyChanged(nameof(VarValueIsText));
+            OnPropertyChanged(nameof(VarValueBool));
+        }
+    }
+
+    // ── Bool variables compare with a tick box, not typed text ──────────
+    //
+    // A condition matches by comparing strings, so "True" fails against a
+    // variable holding "true" and nothing says why. The same reasoning as the
+    // action side, and the same hook — see NodeActionViewModel.
+
+    /// <summary>Reports whether a pack variable of this name is a Bool. Set by
+    /// MainViewModel; null before a pack is loaded, so the text box stays the
+    /// fallback whenever the answer is not known.</summary>
+    internal static Func<string, bool>? IsBoolVariableLookup;
+
+    /// <summary>True when this condition compares a Bool variable's value.</summary>
+    public bool VarValueIsBool =>
+        IsBoolVariableLookup != null &&
+        ShowVariableValue &&
+        !string.IsNullOrWhiteSpace(VarName) &&
+        IsBoolVariableLookup(VarName);
+
+    /// <summary>The complement, for the text box beside it.</summary>
+    public bool VarValueIsText => ShowVariableValue && !VarValueIsBool;
+
+    /// <summary>The compared value as a tick box. Anything but "true" reads as
+    /// false, matching the runtime, and writing uses the spelling it expects.</summary>
+    public bool VarValueBool
+    {
+        get => string.Equals(VarValue?.Trim(), "true", StringComparison.OrdinalIgnoreCase);
+        set
+        {
+            VarValue = value ? "true" : "false";
+            OnPropertyChanged();
+        }
+    }
+
     public string VarValue { get => GetParam("value"); set { SetParam("value", value); OnPropertyChanged(); } }
 
     public bool Negate

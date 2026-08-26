@@ -43,14 +43,25 @@ public sealed class PlaceDef
     [JsonProperty("baseSprite", Order = 4)]
     public string BaseSprite { get; set; } = "";
 
-    /// <summary>Relative path to the secondary sprite PNG (2048×1136). Used by the level shader for blur/distance.</summary>
+    /// <summary>
+    /// Relative path to the secondary sprite PNG (2048×1136) — the layer BEHIND
+    /// the base art (sorting order −12 against the base's −10), i.e. the backdrop
+    /// seen past the room in front. Used by the level shader for blur/distance.
+    /// <para/>
+    /// The two layers are called Base and Secondary throughout: these keys, the
+    /// Places tab's sprite / mask / sorting-order fields, and the Layer picker a
+    /// <c>SetSprite</c> action shows for the Places category. "Backdrop"
+    /// describes what this layer is, and is never a separate name for it.
+    /// </summary>
     [JsonProperty("secondarySprite", Order = 5)]
     public string SecondarySprite { get; set; } = "";
 
     /// <summary>
-    /// Relative path to the mask sprite PNG (256×143).
+    /// Relative path to the BASE sprite's mask PNG (256×143). Shown as
+    /// "Base mask" in the Places tab, pairing with
+    /// <see cref="SecondaryMaskSprite"/>.
     /// <para/>
-    /// Applied to the BASE sprite's own material as <c>_MaskTex</c>, and nowhere
+    /// Applied to the base sprite's own material as <c>_MaskTex</c>, and nowhere
     /// else — the secondary sprite and every GameObject in the place are
     /// untouched by it. The material is cloned per level first, so a pack's mask
     /// can't leak into the vanilla levels that share the Beach material.
@@ -59,16 +70,16 @@ public sealed class PlaceDef
     public string MaskSprite { get; set; } = "";
 
     /// <summary>
-    /// Optional mask for the SECONDARY sprite, giving the backdrop a jiggle of
-    /// its own.
+    /// Optional mask for the SECONDARY sprite, giving that layer a jiggle of its
+    /// own. Shown as "Secondary mask" in the Places tab.
     /// <para/>
-    /// This goes beyond what vanilla does: a level's backdrop ships on plain
-    /// <c>Sprite-Lit-Default</c>, with no mask and no displacement, and only the
-    /// base art carries the jiggle material. Setting this hands the backdrop a
-    /// clone of the level's own jiggle material so it can be displaced too —
-    /// which is how you get water or foliage moving at a different depth from
-    /// the room in front of it. Blank leaves the backdrop exactly as vanilla
-    /// has it, so no existing place changes.
+    /// This goes beyond what vanilla does: a level's secondary sprite ships on
+    /// plain <c>Sprite-Lit-Default</c>, with no mask and no displacement, and
+    /// only the base art carries the jiggle material. Setting this hands the
+    /// secondary a clone of the level's own jiggle material so it can be
+    /// displaced too — which is how you get water or foliage moving at a
+    /// different depth from the room in front of it. Blank leaves it exactly as
+    /// vanilla has it, so no existing place changes.
     /// </summary>
     [JsonProperty("secondaryMaskSprite", Order = 7, NullValueHandling = NullValueHandling.Ignore)]
     public string SecondaryMaskSprite { get; set; } = "";
@@ -87,8 +98,8 @@ public sealed class PlaceDef
     public int? BaseSortingOrder { get; set; }
 
     /// <summary>Sorting order of the secondary (distance) sprite. Null keeps the
-    /// prototype's −12. Vanilla backdrops sit at −12 or −15, i.e. behind the base
-    /// art but in front of anything deliberately parked below them.</summary>
+    /// prototype's −12. Vanilla levels put it at −12 or −15, i.e. behind the base
+    /// art but in front of anything deliberately parked below it.</summary>
     [JsonProperty("secondarySortingOrder", Order = 9, NullValueHandling = NullValueHandling.Ignore)]
     public int? SecondarySortingOrder { get; set; }
 

@@ -35,6 +35,7 @@ namespace SMSModForge.PackPlugin
             public bool ReplayOnTalk;
             public bool Queued;
             public bool DisableVanillaTrigger;
+
             /// <summary>Author opted this dialogue into the F12 condition-state dump.</summary>
             public bool DebugConditions;
 
@@ -70,7 +71,17 @@ namespace SMSModForge.PackPlugin
             public bool MissedWindow;
             public Dialogue Dialogue;
             public GameObject GameObject;
-            public Transform RoomTalkParent;
+            /// <summary>
+            /// The VANILLA roomtalk this dialogue takes priority over, when
+            /// "Prioritize this dialogue over vanilla" is set — nothing else.
+            /// It is NOT where the dialogue lives: pack dialogues are hosted on
+            /// an always-active container so that playing one never has to
+            /// switch a roomtalk on (doing so ran the room's EventOnEnable
+            /// Trigger and started the vanilla dialogue we were replacing).
+            /// Null when the dialogue doesn't ask for priority, or when the
+            /// room has no roomtalk to suppress.
+            /// </summary>
+            public Transform VanillaRoomTalk;
             /// <summary>
             /// The vanilla <c>Trigger</c> MonoBehaviour on the parent roomtalk
             /// we may be temporarily disabling. Typed as <see cref="Behaviour"/>
@@ -133,7 +144,7 @@ namespace SMSModForge.PackPlugin
         /// roomtalk parent so GC2 sees it as part of the same chain its
         /// vanilla siblings use.
         /// </summary>
-        public static BuiltDialogue Build(JObject manifest, PackContext ctx, Transform roomTalkParent,
+        public static BuiltDialogue Build(JObject manifest, PackContext ctx, Transform host,
                                           UnityEngine.ScriptableObject sharedDialogueSkin)
         {
             string key = (string)manifest["key"];
@@ -147,7 +158,7 @@ namespace SMSModForge.PackPlugin
             // INACTIVE until the dispatcher decides to play this dialogue —
             // we don't want GC2 to do anything before our turn.
             var go = new GameObject(ctx.PackId + "_" + key);
-            go.transform.SetParent(roomTalkParent, false);
+            go.transform.SetParent(host, false);
             go.SetActive(false);
 
             var dlg = go.AddComponent<Dialogue>();
@@ -177,7 +188,6 @@ namespace SMSModForge.PackPlugin
                 DisableVanillaTrigger = (bool?)manifest["disableVanillaTrigger"] ?? false,
                 Dialogue = dlg,
                 GameObject = go,
-                RoomTalkParent = roomTalkParent,
                 StartConditions = manifest["startConditions"] as JArray,
                 ManifestRoot = manifest,
             };

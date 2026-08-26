@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -18,21 +19,64 @@ public sealed class DialogueDef
     public string DisplayName { get; set; } = "New Dialogue";
 
     /// <summary>
-    /// Where the dialogue lives in the scene. One of:
-    /// <list type="bullet">
-    ///   <item><c>"vanilla:&lt;roomTalkName&gt;"</c> — parent under an existing roomtalk (e.g. <c>vanilla:Beach</c>).</item>
-    ///   <item><c>"place:&lt;packPlaceKey&gt;"</c> — parent under a roomtalk created by this pack's <see cref="PlaceDef"/>.</item>
-    /// </list>
-    /// The runtime resolves this to a transform under <c>8_Room_Talk</c>.
+    /// The vanilla roomtalk this dialogue can take priority over, as
+    /// <c>"vanilla:&lt;roomTalkName&gt;"</c> — or empty when its level has none.
+    /// <para/>
+    /// DERIVED, not authored. It used to be picked by hand and doubled as the
+    /// dialogue's parent in the scene; dialogues are hosted on a per-pack
+    /// always-active container now, so the only thing left that needs a
+    /// roomtalk is <see cref="DisableVanillaTrigger"/>. Since a level uniquely
+    /// determines its roomtalk, this reads straight off the pinned
+    /// <c>LevelActive</c> start condition and can't disagree with it.
+    /// <para/>
+    /// The setter is kept so packs written before the change still deserialise;
+    /// the stored value is ignored.
     /// </summary>
     [JsonProperty("roomTalk", Order = 3)]
-    public string RoomTalk { get; set; } = "";
+    public string RoomTalk
+    {
+        get => VanillaPlaces.RoomTalkTokenForLevel(LevelToken);
+        set => LegacyRoomTalk = value ?? "";
+    }
+
+    /// <summary>Only emit a roomtalk when there is one — most dialogues have
+    /// no vanilla entry dialogue to take priority over.</summary>
+    public bool ShouldSerializeRoomTalk() => !string.IsNullOrEmpty(RoomTalk);
 
     /// <summary>
-    /// When true, the plugin disables the parent roomtalk's vanilla
-    /// <c>Trigger</c> component while this dialogue is the only one the
-    /// pack expects to run there. Use for vanilla locations whose Trigger
-    /// auto-plays a default dialogue on entry that you want to suppress.
+    /// Whatever a pre-derivation pack stored in <c>roomTalk</c>. Never written
+    /// back out — it exists so a pack old enough to predate the pinned
+    /// LevelActive condition can still have its level inferred from the
+    /// roomtalk it used to name, instead of loading with no level at all.
+    /// </summary>
+    [JsonIgnore]
+    public string LegacyRoomTalk { get; private set; } = "";
+
+    /// <summary>
+    /// The level this dialogue is gated on, from its pinned <c>LevelActive</c>
+    /// start condition. Empty when the condition is missing or has no level yet.
+    /// </summary>
+    [JsonIgnore]
+    public string LevelToken
+    {
+        get
+        {
+            var c = StartConditions?.FirstOrDefault(x => x.Type == NodeConditionTypes.LevelActive);
+            if (c?.Params != null && c.Params.TryGetValue("level", out var lv)) return lv ?? "";
+            return "";
+        }
+    }
+
+    /// <summary>True when this dialogue's level has a vanilla roomtalk, i.e.
+    /// when <see cref="DisableVanillaTrigger"/> has something to suppress.</summary>
+    [JsonIgnore]
+    public bool VanillaRoomTalkAvailable => VanillaPlaces.HasRoomTalk(LevelToken);
+
+    /// <summary>
+    /// "Prioritize this dialogue over vanilla" — while every start condition
+    /// holds, the plugin disables the vanilla Trigger on this level's roomtalk
+    /// so the room's own entry dialogue doesn't compete with this one. The
+    /// roomtalk comes from <see cref="RoomTalk"/>, i.e. from the level.
     /// </summary>
     [JsonProperty("disableVanillaTrigger", Order = 4, DefaultValueHandling = DefaultValueHandling.IgnoreAndPopulate)]
     public bool DisableVanillaTrigger { get; set; } = false;

@@ -201,8 +201,29 @@ namespace SMSModForge.PackPlugin
             SaveFilePath = Path.Combine(_savesRoot,
                                         "NANOSAVE_" + slot.ToString("D4"),
                                         "SMSModForge_" + PackId + ".json");
-            ResetAllToDefaults();
-            LoadFromDisk();
+
+            // Reset ONLY when there is a file to load.
+            //
+            // Binding happens the first frame the game reports a valid slot, and
+            // on a NEW game that is not frame one — the runtime has been ticking
+            // since the scene loaded, so dialogues, rules and level hooks may
+            // already have written variables. Resetting here would throw all of
+            // that away, and LoadFromDisk can't give it back: with no file it
+            // returns immediately, leaving the session at bare defaults.
+            //
+            // The pre-ModForge SaveManager got this right by construction — its
+            // currentSlotCache.Clear() lived inside LoadSaveFile(), so it only
+            // ever ran when a slot was actually being loaded, and a fresh slot
+            // kept whatever the session had accumulated until the first write.
+            //
+            // Loading an existing save still scrubs first, which is what makes a
+            // slot switch clean: the outgoing slot's values must not survive
+            // into the incoming one.
+            if (File.Exists(SaveFilePath))
+            {
+                ResetAllToDefaults();
+                LoadFromDisk();
+            }
             // After the load, so a save that already has a seed keeps it and
             // only a genuinely fresh save mints one.
             EnsureRollSeed();

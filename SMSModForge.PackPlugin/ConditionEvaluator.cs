@@ -438,5 +438,63 @@ namespace SMSModForge.PackPlugin
             if (raw.Length > 1 && raw[1] == '$') return raw.Substring(1);
             return vars?.GetString(raw.Substring(1)) ?? "";
         }
+
+        // ── Author-facing diagnostics ────────────────────────────────────
+
+        /// <summary>
+        /// Log one condition's pass/fail with its params and, for a variable
+        /// comparison, the live value — so the reason is on the line rather than
+        /// something to go and look up. Groups recurse, indented.
+        /// <para/>
+        /// Shared by the dialogue F12 dump and the integration-rule debug flag:
+        /// both answer the same question ("why didn't this fire?"), and a second
+        /// copy of the formatting would drift from this one.
+        /// </summary>
+        public static void DumpCondition(JObject c, PackContext ctx, string indent)
+        {
+            if (c == null || ctx == null) return;
+            string type = (string)c["type"] ?? "?";
+            bool negate = (bool?)c["negate"] ?? false;
+            bool pass = Evaluate(c, ctx.Vars, ctx.Log, ctx.PackId);
+            string flag = (pass ? "[PASS] " : "[FAIL] ") + (negate ? "NOT " : "");
+
+            // Groups recurse; the group's own PASS/FAIL is the combined verdict.
+            if (type == "All" || type == "Any")
+            {
+                ctx.Log?.LogInfo("[CondDebug] " + indent + flag + "group " + type);
+                if (c["conditions"] is JArray kids)
+                    foreach (var k in kids) DumpCondition(k as JObject, ctx, indent + "  ");
+                return;
+            }
+
+            string detail = "";
+            if (c["params"] is JObject p)
+            {
+                var parts = new System.Collections.Generic.List<string>();
+                foreach (var prop in p.Properties())
+                    parts.Add(prop.Name + "=" + prop.Value);
+                detail = " { " + string.Join(", ", parts.ToArray()) + " }";
+
+                // For variable comparisons, append the live value so the author
+                // sees WHY it passed/failed without checking anything else.
+                string name = (string)p["name"];
+                if (!string.IsNullOrEmpty(name))
+                {
+                    bool vanilla = string.Equals((string)p["source"], "vanilla",
+                                       System.StringComparison.OrdinalIgnoreCase) ||
+                                   type.StartsWith("GameVariable");
+                    string current;
+                    if (vanilla)
+                    {
+                        object g = GameVariableBridge.Get(name);
+                        current = g != null ? g.ToString() : "<not found>";
+                    }
+                    else
+                        current = ctx.Vars != null ? ctx.Vars.GetString(name) : "<no store>";
+                    detail += " current=" + current;
+                }
+            }
+            ctx.Log?.LogInfo("[CondDebug] " + indent + flag + type + detail);
+        }
     }
 }

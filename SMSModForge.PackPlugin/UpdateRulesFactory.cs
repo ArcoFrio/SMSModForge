@@ -37,6 +37,7 @@ namespace SMSModForge.PackPlugin
                     // Optional parameterization: run the rule once per value.
                     ForEach = (string)ro["forEach"] ?? "",
                     ForEachAs = string.IsNullOrEmpty(forEachAs) ? "item" : forEachAs,
+                    DebugConditions = (bool?)ro["debugConditions"] ?? false,
                 };
                 // Branch 0 = the rule's own conditions + actions (the IF);
                 // the optional "branches" array is the else-if chain, tried

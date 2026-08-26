@@ -1,0 +1,73 @@
+<Window x:Class="SMSModForge.View.SaveConfirmWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Confirm save" Width="900" Height="560" MinWidth="560" MinHeight="320"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <DockPanel Margin="12">
+
+        <!-- Header: what's about to be written, and where. -->
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+            <TextBlock x:Name="HeadlineText" FontWeight="Bold" FontSize="14" TextWrapping="Wrap"/>
+            <TextBlock x:Name="TargetText" Foreground="Gray" TextWrapping="Wrap" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <!-- Footer: the opt-out sits on the left, away from the commit button,
+             so it can't be clicked by muscle memory while aiming for Save. -->
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <CheckBox x:Name="DontAskAgain" VerticalAlignment="Center"
+                      Content="Don't ask again"
+                      ToolTip="Save straight away from now on. Turn this back on any time under Options → Confirm changes on save."/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Save" Width="90" IsDefault="True" Click="Save_Click" Margin="0,0,8,0"/>
+                <Button Content="Cancel" Width="90" IsCancel="True"
+                        ToolTip="Go back to the editor. Nothing is written; your edits stay exactly as they are."/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- ListView isn't covered by App.xaml's implicit ListBox style (WPF
+             implicit styles match the exact type), so the theme brushes are
+             applied here by hand. IsVirtualizingWhenGrouping matters: grouping
+             turns virtualization OFF by default, and this list can run to a
+             couple of thousand rows after a big editing session. -->
+        <ListView x:Name="ChangeList" SelectionMode="Single"
+                  Background="{DynamicResource Theme.Control}"
+                  Foreground="{DynamicResource Theme.Text}"
+                  BorderBrush="{DynamicResource Theme.Accent}"
+                  VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                  ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Margin="0,6,0,2" FontWeight="Bold">
+                                <Run Text="{Binding Name, Mode=OneWay}"/><Run Text=" ("/><Run
+                                    Text="{Binding ItemCount, Mode=OneWay}"/><Run Text=")"/>
+                            </TextBlock>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="" Width="26" DisplayMemberBinding="{Binding Glyph}"/>
+                    <GridViewColumn Header="What" Width="360" DisplayMemberBinding="{Binding Path}"/>
+                    <GridViewColumn Header="Was" Width="220" DisplayMemberBinding="{Binding Before}"/>
+                    <GridViewColumn Header="Now" Width="220" DisplayMemberBinding="{Binding After}"/>
+                </GridView>
+            </ListView.View>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="ToolTip">
+                        <Setter.Value>
+                            <MultiBinding StringFormat="{}{0}&#x0a;was: {1}&#x0a;now: {2}">
+                                <Binding Path="Path"/>
+                                <Binding Path="Before"/>
+                                <Binding Path="After"/>
+                            </MultiBinding>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+    </DockPanel>
+</Window>

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -37,6 +37,25 @@ public sealed class OutfitDef
     /// <summary>Relative path to the blink PNG (eyes-closed overlay).</summary>
     [JsonProperty("blinkSprite", Order = 5)]
     public string BlinkSprite { get; set; } = "";
+
+    /// <summary>
+    /// Whether this outfit has a blink frame at all. Mirrors
+    /// <see cref="MouthSpec.Enabled"/> and <see cref="ExpressionSpec.Enabled"/>:
+    /// off strips the <c>SpriteRenderer</c> from the bust's Blink child, so the
+    /// eyes simply never close.
+    /// <para/>
+    /// Worth having because blink was the one overlay with no way to say "this
+    /// bust hasn't got one". A missing blink sprite does not degrade — the
+    /// runtime treats it as a broken outfit and skips the whole bust, so a
+    /// character with no blink art does not appear in the game at all.
+    /// <para/>
+    /// Defaults to true and is only written when false, so every pack authored
+    /// before this existed keeps exactly the bytes and behaviour it had.
+    /// </summary>
+    [JsonProperty("blinkEnabled", Order = 4, NullValueHandling = NullValueHandling.Ignore)]
+    public bool BlinkEnabled { get; set; } = true;
+
+    public bool ShouldSerializeBlinkEnabled() => !BlinkEnabled;
 
     [JsonProperty("mouth", Order = 6)]
     public MouthSpec Mouth { get; set; } = new();

@@ -33,5 +33,11 @@ disasm_shader.py
 shader_dump/
 
 # Local scratch packs / manifest backups
+# TestPack stays a local scratch workspace. The tutorial art that used to live
+# here now ships with the editor from SMSModForge/Resources/TutorialAssets/ —
+# tracked, because a tutorial whose sprites exist on one machine is no tutorial.
 TestPack/
+# ...and belt-and-braces: never track a manifest from the shipped asset folder,
+# whatever ends up in there during testing.
+SMSModForge/Resources/TutorialAssets/**/modpack.json
 modpack - Copy.json

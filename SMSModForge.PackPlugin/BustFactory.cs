@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -89,9 +89,17 @@ namespace SMSModForge.PackPlugin
             string maskRel  = (string)o["maskSprite"];
             string blinkRel = (string)o["blinkSprite"];
 
-            if (!pack.Has(baseRel) || !pack.Has(maskRel) || !pack.Has(blinkRel))
+            // Blink is optional per outfit. Without the flag a bust with no
+            // blink art was skipped entirely, so "I have no blink frame" and
+            // "my outfit is broken" were the same thing to this check.
+            bool blinkEnabled = (bool?)o["blinkEnabled"] ?? true;
+
+            // maskSprite is deliberately absent from this list: an outfit with
+            // no mask simply does not jiggle. Requiring it meant a bust with no
+            // mask art never reached the game at all.
+            if (!pack.Has(baseRel) || (blinkEnabled && !pack.Has(blinkRel)))
             {
-                logger.LogWarning("[SMSModForge.PackPlugin] Skipping " + goName + " — base/mask/blink missing in archive.");
+                logger.LogWarning("[SMSModForge.PackPlugin] Skipping " + goName + " — base sprite" + (blinkEnabled ? " or blink frame" : "") + " missing in archive.");
                 return null;
             }
 
@@ -104,10 +112,26 @@ namespace SMSModForge.PackPlugin
 
             GameObject newBust = Object.Instantiate(baseBust, bustManager);
             newBust.name = goName;
-            GameObject mBase = newBust.transform.Find("MBase1").gameObject;
-            GameObject blink = mBase.transform.Find("Blink").gameObject;
-            GameObject mouthGo = mBase.transform.Find("Mouth").gameObject;
-            GameObject expressions = mBase.transform.Find("Expressions").gameObject;
+
+            // The sprite root is NOT consistently named across rigs: MBase1 on
+            // most busts, D1Base on others. ActorRegistry.FindMBase is the one
+            // place that convention lives (named lookup, else first child) and
+            // every other bust-child lookup already goes through it — so this
+            // does too rather than hardcoding a name that only matches some
+            // characters. The overlay branches are then optional: a rig without
+            // a Mouth or Expressions group is valid, and used to throw here.
+            Transform mBaseT = ActorRegistry.FindMBase(newBust);
+            if (mBaseT == null)
+            {
+                logger?.LogError("[SMSModForge.PackPlugin] Bust " + goName +
+                                 " has no sprite root child — skipping.");
+                Object.Destroy(newBust);
+                return null;
+            }
+            GameObject mBase = mBaseT.gameObject;
+            GameObject blink = mBaseT.Find("Blink")?.gameObject;
+            GameObject mouthGo = mBaseT.Find("Mouth")?.gameObject;
+            GameObject expressions = mBaseT.Find("Expressions")?.gameObject;
 
             // Per-outfit material clone so shader uniforms / mask are not shared
             // between outfits. Built fully BEFORE being assigned: reading back
@@ -116,9 +140,45 @@ namespace SMSModForge.PackPlugin
             Material mat = new Material(mBase.GetComponent<SpriteRenderer>().sharedMaterial);
 
             ApplySprite(mBase.GetComponent<SpriteRenderer>(), pack, baseRel);
-            ApplySprite(blink.GetComponent<SpriteRenderer>(), pack, blinkRel);
+            if (blink != null)
+            {
+                if (blinkEnabled)
+                {
+                    var blinkSr = blink.GetComponent<SpriteRenderer>();
+                    if (blinkSr != null) ApplySprite(blinkSr, pack, blinkRel);
+                }
+                else
+                {
+                    // Emptied as well as switched off. Belt and braces: if
+                    // anything ever re-activates this child, it has nothing of
+                    // the prototype's left to show.
+                    var blinkSr = blink.GetComponent<SpriteRenderer>();
+                    if (blinkSr != null) blinkSr.sprite = null;
 
-            Texture2D maskTex = LoadTexture(pack, maskRel, linear: true);
+                    // Turn the object OFF rather than stripping its renderer.
+                    //
+                    // Stripping was the first attempt at this and it crashed
+                    // every blinkless character. Unlike the Mouth and Expression
+                    // slots below, the prototype's Blink child carries the
+                    // game's own BlinkingSprite driver, and that driver's Awake
+                    // caches the SpriteRenderer and dereferences it. Awake does
+                    // not run at build time — it runs the first time the bust is
+                    // activated, which is mid-dialogue, long after the renderer
+                    // was destroyed. So the bust built fine, loaded fine, and
+                    // threw a NullReferenceException at the moment it appeared.
+                    //
+                    // An inactive GameObject never runs Awake at all, so this
+                    // removes the whole class of problem instead of this one
+                    // component's version of it. Nothing is destroyed: the
+                    // driver and the renderer stay as the prototype had them and
+                    // simply never wake up.
+                    blink.SetActive(false);
+                }
+            }
+
+            Texture2D maskTex = MaskTextures.IsAuthored(pack, maskRel)
+                ? LoadTexture(pack, maskRel, linear: true)
+                : MaskTextures.None();
             mat.SetTexture("_MaskTex", maskTex);
 
             var jiggle = (JObject)o["jiggle"];
@@ -126,66 +186,64 @@ namespace SMSModForge.PackPlugin
 
             mBase.GetComponent<SpriteRenderer>().sharedMaterial = mat;
 
-            // Mouth frames — load 1..4 if enabled, otherwise destroy the renderers.
+            // Mouth frames — load 1..4 if enabled, otherwise empty the slots.
             // The "prefix" carried in the manifest is an archive-relative
             // stem (e.g. "Sprites/MyChar/Mouth_"); we suffix 1.PNG..4.PNG and
             // look the result up in the archive.
             for (int i = 1; i <= 4; i++)
             {
-                var slot = mouthGo.transform.Find(i.ToString());
+                var slot = mouthGo != null ? mouthGo.transform.Find(i.ToString()) : null;
                 if (slot == null) continue;
                 var sr = slot.GetComponent<SpriteRenderer>();
                 if (sr == null) continue;
+                // ApplySprite empties the slot when the frame is absent, so a
+                // half-authored mouth shows gaps rather than the prototype's
+                // remaining frames.
                 if (mouthEnabled && !string.IsNullOrEmpty(mouthPrefix))
-                {
-                    string rel = mouthPrefix + i + ".PNG";
-                    if (pack.Has(rel)) ApplySprite(sr, pack, rel);
-                }
+                    ApplySprite(sr, pack, mouthPrefix + i + ".PNG");
                 else
-                {
-                    Object.Destroy(sr);
-                }
+                    sr.sprite = null;
             }
 
             // Expression overlays — same pattern as mouth.
             foreach (var name in ExpressionNames)
             {
-                var slot = expressions.transform.Find(name);
+                var slot = expressions != null ? expressions.transform.Find(name) : null;
                 if (slot == null) continue;
                 var sr = slot.GetComponent<SpriteRenderer>();
                 if (sr == null) continue;
                 if (exprEnabled && !string.IsNullOrEmpty(exprPrefix))
-                {
-                    string rel = exprPrefix + name + ".PNG";
-                    if (pack.Has(rel)) ApplySprite(sr, pack, rel);
-                }
+                    ApplySprite(sr, pack, exprPrefix + name + ".PNG");
                 else
-                {
-                    Object.Destroy(sr);
-                }
+                    sr.sprite = null;
             }
 
-            // Every overlay rides the SAME jiggle material as the body, so the
-            // eyes, mouth and expression are displaced with it instead of
-            // sitting still on a moving chest. Only the body was getting it,
-            // which is why the mask appeared not to reach the other sprites.
-            // Sharing one instance is what makes the displacement consistent:
-            // the shader samples _MaskTex in the sprite's own UV space and
-            // these overlays are authored on the body's frame.
-            // Opt-in, default OFF = vanilla behaviour (overlays keep their own
-            // material and only the body jiggles). Sharing the jiggle material
-            // with the overlays washes them out for a reason not yet pinned
-            // down — it survived removing the body's tint from the copy — so
-            // the default stays on the appearance that is known good and this
-            // is a switch to experiment behind rather than a silent change.
-            // One-off diagnostic: what the vanilla overlay renderers are actually
-            // shaded with. Sharing the body's jiggle material with them washes
-            // them out, and that is only explicable if their own shader differs
-            // from the body's in how it handles alpha — this says which.
+            // Overlays keep their OWN Sprite-Lit-Default material and are moved
+            // on the CPU instead of being given the jiggle shader. The shader
+            // route recolours them: its lit pass runs a 193-tap "fake GI" gather
+            // weighted by (1 - alpha), so a sprite that fills 0.02-0.26% of its
+            // canvas is lit as though floating in void, where the body fills
+            // 27.5%. That gather is present in all 64 lit variants and the URP
+            // 2D renderer only dispatches the lit pass (Universal2D; the
+            // UniversalForward pass exists but is never drawn), so it can be
+            // neither keyword-gated nor bypassed. See OverlayJiggle.
+            // Once per session: confirms the body is on the jiggle shader and the
+            // overlays are still on their own. If an overlay ever shows up here
+            // carrying the jiggle shader, the colour shift is back.
             LogOverlayShadersOnce(mBase, blink, mouthGo, expressions, logger);
 
+            // OFF by default — vanilla behaviour, where only the body sprite is
+            // displaced and the blink / mouth / expression ride along on it
+            // unmoved. Both ways of making them move turned out worse than the
+            // problem: the jiggle material recolours them (its lit pass gathers
+            // the sprite's own texture weighted by 1-alpha, so art covering a
+            // fraction of a percent of its canvas is lit as if floating in
+            // void), and the per-object offset below travels only ~3.8 texels,
+            // which is roughly 8 distinct positions per bounce and reads as
+            // stepping rather than motion. A pack can still opt in per outfit
+            // with "applyToOverlays": true.
             if ((bool?)jiggle?["applyToOverlays"] ?? false)
-                ShareMaterial(mat, blink, mouthGo, expressions);
+                AttachOverlayJiggle(mBaseT, maskTex, jiggle);
 
             // Drop the GC2 Conditions/Trigger components on Expressions so they
             // don't fire vanilla behaviour. Found by name to avoid a hard ref
@@ -230,9 +288,31 @@ namespace SMSModForge.PackPlugin
             return newBust;
         }
 
+        /// <summary>
+        /// Put the pack's sprite in this slot, or EMPTY the slot when the pack
+        /// has none for it.
+        /// <para/>
+        /// Emptying is the part that matters. Every bust is a clone of the
+        /// vanilla prototype, so each slot arrives carrying that character's
+        /// art. This used to return early when the path was blank or missing
+        /// from the archive, which left the prototype's own blink frame, mouth
+        /// or expression showing on somebody else's character — art the author
+        /// never chose and would not recognise.
+        /// <para/>
+        /// A SpriteRenderer with a null sprite draws nothing while staying a
+        /// live component, which is what the overlay walk and the sorting pass
+        /// both expect to find. Destroying it instead is what broke blink: the
+        /// prototype's BlinkingSprite driver outlived its renderer and threw on
+        /// the first activation.
+        /// </summary>
         private static void ApplySprite(SpriteRenderer sr, PackManifest pack, string rel)
         {
-            if (sr == null || string.IsNullOrEmpty(rel) || !pack.Has(rel)) return;
+            if (sr == null) return;
+            if (string.IsNullOrEmpty(rel) || !pack.Has(rel))
+            {
+                sr.sprite = null;
+                return;
+            }
             var tex = LoadTexture(pack, rel);
             sr.sprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
         }
@@ -255,30 +335,90 @@ namespace SMSModForge.PackPlugin
             return tex;
         }
 
-        /// <summary>Give every SpriteRenderer at or under <paramref name="roots"/>
-        /// the same material instance. Renderers destroyed above (a disabled
-        /// mouth or expression set) are simply not there to receive it.</summary>
-        private static void ShareMaterial(Material mat, params GameObject[] roots)
+        /// <summary>
+        /// Give every overlay under the bust's sprite root an
+        /// <see cref="OverlayJiggle"/> so it moves with the body, leaving its
+        /// own material (and therefore its lighting and colour) alone.
+        /// <para/>
+        /// The mask is constant at runtime, so each overlay's four channels are
+        /// sampled once here, at the sprite's alpha-weighted centroid — the point
+        /// that best represents where the sprite actually sits on the body's
+        /// frame. All bust art shares that 256x256 frame, so the overlay's own UV
+        /// indexes the mask directly.
+        /// <para/>
+        /// Walks the subtree rather than the Blink / Mouth / Expressions groups by
+        /// name: rigs differ (the sprite root alone is MBase1 on some busts and
+        /// D1Base on others) and a named walk silently skips any branch a
+        /// character names differently.
+        /// </summary>
+        private static void AttachOverlayJiggle(Transform mBase, Texture2D maskTex, JObject j)
         {
-            foreach (var root in roots)
+            if (mBase == null || maskTex == null) return;
+            var bodySr = mBase.GetComponent<SpriteRenderer>();
+
+            float speed         = (float?)j?["speed"]         ?? 3.0f;
+            float strength      = (float?)j?["strength"]      ?? -0.02f;
+            float frequency     = (float?)j?["frequency"]     ?? 4.0f;
+            float noiseScale    = (float?)j?["noiseScale"]    ?? 5.0f;
+            float noiseSpeed    = (float?)j?["noiseSpeed"]    ?? 0.5f;
+            float noiseStrength = (float?)j?["noiseStrength"] ?? 0.06f;
+
+            foreach (var sr in mBase.GetComponentsInChildren<SpriteRenderer>(true))
             {
-                if (root == null) continue;
-                foreach (var sr in root.GetComponentsInChildren<SpriteRenderer>(true))
+                if (sr == bodySr || sr.sprite == null) continue;
+
+                Vector2 uv = OpaqueCentroidUv(sr.sprite);
+                Color m = maskTex.GetPixelBilinear(uv.x, uv.y);
+
+                // Overlay textures stay on FilterMode.Point, like the body.
+                // Bilinear was tried to smooth the bounce and is the wrong trade:
+                // it softens the sprite whenever it is sampled off a texel centre,
+                // which at these display scales is essentially always — not only
+                // while moving. Crisp art matters more than a smoother few-texel
+                // travel. See OverlayJiggle for what the stepping actually is.
+                var comp = sr.GetComponent<OverlayJiggle>();
+                if (comp == null) comp = sr.gameObject.AddComponent<OverlayJiggle>();
+                comp.MaskR = m.r; comp.MaskG = m.g; comp.MaskB = m.b; comp.MaskA = m.a;
+                comp.Uv = uv;
+                comp.Speed = speed; comp.Strength = strength; comp.Frequency = frequency;
+                comp.NoiseScale = noiseScale; comp.NoiseSpeed = noiseSpeed;
+                comp.NoiseStrength = noiseStrength;
+                var size = sr.sprite.bounds.size;
+                comp.SpriteSize = new Vector2(size.x, size.y);
+            }
+        }
+
+        /// <summary>
+        /// Alpha-weighted centre of a sprite's drawn pixels, in 0..1 UV.
+        /// Overlays are a small mark on a mostly empty canvas, so the geometric
+        /// centre would sample the mask nowhere near the art. Subsampled on a
+        /// 2px grid — this only decides which mask texel to read, and it runs
+        /// once per overlay at build time. Falls back to the centre for a sprite
+        /// with no opaque pixels at all.
+        /// </summary>
+        private static Vector2 OpaqueCentroidUv(Sprite sprite)
+        {
+            var tex = sprite.texture;
+            if (tex == null) return new Vector2(0.5f, 0.5f);
+
+            Color32[] px;
+            try { px = tex.GetPixels32(); }
+            catch { return new Vector2(0.5f, 0.5f); }   // not readable
+
+            int w = tex.width, h = tex.height;
+            double sx = 0, sy = 0, sa = 0;
+            for (int y = 0; y < h; y += 2)
+            {
+                int row = y * w;
+                for (int x = 0; x < w; x += 2)
                 {
-                    var original = sr.sharedMaterial;
-                    var m = new Material(mat);
-                    // Keep the overlay's OWN tint. _Color on the body's material
-                    // is that art's colour correction; the eyes, mouth and
-                    // expression are drawn separately and inheriting it washed
-                    // them out. Only the displacement should carry over, which
-                    // is the mask plus the jiggle uniforms already in the copy.
-                    m.SetColor("_Color",
-                        original != null && original.HasProperty("_Color")
-                            ? original.GetColor("_Color")
-                            : Color.white);
-                    sr.sharedMaterial = m;
+                    byte a = px[row + x].a;
+                    if (a == 0) continue;
+                    sx += x * (double)a; sy += y * (double)a; sa += a;
                 }
             }
+            if (sa <= 0) return new Vector2(0.5f, 0.5f);
+            return new Vector2((float)(sx / sa) / w, (float)(sy / sa) / h);
         }
 
         private static bool _loggedOverlayShaders;

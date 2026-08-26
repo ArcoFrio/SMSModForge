@@ -147,6 +147,14 @@ public sealed class UpdateRuleViewModel : ObservableObject
         set { Model.TriggerMode = value; OnPropertyChanged(); }
     }
 
+    /// <summary>Log this rule's decisions in-game — see
+    /// <see cref="UpdateRuleDef.DebugConditions"/>.</summary>
+    public bool DebugConditions
+    {
+        get => Model.DebugConditions;
+        set { Model.DebugConditions = value; OnPropertyChanged(); }
+    }
+
     /// <summary>Values to repeat the rule for — a literal CSV or <c>$ListVar</c>.
     /// Blank = the rule runs once.</summary>
     public string ForEach

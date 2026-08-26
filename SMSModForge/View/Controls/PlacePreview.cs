@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -26,8 +26,8 @@ namespace SMSModForge.View.Controls;
 /// so every pixel coordinate from the layout spec maps 1:1, then the Viewbox
 /// scales it down to the on-screen display size. Layers, bottom to top:
 /// <list type="number">
-///   <item>Secondary sprite — the distance/blur background.</item>
-///   <item>Base sprite — the main foreground art.</item>
+///   <item>Back sprite — the layer behind (manifest: secondarySprite).</item>
+///   <item>Front sprite — the layer in front (manifest: baseSprite).</item>
 ///   <item>GameplayUI overlay — the vanilla HUD frame
 ///         (<c>VanillaOverlays/GameplayUI.png</c>), or
 ///         <c>GameplayUIExtended.png</c> once the place has more than six
@@ -236,7 +236,7 @@ public sealed class PlacePreview : Grid
     /// GameObjects used to live in one canvas pinned in FRONT of the
     /// base image, so an overlay authored behind the level (SecretBeach's sky
     /// / portal / gatekeeper are all negative) previewed in front of it — the
-    /// opposite of what the game does. Now the base sprite, the secondary
+    /// opposite of what the game does. Now the front sprite, the back
     /// sprite and the overlays all go into this one host and are added in
     /// sorting-order sequence, so the preview's stacking is the runtime's.
     /// The HUD frame and map buttons stay above it unconditionally.
@@ -306,8 +306,8 @@ public sealed class PlacePreview : Grid
         Margin = new Thickness(8),
     };
 
-    private static BitmapImage? _cachedOverlay;
-    private static BitmapImage? _cachedOverlayExtended;
+    private static BitmapSource? _cachedOverlay;
+    private static BitmapSource? _cachedOverlayExtended;
     private static FontFamily? _numberFont;
     private static FontFamily? _labelFont;
 
@@ -610,13 +610,18 @@ public sealed class PlacePreview : Grid
     private void Refresh()
     {
         string root = PackRoot ?? "";
-        string basePath = BaseSprite ?? "";
 
-        if (string.IsNullOrWhiteSpace(basePath))
+        // Spelled out because the names cross over: BaseSprite is the FRONT
+        // layer (-10) and SecondarySprite the BACK one (-12). That is the
+        // manifest's naming, not the tab's.
+        string frontPath = BaseSprite ?? "";
+        string backPath = SecondarySprite ?? "";
+
+        if (string.IsNullOrWhiteSpace(frontPath) && string.IsNullOrWhiteSpace(backPath))
         {
             ShowPlaceholder(string.IsNullOrEmpty(root)
-                ? "Save the pack and set a base sprite path."
-                : "No base sprite path set.");
+                ? "Save the pack and set a back or front sprite path."
+                : "No back or front sprite path set.");
             return;
         }
         if (string.IsNullOrEmpty(root))
@@ -625,28 +630,30 @@ public sealed class PlacePreview : Grid
             return;
         }
 
-        string absBase = Path.Combine(root, Normalize(basePath));
-        if (!File.Exists(absBase))
-        {
-            ShowPlaceholder($"Base sprite not found:\n{absBase}");
-            return;
-        }
+        // Either layer alone is a valid place, so an unset path is not a
+        // failure — it just means that layer draws nothing. This used to
+        // require the front layer and report "no base sprite" for a place
+        // that had perfectly good back art. A path that IS set but resolves
+        // nowhere is still reported, because that is a typo, not a choice.
+        string? absFront = string.IsNullOrWhiteSpace(frontPath)
+            ? null : Path.Combine(root, Normalize(frontPath));
+        string? absBack = string.IsNullOrWhiteSpace(backPath)
+            ? null : Path.Combine(root, Normalize(backPath));
 
-        // Secondary (distance/blur) layer — behind base.
-        string secondary = SecondarySprite ?? "";
-        if (!string.IsNullOrWhiteSpace(secondary))
-        {
-            string absSecondary = Path.Combine(root, Normalize(secondary));
-            _secondaryImage.Source = File.Exists(absSecondary) ? TryLoad(absSecondary) : null;
-        }
-        else
-        {
-            _secondaryImage.Source = null;
-        }
+        _secondaryImage.Source = absBack != null && File.Exists(absBack) ? TryLoad(absBack) : null;
         _secondaryImage.Visibility = _secondaryImage.Source != null ? Visibility.Visible : Visibility.Collapsed;
 
-        _baseImage.Source = TryLoad(absBase);
-        _baseImage.Visibility = Visibility.Visible;
+        _baseImage.Source = absFront != null && File.Exists(absFront) ? TryLoad(absFront) : null;
+        _baseImage.Visibility = _baseImage.Source != null ? Visibility.Visible : Visibility.Collapsed;
+
+        if (_baseImage.Source == null && _secondaryImage.Source == null)
+        {
+            // Every path that was given failed to load, so name one.
+            ShowPlaceholder(absFront != null && !File.Exists(absFront)
+                ? $"Front sprite not found:\n{absFront}"
+                : $"Back sprite not found:\n{absBack}");
+            return;
+        }
 
         // Both layers at their true world size, centred on the origin, rather
         // than stretched to the viewport — see SizeLevelLayer.
@@ -1399,7 +1406,7 @@ public sealed class PlacePreview : Grid
     private bool _isLoaded;
     private DateTime _wetStart = DateTime.Now;
 
-    private static readonly Dictionary<string, BitmapImage?> _bitmapCache = new();
+    private static readonly Dictionary<string, BitmapSource?> _bitmapCache = new();
 
     /// <summary>A 2-D affine transform (Unity convention: +Y up, rotation CCW).
     /// Columns are the mapped basis vectors: x-axis (A,B), y-axis (C,D); (Tx,Ty)
@@ -2288,7 +2295,7 @@ public sealed class PlacePreview : Grid
     /// <summary>Decode-once bitmap loader (NPC poses + overlay sprites). A full
     /// rebuild happens on every transform edit / gizmo drag, so decoding the
     /// 2048×1136 level-overlay PNGs each time was a big hidden cost — cache them.</summary>
-    private static BitmapImage? LoadCachedBitmap(string abs)
+    private static BitmapSource? LoadCachedBitmap(string abs)
     {
         if (_bitmapCache.TryGetValue(abs, out var cached)) return cached;
         var bmp = File.Exists(abs) ? TryLoad(abs) : null;
@@ -3269,12 +3276,12 @@ public sealed class PlacePreview : Grid
         return string.IsNullOrEmpty(exeDir) ? null : Path.Combine(exeDir, "VanillaOverlays");
     }
 
-    private static BitmapImage? LoadOverlay() => _cachedOverlay ??= LoadOverlayFile("GameplayUI.png");
-    private static BitmapImage? LoadOverlayExtended() => _cachedOverlayExtended ??= LoadOverlayFile("GameplayUIExtended.png");
+    private static BitmapSource? LoadOverlay() => _cachedOverlay ??= LoadOverlayFile("GameplayUI.png");
+    private static BitmapSource? LoadOverlayExtended() => _cachedOverlayExtended ??= LoadOverlayFile("GameplayUIExtended.png");
     // ButtonNavigator.png is gone: the button is drawn from the game's own
     // "Semi Rounded", nine-sliced, with its disc and rule sprites over it.
 
-    private static BitmapImage? LoadOverlayFile(string fileName)
+    private static BitmapSource? LoadOverlayFile(string fileName)
     {
         try
         {
@@ -3308,7 +3315,7 @@ public sealed class PlacePreview : Grid
         return new FontFamily(fallback);
     }
 
-    private static BitmapImage? TryLoad(string path)
+    private static BitmapSource? TryLoad(string path)
     {
         try
         {
@@ -3319,7 +3326,8 @@ public sealed class PlacePreview : Grid
             img.StreamSource = fs;
             img.EndInit();
             img.Freeze();
-            return img;
+
+            return Rendering.VanillaArtSizes.RestoreIfThumbnail(path, img);
         }
         catch (Exception)
         {

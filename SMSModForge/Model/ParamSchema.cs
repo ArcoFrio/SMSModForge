@@ -103,6 +103,12 @@ public enum ParamType
     /// Rendered as a wider TextBox so deep paths stay readable.</summary>
     GameObjectPath,
 
+    /// <summary>Pack-relative path to a PNG (e.g. <c>Sprites/Amber/Angry.PNG</c>),
+    /// rendered as an editable text box with a Browse button that stores the
+    /// path relative to the pack root. Used by SetSprite for both the sprite and
+    /// its optional mask.</summary>
+    SpriteRef,
+
     /// <summary>Fixed set of options declared on the schema itself
     /// (<see cref="ParamSchema.FixedOptions"/>). Rendered as a
     /// non-editable ComboBox — the value is always one of the options.</summary>

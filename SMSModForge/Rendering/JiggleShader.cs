@@ -267,4 +267,83 @@ public static class JiggleShader
         a = tex[i + 3] / 255f;
     }
 
+    // ── Overlay displacement ──────────────────────────────────────────
+    // Bust overlays (blink / mouth / expression) do NOT run this shader in
+    // game. Given its material they recolour badly: the lit pass gathers the
+    // sprite's own texture weighted by (1 - alpha), so a sprite covering a
+    // fraction of a percent of its canvas is lit as though floating in void,
+    // where the body covers about 27%. So the game leaves them on the stock
+    // sprite shader and displaces each one RIGIDLY instead, by this shader's
+    // offset evaluated once at the sprite's own centroid.
+    //
+    // The two helpers below are that calculation, kept beside the per-pixel
+    // version they have to agree with.
+
+    /// <summary>
+    /// Alpha-weighted centre of a straight-alpha BGRA buffer, in UV
+    /// (v bottom-up, matching <see cref="Render"/>).
+    /// <para/>
+    /// The geometric centre would be wrong: an overlay is a small mark on a
+    /// mostly empty canvas, so the middle of the frame usually samples the mask
+    /// nowhere near the art. Falls back to the centre for a fully transparent
+    /// buffer. Subsampled on a 2px grid — this only picks which mask texel to
+    /// read, and it runs once per overlay per frame.
+    /// </summary>
+    public static (float u, float v) OpaqueCentroid(byte[] straight, int w = Size, int h = Size)
+    {
+        double sx = 0, sy = 0, sa = 0;
+        int stride = w * 4;
+        for (int y = 0; y < h; y += 2)
+        {
+            int row = y * stride;
+            for (int x = 0; x < w; x += 2)
+            {
+                byte a = straight[row + x * 4 + 3];
+                if (a == 0) continue;
+                sx += x * (double)a; sy += y * (double)a; sa += a;
+            }
+        }
+        if (sa <= 0) return (0.5f, 0.5f);
+        return ((float)(sx / sa) / w, 1.0f - (float)(sy / sa) / h);
+    }
+
+    /// <summary>
+    /// The displacement this shader would apply at a single UV — the same
+    /// bounce / wave / noise terms <see cref="Render"/> computes per pixel,
+    /// evaluated once. Returned in the shader's sense: the SAMPLE coordinate
+    /// moves by +offset, so the drawn image moves by -offset.
+    /// </summary>
+    public static (float du, float dv) OffsetAt(
+        byte[] maskTex, float u, float v, JiggleParams p, float time,
+        int srcW = Size, int srcH = Size)
+    {
+        int mx = (int)(u * srcW); if (mx >= srcW) mx = srcW - 1; if (mx < 0) mx = 0;
+        int my = (int)((1.0f - v) * srcH); if (my >= srcH) my = srcH - 1; if (my < 0) my = 0;
+        int mi = my * (srcW * 4) + mx * 4;
+
+        float ma = maskTex[mi + 3] / 255f;
+        float du = 0f, dv = 0f;
+
+        // Same gates Render uses, so an overlay never moves on a term the body
+        // has switched off.
+        if (p.Strength != 0f)
+        {
+            float mr = maskTex[mi + 2] / 255f;
+            float mg = maskTex[mi + 1] / 255f;
+            du += MathF.Sin(v * p.Frequency + time * p.Speed) * p.Strength * mg * ma;
+            dv += MathF.Sin(time * p.Speed) * p.Strength * mr * ma;
+        }
+
+        if (p.NoiseStrength != 0f)
+        {
+            float mb = maskTex[mi] / 255f;
+            float amp = p.NoiseStrength * mb * ma;
+            float ncx = u * p.NoiseScale + time * p.NoiseSpeed;
+            float ncy = v * p.NoiseScale + time * p.NoiseSpeed;
+            du += GradientNoise(ncx, ncy) * amp;
+            dv += GradientNoise(ncx + 100f, ncy + 100f) * amp;
+        }
+
+        return (du, dv);
+    }
 }

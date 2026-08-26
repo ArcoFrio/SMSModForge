@@ -63,12 +63,6 @@ public static class NodeActionTypes
     /// <summary>Add/subtract from a numeric pack variable. Params: <c>name</c>, <c>delta</c>.</summary>
     public const string IncrementVariable = "IncrementVariable";
 
-    /// <summary>Set the active bust for an actor (pack-local actor key). Params: <c>actor</c>, <c>bustKey</c>.</summary>
-    public const string SetActorBust = "SetActorBust";
-
-    /// <summary>Force an actor's expression for the upcoming line. Params: <c>actor</c>, <c>expression</c>.</summary>
-    public const string SetActorExpression = "SetActorExpression";
-
     /// <summary>
     /// Raise or lower an actor's bust relative to the CG / scene layer —
     /// the generalised replacement for a host sprite-focus marker
@@ -77,13 +71,6 @@ public static class NodeActionTypes
     /// restores the resting orders. Params: <c>actor</c>, <c>focused</c>.
     /// </summary>
     public const string SetSpriteFocus = "SetSpriteFocus";
-
-    /// <summary>
-    /// Immediately deactivate the actor's current bust GameObject — equivalent
-    /// to <c>SetActive(false)</c> on the bust under <c>2_Bust_Manager</c>. No
-    /// fade. Params: <c>actor</c>.
-    /// </summary>
-    public const string DeactivateBust = "DeactivateBust";
 
     /// <summary>
     /// Trigger the vanilla "leave" fade-out on the actor's current bust by
@@ -103,8 +90,38 @@ public static class NodeActionTypes
     /// <c>path</c> (GO) is still read as a fallback for pre-unify packs.</summary>
     public const string SetGameObjectActive = "SetGameObjectActive";
 
+    /// <summary>
+    /// Swap the sprite (and optionally the mask) on whatever the category
+    /// addresses. Params: <c>kind</c>, <c>target</c>, <c>overlayLevel</c> —
+    /// identical targeting to <see cref="SetGameObjectActive"/> — plus
+    /// <c>sprite</c> and an optional <c>mask</c>, both pack-relative PNGs.
+    /// <para/>
+    /// The mask is offered for every category rather than just busts: it is set
+    /// through the material's <c>_MaskTex</c>, which any shader may declare. A
+    /// target with no renderer, no material, or a material without that property
+    /// logs which of the three it was instead of failing quietly.
+    /// </summary>
+    public const string SetSprite = "SetSprite";
+
     /// <summary>Emit a GC2 signal by name. Params: <c>signal</c>.</summary>
     public const string EmitSignal = "EmitSignal";
+
+    /// <summary>
+    /// Leave the gameplay UI faded out when this dialogue ends, because
+    /// something this node opened is now responsible for bringing it back.
+    /// No params.
+    /// <para/>
+    /// A dialogue normally fades the UI out when it starts and back in when it
+    /// finishes. A node that opens a panel of its own and then exits doesn't
+    /// want the second half: the UI would fade back in underneath the panel,
+    /// and the panel's own closing fade would then toggle it away again,
+    /// leaving it inverted. This hands the fade over instead.
+    /// <para/>
+    /// Only use it for a panel that is NOT parented under <c>9_MainCanvas</c> —
+    /// hiding the UI deactivates that canvas, so anything beneath it would be
+    /// hidden along with the UI it is meant to sit over.
+    /// </summary>
+    public const string LeaveUiFaded = "LeaveUiFaded";
 
     /// <summary>
     /// Emit a GC2 signal after a delay, fire-and-forget. The action
@@ -155,6 +172,42 @@ public static class NodeActionTypes
     public const string MoveGameObject = "MoveGameObject";
 
     /// <summary>
+    /// Set one property on one Unity component attached to a target
+    /// GameObject — the generic "reach a component the action vocabulary
+    /// doesn't otherwise cover" primitive.
+    /// <para/>
+    /// Deliberately narrow: <c>component</c> picks from a closed, supported
+    /// list rather than resolving arbitrary types by name, and <c>property</c>
+    /// from that component's supported fields. Reflection over any component
+    /// would let a pack poke at engine internals with no way for the editor to
+    /// offer sensible values or for the runtime to fail legibly, so each
+    /// component is added on purpose with its own parsing.
+    /// <para/>
+    /// Supported today:
+    /// <list type="bullet">
+    ///   <item><b>CanvasGroup</b> — <c>alpha</c> (0..1, tweenable via
+    ///   <c>seconds</c>), <c>interactable</c>, <c>blocksRaycasts</c>. The
+    ///   handle for a whole UI panel: fading the group leaves every child's own
+    ///   colour alone, and clearing the input flags stops an invisible panel
+    ///   swallowing clicks meant for what is behind it. Unlike
+    ///   <see cref="SetGameObjectActive"/>, a group at alpha 0 keeps ticking,
+    ///   so animations and coroutines underneath survive. The component is
+    ///   added when absent — a fresh CanvasGroup is inert, so that changes
+    ///   nothing until a value is written.</item>
+    /// </list>
+    /// Params: <c>component</c>, <c>property</c>, <c>value</c> (parsed to suit
+    /// the property), <c>seconds</c> (0 = snap; only meaningful for numeric
+    /// properties), plus the shared <c>kind</c> / <c>target</c> /
+    /// <c>overlayLevel</c> targeting row.
+    /// <para/>
+    /// Adding a component means a case in the runtime, an entry in this doc,
+    /// and its fields in the schema's property list — and, once there is more
+    /// than one, making that list depend on the selected component instead of
+    /// being flat.
+    /// </summary>
+    public const string SetComponentProperty = "SetComponentProperty";
+
+    /// <summary>
     /// Start or stop a GameObject spinning around Z at a constant rate — the
     /// generic continuous-rotation primitive (the a prop's spin). Adds a
     /// lightweight spin component the first time. Params: <c>target</c>,
@@ -176,9 +229,6 @@ public static class NodeActionTypes
     /// (seconds before play, defaults to 0).
     /// </summary>
     public const string PlaySFX = "PlaySFX";
-
-    /// <summary>End the currently playing dialogue immediately.</summary>
-    public const string EndDialogue = "EndDialogue";
 
     /// <summary>Wait the specified number of seconds before continuing. Params: <c>seconds</c>.</summary>
     public const string Wait = "Wait";
@@ -263,12 +313,12 @@ public static class NodeActionTypes
     /// <summary>All action types recognised by the editor's picker.</summary>
     public static readonly string[] All =
     {
-        SetVariable, IncrementVariable, SetActorBust, SetActorExpression,
-        SetSpriteFocus, DeactivateBust, LeaveBust,
-        SetGameObjectActive, EmitSignal, EmitSignalDelayed,
-        TransitionLevels, FadeSprite, MoveGameObject, SpinGameObject,
+        SetVariable, IncrementVariable,
+        SetSpriteFocus, LeaveBust,
+        SetGameObjectActive, SetSprite, EmitSignal, EmitSignalDelayed, LeaveUiFaded,
+        TransitionLevels, FadeSprite, SetComponentProperty, MoveGameObject, SpinGameObject,
         SwitchMusic, PlaySFX,
-        EndDialogue, Wait,
+        Wait,
         PickRandomFromList, AddToList, RemoveFromList, ClearList, CountList,
         DiceRoll, SetWeather,
         ActivateScene, DeactivateAllScenes,

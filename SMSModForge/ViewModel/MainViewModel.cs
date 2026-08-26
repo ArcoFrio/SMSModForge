@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -193,17 +193,17 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>
     /// Bust GO names referenced by the pack's declared actors —
     /// specifically each actor's <see cref="ActorViewModel.DefaultBustKey"/>.
-    /// Drives the <c>bustKey</c> dropdown on the <c>SetActorBust</c>
-    /// dialogue-node action so the picker shows the busts most likely
-    /// to be relevant (the ones actors in this pack actually use). The
-    /// underlying combo stays <c>IsEditable</c> so authors can still
-    /// type any bust GO name that isn't in the actor catalog.
+    /// Backs every <c>BustRef</c> param, so a bust picker shows the ones
+    /// most likely to be relevant (the ones this pack's characters actually
+    /// use). The underlying combo stays <c>IsEditable</c> so authors can still
+    /// type any bust GO name that isn't in the catalog.
     /// </summary>
     public ObservableCollection<NavigatorTargetOption> ActorBustOptions { get; } = new();
 
     /// <summary>
-    /// Expression keys available to the <c>SetActorExpression</c>
-    /// action. Combines the four vanilla expressions
+    /// Expression keys offered wherever one is picked — the node's own
+    /// Expression field, and any <c>ExpressionRef</c> param. Combines the four
+    /// vanilla expressions
     /// (<c>Happy/Angry/Sad/Flirty</c>) with any custom expression
     /// keys declared on this pack's actors. Editable — authors can
     /// type an expression name that maps to a custom bust child.
@@ -533,40 +533,71 @@ public sealed class MainViewModel : ObservableObject
             var savedExpression = value?.Expression;
             var savedOutfit     = value?.Outfit;
 
-            // Detach from the previous node's Actor-change notification so the
-            // bust-preview key tracks the *current* node's actor.
-            if (_selectedNode != null) _selectedNode.PropertyChanged -= OnSelectedNodeActorMaybeChanged;
-            _selectedNode = value;
-            if (_selectedNode != null) _selectedNode.PropertyChanged += OnSelectedNodeActorMaybeChanged;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(SelectedNodeActorBustKey));
-            // Refresh the GO-path autocomplete from the current model so newly
-            // added / renamed overlays show up when editing this node's actions.
-            RebuildGameObjectNameOptions();
-            // Same for the variable / list-variable pickers — a variable whose
-            // type was just changed to List must appear in AddToList etc.
-            RebuildVariableNameOptions();
-            // Overlay list is filtered to this node's inferred level, so it must
-            // rebuild on every node change (not just actor changes).
-            RebuildSelectedNodeOverlayOptions();
-
-            // Only rebuild the option lists when the actor actually changed.
-            // Same actor → same outfit / expression options → no need to
-            // disrupt the ComboBox (which avoids the clear-cascade entirely).
-            if (_selectedNode?.Actor != prevActor)
+            // Nothing that happens while SWITCHING nodes counts as the author
+            // changing a speaker, so the outfit-follows-actor rule is off for
+            // the duration. Rebinding the editor pane is exactly the moment a
+            // combo can push a value back into the model, and that must never
+            // be allowed to rewrite the incoming node's authored outfit.
+            _suppressOutfitFollow = true;
+            try
             {
-                RebuildSelectedNodeExpressionOptions();
-                RebuildSelectedNodeOutfitOptions();
+                // Detach from the previous node's Actor-change notification so the
+                // bust-preview key tracks the *current* node's actor.
+                if (_selectedNode != null) _selectedNode.PropertyChanged -= OnSelectedNodeActorMaybeChanged;
+                _selectedNode = value;
+                if (_selectedNode != null) _selectedNode.PropertyChanged += OnSelectedNodeActorMaybeChanged;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(SelectedNodeActorBustKey));
+                // Refresh the GO-path autocomplete from the current model so newly
+                // added / renamed overlays show up when editing this node's actions.
+                RebuildGameObjectNameOptions();
+                // Same for the variable / list-variable pickers — a variable whose
+                // type was just changed to List must appear in AddToList etc.
+                RebuildVariableNameOptions();
+                // Overlay list is filtered to this node's inferred level, so it must
+                // rebuild on every node change (not just actor changes).
+                RebuildSelectedNodeOverlayOptions();
+
+                // Only rebuild the option lists when the actor actually changed.
+                // Same actor → same outfit / expression options → no need to
+                // disrupt the ComboBox (which avoids the clear-cascade entirely).
+                if (_selectedNode?.Actor != prevActor)
+                {
+                    RebuildSelectedNodeExpressionOptions();
+                    RebuildSelectedNodeOutfitOptions();
+                }
+
+                // Restore — WPF binding or the rebuild may have cleared these.
+                if (_selectedNode != null)
+                {
+                    _selectedNode.Expression = savedExpression ?? "";
+                    _selectedNode.Outfit     = savedOutfit ?? "";
+                }
             }
-
-            // Restore — WPF binding or the rebuild may have cleared these.
-            if (_selectedNode != null)
+            finally
             {
-                _selectedNode.Expression = savedExpression ?? "";
-                _selectedNode.Outfit     = savedOutfit ?? "";
+                // Baseline for the outfit-follows-actor rule. Set LAST, once the
+                // restores above have finished firing their notifications, so
+                // the next real speaker edit is measured against what the node
+                // actually ended up holding.
+                _outfitFollowActor = _selectedNode?.Actor ?? "";
+                _suppressOutfitFollow = false;
             }
         }
     }
+
+    /// <summary>True while a node selection is being swapped in — see the
+    /// SelectedNode setter.</summary>
+    private bool _suppressOutfitFollow;
+
+    /// <summary>
+    /// The actor key the node editor last reconciled the Outfit field against.
+    /// Compared in <see cref="OnSelectedNodeActorMaybeChanged"/> so the outfit
+    /// only follows a REAL speaker change, not a re-notification of the same
+    /// value (the Actor setter fires unconditionally, and the selection setter
+    /// pushes values back into the node on every node change).
+    /// </summary>
+    private string _outfitFollowActor = "";
 
     private void OnSelectedNodeActorMaybeChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
@@ -575,12 +606,42 @@ public sealed class MainViewModel : ObservableObject
             OnPropertyChanged(nameof(SelectedNodeActorBustKey));
             RebuildSelectedNodeExpressionOptions();
             RebuildSelectedNodeOutfitOptions();
+            ApplyDefaultOutfitForActorChange();
         }
         else if (e.PropertyName == nameof(DialogueNodeViewModel.Outfit))
         {
             // A node outfit override changes which bust the preview shows.
             OnPropertyChanged(nameof(SelectedNodeActorBustKey));
         }
+    }
+
+    /// <summary>
+    /// Point a node's Outfit at the new speaker's default whenever the node's
+    /// actor changes — including the first time an actor is picked on a node
+    /// that had none. An outfit authored for the PREVIOUS speaker is a bust GO
+    /// that belongs to a different character, so leaving it in place is never
+    /// right; the author would have to notice and clear it by hand.
+    /// <para/>
+    /// Only fires for an actor key that resolves to a character. The actor combo
+    /// is editable and writes through on every keystroke, so a half-typed key
+    /// must leave the outfit alone (and leave the baseline untouched, so the
+    /// rule still fires once the full key lands).
+    /// </summary>
+    private void ApplyDefaultOutfitForActorChange()
+    {
+        if (_suppressOutfitFollow) return;
+        var node = _selectedNode;
+        if (node == null) return;
+
+        string actor = node.Actor ?? "";
+        if (string.Equals(actor, _outfitFollowActor, StringComparison.Ordinal)) return;
+        if (string.IsNullOrWhiteSpace(actor)) return;
+
+        var speaker = SpeakerFor(actor);
+        if (speaker == null) return;   // not a known character (yet) — don't touch anything
+
+        _outfitFollowActor = actor;
+        node.Outfit = speaker.DefaultOutfit ?? "";
     }
 
     /// <summary>
@@ -601,9 +662,10 @@ public sealed class MainViewModel : ObservableObject
 
             var actorKey = SelectedNode?.Actor;
             if (string.IsNullOrEmpty(actorKey)) return "";
-            foreach (var a in Actors)
-                if (a.Key == actorKey) return a.DefaultBustKey ?? "";
-            return "";
+            // Characters, not Actors — CharacterMerge empties the actor list
+            // once it has folded them in, so this always returned "".
+            var speaker = SpeakerFor(actorKey);
+            return speaker?.DefaultOutfit ?? "";
         }
     }
 
@@ -625,14 +687,11 @@ public sealed class MainViewModel : ObservableObject
         {
             var seen = new HashSet<string>(StringComparer.Ordinal)
                 { "Happy", "Angry", "Sad", "Flirty" };
-            foreach (var a in Actors)
-            {
-                if (a.Key != actorKey) continue;
-                foreach (var e in a.Expressions)
+            var speaker = SpeakerFor(actorKey);
+            if (speaker != null)
+                foreach (var e in speaker.Expressions)
                     if (!string.IsNullOrEmpty(e.Key) && seen.Add(e.Key))
                         exprs.Add(e.Key);
-                break;
-            }
         }
         // In-place sync, never Clear — see SyncOptions. Rebuilds on every node
         // selection, so a Clear could empty the bound Expression combo.
@@ -658,18 +717,15 @@ public sealed class MainViewModel : ObservableObject
         var actorKey = SelectedNode?.Actor;
         if (!string.IsNullOrEmpty(actorKey))
         {
-            foreach (var a in Actors)
+            var speaker = SpeakerFor(actorKey);
+            if (speaker != null)
             {
-                if (a.Key != actorKey) continue;
                 var seen = new HashSet<string>(StringComparer.Ordinal);
-                var outfits = new System.Collections.Generic.List<string>();
-                if (!string.IsNullOrEmpty(a.DefaultBustKey) && seen.Add(a.DefaultBustKey))
-                    outfits.Add(a.DefaultBustKey);
-                foreach (var o in a.Outfits)
-                    if (!string.IsNullOrEmpty(o.BustGoName) && seen.Add(o.BustGoName))
-                        outfits.Add(o.BustGoName);
-                desired.AddRange(outfits.OrderBy(n => n, StringComparer.OrdinalIgnoreCase));
-                break;
+                if (!string.IsNullOrEmpty(speaker.DefaultOutfit) && seen.Add(speaker.DefaultOutfit))
+                    desired.Add(speaker.DefaultOutfit);
+                foreach (var o in speaker.Outfits)
+                    if (!string.IsNullOrEmpty(o.GameObjectName) && seen.Add(o.GameObjectName))
+                        desired.Add(o.GameObjectName);
             }
         }
         SyncOptions(SelectedNodeOutfitOptions, desired);
@@ -987,6 +1043,92 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand AddVanillaOutfitCommand { get; }
     public RelayCommand AddCharacterExpressionCommand { get; }
     public RelayCommand AddOutfitCommand { get; }
+    public RelayCommand RemoveCharacterCommand { get; }
+    public RelayCommand RemoveOutfitCommand { get; }
+    public RelayCommand UntrackDebugDialogueCommand { get; }
+    public RelayCommand ClearDebugDialoguesCommand { get; }
+    public RelayCommand UntrackDebugRuleCommand { get; }
+    public RelayCommand ClearDebugRulesCommand { get; }
+
+    /// <summary>
+    /// Every dialogue currently flagged for the F12 condition dump. Surfaced as
+    /// a list because the flag is a per-dialogue checkbox buried in each one's
+    /// editor — easy to leave on by accident, and then the in-game log is noise.
+    /// </summary>
+    public ObservableCollection<DialogueViewModel> DebuggedDialogues { get; } = new();
+
+    public void RefreshDebuggedDialogues()
+    {
+        var want = Dialogues.Where(d => d.DebugConditions)
+                            .OrderBy(d => d.Display, StringComparer.OrdinalIgnoreCase).ToList();
+        DebuggedDialogues.Clear();
+        foreach (var d in want) DebuggedDialogues.Add(d);
+        OnPropertyChanged(nameof(HasDebuggedDialogues));
+    }
+
+    public bool HasDebuggedDialogues => DebuggedDialogues.Count > 0;
+
+    /// <summary>Keep the tracking list in step with a dialogue's own checkbox,
+    /// so ticking it in the Dialogues tab shows up on the ModForge tab and
+    /// untracking from either place agrees.</summary>
+    private DialogueViewModel HookDebugTracking(DialogueViewModel d)
+    {
+        d.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(DialogueViewModel.DebugConditions) ||
+                string.IsNullOrEmpty(e.PropertyName))
+                RefreshDebuggedDialogues();
+        };
+        return d;
+    }
+
+    /// <summary>Clear the debug flag on one dialogue, from the tracking list.</summary>
+    public void UntrackDebugDialogue(DialogueViewModel? d)
+    {
+        if (d == null) return;
+        d.DebugConditions = false;
+        RefreshDebuggedDialogues();
+    }
+
+    /// <summary>
+    /// Integration rules flagged for decision logging. Same reasoning as
+    /// <see cref="DebuggedDialogues"/> — the flag is a checkbox inside one
+    /// rule's editor, and a rule left logging is noise in every later session.
+    /// Kept as its own list because rules log continuously (no F12), so leaving
+    /// one on costs more than a dialogue does.
+    /// </summary>
+    public ObservableCollection<UpdateRuleViewModel> DebuggedRules { get; } = new();
+
+    public void RefreshDebuggedRules()
+    {
+        var want = IntegrationRules.Where(r => r.DebugConditions)
+                                   .OrderBy(r => r.Display, StringComparer.OrdinalIgnoreCase).ToList();
+        DebuggedRules.Clear();
+        foreach (var r in want) DebuggedRules.Add(r);
+        OnPropertyChanged(nameof(HasDebuggedRules));
+    }
+
+    public bool HasDebuggedRules => DebuggedRules.Count > 0;
+
+    /// <summary>Mirror of <see cref="HookDebugTracking"/> for rules.</summary>
+    private UpdateRuleViewModel HookRuleDebugTracking(UpdateRuleViewModel r)
+    {
+        r.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(UpdateRuleViewModel.DebugConditions) ||
+                string.IsNullOrEmpty(e.PropertyName))
+                RefreshDebuggedRules();
+        };
+        return r;
+    }
+
+    /// <summary>Clear the debug flag on one rule, from the tracking list.</summary>
+    public void UntrackDebugRule(UpdateRuleViewModel? r)
+    {
+        if (r == null) return;
+        r.DebugConditions = false;
+        RefreshDebuggedRules();
+    }
     public RelayCommand AddPlaceCommand { get; }
     public RelayCommand RemovePlaceCommand { get; }
     public RelayCommand AddNavigatorButtonCommand { get; }
@@ -1066,6 +1208,69 @@ public sealed class MainViewModel : ObservableObject
     /// the live bust preview runs its CPU shader (and whether it supersamples),
     /// trading smoothness for CPU. See <see cref="Services.PreviewQualityManager"/>.</summary>
     public IReadOnlyList<Services.PreviewQualityDef> PreviewQualities => Services.PreviewQualityManager.All;
+
+    /// <summary>The guided tutorials offered on the ModForge tab, each paired
+    /// with whether this author has finished it.</summary>
+    public IReadOnlyList<TutorialListItem> Tutorials =>
+        SMSModForge.Tutorials.TutorialCatalog.All
+            .Select(t => new TutorialListItem(t, Services.EditorPrefs.IsTutorialComplete(t.Id)))
+            .ToList();
+
+    /// <summary>Drives whichever tutorial is running. Always present; idle
+    /// until started, so the overlay has something to bind to from the start.</summary>
+    public TutorialRunner TutorialRunner { get; }
+
+    /// <summary>Starts the tutorial passed as the command parameter.</summary>
+    public RelayCommand StartTutorialCommand { get; }
+
+
+    /// <summary>The end-user reference rendered in the ModForge tab's
+    /// Documentation section, filtered by <see cref="DocQuery"/>. Content
+    /// itself is static — see Documentation.DocTopics.</summary>
+    public IReadOnlyList<Documentation.DocPart> DocParts =>
+        Documentation.DocSearch.Filter(Documentation.DocTopics.Parts, _docQuery);
+
+    private string _docQuery = "";
+
+    /// <summary>What the reader typed into the documentation search box.
+    /// Empty shows the whole reference.</summary>
+    public string DocQuery
+    {
+        get => _docQuery;
+        set
+        {
+            if (!SetField(ref _docQuery, value ?? "")) return;
+            OnPropertyChanged(nameof(DocParts));
+            OnPropertyChanged(nameof(DocSearchSummary));
+            OnPropertyChanged(nameof(IsDocSearchActive));
+            OnPropertyChanged(nameof(HasNoDocResults));
+        }
+    }
+
+    /// <summary>True while a search is narrowing the reference.</summary>
+    public bool IsDocSearchActive => _docQuery.Trim().Length > 0;
+
+    /// <summary>True when a search matched nothing, so the view can say so
+    /// rather than showing an unexplained blank.</summary>
+    public bool HasNoDocResults => IsDocSearchActive && DocParts.Count == 0;
+
+    /// <summary>Result line under the search box. Empty while not searching.</summary>
+    public string DocSearchSummary
+    {
+        get
+        {
+            if (!IsDocSearchActive) return "";
+            var parts = DocParts;                       // runs the filter
+            int topics = parts.Sum(p => p.Topics.Count);
+            int hits = Documentation.DocSearch.LastMatchCount;
+            if (topics == 0) return "Nothing matches that.";
+            return hits + (hits == 1 ? " result in " : " results in ") +
+                   topics + (topics == 1 ? " topic" : " topics");
+        }
+    }
+
+    /// <summary>Empties the search box and restores the full reference.</summary>
+    public RelayCommand ClearDocSearchCommand { get; }
     public RelayCommand ApplyPreviewQualityCommand { get; }
 
     public ObservableCollection<string> RecentFiles { get; } = new();
@@ -1111,6 +1316,8 @@ public sealed class MainViewModel : ObservableObject
         // Node rows tint themselves with their speaker's authored colour; they
         // hold only the actor key, so resolution comes from here.
         DialogueNodeViewModel.ActorColorProvider = ActorColorFor;
+        // Node rows label their speaker by name, not by the key they store.
+        DialogueNodeViewModel.ActorDisplayNameProvider = ActorDisplayNameFor;
         // Levels offered in that row's level dropdown: only ones that actually
         // carry GameObjects (pack places + vanilla extensions).
         NodeActionViewModel.OverlayLevelProvider = OverlayLevelOptionTokens;
@@ -1172,6 +1379,19 @@ public sealed class MainViewModel : ObservableObject
             () => SelectedCharacter != null);
 
         AddOutfitCommand   = new RelayCommand(AddOutfit, () => SelectedOutfit != null || Characters.Count > 0);
+        RemoveCharacterCommand = new RelayCommand(RemoveCharacter, () => SelectedCharacter != null);
+        RemoveOutfitCommand    = new RelayCommand(RemoveOutfit,
+            () => SelectedOutfit != null && SelectedCharacter != null);
+        UntrackDebugDialogueCommand = new RelayCommand(p => UntrackDebugDialogue(p as DialogueViewModel));
+        ClearDebugDialoguesCommand  = new RelayCommand(
+            () => { foreach (var d in DebuggedDialogues.ToList()) d.DebugConditions = false;
+                    RefreshDebuggedDialogues(); },
+            () => DebuggedDialogues.Count > 0);
+        UntrackDebugRuleCommand = new RelayCommand(p => UntrackDebugRule(p as UpdateRuleViewModel));
+        ClearDebugRulesCommand  = new RelayCommand(
+            () => { foreach (var r in DebuggedRules.ToList()) r.DebugConditions = false;
+                    RefreshDebuggedRules(); },
+            () => DebuggedRules.Count > 0);
         AddPlaceCommand    = new RelayCommand(AddPlace);
         RemovePlaceCommand = new RelayCommand(RemovePlace, () => SelectedPlace != null || PlaceTree.Selected is UnitFolderNode);
         AddNavigatorButtonCommand = new RelayCommand(AddNavigatorButton,
@@ -1205,12 +1425,20 @@ public sealed class MainViewModel : ObservableObject
         AddDialogueChildNodeCommand   = new RelayCommand(AddDialogueChildNode, () => SelectedDialogue != null && SelectedNode != null);
         AddDialogueSiblingNodeCommand = new RelayCommand(AddDialogueSiblingNode, () => SelectedDialogue != null && SelectedNode != null);
         RemoveDialogueNodeCommand     = new RelayCommand(RemoveDialogueNode, () => SelectedDialogue != null && SelectedNode != null);
+        // Paste selects what it pasted. Without this the subtree lands somewhere
+        // in the list with the ORIGINAL still selected, which reads as "nothing
+        // happened" on a long dialogue where the new rows are off-screen.
+        void PasteNodesAt(DialogueNodeViewModel? target, NodePastePosition position)
+        {
+            var pasted = SelectedDialogue?.PasteNodes(target, position);
+            if (pasted != null) SelectedNode = pasted;
+        }
         CopyNodeCommand               = new RelayCommand(() => SelectedDialogue?.CopyNode(SelectedNode), () => SelectedNode != null);
-        PasteNodeSiblingCommand       = new RelayCommand(() => SelectedDialogue?.PasteNodes(SelectedNode, NodePastePosition.Sibling),
+        PasteNodeSiblingCommand       = new RelayCommand(() => PasteNodesAt(SelectedNode, NodePastePosition.Sibling),
                                                          () => SelectedDialogue != null && SelectedNode != null && Services.EditorClipboard.HasNodes);
-        PasteNodeChildCommand         = new RelayCommand(() => SelectedDialogue?.PasteNodes(SelectedNode, NodePastePosition.Child),
+        PasteNodeChildCommand         = new RelayCommand(() => PasteNodesAt(SelectedNode, NodePastePosition.Child),
                                                          () => SelectedDialogue != null && SelectedNode != null && Services.EditorClipboard.HasNodes);
-        PasteNodeRootCommand          = new RelayCommand(() => SelectedDialogue?.PasteNodes(null, NodePastePosition.Root),
+        PasteNodeRootCommand          = new RelayCommand(() => PasteNodesAt(null, NodePastePosition.Root),
                                                          () => SelectedDialogue != null && Services.EditorClipboard.HasNodes);
         AddDialogueStartConditionCommand = new RelayCommand(AddDialogueStartCondition, () => SelectedDialogue != null);
         AddDialogueStartConditionGroupCommand = new RelayCommand(() => SelectedDialogue?.AddStartConditionGroup(), () => SelectedDialogue != null);
@@ -1266,6 +1494,24 @@ public sealed class MainViewModel : ObservableObject
         {
             if (p is Services.ThemeDef theme) Services.ThemeManager.Apply(theme);
         });
+        // Lets an action or condition row ask what type a variable is. The
+        // rows are built from their own defs and have no path to the catalog,
+        // and this is the one place that owns both.
+        NodeActionViewModel.IsBoolVariableLookup = IsBoolVariable;
+        NodeConditionViewModel.IsBoolVariableLookup = IsBoolVariable;
+
+        TutorialRunner                = new TutorialRunner(this);
+        // Tutorials is a snapshot joined against saved progress, so it has to be
+        // re-read when a run ends — otherwise a finished tutorial keeps saying
+        // Start until the editor is restarted.
+        TutorialRunner.Ended         += () => OnPropertyChanged(nameof(Tutorials));
+        StartTutorialCommand          = new RelayCommand(p =>
+        {
+            var def = p as SMSModForge.Tutorials.TutorialDef
+                   ?? (p as TutorialListItem)?.Def;
+            if (def != null) TutorialRunner.Start(def);
+        });
+        ClearDocSearchCommand         = new RelayCommand(() => DocQuery = "");
         ApplyPreviewQualityCommand    = new RelayCommand(p =>
         {
             if (p is Services.PreviewQualityDef q) Services.PreviewQualityManager.Apply(q);
@@ -1327,7 +1573,7 @@ public sealed class MainViewModel : ObservableObject
     {
         Characters.Clear();
         foreach (var c in Pack.Characters)
-            Characters.Add(new CharacterViewModel(c, () => Characters));
+            Characters.Add(HookSpeaker(new CharacterViewModel(c, () => Characters)));
         SelectedOutfit = Characters.FirstOrDefault()?.Outfits.FirstOrDefault();
     }
 
@@ -1407,8 +1653,54 @@ public sealed class MainViewModel : ObservableObject
             targetOpts.OrderBy(t => t.DisplayLabel, System.StringComparer.OrdinalIgnoreCase).ToList());
     }
 
+    /// <summary>
+    /// Offer to save before something replaces the current pack. Returns false
+    /// when the caller should abandon what it was about to do.
+    /// <para/>
+    /// Closing the window has always asked this; New and Open never did, so
+    /// either one silently discarded an afternoon's work. The tutorial even
+    /// promised otherwise — "anything unsaved will be offered back to you
+    /// first" — which was true of nothing.
+    /// <para/>
+    /// Save is routed through the normal command, so a never-saved pack still
+    /// gets its Save-As dialog. If that is cancelled the changes are still
+    /// pending, and the answer is no: the same reasoning the close guard uses.
+    /// </summary>
+    private bool ConfirmDiscardChanges(string whatFollows)
+    {
+        if (!HasUnsavedChanges) return true;
+
+        var choice = MessageBox.Show(
+            "You have unsaved changes. Save before " + whatFollows + "?",
+            "Unsaved changes", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
+        switch (choice)
+        {
+            case MessageBoxResult.Yes:
+                SavePackCommand.Execute(null);
+                return !HasUnsavedChanges;   // save cancelled / failed
+            case MessageBoxResult.No:
+                return true;                 // discard deliberately
+            default:
+                return false;                // Cancel, and anything else
+        }
+    }
+
+    /// <summary>Whether a pack variable of this name is declared as a Bool.
+    /// Read by the action / condition rows to decide between a tick box and a
+    /// text field for its value.</summary>
+    private bool IsBoolVariable(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return false;
+        foreach (var v in Variables)
+            if (string.Equals(v.Name, name, StringComparison.OrdinalIgnoreCase))
+                return v.Type == Model.PackVariableType.Bool;
+        return false;
+    }
+
     private void NewPack()
     {
+        if (!ConfirmDiscardChanges("starting a new pack")) return;
         Pack = PackRepository.CreateEmpty("Untitled");
         PackRoot = null;
         RebindAll();
@@ -1465,6 +1757,10 @@ public sealed class MainViewModel : ObservableObject
 
     private void OpenPackFromPath(string dir)
     {
+        // Guarded HERE rather than in each caller: the Open dialog and the
+        // recent list both land here, and so will anything added later.
+        if (!ConfirmDiscardChanges("opening another pack")) return;
+
         try
         {
             Pack = PackRepository.Load(dir);
@@ -1531,6 +1827,7 @@ public sealed class MainViewModel : ObservableObject
         // so a non-null root afterwards means the save went through; a
         // cancelled dialog leaves it null.
         if (PackRoot is null) { SavePackAs(); return PackRoot != null; }
+        if (!ConfirmChangesBeforeWriting()) return false;
         try
         {
             PackRepository.Save(Pack, PackRoot);
@@ -1547,6 +1844,64 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// Shows the change list and returns whether the write should go ahead.
+    /// <para/>
+    /// Deliberately the LAST thing before the write, after the folder syncs and
+    /// the pending variable rename have been folded into the model — those are
+    /// part of what a save commits, so a list assembled before them would omit
+    /// real changes. The diff is between the last saved snapshot and exactly
+    /// what <see cref="PackRepository.Save"/> is about to serialize, so it can't
+    /// drift from the file.
+    /// <para/>
+    /// Returns true unchanged when the prompt is switched off, when no UI is
+    /// attached, or when nothing differs — re-saving an unmodified pack is a
+    /// no-op that shouldn't put a dialog in the way.
+    /// </summary>
+    private bool ConfirmChangesBeforeWriting()
+    {
+        if (!ConfirmOnSave || ConfirmSave == null) return true;
+
+        var changes = PackDiff.Compute(_savedSnapshot, PackRepository.SerializeAsSaved(Pack));
+        if (changes.Count == 0) return true;
+
+        var (proceed, suppress) = ConfirmSave(changes, PackRoot);
+        if (proceed && suppress) ConfirmOnSave = false;
+        return proceed;
+    }
+
+    /// <summary>
+    /// Whether Save lists its changes for confirmation first. Persisted per
+    /// author in the local editor prefs (never in the pack); toggled from the
+    /// Options menu or by the dialog's own "Don't ask again".
+    /// </summary>
+    public bool ConfirmOnSave
+    {
+        get => Services.EditorPrefs.ConfirmOnSave;
+        set
+        {
+            if (Services.EditorPrefs.ConfirmOnSave == value) return;
+            Services.EditorPrefs.ConfirmOnSave = value;
+            OnPropertyChanged();
+        }
+    }
+
+    /// <summary>
+    /// Whether the node Text box runs Windows' spell checker. Persisted per
+    /// author in the local editor prefs, same as <see cref="ConfirmOnSave"/>.
+    /// </summary>
+    public bool SpellCheckNodeText
+    {
+        get => Services.EditorPrefs.SpellCheckNodeText;
+        set
+        {
+            if (Services.EditorPrefs.SpellCheckNodeText == value) return;
+            Services.EditorPrefs.SpellCheckNodeText = value;
+            OnPropertyChanged();
+        }
+    }
+
+
     private void SavePackAs()
     {
         SyncFoldersToModel();   // keep folder membership current (see SavePack)
@@ -1561,11 +1916,43 @@ public sealed class MainViewModel : ObservableObject
         };
         if (dialog.ShowDialog() != true) return;
         var dir = Path.GetDirectoryName(dialog.FileName)!;
+
+        // The chosen folder BECOMES the pack, and export bundles a pack root
+        // whole. Saving onto a Desktop therefore makes every document on it
+        // part of the pack — invisibly, until an archive has been written and
+        // shared. Offer a subfolder before that can happen.
+        if (Services.PackFolderSafety.RiskOf(dir) is string risk)
+        {
+            string suggested = Services.PackFolderSafety.SuggestSubfolder(dir, Pack.PackId);
+            var answer = MessageBox.Show(
+                $"That is {risk}.\n\n" +
+                "A pack owns its whole folder: everything inside it, including " +
+                "every subfolder, is bundled into the .smspack when you export. " +
+                "Saving here would make all of it part of the pack.\n\n" +
+                $"Create a folder for the pack instead?\n{suggested}",
+                "Save pack", MessageBoxButton.YesNoCancel, MessageBoxImage.Warning);
+
+            if (answer == MessageBoxResult.Cancel) return;
+            if (answer == MessageBoxResult.Yes)
+            {
+                try { Directory.CreateDirectory(suggested); dir = suggested; }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Could not create the folder",
+                                    MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+            }
+        }
+
         PackRoot = dir;
         Pack.PackId = Path.GetFileName(dir);
         OnPropertyChanged(nameof(Title));
-        SavePack();
-        RecordRecentFile(dir);
+        // Only remember the folder if something was actually written there —
+        // the save can still be declined at the change-confirmation step, and a
+        // recent-files entry pointing at a folder with no manifest just fails to
+        // open next time.
+        if (SavePack()) RecordRecentFile(dir);
     }
 
     /// <summary>
@@ -1626,6 +2013,39 @@ public sealed class MainViewModel : ObservableObject
     /// Routed through SavePack so the export also commits a pending variable
     /// rename, re-validates, marks the pack clean and flashes the Saved
     /// toast: after an export, "saved" and "exported" always agree.</summary>
+    /// <summary>
+    /// Counts what an export would sweep up and asks first when that looks
+    /// like more than a pack. Everything under the pack root goes into the
+    /// archive, so this is the only warning an author gets before a folder
+    /// they did not mean to share becomes a file they hand out.
+    /// </summary>
+    private bool ConfirmExportScale()
+    {
+        if (PackRoot is null) return false;
+        int files = 0;
+        long bytes = 0;
+        try
+        {
+            foreach (var f in Directory.EnumerateFiles(PackRoot, "*", SearchOption.AllDirectories))
+            {
+                files++;
+                try { bytes += new FileInfo(f).Length; } catch { /* skip unreadable */ }
+                if (files > SuspiciousExportFileCount || bytes > SuspiciousExportBytes) break;
+            }
+        }
+        catch { return true; }   // cannot count it — do not block the author
+
+        if (files <= SuspiciousExportFileCount && bytes <= SuspiciousExportBytes) return true;
+
+        double mb = bytes / 1024.0 / 1024.0;
+        return MessageBox.Show(
+            $"This pack folder holds at least {files} files ({mb:N0} MB):\n{PackRoot}\n\n" +
+            "Everything in it goes into the .smspack, including anything that is " +
+            $"not part of the pack.\n\nExport anyway?",
+            "Export pack", MessageBoxButton.YesNo, MessageBoxImage.Warning)
+            == MessageBoxResult.Yes;
+    }
+
     private bool EnsureSavedForExport()
     {
         // Belt and braces: the commands' CanExecute already requires
@@ -1641,8 +2061,21 @@ public sealed class MainViewModel : ObservableObject
         return SavePack();   // SavePack already reported any failure
     }
 
+    /// <summary>Beyond this many files, an export is sweeping up something
+    /// that is not the pack — most packs are tens of files, not thousands.</summary>
+    private const int SuspiciousExportFileCount = 800;
+
+    /// <summary>Likewise for size.</summary>
+    private const long SuspiciousExportBytes = 512L * 1024 * 1024;
+
     private void RunExport(string outputFile)
     {
+        // Last line of defence. The folder check at save time catches the
+        // obvious cases, but a pack root can become crowded afterwards — an
+        // author who unzips something into it, or points a pack at a folder
+        // that later grows. Better to ask than to write a private archive.
+        if (!ConfirmExportScale()) return;
+
         try
         {
             var result = PackExporter.Export(PackRoot!, outputFile);
@@ -1677,10 +2110,51 @@ public sealed class MainViewModel : ObservableObject
         if (source == BustSource.Pack)
             def.Outfits.Add(new OutfitDef { Key = def.Name, GameObjectName = def.Name });
         Pack.Characters.Add(def);
-        Characters.Add(vm);
+        Characters.Add(HookSpeaker(vm));
         foreach (var o in def.Outfits) vm.Outfits.Add(new OutfitViewModel(o));
         SelectedOutfit = vm.Outfits.FirstOrDefault();
         OnPropertyChanged(nameof(SelectedCharacter));
+    }
+
+    /// <summary>
+    /// Delete the selected character and everything it owns. Its outfits go with
+    /// it — they are its art, not shared — but dialogue nodes that name it as a
+    /// speaker are left alone: rewriting them silently would be worse than a
+    /// dangling reference the validator can point at.
+    /// </summary>
+    private void RemoveCharacter()
+    {
+        var ch = SelectedCharacter;
+        if (ch == null) return;
+        if (System.Windows.MessageBox.Show(
+                $"Delete '{ch.Display}' and its {ch.Outfits.Count} outfit(s)?" +
+                System.Environment.NewLine + System.Environment.NewLine +
+                "Dialogue lines that name it as the speaker are left as they are.",
+                "Delete character", System.Windows.MessageBoxButton.OKCancel,
+                System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.OK)
+            return;
+        Undo.Checkpoint();
+        Pack.Characters.Remove(ch.Model);
+        Characters.Remove(ch);
+        SelectedOutfit = Characters.FirstOrDefault()?.Outfits.FirstOrDefault();
+        RebuildActorAndBustOptions();
+        RefreshNodeActorTints();
+    }
+
+    private void RemoveOutfit()
+    {
+        var ch = SelectedCharacter;
+        var o = SelectedOutfit;
+        if (ch == null || o == null) return;
+        if (System.Windows.MessageBox.Show(
+                $"Delete outfit '{o.Display}'?", "Delete outfit",
+                System.Windows.MessageBoxButton.OKCancel,
+                System.Windows.MessageBoxImage.Warning) != System.Windows.MessageBoxResult.OK)
+            return;
+        Undo.Checkpoint();
+        ch.RemoveOutfit(o);
+        SelectedOutfit = ch.Outfits.FirstOrDefault() ?? Characters.FirstOrDefault()?.Outfits.FirstOrDefault();
+        RebuildActorAndBustOptions();
     }
 
     private void AddOutfit()
@@ -1803,9 +2277,10 @@ public sealed class MainViewModel : ObservableObject
     {
         Dialogues.Clear();
         foreach (var d in Pack.Dialogues)
-            Dialogues.Add(new DialogueViewModel(d));
+            Dialogues.Add(HookDebugTracking(new DialogueViewModel(d)));
         BuildDialogueTree();
         SelectedDialogue = Dialogues.FirstOrDefault();
+        RefreshDebuggedDialogues();
     }
 
     // ── Dialogue folder tree (cosmetic grouping) ─────────────────────────
@@ -2167,6 +2642,14 @@ public sealed class MainViewModel : ObservableObject
     /// <summary>Info-message hook wired by the window (title, message).</summary>
     public Action<string, string>? ShowInfo { get; set; }
 
+    /// <summary>
+    /// Save-confirmation hook wired by the window (change list, pack root) →
+    /// (go ahead?, don't-ask-again ticked?). Null means no UI is attached, in
+    /// which case <see cref="SavePack"/> just writes — the VM never blocks on a
+    /// prompt it has no way to show.
+    /// </summary>
+    public Func<IReadOnlyList<Model.PackChange>, string?, (bool Proceed, bool Suppress)>? ConfirmSave { get; set; }
+
     /// <summary>Unique key: appends _copy / _copy2… (stripping any existing _copyN first).</summary>
     private static string UniqueKey(string baseKey, IEnumerable<string> existing)
     {
@@ -2218,8 +2701,26 @@ public sealed class MainViewModel : ObservableObject
             RefreshNodeActorTints();
     }
 
-    /// <summary>Push a tint re-read to every loaded dialogue node. Cheap (a
-    /// property-changed per row) and only on an actor colour edit.</summary>
+    /// <summary>
+    /// Watch a character for the two things dialogue node rows render from it —
+    /// its colour and its name — and redraw them when either changes. Characters
+    /// are the speakers now, so this is what the old actor subscription did.
+    /// </summary>
+    private CharacterViewModel HookSpeaker(CharacterViewModel vm)
+    {
+        vm.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(CharacterViewModel.NameColor) ||
+                e.PropertyName == nameof(CharacterViewModel.DisplayName) ||
+                e.PropertyName == nameof(CharacterViewModel.Key) ||
+                string.IsNullOrEmpty(e.PropertyName))
+                RefreshNodeActorTints();
+        };
+        return vm;
+    }
+
+    /// <summary>Push a tint + label re-read to every loaded dialogue node. Cheap
+    /// (a property-changed per row) and only on a speaker colour / name edit.</summary>
     private void RefreshNodeActorTints()
     {
         foreach (var d in Dialogues)
@@ -2227,15 +2728,38 @@ public sealed class MainViewModel : ObservableObject
                 n.RefreshActorTint();
     }
 
-    /// <summary>The colour authored for an actor key, or null when the actor
+    /// <summary>
+    /// The character a node's speaker key refers to, or null.
+    /// <para/>
+    /// Speakers are CHARACTERS. The separate actor list was folded into them by
+    /// <see cref="Model.CharacterMerge"/>, which clears <c>pack.Actors</c> once
+    /// it has — so <see cref="Actors"/> is empty on every load and looking a
+    /// speaker up there always missed. The runtime keys speakers by character
+    /// key too (see the plugin's ActorRegistry.Declare), so this is the same
+    /// identity the pack ships.
+    /// </summary>
+    private CharacterViewModel? SpeakerFor(string actorKey)
+    {
+        if (string.IsNullOrWhiteSpace(actorKey)) return null;
+        return Characters.FirstOrDefault(
+            c => string.Equals(c.Key, actorKey, StringComparison.OrdinalIgnoreCase));
+    }
+
+    /// <summary>The colour authored for a speaker key, or null when the speaker
     /// isn't found or left its colour blank. Backs the node-row speaker tint.</summary>
     private System.Windows.Media.Color? ActorColorFor(string actorKey)
     {
-        if (string.IsNullOrWhiteSpace(actorKey)) return null;
-        var actor = Actors.FirstOrDefault(
-            a => string.Equals(a.Key, actorKey, StringComparison.OrdinalIgnoreCase));
-        if (actor == null || string.IsNullOrWhiteSpace(actor.NameColor)) return null;
-        return actor.NameColorValue;
+        var c = SpeakerFor(actorKey);
+        if (c == null || string.IsNullOrWhiteSpace(c.NameColor)) return null;
+        return c.NameColorValue;
+    }
+
+    /// <summary>The name to show for a speaker key on a node row. Falls back to
+    /// the key itself, which is what an unresolved speaker should read as.</summary>
+    private string ActorDisplayNameFor(string actorKey)
+    {
+        var c = SpeakerFor(actorKey);
+        return string.IsNullOrWhiteSpace(c?.Display) ? actorKey : c!.Display;
     }
     private SfxViewModel MakeSfxVm(SfxDef d)
     { var vm = new SfxViewModel(d); vm.PropertyChanged += OnSfxChanged; return vm; }
@@ -2496,7 +3020,7 @@ public sealed class MainViewModel : ObservableObject
         if (clone == null) return;
         clone.Key = UniqueKey(clone.Key, Pack.Dialogues.Select(d => d.Key));
         Pack.Dialogues.Add(clone);
-        var vm = new DialogueViewModel(clone);
+        var vm = HookDebugTracking(new DialogueViewModel(clone));
         Dialogues.Add(vm);
         var leaf = new DialogueLeafNode(vm);
         DialogueDropTarget().Add(leaf);
@@ -2723,7 +3247,7 @@ public sealed class MainViewModel : ObservableObject
             RoomTalk = "vanilla:Beach",
         };
         Pack.Dialogues.Add(def);
-        var vm = new DialogueViewModel(def);
+        var vm = HookDebugTracking(new DialogueViewModel(def));
         Dialogues.Add(vm);
         // Place the new dialogue where the selection points — selected folder,
         // the folder holding the selected dialogue, else root.
@@ -2782,17 +3306,24 @@ public sealed class MainViewModel : ObservableObject
         SelectedNode = n;
     }
 
+    // Child + sibling both start life as a copy of the node they were added
+    // from (everything but the text — see DialogueViewModel.CloneForNewNode).
+    // The next line of a scene almost always keeps the same speaker, outfit and
+    // expression, and re-picking all three per line was the bulk of the clicking
+    // in a long dialogue. "+ Root" deliberately doesn't: a root starts a fresh
+    // strand, often with a different speaker entirely.
+
     private void AddDialogueChildNode()
     {
         if (SelectedDialogue is null || SelectedNode is null) return;
-        var n = SelectedDialogue.AddNode(parentId: SelectedNode.Id);
+        var n = SelectedDialogue.AddNode(parentId: SelectedNode.Id, template: SelectedNode.Model);
         SelectedNode = n;
     }
 
     private void AddDialogueSiblingNode()
     {
         if (SelectedDialogue is null || SelectedNode is null) return;
-        var n = SelectedDialogue.AddSibling(SelectedNode);
+        var n = SelectedDialogue.AddSibling(SelectedNode, template: SelectedNode.Model);
         if (n != null) SelectedNode = n;
     }
 
@@ -2841,8 +3372,12 @@ public sealed class MainViewModel : ObservableObject
     public void RebuildActorAndBustOptions()
     {
         // In-place sync, never Clear — see SyncOptions.
+        // Speakers come from Characters — the actor list is emptied by
+        // CharacterMerge once it has folded them in, so sourcing this from
+        // Actors left the node speaker dropdown permanently blank.
         SyncOptions(ActorOptions,
-            Actors.OrderBy(a => a.Key, System.StringComparer.OrdinalIgnoreCase).Select(a => a.Key).ToList());
+            Characters.OrderBy(c => c.Key, System.StringComparer.OrdinalIgnoreCase)
+                      .Select(c => c.Key).ToList());
 
         var bustOpts = new System.Collections.Generic.List<NavigatorTargetOption>();
         foreach (var v in VanillaBusts.All)
@@ -3130,6 +3665,11 @@ public sealed class MainViewModel : ObservableObject
         Scenes.Add(vm);
         SceneTree.PlaceNew(vm);
         RebuildSceneOptions();
+        // Select what was just created, the way adding a variable or a dialogue
+        // node does. Without it the detail pane keeps showing the previous
+        // selection — or nothing at all on a fresh pack — and the new scene
+        // reads as "the button did nothing".
+        SelectedScene = vm;
     }
 
     private void RemoveScene()
@@ -3370,7 +3910,8 @@ public sealed class MainViewModel : ObservableObject
     {
         IntegrationRules.Clear();
         foreach (var r in Pack.IntegrationRules)
-            IntegrationRules.Add(new UpdateRuleViewModel(r));
+            IntegrationRules.Add(HookRuleDebugTracking(new UpdateRuleViewModel(r)));
+        RefreshDebuggedRules();
         BuildIntegrationTree();
         SelectedIntegrationRule = IntegrationRules.FirstOrDefault();
         SelectedIntegrationTreeItem = SelectedIntegrationRule != null

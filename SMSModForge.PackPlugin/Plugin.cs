@@ -166,6 +166,199 @@ namespace SMSModForge.PackPlugin
         private static bool _dailyCatchUpDone;
 
         /// <summary>
+        /// True once the vanilla calendar has stopped moving this scene — see
+        /// <see cref="VanillaDaySettled"/>.
+        /// </summary>
+        private static bool _vanillaVarsReady;
+
+        // Settle tracking for VanillaDaySettled.
+        private static int _settleHash;
+        private static int _settleCount = -1;
+        private static int _settleFrames;
+
+        /// <summary>
+        /// Frames the vanilla calendar must hold still before we believe it.
+        /// Half a second at 60fps — long enough to cover the gap between the
+        /// save slot binding and the game restoring its globals, short enough
+        /// that nothing waiting on it is perceptibly late.
+        /// </summary>
+        private const int DaySettleFrames = 30;
+
+        /// <summary>Packs whose rules are currently held waiting for a daily
+        /// refresh. Membership, not a timestamp: the hold ends on an event, not
+        /// after a duration — so this exists only to keep the enter/leave notices
+        /// to one line each instead of one per frame.</summary>
+        private static readonly HashSet<string> _refreshHeld = new HashSet<string>();
+
+        /// <summary>
+        /// True while the vanilla calendar has moved to a day this pack has not
+        /// yet refreshed for — the rules must not tick until it has.
+        /// <para/>
+        /// The day flips the moment the player picks Sleep, but the new day does
+        /// not BEGIN there: the profit summary, the morning-action choice and the
+        /// morning action itself (a dialogue, a minigame — unbounded) all run
+        /// first, and gameplay only unlocks when the Saved UI appears. That is
+        /// where the refresh belongs, and where <see cref="TickSleepAutosave"/>
+        /// does it.
+        /// <para/>
+        /// Which leaves the gap. Rules would otherwise tick right through it,
+        /// seeing the NEW day's date alongside YESTERDAY's Daily variables. An
+        /// OnRisingEdge rule that fires on that half-updated world spends its
+        /// edge on it, and the refresh then wipes what it wrote — and because
+        /// <c>TickOne</c> only re-fires when the SELECTED BRANCH CHANGES, the
+        /// same branch winning again afterwards is not a change, so the rule
+        /// stays silent for the rest of the day. That is how a schedule could
+        /// report "DailyChance … PASS" and still leave the character where she
+        /// was. Reloading fixed it only because a fresh registry has no
+        /// last-selected branch to match against.
+        /// <para/>
+        /// So the rules wait. Nothing they do is wanted during the morning
+        /// sequence anyway — placing a character for a day that has not started
+        /// is the very thing that went wrong.
+        /// <para/>
+        /// Deliberately NOT time-limited. An earlier version gave up after a
+        /// grace period and resumed the rules without the refresh, which is
+        /// precisely the corruption above; and no duration can work, because the
+        /// window is as long as the player's morning takes. The hold is released
+        /// by an event — the turnover, or the load-time catch-up — and the only
+        /// escape is structural: if the turnover's gate objects do not exist in
+        /// this build we could never be released, so we do not hold on them.
+        /// </summary>
+        private bool DailyRefreshPending(PackContext c, int today)
+        {
+            // today <= 0 means the day isn't readable — that is VanillaDaySettled's
+            // problem, not this one, and holding on it would freeze the pack for a
+            // reason this gate can't fix.
+            if (c?.Vars == null || today <= 0 || c.Vars.LastRefreshDay == today)
+            {
+                if (c != null && _refreshHeld.Remove(c.PackId))
+                    Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId +
+                                   ": daily refresh done for day " + today + " — integration rules resumed.");
+                return false;
+            }
+
+            // Can't watch for a turnover we can't find — refresh here instead of
+            // waiting forever. Not a timeout: this is decided by whether the
+            // objects exist, so it either never applies or applies immediately.
+            //
+            // Gated on the catch-up having run, because those objects are also
+            // unresolved for the first frames of a scene, and a load owing a
+            // refresh must get it from TickDailyCatchUp — which alone waits for
+            // the save slot to bind, and so refreshes the right pack's store.
+            // Without this the fallback would win that race and refresh against
+            // whatever was loaded before the slot was known.
+            if (!SleepTurnoverDetectable && _dailyCatchUpDone)
+            {
+                EnsureDayRefreshed(c, today, "no sleep turnover to wait for");
+                return false;
+            }
+
+            if (_refreshHeld.Add(c.PackId))
+                Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId + ": game is on day " + today +
+                               " but the pack last refreshed for day " + c.Vars.LastRefreshDay +
+                               " — holding integration rules until the sleep turnover refreshes them.");
+            return true;
+        }
+
+        /// <summary>Whether <see cref="TickSleepAutosave"/> has resolved the two
+        /// objects its turnover is keyed on. False means no turnover will ever be
+        /// observed, so nothing may block on one.</summary>
+        private bool SleepTurnoverDetectable => _afterSleepEvents != null && _savedUI != null;
+
+        /// <summary>
+        /// Run the day-change refresh for <paramref name="day"/> unless it has
+        /// already run for that day; returns whether it did anything.
+        /// <para/>
+        /// Idempotence is the point. Three paths want the day refreshed — the
+        /// sleep turnover (the normal one), the load-time catch-up, and the
+        /// unwatchable-turnover fallback — and whichever arrives first is the one
+        /// that counts. A second refresh for the same day is not harmless: it
+        /// resets every Daily variable again, discarding both what the schedules
+        /// placed and anything written since.
+        /// <para/>
+        /// <see cref="PackVariableStore.LastRefreshDay"/> is what makes that
+        /// work, and it is persisted, so the guarantee survives a quit: reloading
+        /// a save whose refresh already ran does not run it again, while one that
+        /// never got its refresh committed still catches up. See
+        /// <see cref="TickDailyCatchUp"/>.
+        /// </summary>
+        private bool EnsureDayRefreshed(PackContext c, int day, string reason)
+        {
+            if (c?.Vars == null || day <= 0 || c.Vars.LastRefreshDay == day) return false;
+
+            Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId + ": daily refresh for day " + day +
+                           " (last was day " + c.Vars.LastRefreshDay + ", via " + reason + ").");
+            c.Vars.RefreshOnDayChange(day);      // Daily / DailyRandom refresh policies
+            // Let OnDayChange integration rules know an event happened. On the
+            // turnover path this runs earlier in the same frame than the rules
+            // loop, so they fire while the Saved UI is still up — a schedule has
+            // repopulated before the player can reach the world map.
+            c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
+            // Report the new day's DailyChance outcomes. Nothing is rolled here:
+            // the values are derived, so this just prints what every DailyChance
+            // condition will evaluate to today.
+            LogDailyChances(c);
+            return true;
+        }
+
+        /// <summary>
+        /// Whether the vanilla globals can be trusted yet.
+        /// <para/>
+        /// A pack's own store loads from ModForge's file, which is ready before
+        /// the game has restored its GC2 globals. In that window they read their
+        /// UNINITIALISED values, and — this is the trap — those look perfectly
+        /// plausible: a real load was observed reporting <c>Day = 1</c> (Monday)
+        /// and <c>DaysPassed = 0</c> when the save was actually Thursday, day
+        /// 193. Anything that samples once and commits gets it wrong:
+        /// <list type="bullet">
+        ///   <item><see cref="TickDailyCatchUp"/> concluded the day had changed
+        ///   and ran a daily refresh, wiping a whole day's schedule state.</item>
+        ///   <item>Integration rules fired their edges against Monday. A rule
+        ///   guarded by a NEGATED day test ("not Thursday") passes happily on
+        ///   Monday, and an OnRisingEdge action that lands has spent its edge —
+        ///   nothing takes it back when the real day shows up.</item>
+        /// </list>
+        /// So the test can't be "is this value plausible" — 1 and 0 both are —
+        /// it has to be "has the state stopped changing". And it watches EVERY
+        /// global, not the two the calendar happens to live in: the restore
+        /// writes them as a batch, so any variable still moving means the batch
+        /// is still landing, and a pack condition may read any of them. Watching
+        /// only the day would also miss the case where the day's saved value
+        /// equals its uninitialised one.
+        /// <para/>
+        /// Latched once settled, so legitimate later changes (the player sleeps,
+        /// a dialogue writes a global) don't re-gate anything — and the
+        /// whole-set walk stops after the handful of frames it takes. That latch
+        /// is also why <see cref="EnsureDayRefreshed"/> can trust a mid-session
+        /// day flip immediately: the batch-restore hazard is a load-time one,
+        /// and sleeping writes the calendar deliberately, one value at a time.
+        /// </summary>
+        private bool VanillaDaySettled()
+        {
+            if (_vanillaVarsReady) return true;
+
+            GameVariableBridge.StateFingerprint(out int hash, out int count);
+            // Nothing readable yet is not "settled at zero" — it's not ready.
+            if (count == 0) { _settleFrames = 0; _settleCount = -1; return false; }
+
+            if (hash != _settleHash || count != _settleCount)
+            {
+                _settleHash = hash;
+                _settleCount = count;
+                _settleFrames = 0;
+                return false;
+            }
+            if (++_settleFrames < DaySettleFrames) return false;
+
+            _vanillaVarsReady = true;
+            Logger.LogInfo("[SMSModForge.PackPlugin] Vanilla globals settled (" + count +
+                           " variables, day-of-week " + (int)GameVariableBridge.GetNumber("Day") +
+                           ", days passed " + (int)GameVariableBridge.GetNumber("DaysPassed") +
+                           ") — running catch-up and integration rules now.");
+            return true;
+        }
+
+        /// <summary>
         /// True once the sleep autosave has fired this gameplay session (reset
         /// on every scene load). The manual-save copy reads this to decide its
         /// source slot — exactly like the host mod's <c>autosaveProcedThisSession</c>:
@@ -454,6 +647,11 @@ namespace SMSModForge.PackPlugin
             _pendingCommitFrame = -1;
             _sleepDay = -1;
             _dailyCatchUpDone = false;
+            _vanillaVarsReady = false;
+            _settleHash = 0;
+            _settleCount = -1;
+            _settleFrames = 0;
+            _refreshHeld.Clear();
             ConditionEvaluator.ResetRollLog();
             AutosaveProcedThisSession = false;
             // Reset slot tracking so the next CoreGameScene fresh-loads
@@ -481,6 +679,7 @@ namespace SMSModForge.PackPlugin
             }
             _dispatchers.Clear();
             _contexts.Clear();
+            _dialogueHosts.Clear();
             _sharedSkin = null;
             _levelWatches.Clear();
             _levelWatchesBuilt = false;
@@ -838,8 +1037,35 @@ namespace SMSModForge.PackPlugin
                 // After dialogues, run integration rules — any
                 // variable a dialogue node just mutated is visible to
                 // the rule's conditions on the same frame.
-                for (int i = 0; i < _contexts.Count; i++)
-                    _contexts[i].UpdateRules?.Tick(_contexts[i], Logger);
+                //
+                // …but not before the vanilla save has been applied. See
+                // VanillaDaySettled: until the globals stop moving, every
+                // vanilla condition answers from uninitialised values that look
+                // real. Rules are edge-triggered and their actions stick, so a
+                // rule that fires in that window is wrong for the rest of the
+                // day with nothing to correct it. Holding them for the few
+                // frames it takes costs nothing — every trigger mode either
+                // re-tests next frame or is a one-shot that is armed, not
+                // consumed, while we wait.
+                //
+                // Deliberately NOT applied to the condition-gated GameObjects
+                // below: those recompute from scratch every frame, so they
+                // self-correct the moment the data is good.
+                if (VanillaDaySettled())
+                {
+                    int today = (int)GameVariableBridge.GetNumber("Day");
+                    for (int i = 0; i < _contexts.Count; i++)
+                    {
+                        // …and not while the calendar has moved ahead of the
+                        // pack's own daily refresh. The day flips when the player
+                        // picks Sleep; the refresh lands at the turnover, on the
+                        // far side of the morning sequence. Ticking in between
+                        // means firing edges against yesterday's variables and
+                        // having them wiped. See DailyRefreshPending.
+                        if (DailyRefreshPending(_contexts[i], today)) continue;
+                        _contexts[i].UpdateRules?.Tick(_contexts[i], Logger);
+                    }
+                }
 
                 // Then the condition-gated GameObjects, so an object whose
                 // gate reads a variable a rule just wrote settles on the same
@@ -978,17 +1204,13 @@ namespace SMSModForge.PackPlugin
                 _sleepDay = (int)GameVariableBridge.GetNumber("Day");
                 foreach (var c in _contexts)
                 {
-                    if (c.Vars == null) continue;
-                    c.Vars.RefreshOnDayChange(_sleepDay);  // Daily / DailyRandom refresh policies
-                    // Let OnDayChange integration rules know an event happened.
-                    // They fire on the next Tick if their conditions also pass —
-                    // which is now while the flash is still up, so a schedule has
-                    // repopulated before the player can move.
-                    c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
-                    // Report the new day's DailyChance outcomes. Nothing is
-                    // rolled here: the values are derived, so this just prints
-                    // what every DailyChance condition will evaluate to today.
-                    LogDailyChances(c);
+                    // THE day boundary, as far as a pack is concerned: gameplay
+                    // unlocks here, so this is where the new day's Daily values
+                    // have to be in place. It is also what releases the rules —
+                    // DailyRefreshPending has been holding them since the calendar
+                    // moved, and stamping the day lets them tick later in this
+                    // same frame, against a world that is now wholly today's.
+                    EnsureDayRefreshed(c, _sleepDay, "sleep turnover");
                 }
 
                 // Commit NOW, alongside the host mod's own SaveToFile(1) /
@@ -1151,26 +1373,25 @@ namespace SMSModForge.PackPlugin
         {
             if (_dailyCatchUpDone || _lastSeenSlot <= 0) return;
 
+            // The slot binds BEFORE the game restores its globals, so the
+            // calendar has to be allowed to settle first — a "day > 0" test
+            // isn't enough, because the uninitialised day reads 1. Committing
+            // early ran a refresh for the wrong day and wiped a day's worth of
+            // schedule state. See VanillaDaySettled.
+            if (!VanillaDaySettled()) return;
+
             int day = (int)GameVariableBridge.GetNumber("Day");
             if (day <= 0) return;              // day not readable yet — try again next frame
             _dailyCatchUpDone = true;
 
             foreach (var c in _contexts)
             {
-                if (c.Vars != null && c.Vars.LastRefreshDay != day)
-                {
-                    Logger.LogInfo("[SMSModForge.PackPlugin] " + c.PackId +
-                                   ": loaded save was last refreshed for day " + c.Vars.LastRefreshDay +
-                                   " but it is day " + day + " — running the daily refresh now.");
-                    c.Vars.RefreshOnDayChange(day);
-                    c.UpdateRules?.ArmOneShots(UpdateRulesRegistry.TriggerMode.OnDayChange);
-                }
-
                 // Report the day's gates whether or not the refresh was owed.
-                // Sleeping prints them at turnover, but a session that starts
-                // mid-day never passed through one, and the outcomes hold for
-                // the rest of the day — so print the calendar on every load.
-                LogDailyChances(c);
+                // A refresh prints them itself, so this covers the other case:
+                // a session that starts mid-day never passes through a turnover,
+                // and the outcomes hold for the rest of the day.
+                if (!EnsureDayRefreshed(c, day, "loaded save"))
+                    LogDailyChances(c);
             }
         }
 
@@ -1357,6 +1578,7 @@ namespace SMSModForge.PackPlugin
             var ctx = new PackContext
             {
                 PackId = m.PackId,
+                Pack = m,
                 Log = Logger,
                 Plugin = this,
                 Vars = new PackVariableStore(m.PackId, SavesRoot, Logger),
@@ -1538,20 +1760,30 @@ namespace SMSModForge.PackPlugin
             if (dialogues == null || dialogues.Count == 0) return;
 
             var dispatcher = new DialogueDispatcher(ctx);
+            var host = EnsureDialogueHost(ctx.PackId);
             int built = 0;
             foreach (var d in dialogues)
             {
                 var dj = (Newtonsoft.Json.Linq.JObject)d;
-                var roomTalkParent = ResolveRoomTalk((string)dj["roomTalk"]);
-                if (roomTalkParent == null)
+                var b = DialogueBuilder.Build(dj, ctx, host, _sharedSkin);
+                if (b == null) continue;
+
+                // A roomtalk is now needed for ONE thing: "Prioritize this
+                // dialogue over vanilla", which disables that room's own
+                // Trigger while our conditions hold. A dialogue that doesn't
+                // ask for it never touches a roomtalk at all, and an
+                // unresolvable one is no longer fatal — it just means there is
+                // no vanilla dialogue in that room to take priority over.
+                if ((bool?)dj["disableVanillaTrigger"] ?? false)
                 {
-                    Logger.LogWarning("[SMSModForge.PackPlugin] Dialogue " + ctx.PackId + "." +
-                                      (string)dj["key"] + " — roomtalk '" + (string)dj["roomTalk"] +
-                                      "' could not be resolved; skipping");
-                    continue;
+                    b.VanillaRoomTalk = ResolveRoomTalk((string)dj["roomTalk"]);
+                    if (b.VanillaRoomTalk == null)
+                        Logger.LogWarning("[SMSModForge.PackPlugin] Dialogue " + ctx.PackId + "." +
+                                          (string)dj["key"] + " asks to take priority over vanilla, but roomtalk '" +
+                                          (string)dj["roomTalk"] + "' could not be resolved — nothing to suppress.");
                 }
-                var b = DialogueBuilder.Build(dj, ctx, roomTalkParent, _sharedSkin);
-                if (b != null) { dispatcher.Add(b); built++; }
+                dispatcher.Add(b);
+                built++;
             }
 
             _contexts.Add(ctx);
@@ -1586,8 +1818,37 @@ namespace SMSModForge.PackPlugin
         }
 
         /// <summary>
+        /// Per-pack container that hosts every dialogue GameObject the pack
+        /// builds. A scene ROOT with nothing on it but a Transform, left active
+        /// for the whole scene.
+        /// <para/>
+        /// Dialogues used to be parented to the vanilla roomtalk they were
+        /// authored against, which meant playing one had to switch that roomtalk
+        /// on — and the roomtalk's Trigger is EventOnEnable, so that ran the
+        /// entire vanilla room sequence and its dialogue landed on top of ours.
+        /// The game solves the same problem the same way: its always-live
+        /// dialogues (Villa_Sharedtalks) sit under a root object called
+        /// Always_Active with no Trigger and no Conditions. Note it is a root
+        /// and NOT a child of 8_Room_Talk — that carries a DisableChildren
+        /// component, which is presumably why.
+        /// </summary>
+        private readonly Dictionary<string, Transform> _dialogueHosts =
+            new Dictionary<string, Transform>();
+
+        private Transform EnsureDialogueHost(string packId)
+        {
+            if (_dialogueHosts.TryGetValue(packId, out var existing) && existing != null)
+                return existing;
+            var go = new GameObject("SMSModForge_" + packId + "_Dialogues");
+            _dialogueHosts[packId] = go.transform;
+            return go.transform;
+        }
+
+        /// <summary>
         /// Resolves a <c>vanilla:&lt;name&gt;</c> or <c>place:&lt;key&gt;</c>
         /// roomtalk token into the actual transform under <c>8_Room_Talk</c>.
+        /// Used only to find a vanilla Trigger to suppress — dialogues are no
+        /// longer hosted on roomtalks.
         /// </summary>
         private Transform ResolveRoomTalk(string token)
         {

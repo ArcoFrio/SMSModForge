@@ -215,10 +215,16 @@ public sealed class DialogueViewModel : ObservableObject
         return "";
     }
 
-    /// <summary>Adds a new node. If <paramref name="parentId"/> is null, the node becomes a root.</summary>
-    public DialogueNodeViewModel AddNode(int? parentId = null, DialogueNodeKind kind = DialogueNodeKind.Text)
+    /// <summary>
+    /// Adds a new node. If <paramref name="parentId"/> is null, the node becomes
+    /// a root. When <paramref name="template"/> is given, the new node inherits
+    /// every authored field from it — see <see cref="CloneForNewNode"/>.
+    /// </summary>
+    public DialogueNodeViewModel AddNode(int? parentId = null, DialogueNodeKind kind = DialogueNodeKind.Text,
+                                          DialogueNodeDef? template = null)
     {
-        var def = new DialogueNodeDef { Id = NextNodeId(), Kind = kind };
+        var def = template != null ? CloneForNewNode(template) : new DialogueNodeDef { Kind = kind };
+        def.Id = NextNodeId();
         Model.Nodes.Add(def);
         if (parentId.HasValue)
         {
@@ -234,6 +240,34 @@ public sealed class DialogueViewModel : ObservableObject
         OnPropertyChanged(nameof(RootsSummary));
         RecomputeDepths();
         return vm;
+    }
+
+    /// <summary>
+    /// Deep-copies <paramref name="template"/> as the starting point for a new
+    /// node: kind, actor, expression, outfit, duration/timeout, jump, and the
+    /// whole conditions / start-actions / finish-actions lists all carry over,
+    /// so adding the next line of a scene doesn't mean re-picking the speaker
+    /// and their expression every time.
+    /// <para/>
+    /// Four fields deliberately don't:
+    /// <list type="bullet">
+    ///   <item><c>Id</c> — allocated by the caller.</item>
+    ///   <item><c>Text</c> — the one thing that's always different.</item>
+    ///   <item><c>Children</c> — a new node starts as a leaf; copying the list
+    ///   would give two parents the same children and knot the tree.</item>
+    ///   <item><c>Tag</c> — it's a jump TARGET name. Two nodes carrying the
+    ///   same tag makes <c>Content.FindByTag</c> ambiguous (it returns whichever
+    ///   it enumerates first), so every jump aimed at the original could
+    ///   silently start landing on the copy.</item>
+    /// </list>
+    /// </summary>
+    private static DialogueNodeDef CloneForNewNode(DialogueNodeDef template)
+    {
+        var def = Services.EditorClipboard.CloneOne(template);
+        def.Text = "";
+        def.Tag = null;
+        def.Children = new List<int>();
+        return def;
     }
 
     public void RemoveNode(DialogueNodeViewModel nodeVm)
@@ -282,11 +316,12 @@ public sealed class DialogueViewModel : ObservableObject
 
     /// <summary>Pastes the clipboard node subtree into this dialogue with fresh
     /// ids, wiring its root as a sibling/child of <paramref name="target"/> or as
-    /// a new root.</summary>
-    public void PasteNodes(DialogueNodeViewModel? target, NodePastePosition position)
+    /// a new root. Returns the pasted subtree's root so the caller can select
+    /// it; null when the clipboard held no nodes.</summary>
+    public DialogueNodeViewModel? PasteNodes(DialogueNodeViewModel? target, NodePastePosition position)
     {
         var src = Services.EditorClipboard.NodeSubtree;
-        if (src == null || src.Count == 0) return;
+        if (src == null || src.Count == 0) return null;
 
         var pasted = Services.EditorClipboard.Clone(src);   // independent of clipboard
         int next = NextNodeId();
@@ -314,6 +349,10 @@ public sealed class DialogueViewModel : ObservableObject
                 var pid = FindParentId(target.Id);
                 if (pid.HasValue) Model.Nodes.First(n => n.Id == pid.Value).Children.Add(rootNewId);
                 else Model.RootNodeIds.Add(rootNewId);
+                // Land it directly BELOW the node it was pasted onto — pasting
+                // is how a line gets inserted mid-scene, and appending to the
+                // end of the sibling row is never what that means.
+                InsertAfterSibling(rootNewId, target.Id);
                 break;
             default:
                 Model.RootNodeIds.Add(rootNewId);
@@ -321,6 +360,7 @@ public sealed class DialogueViewModel : ObservableObject
         }
         OnPropertyChanged(nameof(RootsSummary));
         RecomputeDepths();
+        return Nodes.FirstOrDefault(n => n.Id == rootNewId);
     }
 
     /// <summary>
@@ -331,11 +371,40 @@ public sealed class DialogueViewModel : ObservableObject
     /// and click "+ Child".
     /// </summary>
     public DialogueNodeViewModel? AddSibling(DialogueNodeViewModel nodeVm,
-                                              DialogueNodeKind kind = DialogueNodeKind.Text)
+                                              DialogueNodeKind kind = DialogueNodeKind.Text,
+                                              DialogueNodeDef? template = null)
     {
         if (nodeVm == null) return null;
         int? parentId = FindParentId(nodeVm.Id);
-        return AddNode(parentId, kind);
+        var added = AddNode(parentId, kind, template);
+        // AddNode appends to the parent's children (or the root list). A sibling
+        // added from a selection belongs directly BELOW that selection, not at
+        // the end of the row of siblings — otherwise inserting a line into the
+        // middle of a scene silently sends it to the bottom.
+        InsertAfterSibling(added.Id, nodeVm.Id);
+        return added;
+    }
+
+    /// <summary>
+    /// Moves <paramref name="id"/> to sit immediately after
+    /// <paramref name="afterId"/> in whichever sibling list holds the latter
+    /// (its parent's children, or the root list). No-op when the target isn't
+    /// in a sibling list, which leaves the caller's append in place.
+    /// </summary>
+    private void InsertAfterSibling(int id, int afterId)
+    {
+        int? parentId = FindParentId(afterId);
+        var siblings = parentId.HasValue
+            ? Model.Nodes.First(n => n.Id == parentId.Value).Children
+            : Model.RootNodeIds;
+
+        if (!siblings.Contains(afterId)) return;
+        // Detach first, THEN locate the anchor: removing an entry that sat
+        // before the anchor shifts it, and an index captured beforehand would
+        // land the node one slot too far down.
+        siblings.Remove(id);
+        siblings.Insert(siblings.IndexOf(afterId) + 1, id);
+        RecomputeDepths();
     }
 
     /// <summary>
@@ -613,7 +682,7 @@ public sealed class DialogueViewModel : ObservableObject
                 // implicit level matches the roomtalk at create-time.
                 Params = new Dictionary<string, string>
                 {
-                    ["level"] = DefaultLevelTokenForRoomTalk(Model.RoomTalk),
+                    ["level"] = DefaultLevelTokenForRoomTalk(Model.LegacyRoomTalk),
                 },
             };
             Model.StartConditions.Insert(0, def);
@@ -624,8 +693,19 @@ public sealed class DialogueViewModel : ObservableObject
         var lockedVm = new NodeConditionViewModel(Model.StartConditions[0],
                                                   removeCallback: RemoveStartCondition,
                                                   isLocked: true);
+        // "Prioritize over vanilla" is only meaningful in a room that HAS a
+        // vanilla entry dialogue, and that follows from the level — so the
+        // checkbox's availability has to track edits to this row.
+        lockedVm.PropertyChanged += (_, __) => OnPropertyChanged(nameof(LevelHasVanillaRoomTalk));
         StartConditions.Insert(0, lockedVm);
     }
+
+    /// <summary>
+    /// Does this dialogue's level have a vanilla roomtalk to take priority
+    /// over? False for pack-authored levels and for the vanilla levels that
+    /// ship without one, where the checkbox would have nothing to suppress.
+    /// </summary>
+    public bool LevelHasVanillaRoomTalk => Model.VanillaRoomTalkAvailable;
 
     /// <summary>
     /// Pure helper: turn a roomtalk token (<c>vanilla:&lt;name&gt;</c> /

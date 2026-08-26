@@ -174,13 +174,13 @@ public sealed class PlaceViewModel : ObservableObject
         }
     }
 
-    /// <summary>Whether the backdrop has been given a jiggle of its own.</summary>
+    /// <summary>Whether the SECONDARY sprite has been given a jiggle of its own.</summary>
     public bool HasSecondaryMask => !string.IsNullOrWhiteSpace(Model.SecondaryMaskSprite);
 
-    /// <summary>Mask-editor host for the BASE art's mask.</summary>
+    /// <summary>Mask-editor host for the BASE sprite's mask.</summary>
     public IMaskEditorHost BaseMaskHost => new PlaceMaskHost(this, secondary: false);
 
-    /// <summary>Mask-editor host for the BACKDROP's mask.</summary>
+    /// <summary>Mask-editor host for the SECONDARY sprite's mask.</summary>
     public IMaskEditorHost SecondaryMaskHost => new PlaceMaskHost(this, secondary: true);
 
     private byte[]? _liveBaseMask, _liveSecondaryMask;
@@ -198,7 +198,7 @@ public sealed class PlaceViewModel : ObservableObject
         set { _liveBaseMask = value; OnPropertyChanged(); }
     }
 
-    /// <summary>Same, for the backdrop's mask.</summary>
+    /// <summary>Same, for the secondary sprite's mask.</summary>
     public byte[]? LiveSecondaryMask
     {
         get => _liveSecondaryMask;
@@ -221,7 +221,9 @@ public sealed class PlaceViewModel : ObservableObject
         public PlaceMaskHost(PlaceViewModel place, bool secondary)
         { _place = place; _secondary = secondary; }
 
-        public string Key => _place.Key + (_secondary ? "_backdropmask" : "_mask");
+        // Seeds the mask editor's Save-As filename ("<Key>_mask.PNG"), so it says
+        // which layer without repeating the word: GiftShop_secondary_mask.PNG.
+        public string Key => _place.Key + (_secondary ? "_secondary" : "_base");
         public string PoseSpritePath => _secondary ? _place.SecondarySprite : _place.BaseSprite;
 
         public string MaskPath

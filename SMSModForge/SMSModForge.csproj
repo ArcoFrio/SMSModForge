@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
@@ -48,8 +48,7 @@
     incremental builds fast — re-extracting only re-copies changed files.
   -->
   <ItemGroup>
-    <Content Include="Resources\VanillaBustArt\**\*.PNG"
-             Exclude="Resources\VanillaBustArt\.gitkeep">
+    <Content Include="Resources\VanillaArtThumbs\VanillaBustArt\**\*.PNG">
       <Link>VanillaBustArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -61,7 +60,7 @@
       than the mask being absent entirely. _contents.txt is deliberately left
       behind: it documents the extraction and nothing reads it at run time.
     -->
-    <Content Include="Resources\VanillaBustArt\**\Jiggle.txt">
+    <Content Include="Resources\VanillaArtThumbs\VanillaBustArt\**\Jiggle.txt">
       <Link>VanillaBustArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -84,10 +83,41 @@
       save-time delta pass compares against, so an extension stores only what
       it actually changes.
     -->
-    <Content Include="Resources\VanillaLevelArt\**\*.PNG;Resources\VanillaLevelArt\**\*.png;Resources\VanillaLevelArt\vanilla_levels.json">
+    <Content Include="Resources\VanillaArtThumbs\VanillaLevelArt\**\*.PNG;Resources\VanillaArtThumbs\VanillaLevelArt\**\*.png;Resources\VanillaArtThumbs\VanillaLevelArt\vanilla_levels.json">
       <Link>VanillaLevelArt\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <!--
+      Original dimensions of every thumbnail. The preview restores each image to
+      its recorded size on load, so layout is identical to shipping the full-res
+      art; only sharpness differs. Needed because the downscale rounds down and
+      the original cannot be recovered from the result.
+    -->
+    <Content Include="Resources\VanillaArtThumbs\sizes.json">
+      <Link>VanillaArtSizes.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <!--
+    Tutorial assets. Dummy art the guided tutorials copy into whatever pack
+    folder the author points them at: busts of differing shape (so a jiggle
+    mask has something visible to do), a room's two layers with no mask so the
+    author paints one, two unmasked NPCs, and one scene.
+
+    Shipped deliberately — a tutorial whose art only exists on the machine it
+    was written on is no tutorial. A manifest is never written here, because
+    the tutorial's working pack is created somewhere the author chooses, so
+    there is no modpack.json in this folder to keep out of a build.
+  -->
+  <ItemGroup>
+    <Content Include="Resources\TutorialAssets\**\*.png;Resources\TutorialAssets\**\*.PNG"
+             Exclude="Resources\TutorialAssets\**\modpack.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources\VanillaOverlays\*.png;Resources\VanillaOverlays\*.PNG">
       <Link>VanillaOverlays\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

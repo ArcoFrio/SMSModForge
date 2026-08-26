@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows.Media.Imaging;
 using SMSModForge.Model;
@@ -21,7 +21,7 @@ public static class BustComposer
         var decoder = new PngBitmapDecoder(stream, BitmapCreateOptions.PreservePixelFormat, BitmapCacheOption.OnLoad);
         var frame = decoder.Frames[0];
 
-        // Force to 256×256 BGRA32 by drawing into a transformed bitmap if needed.
+        // Force to 256×256 BGRA32.
         var converted = new FormatConvertedBitmap(frame, System.Windows.Media.PixelFormats.Bgra32, null, 0);
         if (converted.PixelWidth == JiggleShader.Size && converted.PixelHeight == JiggleShader.Size)
         {
@@ -30,13 +30,35 @@ public static class BustComposer
             return buf;
         }
 
-        var scaled = new TransformedBitmap(converted,
-            new System.Windows.Media.ScaleTransform(
-                JiggleShader.Size / (double)converted.PixelWidth,
-                JiggleShader.Size / (double)converted.PixelHeight));
-        var buf2 = new byte[JiggleShader.Stride * JiggleShader.Size];
-        scaled.CopyPixels(buf2, JiggleShader.Stride, 0);
-        return buf2;
+        // Point-sampled, not TransformedBitmap. The shipped vanilla art is a
+        // half-scale copy, so this path now runs for every borrowed bust rather
+        // than almost never, and WPF's own filtering turns a 128px bust into a
+        // soft 256px one. Nearest-neighbour keeps the pixels honest: visibly
+        // chunky rather than smeared, which reads as low resolution instead of
+        // as bad art. It also matches the composite pass below, which already
+        // point-filters its overlays for the same reason.
+        int sw = converted.PixelWidth, sh = converted.PixelHeight;
+        int srcStride = sw * 4;
+        var src = new byte[srcStride * sh];
+        converted.CopyPixels(src, srcStride, 0);
+
+        var outBuf = new byte[JiggleShader.Stride * JiggleShader.Size];
+        for (int y = 0; y < JiggleShader.Size; y++)
+        {
+            int sy = (int)((long)y * sh / JiggleShader.Size);
+            int srcRow = sy * srcStride;
+            int dstRow = y * JiggleShader.Stride;
+            for (int x = 0; x < JiggleShader.Size; x++)
+            {
+                int si = srcRow + (int)((long)x * sw / JiggleShader.Size) * 4;
+                int di = dstRow + x * 4;
+                outBuf[di]     = src[si];
+                outBuf[di + 1] = src[si + 1];
+                outBuf[di + 2] = src[si + 2];
+                outBuf[di + 3] = src[si + 3];
+            }
+        }
+        return outBuf;
     }
 
     /// <summary>
@@ -47,7 +69,21 @@ public static class BustComposer
     /// pixel-art look and keeps the overlay crisp at the denser output grid.
     /// Destination is mutated in place.
     /// </summary>
-    public static void Composite(byte[] destPremul, byte[] overlayStraight)
+    /// <param name="offsetU">
+    /// Constant UV displacement applied to the overlay's lookup, in exactly the
+    /// sense <see cref="JiggleShader"/> uses: the sample coordinate moves by
+    /// +offset, so the drawn image moves by -offset. Zero composites the overlay
+    /// where it was authored.
+    /// <para/>
+    /// This is how the game moves bust overlays. They do NOT carry the jiggle
+    /// shader — it would recolour them — so instead each is displaced rigidly by
+    /// the jiggle evaluated once at its own centroid (see the plugin's
+    /// <c>OverlayJiggle</c>). Feeding that same constant through the same
+    /// sampling path the body uses is what makes the preview agree with the game
+    /// rather than approximate it.
+    /// </param>
+    public static void Composite(byte[] destPremul, byte[] overlayStraight,
+                                 float offsetU = 0f, float offsetV = 0f)
     {
         if (destPremul.Length != JiggleShader.RenderStride * JiggleShader.RenderSize)
             throw new ArgumentException("dest bad size", nameof(destPremul));
@@ -59,15 +95,41 @@ public static class BustComposer
         // no per-pixel float math.
         const int scale = JiggleShader.RenderSize / JiggleShader.Size;
 
+        // Displacement stays POINT-sampled, on the output grid.
+        //
+        // Bilinear was tried here to smooth the bounce and is the wrong trade: at
+        // a 2x upscale an output pixel maps to source y/scale, which never lands
+        // on a texel centre, so every pixel becomes a blend of two texels even at
+        // zero offset. That softened the art permanently, not just while moving.
+        //
+        // What remains is a real limit, not a bug: a typical Strength of 0.015
+        // moves the sprite about 7.7 output pixels peak-to-peak, so a rigid
+        // point-sampled translation has roughly 8 distinct positions per bounce
+        // cycle. The BODY avoids this only because its displacement is per pixel
+        // — its texel boundaries cross at different moments across the sprite —
+        // and that is precisely what the overlays cannot have without the jiggle
+        // shader, which recolours them. Vertical bounce shows the stepping worst,
+        // being the largest term on most masks.
+        //
+        // v is bottom-up (Unity's convention, the one JiggleShader samples in)
+        // while rows run top-down, hence the sign flip on the row term.
+        float shiftX = offsetU * JiggleShader.RenderSize;
+        float shiftY = -offsetV * JiggleShader.RenderSize;
+
         for (int y = 0; y < JiggleShader.RenderSize; y++)
         {
-            int srcY = y / scale;
+            // MathF.Floor, not integer division: the latter truncates toward
+            // zero, folding a negative coordinate back onto row 0 instead of
+            // letting it fall off the canvas.
+            int srcY = (int)MathF.Floor((y + shiftY) / scale);
+            if (srcY < 0 || srcY >= JiggleShader.Size) continue;
             int destRow = y * JiggleShader.RenderStride;
             int srcRow = srcY * JiggleShader.Stride;
 
             for (int x = 0; x < JiggleShader.RenderSize; x++)
             {
-                int srcX = x / scale;
+                int srcX = (int)MathF.Floor((x + shiftX) / scale);
+                if (srcX < 0 || srcX >= JiggleShader.Size) continue;
                 int oIdx = srcRow + srcX * 4;
                 int dIdx = destRow + x * 4;
 

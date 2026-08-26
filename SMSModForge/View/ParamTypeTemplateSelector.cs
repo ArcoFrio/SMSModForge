@@ -39,6 +39,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
     public DataTemplate? MusicRefTemplate { get; set; }
     public DataTemplate? SfxRefTemplate { get; set; }
     public DataTemplate? GameObjectPathTemplate { get; set; }
+    public DataTemplate? SpriteRefTemplate { get; set; }
     public DataTemplate? ChoiceTemplate { get; set; }
 
     public override DataTemplate? SelectTemplate(object item, DependencyObject container)
@@ -65,6 +66,7 @@ public sealed class ParamTypeTemplateSelector : DataTemplateSelector
             ParamType.MusicRef => MusicRefTemplate ?? StringTemplate,
             ParamType.SfxRef => SfxRefTemplate ?? StringTemplate,
             ParamType.GameObjectPath => GameObjectPathTemplate ?? StringTemplate,
+            ParamType.SpriteRef => SpriteRefTemplate ?? StringTemplate,
             ParamType.Choice => ChoiceTemplate ?? StringTemplate,
             _ => StringTemplate,
         };

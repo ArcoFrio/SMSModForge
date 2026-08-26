@@ -1,3 +1,4 @@
+﻿using System;
 using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
@@ -22,7 +23,26 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     public string GameObjectName
     {
         get => Model.GameObjectName;
-        set { Model.GameObjectName = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            // Key follows the name unless it was deliberately made to differ.
+            // AddOutfit sets both to the same value and only this one is
+            // editable, so without this a rename left Key on the original and
+            // the tree label ("Key (GameObjectName)") went stale — while every
+            // actual reference in the pack uses GameObjectName.
+            // A BLANK name still counts as tracking. Clearing the box and
+            // retyping is the normal way to rename, and comparing Key against
+            // an empty GameObjectName reads as "deliberately different" — which
+            // detached the two permanently after the first keystroke.
+            bool keyTracked = string.IsNullOrWhiteSpace(Model.GameObjectName)
+                              || string.Equals(Model.Key, Model.GameObjectName,
+                                               StringComparison.OrdinalIgnoreCase);
+            Model.GameObjectName = value;
+            if (keyTracked && !string.IsNullOrWhiteSpace(value)) Model.Key = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Key));
+            OnPropertyChanged(nameof(Display));
+        }
     }
 
     public string BaseSprite
@@ -41,6 +61,12 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     {
         get => Model.BlinkSprite;
         set { Model.BlinkSprite = value; OnPropertyChanged(); }
+    }
+
+    public bool BlinkEnabled
+    {
+        get => Model.BlinkEnabled;
+        set { Model.BlinkEnabled = value; OnPropertyChanged(); }
     }
 
     public bool MouthEnabled

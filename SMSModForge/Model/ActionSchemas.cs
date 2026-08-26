@@ -45,23 +45,6 @@ public static class ActionSchemas
         },
 
         // ── Actor / bust visuals ───────────────────────────────────────
-        [NodeActionTypes.SetActorBust] = new[]
-        {
-            new ParamSchema("actor", "Actor", ParamType.ActorRef, "",
-                "Pack-local actor key whose bust slot you're swapping."),
-            new ParamSchema("bustKey", "Bust GO", ParamType.BustRef, "",
-                "Bust GameObject name. Dropdown lists busts declared on actors " +
-                "in this pack; type any other GO name (vanilla or pack) to override. " +
-                "Type $variableName to set the outfit dynamically from a pack " +
-                "variable's current value."),
-        },
-        [NodeActionTypes.SetActorExpression] = new[]
-        {
-            new ParamSchema("actor", "Actor", ParamType.ActorRef, "", ""),
-            new ParamSchema("expression", "Expression", ParamType.ExpressionRef, "",
-                "Expression key — Happy / Angry / Sad / Flirty by default, plus any " +
-                "custom keys declared on the actor."),
-        },
         [NodeActionTypes.SetSpriteFocus] = new[]
         {
             new ParamSchema("focused", "Focused", ParamType.Bool, "true",
@@ -69,11 +52,6 @@ public static class ActionSchemas
                 "layer; when false, their resting sorting orders are restored. No per-actor " +
                 "target — it focuses the whole cast, and resets automatically when the " +
                 "dialogue ends."),
-        },
-        [NodeActionTypes.DeactivateBust] = new[]
-        {
-            new ParamSchema("actor", "Actor", ParamType.ActorRef, "",
-                "Immediately deactivates this actor's current bust (no fade)."),
         },
         [NodeActionTypes.LeaveBust] = new[]
         {
@@ -91,6 +69,18 @@ public static class ActionSchemas
                 "are found too, so this can activate something that starts disabled."),
             new ParamSchema("active", "Active", ParamType.Bool, "true",
                 "True to SetActive(true), false for SetActive(false)."),
+        },
+        // Targeting params (kind/target/overlayLevel) are supplied by the
+        // shared category row, same as SetGameObjectActive — only what is
+        // unique to this action is declared here.
+        [NodeActionTypes.SetSprite] = new[]
+        {
+            new ParamSchema("sprite", "Sprite", ParamType.SpriteRef, "",
+                "Pack-relative PNG to draw. Applied at the image's own size."),
+            new ParamSchema("mask", "Mask (optional)", ParamType.SpriteRef, "",
+                "Pack-relative PNG for the material's _MaskTex. Leave blank to keep " +
+                "the current mask. Warns if the target has no material or its shader " +
+                "has no mask slot."),
         },
         [NodeActionTypes.EmitSignal] = new[]
         {
@@ -124,6 +114,30 @@ public static class ActionSchemas
             new ParamSchema("seconds", "Duration (s)", ParamType.Float, "0.5",
                 "Time over which the alpha tween plays."),
         },
+        [NodeActionTypes.SetComponentProperty] = new[]
+        {
+            new ParamSchema("component", "Component", ParamType.Choice, "CanvasGroup",
+                "Which component on the target to write to. A closed list, not a type name: " +
+                "each entry is supported on purpose so the property list below means something " +
+                "and a bad value fails with a readable log line.",
+                fixedOptions: new[] { "CanvasGroup" }),
+            new ParamSchema("property", "Property", ParamType.Choice, "alpha",
+                "Which field to set. CanvasGroup: 'alpha' hides the whole UI subtree without " +
+                "deactivating it (so anything animating underneath keeps running); " +
+                "'interactable' turns its controls on or off; 'blocksRaycasts' decides whether " +
+                "clicks stop here or pass through to what is behind. Hiding a panel usually " +
+                "wants all three, which is three rows.",
+                fixedOptions: new[] { "alpha", "interactable", "blocksRaycasts" }),
+            new ParamSchema("value", "Value", ParamType.String, "1",
+                "The new value, read to suit the property: a number for 'alpha' (0..1), " +
+                "'true' / 'false' for the two flags.",
+                emptyIsAValue: true),
+            new ParamSchema("seconds", "Duration (s)", ParamType.Float, "0",
+                "0 sets the value immediately; anything higher tweens to it. Numeric " +
+                "properties only — a flag has nothing to tween through, so this is ignored " +
+                "for those and the change lands at once."),
+        },
+
         [NodeActionTypes.MoveGameObject] = new[]
         {
             new ParamSchema("home", "Return to original", ParamType.Bool, "false",
@@ -165,10 +179,9 @@ public static class ActionSchemas
         },
 
         // ── Flow control ───────────────────────────────────────────────
-        // EndDialogue / DeactivateAllScenes / ClearList (last has a single
-        // list param). EndDialogue + DeactivateAllScenes intentionally render
+        // DeactivateAllScenes / ClearList (last has a single
+        // list param). DeactivateAllScenes intentionally renders
         // no params.
-        [NodeActionTypes.EndDialogue] = Empty,
         [NodeActionTypes.Wait] = new[]
         {
             new ParamSchema("seconds", "Seconds", ParamType.Float, "0.5",
@@ -244,6 +257,8 @@ public static class ActionSchemas
                 "Pack-local scene key declared on the Scenes tab."),
         },
         [NodeActionTypes.DeactivateAllScenes] = Empty,
+        // No params: it's a hand-off, not a setting. See NodeActionTypes.LeaveUiFaded.
+        [NodeActionTypes.LeaveUiFaded] = Empty,
     };
 
     /// <summary>Returns the schema for <paramref name="actionType"/>, or
