@@ -1,7 +1,7 @@
-// SMSModForge — GC2 Dialogue Extractor (Unity Editor script)
+﻿// SMSModForge — GC2 Dialogue Extractor (Unity Editor script)
 //
 // HOW TO USE
-//   1. Copy this file into your Starmaker Story / SMSAndroids *asset*
+//   1. Copy this file into your Starmaker Story *asset*
 //      Unity project under any `Assets/Editor/` folder (create one if it
 //      doesn't exist — Unity treats anything inside an `Editor` folder as
 //      editor-only code). This must be the project that contains the
@@ -9,7 +9,7 @@
 //   2. From Unity's main menu pick:  Tools › SMSModForge › Extract
 //      Dialogues…   You'll be prompted for an output `.json` file.
 //   3. Send the resulting JSON file back — it is consumed when authoring
-//      the `dialogues` array of SMSAndroidsPack/modpack.json.
+//      the `dialogues` array of a pack's modpack.json.
 //
 // WHAT GETS EXTRACTED
 //   Every prefab asset in the project whose ROOT GameObject carries a
@@ -19,7 +19,7 @@
 //     * assetName / assetPath              — the .prefab file
 //     * hierarchy                          — the prefab's complete child
 //       GameObject tree (names, active state, components). This is where
-//       the SMSAndroids "marker" children live — `Scene1`..`SceneN`,
+//       a mod's "marker" children live — `Scene1`..`SceneN`,
 //       `DialogueActivator`, `DialogueFinisher`, `MouthActivator`,
 //       `SpriteFocus` — the GameObjects a dialogue node's instructions
 //       toggle on/off and that MainStory.cs polls.
@@ -179,7 +179,7 @@ namespace SMSModForge.UnityTools
 
             string defaultRoot = Path.GetDirectoryName(Application.dataPath) ?? "";
             string outPath = EditorUtility.SaveFilePanel(
-                "Save extracted dialogues", defaultRoot, "SMSAndroidsDialogues", "json");
+                "Save extracted dialogues", defaultRoot, "ExtractedDialogues", "json");
             if (string.IsNullOrEmpty(outPath)) return;
 
             var sb = new StringBuilder(1 << 20);

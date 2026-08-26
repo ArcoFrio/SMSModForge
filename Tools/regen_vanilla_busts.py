@@ -1,25 +1,29 @@
 #!/usr/bin/env python3
 """
-Regenerate `SMSModForge/Model/VanillaBusts.cs` from a fresh
-CoreGameScene hierarchy dump. Use this when the target Starmaker Story
-version changes and the bust list shifts.
+Rebuild `SMSModForge/Model/VanillaBusts.cs` from a CoreGameScene hierarchy
+dump: every direct child of `2_Bust_Manager`, with a best-effort `Character`
+grouping taken from the prefix before the first underscore.
 
-Workflow:
-    1. Re-dump the hierarchy. The SMSAndroids dev tooling produces a
-       file like `CoreGameScene_Hierarchy_1.8E.txt`. Point this script at
-       the new file with `--hierarchy`.
-    2. The script extracts every direct child of `2_Bust_Manager` and
-       writes the catalog to the .cs file at
-       `--output` (defaults to the live one in this repo).
-    3. Best-effort `Character` grouping is derived from the GO name —
-       prefix before the first underscore, with a few hand-tuned
-       overrides for special-cased names. Review/refine the result
-       before committing.
+READ THIS BEFORE RUNNING IT
+    The shipped catalog is NOT the raw extraction. Busts that sit in the
+    scene with no content showing them are excluded deliberately -- see the
+    header of VanillaBusts.cs -- and this script knows nothing about that.
+    Run it as-is and it writes them all back, including the ones removed on
+    purpose, and the art generator then starts shipping their artwork again.
+
+    So treat the output as a candidate list to diff against the current
+    catalog, never as a drop-in replacement. --output defaults to the live
+    file; point it somewhere else unless you mean to overwrite.
+
+    To genuinely refresh for a new game version: run the bust audit in the
+    SMSDiagDebug plugin (it scans what references each bust and exports the
+    art of the ones nothing does), review the shortlist with the people who
+    made the game, and add back only what is confirmed shipped.
 
 Usage:
     python regen_vanilla_busts.py \
-        --hierarchy ../../SMSAndroids/SMSAndroids/ReferenceClasses/CoreGameScene_Hierarchy_1.8E.txt \
-        [--output ../SMSModForge/Model/VanillaBusts.cs]
+        --hierarchy path/to/CoreGameScene_Hierarchy_<version>.txt \
+        --output /tmp/candidate_busts.cs
 """
 
 from __future__ import annotations

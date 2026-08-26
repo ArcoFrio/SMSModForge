@@ -1,4 +1,4 @@
-// SMSModForge — Vanilla Bust Art Extractor (Unity Editor script)
+﻿// SMSModForge — Vanilla Bust Art Extractor (Unity Editor script)
 //
 // HOW TO USE
 //   1. Copy this file into your Starmaker Story Unity project under any
@@ -25,7 +25,7 @@
 //
 //   The bust GameObject itself is only a "CharacterBox" container — the
 //   real body art lives on its first child (`MBase1`, `D1Base`, …), which
-//   is how SMSAndroids reaches it too (`newBust.transform.GetChild(0)`).
+//   is how the game's own code reaches it too (`newBust.transform.GetChild(0)`).
 //   Renderers under that body are classified by structural *pattern*, not
 //   by exact GameObject names, so a `D1Base` bust is handled like an
 //   `MBase1` one:
@@ -160,7 +160,7 @@ namespace SMSModForge.UnityTools
             // The real bust art lives on the bust GO's first child —
             // MBase1 / D1Base / etc. The bust GO itself only carries a
             // "CharacterBox" placeholder sprite, which is never the art.
-            // (SMSAndroids reaches the body the same way, via
+            // (the game reaches the body the same way, via
             // newBust.transform.GetChild(0).)
             if (bustRoot.childCount == 0) return 0;
             Transform body = bustRoot.GetChild(0);

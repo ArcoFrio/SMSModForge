@@ -131,19 +131,23 @@ names the key it writes.
 
 ### Building
 
-Both projects live in one solution. The editor needs the **.NET 8 SDK**. The
-plugin needs a sibling [SMSAndroids checkout](../SMSAndroids) next to this one,
-so it can resolve its game DLL references from `..\..\SMSAndroids\Libraries\`.
+Both projects live in one solution. The editor needs only the **.NET 8 SDK**:
 
 ```pwsh
 dotnet build SMSModForge\SMSModForge.csproj
 dotnet run   --project SMSModForge
-
-dotnet build SMSModForge.PackPlugin\SMSModForge.PackPlugin.csproj
 ```
 
-The plugin's `OutputPath` points at a specific local game install — change it
-in `SMSModForge.PackPlugin.csproj` for your machine.
+The plugin additionally needs the game's managed assemblies — BepInEx, Harmony,
+Unity, GC2 and the base game's `Assembly-CSharp`. None are redistributable, so
+they are not in this repo; point `GameLibs` at wherever you keep them:
+
+```pwsh
+dotnet build SMSModForge.PackPlugin\SMSModForge.PackPlugin.csproj -p:GameLibs=C:\path\to\Libraries\
+```
+
+The plugin's `OutputPath` also points at one specific local game install —
+change it in `SMSModForge.PackPlugin.csproj` for your machine.
 
 **Build a release from a clean output directory.** The content globs use
 `PreserveNewest`, which copies changed files but never deletes removed ones, so

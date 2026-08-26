@@ -17,25 +17,25 @@
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
     <!--
-      Library path: the plugin shares the same DLL family as SMSAndroidsCore
-      (BepInEx, base game assemblies, Unity, GC2). We point at the sibling
-      SMSAndroids checkout's Libraries folder rather than copying binaries
-      into this repo — see SMSAndroids/SMSAndroidsCore.csproj for the canonical
-      list. If a contributor doesn't have SMSAndroids checked out, this
-      project won't compile (the editor still does).
+      Where the game's managed assemblies live: BepInEx, Harmony, Unity, GC2
+      and the base game's own Assembly-CSharp. None are redistributable, so
+      they are not in this repository and there is no default that could be
+      right on someone else's machine.
+
+      Set GameLibs in Directory.Build.props — copy Directory.Build.props.example
+      and edit it — or pass it per build:
+
+          dotnet build -p:GameLibs=C:\path\to\Libraries\
+
+      The editor needs none of this and builds without it.
     -->
-    <SmsLibs>..\..\SMSAndroids\Libraries\</SmsLibs>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>false</Optimize>
-    <!--
-      Debug builds drop into the same local install BepInEx folder as
-      SMSAndroidsCore. Change this path on your machine if you install the
-      game elsewhere.
-    -->
-    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E\BepInEx\plugins\</OutputPath>
+    <!-- Set PluginOutputPath in Directory.Build.props; see the example file. -->
+    <OutputPath>$(PluginOutputPath)</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -44,7 +44,7 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>D:\Downloads\SkyrimM\spec\uTorrent\Starmaker Story 1.8E\BepInEx\plugins\</OutputPath>
+    <OutputPath>$(PluginOutputPath)</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -114,91 +114,91 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="BepInEx">
-      <HintPath>$(SmsLibs)BepInEx.dll</HintPath>
+      <HintPath>$(GameLibs)BepInEx.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="0Harmony">
-      <HintPath>$(SmsLibs)0Harmony.dll</HintPath>
+      <HintPath>$(GameLibs)0Harmony.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-      <HintPath>$(SmsLibs)Newtonsoft.Json.dll</HintPath>
+      <HintPath>$(GameLibs)Newtonsoft.Json.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(SmsLibs)Assembly-CSharp.dll</HintPath>
+      <HintPath>$(GameLibs)Assembly-CSharp.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(SmsLibs)Assembly-CSharp-firstpass.dll</HintPath>
+      <HintPath>$(GameLibs)Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="GameCreator.Runtime.Core">
-      <HintPath>$(SmsLibs)GameCreator.Runtime.Core.dll</HintPath>
+      <HintPath>$(GameLibs)GameCreator.Runtime.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="GameCreator.Runtime.Dialogue">
-      <HintPath>$(SmsLibs)GameCreator.Runtime.Dialogue.dll</HintPath>
+      <HintPath>$(GameLibs)GameCreator.Runtime.Dialogue.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>$(SmsLibs)Unity.TextMeshPro.dll</HintPath>
+      <HintPath>$(GameLibs)Unity.TextMeshPro.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine">
-      <HintPath>$(SmsLibs)UnityEngine.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(SmsLibs)UnityEngine.CoreModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.CoreModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
-      <HintPath>$(SmsLibs)UnityEngine.UI.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIModule">
-      <HintPath>$(SmsLibs)UnityEngine.UIModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.UIModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UIElementsModule">
-      <HintPath>$(SmsLibs)UnityEngine.UIElementsModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.UIElementsModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>$(SmsLibs)UnityEngine.ImageConversionModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.ImageConversionModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.ParticleSystemModule">
-      <HintPath>$(SmsLibs)UnityEngine.ParticleSystemModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.ParticleSystemModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(SmsLibs)UnityEngine.TextRenderingModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.TextRenderingModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.SpriteMaskModule">
-      <HintPath>$(SmsLibs)UnityEngine.SpriteMaskModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.SpriteMaskModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.SpriteShapeModule">
-      <HintPath>$(SmsLibs)UnityEngine.SpriteShapeModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.SpriteShapeModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.AudioModule">
-      <HintPath>$(SmsLibs)UnityEngine.AudioModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.AudioModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(SmsLibs)UnityEngine.InputLegacyModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.InputLegacyModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestModule">
-      <HintPath>$(SmsLibs)UnityEngine.UnityWebRequestModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.UnityWebRequestModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UnityWebRequestAudioModule">
-      <HintPath>$(SmsLibs)UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
+      <HintPath>$(GameLibs)UnityEngine.UnityWebRequestAudioModule.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="System" />
@@ -208,4 +208,10 @@
     <Reference Include="System.IO.Compression.FileSystem" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="CheckLocalPaths" BeforeTargets="_CheckForInvalidConfigurationAndPlatform">
+    <Error Condition="'$(GameLibs)' == ''"
+           Text="GameLibs is not set. Copy Directory.Build.props.example to Directory.Build.props and point GameLibs at the game's managed assemblies. (The SMSModForge editor builds without this.)" />
+    <Error Condition="'$(PluginOutputPath)' == ''"
+           Text="PluginOutputPath is not set. Copy Directory.Build.props.example to Directory.Build.props and point PluginOutputPath at your BepInEx plugins folder." />
+  </Target>
 </Project>

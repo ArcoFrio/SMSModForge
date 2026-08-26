@@ -1,4 +1,4 @@
-// SMSModForge — GC2 Dialogue Actor Extractor (Unity Editor script)
+﻿// SMSModForge — GC2 Dialogue Actor Extractor (Unity Editor script)
 //
 // HOW TO USE
 //   1. Copy this file into your Starmaker Story Unity project under any
@@ -7,7 +7,7 @@
 //   2. From Unity's main menu pick:  Tools › SMSModForge › Extract Actors…
 //      You'll be prompted for an output `.json` file location.
 //   3. Send the resulting JSON file back — it is consumed when authoring
-//      the `actors` array of SMSAndroidsPack/modpack.json.
+//      the `actors` array of a pack's modpack.json.
 //
 // WHAT GETS EXTRACTED
 //   Every Game Creator 2 Dialogue `Actor` ScriptableObject in the project
@@ -129,7 +129,7 @@ namespace SMSModForge.UnityTools
 
             string defaultRoot = Path.GetDirectoryName(Application.dataPath) ?? "";
             string outPath = EditorUtility.SaveFilePanel(
-                "Save extracted actors", defaultRoot, "SMSAndroidsActors", "json");
+                "Save extracted actors", defaultRoot, "ExtractedActors", "json");
             if (string.IsNullOrEmpty(outPath)) return;
 
             File.WriteAllText(outPath, JsonUtility.ToJson(file, true));

@@ -4,9 +4,9 @@ namespace SMSModForge.Model;
 
 /// <summary>
 /// Catalog of vanilla bust GameObjects under <c>2_Bust_Manager</c> in
-/// <c>CoreGameScene</c> in Starmaker Story 1.8E. Used by the Actors tab
-/// so an actor's "default bust" can point at an existing in-game
-/// character without the pack needing to ship one of its own.
+/// <c>CoreGameScene</c> in Starmaker Story 1.8E. Used by the Characters tab
+/// so a character can borrow an existing in-game bust instead of the pack
+/// shipping art of its own.
 /// <para/>
 /// The pack plugin treats vanilla bust references identically to pack
 /// bust references — both are GameObject-name lookups under

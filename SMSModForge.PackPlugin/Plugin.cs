@@ -874,8 +874,8 @@ namespace SMSModForge.PackPlugin
         /// <summary>
         /// The running game's build version, parsed from the vanilla main-menu
         /// text the banner clones — its last space-separated token ("Build
-        /// 1.8E" → "1.8E"). Same parse the classic SMSAndroids / SMSGallery
-        /// headers used for their red incompatibility tint. Empty string when
+        /// 1.8E" → "1.8E"). The same parse older mod headers used for their
+        /// red incompatibility tint. Empty string when
         /// the text can't be read (no marking happens then).
         /// </summary>
         private string GetVanillaGameVersion(GameObject prototype)

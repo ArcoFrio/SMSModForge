@@ -9,14 +9,16 @@
 # Claude Code local session data
 .claude/
 
-# ── SMSAndroids modpack + migration workspace ─────────────────────────
-# ModForge is a generic toolkit; the Androids pack and everything used to
-# migrate that mod's content stays local. Nothing here is needed for the
-# editor or the PackPlugin to build or run.
-SMSAndroidsPack/
-SMSAndroidsPack.smspack
-SMSAndroidsActors.json
-SMSAndroidsDialogues.json
+# ── Local machine paths ───────────────────────────────────────────────
+# Where this machine keeps the game's assemblies and its BepInEx folder.
+# Directory.Build.props.example is the tracked template.
+Directory.Build.props
+
+# ── Local migration workspace ─────────────────────────────────────────
+# ModForge is a generic toolkit. A specific mod's pack, and whatever is used
+# to migrate its content across, stays on the machine doing the migrating --
+# none of it is needed for the editor or the PackPlugin to build or run.
+# Per-mod names for these live in .git/info/exclude, not here.
 modpack BAK.json
 # Tools/ used to be ignored wholesale. That took the build's own scripts with
 # it: MakeArtThumbnails.py regenerates the art a release ships, the
@@ -24,11 +26,6 @@ modpack BAK.json
 # catalogs, and none of it existed anywhere but one machine. Tracked now.
 __pycache__/
 *.pyc
-DIALOGUE_AUDIT.md
-GENERIC_CANDIDATES.md
-INTEGRATION.md
-PORTING_ROADMAP.md
-
 # One-off conversion / shader-analysis scratch scripts
 _convert_*.py
 _port_scenes.py

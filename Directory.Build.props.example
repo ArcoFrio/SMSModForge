@@ -1,0 +1,32 @@
+<Project>
+  <!--
+    Machine-specific paths for building SMSModForge.PackPlugin.
+
+    Copy this file to Directory.Build.props (same folder) and edit the two
+    values. That copy is git-ignored, so your paths stay on your machine and
+    nobody else inherits them.
+
+    The editor (SMSModForge) needs none of this and builds without the file.
+  -->
+  <PropertyGroup>
+
+    <!--
+      Folder holding the game's managed assemblies: BepInEx.dll, 0Harmony.dll,
+      Newtonsoft.Json.dll, Assembly-CSharp.dll, Assembly-CSharp-firstpass.dll,
+      the GameCreator.Runtime.* set, and the UnityEngine.* set.
+
+      None of them are redistributable, so they are not in this repository.
+      Take them from your own installation of the game (its *_Data/Managed
+      folder) plus your BepInEx install. Keep the trailing slash.
+    -->
+    <GameLibs>C:\path\to\Libraries\</GameLibs>
+
+    <!--
+      Where a plugin build lands. Point it straight at your game's BepInEx
+      plugins folder and a build installs itself; point it at bin\ and copy by
+      hand. Keep the trailing slash.
+    -->
+    <PluginOutputPath>C:\path\to\Starmaker Story\BepInEx\plugins\</PluginOutputPath>
+
+  </PropertyGroup>
+</Project>

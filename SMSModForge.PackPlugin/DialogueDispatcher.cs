@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using GameCreator.Runtime.Common;
 using GameCreator.Runtime.Dialogue;
 // DialogueUI lives in GameCreator.Runtime.Dialogue.dll (already referenced) and
@@ -862,8 +862,9 @@ namespace SMSModForge.PackPlugin
         /// every frame. These are three static reads.
         /// <para/>
         /// Exposed as a static helper so <see cref="Plugin"/>'s per-frame
-        /// mirror tick — and, through it, SMSAndroids' bridge — can call the
-        /// same check without holding a dispatcher reference.
+        /// mirror tick — and, through it, any outside caller bridging into the
+        /// pack — can call the same check without holding a dispatcher
+        /// reference.
         /// </summary>
         internal static bool IsAnyDialoguePlayingGlobal()
         {
