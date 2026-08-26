@@ -22,6 +22,8 @@ internal static class TutorialsPart2
     private const int TabPlaces = 3;
     private const int TabDialogues = 5;
     private const int TabScenes = 6;
+    private const int TabMusic = 7;
+    private const int TabSfx = 8;
     private const int TabWallpapers = 9;
     private const int TabVariables = 10;
     private const int TabIntegration = 11;
@@ -620,6 +622,29 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
+                    Title = "Sound comes from two other tabs",
+                    Body = "Music holds background tracks, and an action switches between " +
+                           "them. SFX holds one-shot effects, played by an action the same " +
+                           "way. Both take an OGG, WAV or MP3 from your pack folder, and both " +
+                           "have a Play button so you can hear one without starting the game.",
+                    Kind = StepKind.Read,
+                    Tab = TabMusic,
+                },
+                new TutorialStep
+                {
+                    Title = "The trick worth knowing about SFX",
+                    Body = "An effect does not need an action at all. Auto-trigger patterns is " +
+                           "a list of words that fire it on their own whenever one of them " +
+                           "shows up in a line, written between asterisks by convention, like " +
+                           "*plap*. Drop extra recordings beside the first one named _1, _2 " +
+                           "and so on and the game picks between them at random, so a sound " +
+                           "used often does not wear thin. Neither is discoverable from the " +
+                           "tab, which is the only reason this step exists.",
+                    Kind = StepKind.Read,
+                    Tab = TabSfx,
+                },
+                new TutorialStep
+                {
                     Title = "Add a rule",
                     Body = "Use + Rule. Give it a description while you are there — in six " +
                            "months the conditions will still be readable and the reason will " +
@@ -684,11 +709,14 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
-                    Title = "That is the whole editor",
+                    Title = "That is the shape of it",
                     Body = "Characters, places, conversations, art, memory and rules — and one " +
-                           "door from the bedroom to go and stand in all of it. Everything else " +
-                           "is more of the same shape, and the Documentation section covers the " +
-                           "parts these tutorials did not reach.",
+                           "door from the bedroom to go and stand in all of it. Three things " +
+                           "these seven never made you build: Map Buttons, which put a place on " +
+                           "the world map rather than on another room's strip; Music; and SFX. " +
+                           "All three work like everything you have already done, and the " +
+                           "Documentation section on this tab covers them field by field — " +
+                           "start with Start here if any of it stopped making sense.",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
                 },
