@@ -61,7 +61,7 @@ The editor teaches itself. On the **⚒ ModForge** tab you will find:
   control at a time — a character, a room you can walk into, a conversation,
   a jiggle mask, NPCs, variables, and rules. Everything they make is kept;
   each tutorial carries on in the pack the last one left.
-- **A 30-topic reference** with search, covering every tab and field.
+- **A 33-topic reference** with search, covering every tab and field.
 - **Validate**, which lists what is wrong with your pack and jumps you to it.
 
 If you read nothing else, run the first tutorial. It ends with your character
@@ -99,7 +99,7 @@ The editor manages this for you — it is here so you can read a pack by hand.
   Sprites/
     MyGirl/
       Base.PNG                 ← bust art, 256×256 RGBA
-      Mask.PNG                 ← jiggle mask: R=bounce, G=wave, B=noise, A=intensity
+      Mask.PNG                 ← jiggle mask: R/G/B = Bounce/Sway/Wave, A scales all three
       Blink.PNG                ← optional
       Mouth1.PNG … Mouth4.PNG  ← optional
       ExpressionHappy.PNG …    ← optional: Happy / Angry / Sad / Flirty
@@ -114,6 +114,11 @@ Bust art is **256×256 RGBA**. Room layers follow the vanilla level shape,
 
 **Masks are optional.** A room or bust with no mask simply does not move — the
 plugin binds a fully transparent mask rather than refusing to build it.
+
+A place mask is a different shape from a bust one: a single intensity plane, and
+it lives in **alpha**, so painting a place mask's colour channels does nothing.
+The mask painter already knows which kind it is editing and hides the layers
+that do not apply.
 
 A place draws in two layers. The editor calls them **back** and **front** by
 where they sit; the manifest calls them `secondarySprite` and `baseSprite`,
