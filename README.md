@@ -140,14 +140,19 @@ dotnet run   --project SMSModForge
 
 The plugin additionally needs the game's managed assemblies — BepInEx, Harmony,
 Unity, GC2 and the base game's `Assembly-CSharp`. None are redistributable, so
-they are not in this repo; point `GameLibs` at wherever you keep them:
+they are not in this repo. Copy `Directory.Build.props.example` to
+`Directory.Build.props` and fill in the two paths it asks for: where those
+assemblies live, and where a plugin build should land. That copy is git-ignored,
+so your paths stay on your machine.
 
 ```pwsh
-dotnet build SMSModForge.PackPlugin\SMSModForge.PackPlugin.csproj -p:GameLibs=C:\path\to\Libraries\
+copy Directory.Build.props.example Directory.Build.props
+# edit it, then:
+dotnet build SMSModForge.PackPlugin\SMSModForge.PackPlugin.csproj
 ```
 
-The plugin's `OutputPath` also points at one specific local game install —
-change it in `SMSModForge.PackPlugin.csproj` for your machine.
+Build it without that file and it stops with a message naming the file to copy,
+rather than a wall of unresolved references.
 
 **Build a release from a clean output directory.** The content globs use
 `PreserveNewest`, which copies changed files but never deletes removed ones, so
