@@ -192,6 +192,39 @@ public class TutorialShapeTests
     }
 
     [Fact]
+    public void Every_tutorial_belongs_to_a_group()
+    {
+        var bad = TutorialCatalog.All
+            .Where(t => string.IsNullOrWhiteSpace(t.Group))
+            .Select(t => t.Id)
+            .ToList();
+
+        Assert.True(bad.Count == 0,
+            "A tutorial with no group falls under a blank heading in the list:" +
+            System.Environment.NewLine + "  " +
+            string.Join(System.Environment.NewLine + "  ", bad));
+    }
+
+    [Fact]
+    public void A_groups_tutorials_are_kept_together()
+    {
+        // The list groups by this, preserving catalog order. A group that
+        // appears, stops and starts again shows its heading twice, which reads
+        // as two different things with the same name.
+        var seen = new List<string>();
+        string? current = null;
+        foreach (var t in TutorialCatalog.All)
+        {
+            if (t.Group == current) continue;
+            Assert.False(seen.Contains(t.Group),
+                $"Group '{t.Group}' is split: it appears, is interrupted, and resumes. " +
+                "Order: " + string.Join(" -> ", TutorialCatalog.All.Select(x => x.Group)));
+            seen.Add(t.Group);
+            current = t.Group;
+        }
+    }
+
+    [Fact]
     public void Every_tutorial_has_a_title_and_a_summary()
     {
         var bad = TutorialCatalog.All

@@ -1044,6 +1044,31 @@ public sealed class MainViewModel : ObservableObject
         }
     }
 
+    /// <summary>
+    /// The tutorial list, grouped by the part of the editor each one teaches.
+    /// <para/>
+    /// A view rather than a second collection: it groups the same items the
+    /// list already holds, so refreshing completion does not have to rebuild
+    /// anything. The catalog keeps groups contiguous and in ladder order, and
+    /// the view preserves that order rather than sorting, so the sequence an
+    /// author sees is the one the catalog states.
+    /// </summary>
+    public System.ComponentModel.ICollectionView TutorialsView
+    {
+        get
+        {
+            // Built fresh every time, because Tutorials is itself rebuilt every
+            // time: it joins the catalog against saved progress, so the list
+            // that carries the ticks is a new list after each finish. A cached
+            // view would be a view over the snapshot taken when the tab first
+            // opened, and no tutorial would ever appear to complete.
+            var view = new System.Windows.Data.CollectionViewSource { Source = Tutorials }.View;
+            view.GroupDescriptions.Add(
+                new System.Windows.Data.PropertyGroupDescription(nameof(TutorialListItem.Group)));
+            return view;
+        }
+    }
+
     public ObservableCollection<ValidationIssue> Issues { get; } = new();
 
     // ── Commands
@@ -1532,7 +1557,13 @@ public sealed class MainViewModel : ObservableObject
         // Tutorials is a snapshot joined against saved progress, so it has to be
         // re-read when a run ends — otherwise a finished tutorial keeps saying
         // Start until the editor is restarted.
-        TutorialRunner.Ended         += () => OnPropertyChanged(nameof(Tutorials));
+        TutorialRunner.Ended         += () =>
+        {
+            OnPropertyChanged(nameof(Tutorials));
+            // The list is bound through the grouped view, so that is the
+            // one the window is actually watching.
+            OnPropertyChanged(nameof(TutorialsView));
+        };
         StartTutorialCommand          = new RelayCommand(p =>
         {
             var def = p as SMSModForge.Tutorials.TutorialDef

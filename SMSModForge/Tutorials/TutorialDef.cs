@@ -104,5 +104,19 @@ public sealed class TutorialDef
     /// <summary>Whether this is part of the author-facing progression.</summary>
     public bool IsOnLadder => Level > 0;
 
+    /// <summary>
+    /// Which run of tutorials this belongs to, shown as a heading above them.
+    /// <para/>
+    /// Groups follow the tabs, because that is how someone decides what to
+    /// learn next: they are working on rooms, so they want the rest of the room
+    /// tutorials, not the next thing in a single flat list. Within a group,
+    /// <see cref="Level"/> orders them shallowest first.
+    /// <para/>
+    /// A group's tutorials are kept together in the catalog. Level is still
+    /// global and still runs 1..n across the whole ladder, so "where am I" has
+    /// one answer rather than one per group.
+    /// </summary>
+    public string Group { get; init; } = "";
+
     public IReadOnlyList<TutorialStep> Steps { get; init; } = Array.Empty<TutorialStep>();
 }

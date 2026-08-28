@@ -42,6 +42,7 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "first-steps",
+            Group = "Getting started",
             Title = "First steps",
             Summary = "Make a pack, put a character in it, and send it to the game.",
             Level = 1,
@@ -201,6 +202,7 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "a-place",
+            Group = "Places",
             Title = "A place of your own",
             Summary = "Build a room out of two layers, give it depth, and put it on the map.",
             Level = 2,
@@ -378,6 +380,7 @@ public static class TutorialCatalog
         new TutorialDef
         {
             Id = "smoke",
+            Group = "Diagnostics",
             Title = "Check the tutorial system",
             Summary = "Three steps that prove the highlighting, the gating and the exit all work.",
             Level = 0,

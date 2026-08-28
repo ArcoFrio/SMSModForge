@@ -2268,7 +2268,27 @@
                             </Expander>
 
                             <Expander Header="Guided tutorials" IsExpanded="True" Margin="0,0,0,6">
-                                <ItemsControl ItemsSource="{Binding Tutorials}" Margin="16,4,0,4">
+                                <!--
+                                    Grouped by the part of the editor they teach, because that
+                                    is how someone picks what to learn next: they are working on
+                                    rooms and want the rest of the room tutorials, not the next
+                                    entry in one long list. Level orders them within a group and
+                                    is shown as a badge, so a first tutorial reads as one.
+                                -->
+                                <ItemsControl Margin="16,4,0,4">
+                                    <ItemsControl.ItemsSource>
+                                        <Binding Path="TutorialsView"/>
+                                    </ItemsControl.ItemsSource>
+                                    <ItemsControl.GroupStyle>
+                                        <GroupStyle>
+                                            <GroupStyle.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold"
+                                                               Margin="0,8,0,4" Opacity="0.75"/>
+                                                </DataTemplate>
+                                            </GroupStyle.HeaderTemplate>
+                                        </GroupStyle>
+                                    </ItemsControl.GroupStyle>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
                                             <Border BorderThickness="1" CornerRadius="4" Margin="0,0,0,6"
@@ -2286,6 +2306,8 @@
                                                     <StackPanel>
                                                         <TextBlock FontWeight="Bold">
                                                             <Run Text="{Binding Mark, Mode=OneWay}"
+                                                                 Foreground="{DynamicResource Theme.Accent}"/><Run
+                                                                 Text=" "/><Run Text="{Binding LevelLabel, Mode=OneWay}"
                                                                  Foreground="{DynamicResource Theme.Accent}"/><Run
                                                                  Text=" "/><Run Text="{Binding Title, Mode=OneWay}"/>
                                                         </TextBlock>

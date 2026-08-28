@@ -34,6 +34,7 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "first-conversation",
+            Group = "Dialogues",
             Title = "Your first conversation",
             Summary = "Write a dialogue that starts in your room, with a choice in it.",
             Level = 3,
@@ -209,6 +210,7 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "making-it-move",
+            Group = "Characters",
             Title = "Making it move",
             Summary = "Paint a jiggle mask and tune it until the bust moves the way you want.",
             Level = 4,
@@ -327,6 +329,7 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "populating",
+            Group = "NPCs",
             Title = "Populating the room",
             Summary = "Add standing figures to your place, with shadows that sit them on the floor.",
             Level = 5,
@@ -456,6 +459,7 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "remembering",
+            Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
             Level = 6,
@@ -569,6 +573,7 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "rules",
+            Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
             Level = 7,

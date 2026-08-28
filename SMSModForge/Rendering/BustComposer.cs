@@ -54,8 +54,7 @@ public static class BustComposer
 
         // The larger ratio wins, so the art fits INSIDE the frame rather than
         // overflowing it — matching FittedSprite in the plugin.
-        double scale = System.Math.Max((double)sw / JiggleShader.Size,
-                                       (double)sh / JiggleShader.Size);
+        double scale = ArtFit.BustScale(sw, sh);
         if (scale <= 0) return outBuf;
 
         int dw = System.Math.Max(1, (int)System.Math.Round(sw / scale));

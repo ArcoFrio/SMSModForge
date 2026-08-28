@@ -522,6 +522,18 @@ public sealed class PlacePreview : Grid
     {
         if (img.Source is not BitmapSource bmp) return;
         double ppu = spritePpu > 0 ? spritePpu : LevelArtPpu;
+
+        // A layer authored at some other resolution is fitted to the level
+        // frame, exactly as the runtime fits it, so the room fills the same
+        // screen either way. Without this the preview scaled with the file:
+        // art at twice the resolution drew twice the size here and the same
+        // size in game. Art at 2048x1136 comes through untouched, the factor
+        // being 1.
+        //
+        // Only pack layers reach this method -- both sources are built from
+        // paths under the pack root -- which matters, because vanilla art is
+        // already in the scene and the runtime never refits it.
+        ppu *= Rendering.ArtFit.LevelScale(bmp.PixelWidth, bmp.PixelHeight);
         // Same WorldPpu the objects use, so art and props stay locked together
         // whatever the level's scale.
         double w = bmp.PixelWidth / ppu * WorldPpu;

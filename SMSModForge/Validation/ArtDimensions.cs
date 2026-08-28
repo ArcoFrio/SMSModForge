@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using SMSModForge.Model;
@@ -31,16 +31,13 @@ internal static class ArtDimensions
     public const string CodeMaskSize    = "art.maskSize";
     public const string CodeUnreadable  = "art.unreadable";
 
-    /// <summary>Bust art, and every overlay that shares its frame.</summary>
-    public const int BustPixels = 256;
-
-    /// <summary>A level layer, matching the game's own.</summary>
-    public const int LevelWidth = 2048;
-    public const int LevelHeight = 1136;
-
-    /// <summary>A level's mask.</summary>
-    public const int LevelMaskWidth = 256;
-    public const int LevelMaskHeight = 143;
+    // The frames themselves live with the fitting rule, so a check and a
+    // preview can never come to disagree about what the right size IS.
+    public const int BustPixels = Rendering.ArtFit.BustPixels;
+    public const int LevelWidth = Rendering.ArtFit.LevelWidth;
+    public const int LevelHeight = Rendering.ArtFit.LevelHeight;
+    public const int LevelMaskWidth = Rendering.ArtFit.LevelMaskWidth;
+    public const int LevelMaskHeight = Rendering.ArtFit.LevelMaskHeight;
 
     /// <summary>
     /// Read a PNG's dimensions without decoding the pixels.
