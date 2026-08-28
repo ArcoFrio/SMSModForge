@@ -132,9 +132,14 @@ public static class TutorialCatalog
                 {
                     Title = "Give them a face",
                     Body = "Every character needs at least one outfit, and every outfit needs a " +
-                           "base sprite. Point this one at any bust in TutorialArt/Busts. They " +
-                           "differ in shape, which will matter when you paint a jiggle mask " +
-                           "over one later.",
+                           "base sprite: the picture of them from the chest up. Point this one " +
+                           "at any bust in TutorialArt/Busts — they differ in shape, which will " +
+                           "matter when you paint a jiggle mask later.\n\n" +
+                           "Bust art is 256 by 256 pixels, PNG, with a transparent background. " +
+                           "Other sizes are scaled to fit rather than refused, but 256 is the " +
+                           "only size whose pixels land exactly as you drew them, and anything " +
+                           "that is not square gets transparent bars on two sides. When you come " +
+                           "to draw your own, that is the shape to draw.",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     Anchor = "field:baseSprite",
@@ -152,35 +157,29 @@ public static class TutorialCatalog
                 },
                 new TutorialStep
                 {
-                    Title = "Say what it hasn't got",
-                    Body = "A bust can carry a blink frame and four mouth frames on top of its " +
-                           "base art. The practice busts have neither, so untick Has Blink " +
-                           "frame and Has Mouth frames. Blink especially: an empty blink path " +
-                           "is not read as \"no blink\", it is read as a broken outfit, and the " +
-                           "game skips the whole character. Leave Mask empty — a blank mask " +
-                           "just means the bust does not jiggle, which is what you want until " +
-                           "you paint one a few tutorials from now.",
+                    Title = "Say what this outfit has",
+                    Body = "A bust can carry more than its base picture: a blink frame, four " +
+                           "mouth frames that animate while it talks, and four expressions. " +
+                           "The three tickboxes are how you DECLARE which of those exist — they " +
+                           "are not features to switch on, they are you telling the game what " +
+                           "art to go looking for.\n\n" +
+                           "You are not using any of them yet, so untick all three: Has Blink " +
+                           "frame, Has Mouth frames, Has Expressions. Getting this wrong is " +
+                           "worth understanding now, because it fails silently — a ticked box " +
+                           "with no art behind it reads as a BROKEN outfit, and the game skips " +
+                           "the whole character rather than skipping the blink. A missing " +
+                           "character with no error is almost always this.\n\n" +
+                           "Leave Mask empty. An empty mask means the bust does not move, which " +
+                           "is a perfectly good answer and the one you want until you paint one.",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
-                    // Anchored on the group, not on either checkbox: the overlay
-                    // swallows clicks outside its hole, so a step asking for two
-                    // controls has to open a hole that contains both.
+                    // The dim swallows clicks outside a lit hole, so a step that
+                    // asks for controls in two boxes has to light both.
                     Anchor = "panel:outfitSprites",
-                    IsDone = (vm, s) => vm.SelectedOutfit is { } o && !o.BlinkEnabled && !o.MouthEnabled,
-                    Hint = "Both tickboxes are in the Sprites box, above and below the Blink row.",
-                },
-                new TutorialStep
-                {
-                    Title = "And no expressions",
-                    Body = "Expression overlays are the same story — Happy, Angry, Sad and " +
-                           "Flirty swapped in over the face. There is no expression art either, " +
-                           "so untick Has Expressions. Validate should now come back clean " +
-                           "instead of listing art you never had.",
-                    Kind = StepKind.Do,
-                    Tab = TabCharacters,
-                    Anchor = "panel:outfitExpressions",
-                    IsDone = (vm, s) => vm.SelectedOutfit is { } o && !o.ExpressionEnabled,
-                    Hint = "The Expressions box sits just under Sprites.",
+                    AlsoAllow = new[] { "panel:outfitExpressions" },
+                    IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
+                                        !o.BlinkEnabled && !o.MouthEnabled && !o.ExpressionEnabled,
+                    Hint = "Two tickboxes in the Sprites box, one in Expressions just below it.",
                 },
                 new TutorialStep
                 {

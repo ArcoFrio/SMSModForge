@@ -118,6 +118,17 @@
     there is no modpack.json in this folder to keep out of a build.
   -->
   <ItemGroup>
+    <!--
+      The test project checks things that have no business being public: the
+      art-dimension rules, the fitting frames. Widening them to public so a
+      test can see them would be letting the tests design the API.
+    -->
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
+      <_Parameter1>SMSModForge.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Resources\TutorialAssets\**\*.png;Resources\TutorialAssets\**\*.PNG"
              Exclude="Resources\TutorialAssets\**\modpack.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

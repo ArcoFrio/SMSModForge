@@ -105,14 +105,39 @@ internal static class TutorialSolutions
             w.CopyAssets();
             w.Vm.SelectedOutfit!.BaseSprite = TutorialAssets.Bust(1);
         },
-        ["first-steps / Say what it hasn't got"] = w =>
+        ["first-steps / Say what this outfit has"] = w =>
         {
-            w.Vm.SelectedOutfit!.BlinkEnabled = false;
-            w.Vm.SelectedOutfit!.MouthEnabled = false;
+            var o = w.Vm.SelectedOutfit!;
+            o.BlinkEnabled = false;
+            o.MouthEnabled = false;
+            o.ExpressionEnabled = false;
         },
-        ["first-steps / And no expressions"] = w =>
+
+        // ── 4. A face that moves ──────────────────────────────────────
+        ["a-face-that-moves / Open the character you made"] = w =>
         {
-            w.Vm.SelectedOutfit!.ExpressionEnabled = false;
+            GiveACharacter(w);
+            w.Vm.SelectedOutfit = w.Vm.Characters[0].Outfits[0];
+        },
+        ["a-face-that-moves / Give it a blink"] = w =>
+        {
+            var o = w.Vm.SelectedOutfit!;
+            o.BlinkEnabled = true;
+            o.BlinkSprite = TutorialAssets.BustBlink(1);
+        },
+        ["a-face-that-moves / Four mouths, named by a prefix"] = w =>
+        {
+            var o = w.Vm.SelectedOutfit!;
+            o.MouthEnabled = true;
+            // A stem, with no number and no extension: the runtime appends
+            // 1..4 and the extension itself.
+            o.MouthPrefix = TutorialAssets.MouthPrefix(1);
+        },
+        ["a-face-that-moves / Four expressions, named the same way"] = w =>
+        {
+            var o = w.Vm.SelectedOutfit!;
+            o.ExpressionEnabled = true;
+            o.ExpressionPrefix = TutorialAssets.ExpressionPrefix(1);
         },
 
         // ── 2. A place of your own ────────────────────────────────────

@@ -209,11 +209,136 @@ internal static class TutorialsPart2
 
         new TutorialDef
         {
+            Id = "a-face-that-moves",
+            Group = "Characters",
+            Title = "A face that moves",
+            Summary = "Give a bust its blink, its mouth and its expressions.",
+            Level = 4,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "A bust is a stack of pictures",
+                    Body = "The base sprite is the whole character. Everything else is a small " +
+                           "picture laid over the same 256 by 256 frame, in the same place, " +
+                           "swapped in when the game wants it.\n\n" +
+                           "There are three kinds. A BLINK frame is the eyes closed, shown for a " +
+                           "fifth of a second every few seconds. Four MOUTH frames cycle while a " +
+                           "line types, so the character looks like they are speaking. Four " +
+                           "EXPRESSIONS — Happy, Angry, Sad and Flirty — are swapped in by a " +
+                           "dialogue line and stay until something changes them.\n\n" +
+                           "Each is drawn on a transparent background at the same size as the " +
+                           "base, so it lines up. Draw only the part that changes: for a blink, " +
+                           "that is a pair of closed eyes and nothing else.",
+                    Kind = StepKind.Read,
+                    Tab = TabCharacters,
+                },
+                new TutorialStep
+                {
+                    Title = "Open the character you made",
+                    Body = "This carries on in the same pack. Overlays belong to an OUTFIT, not " +
+                           "to the character, because a character in a different outfit blinks " +
+                           "with different eyes. Click your character in the tree, then the " +
+                           "outfit underneath it.",
+                    Kind = StepKind.Do,
+                    Tab = TabCharacters,
+                    Anchor = "panel:characterTree",
+                    IsDone = (vm, s) => vm.SelectedCharacter != null && vm.SelectedOutfit != null,
+                    Hint = "Expand the character to see its outfits, and click one.",
+                },
+                new TutorialStep
+                {
+                    Title = "Give it a blink",
+                    Body = "Tick Has Blink frame, then point Blink at the blink art for the bust " +
+                           "you chose — in TutorialArt/Busts, beside the base sprite, named for " +
+                           "that bust. Bust1's is Bust1Blink.png.\n\n" +
+                           "Remember what the tickbox means: ticked with nothing behind it is a " +
+                           "broken outfit, and the character will not appear at all.",
+                    Kind = StepKind.Do,
+                    Tab = TabCharacters,
+                    Anchor = "panel:outfitSprites",
+                    AlsoAllow = new[] { "field:hasBlink" },
+                    IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
+                                        o.BlinkEnabled && o.BlinkSprite.Trim().Length > 0,
+                    Hint = "Has Blink frame, then Browse on the Blink row under Sprites.",
+                },
+                new TutorialStep
+                {
+                    Title = "Watch it happen",
+                    Body = "Tick Blinking under the preview. The eyes shut every few seconds, on " +
+                           "a random wait, exactly as the game runs it — so if the blink art is " +
+                           "off by a few pixels you will see it here rather than in game.",
+                    Kind = StepKind.Read,
+                    Tab = TabCharacters,
+                    Anchor = "panel:characterPreview",
+                },
+                new TutorialStep
+                {
+                    Title = "Four mouths, named by a prefix",
+                    Body = "Mouth frames are not chosen one by one. You give a PREFIX, and the " +
+                           "game adds 1, 2, 3 and 4 to it — so a prefix of " +
+                           "TutorialArt/Busts/Bust1/Mouth finds Mouth1.png through Mouth4.png.\n\n" +
+                           "That is exactly four frames: not three, not five. Tick Has Mouth " +
+                           "frames and type the prefix, without the number and without .png.",
+                    Kind = StepKind.Do,
+                    Tab = TabCharacters,
+                    Anchor = "panel:outfitSprites",
+                    AlsoAllow = new[] { "field:hasMouth" },
+                    IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
+                                        o.MouthEnabled && o.MouthPrefix.Trim().Length > 0,
+                    Hint = "Has Mouth frames, then the Mouth prefix box below it.",
+                },
+                new TutorialStep
+                {
+                    Title = "Hear it talk",
+                    Body = "Tick Yapping under the preview and the mouth cycles the way it does " +
+                           "while a line types. Mouth frame beside it holds one frame still, " +
+                           "which is how you check a single drawing.\n\n" +
+                           "Both are preview controls. Neither changes the pack.",
+                    Kind = StepKind.Read,
+                    Tab = TabCharacters,
+                    Anchor = "panel:characterPreview",
+                },
+                new TutorialStep
+                {
+                    Title = "Four expressions, named the same way",
+                    Body = "Expressions work like mouths, except the game appends a NAME rather " +
+                           "than a number — and only four names exist: Happy, Angry, Sad and " +
+                           "Flirty. A prefix of TutorialArt/Busts/Bust1/Expression finds " +
+                           "ExpressionHappy.png and its three siblings.\n\n" +
+                           "Any other name is never looked for. If you want a fifth mood, it has " +
+                           "to be a different outfit.",
+                    Kind = StepKind.Do,
+                    Tab = TabCharacters,
+                    Anchor = "panel:outfitExpressions",
+                    AlsoAllow = new[] { "field:hasExpressions" },
+                    IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
+                                        o.ExpressionEnabled && o.ExpressionPrefix.Trim().Length > 0,
+                    Hint = "Has Expressions, then the Expr. prefix box in the same panel.",
+                },
+                new TutorialStep
+                {
+                    Title = "Try them on",
+                    Body = "Expression under the preview swaps between them. In a conversation " +
+                           "this is a node's Expression field, and it holds until another node " +
+                           "changes it — an angry line does not go back to neutral by itself.\n\n" +
+                           "That is the whole bust: one base picture, one blink, four mouths, " +
+                           "four expressions. Everything a character does on screen comes out of " +
+                           "those, and you now have all of them.",
+                    Kind = StepKind.Read,
+                    Tab = TabCharacters,
+                    Anchor = "panel:characterPreview",
+                },
+            },
+        },
+
+        new TutorialDef
+        {
             Id = "making-it-move",
             Group = "Characters",
             Title = "Making it move",
             Summary = "Paint a jiggle mask and tune it until the bust moves the way you want.",
-            Level = 4,
+            Level = 5,
             Steps = new[]
             {
                 new TutorialStep
@@ -332,7 +457,7 @@ internal static class TutorialsPart2
             Group = "NPCs",
             Title = "Populating the room",
             Summary = "Add standing figures to your place, with shadows that sit them on the floor.",
-            Level = 5,
+            Level = 6,
             Steps = new[]
             {
                 new TutorialStep
@@ -462,7 +587,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
-            Level = 6,
+            Level = 7,
             Steps = new[]
             {
                 new TutorialStep
@@ -576,7 +701,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
-            Level = 7,
+            Level = 8,
             Steps = new[]
             {
                 new TutorialStep
