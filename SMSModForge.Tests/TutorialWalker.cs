@@ -325,6 +325,26 @@ internal static class TutorialSolutions
         ["populating / Switch them on"] = w =>
             w.Vm.SelectedPlace!.NpcsNode.Npcs[0].StartActive = true,
 
+
+        // ── 10. One person, two places ────────────────────────────────
+        ["npcs-that-belong / Put the same person in twice"] = w =>
+        {
+            GiveAPlacedNpc(w);
+            var placed = w.Vm.SelectedPlace!.NpcsNode.AddNpc();
+            placed.Npc = w.Vm.Npcs[0].Key;
+        },
+        ["npcs-that-belong / Tell them apart"] = w =>
+        {
+            // Two placements of one definition, told apart by their own names.
+            var list = w.Vm.SelectedPlace!.NpcsNode.Npcs;
+            list[0].Name = "ByTheDoor";
+            list[^1].Name = "ByTheWindow";
+        },
+        ["npcs-that-belong / Stand them on something"] = w =>
+            w.Vm.SelectedNpc!.ReflectionEnabled = true,
+        ["npcs-that-belong / Give them eyes that close"] = w =>
+            w.Vm.SelectedNpc!.BlinkSprite = TutorialAssets.Npc(1),
+
         // ── 6. Remembering things ─────────────────────────────────────
         ["remembering / Declare one"] = w =>
         {
@@ -400,6 +420,24 @@ internal static class TutorialSolutions
         if (w.Vm.Places.Count > 0) return;
         w.Vm.AddPlaceCommand.Execute(null);
         w.Vm.SelectedPlace!.SecondarySprite = TutorialAssets.RoomBase;
+    }
+
+    /// <summary>A place with one NPC already placed in it — where the first
+    /// NPC tutorial leaves off, and where the second one begins.</summary>
+    private static void GiveAPlacedNpc(TutorialWalker w)
+    {
+        GiveAPlace(w);
+        w.Vm.SelectedPlace = w.Vm.Places[0];
+        if (w.Vm.Npcs.Count == 0)
+        {
+            w.Vm.AddNpcCommand.Execute(null);
+            w.Vm.SelectedNpc!.Sprite = TutorialAssets.Npc(0);
+        }
+        if (w.Vm.SelectedPlace!.NpcsNode.Npcs.Count == 0)
+        {
+            var first = w.Vm.SelectedPlace.NpcsNode.AddNpc();
+            first.Npc = w.Vm.Npcs[0].Key;
+        }
     }
 
     private static void GiveADialogueLine(TutorialWalker w)

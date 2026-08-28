@@ -699,11 +699,142 @@ internal static class TutorialsPart2
 
         new TutorialDef
         {
+            Id = "npcs-that-belong",
+            Group = "NPCs",
+            Title = "One person, two places",
+            Summary = "Reuse an NPC, and give it a reflection and a blink so it sits in the room.",
+            Level = 10,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "A definition is not an appearance",
+                    Body = "The NPCs tab does not put anybody in a room. It DEFINES one: the " +
+                           "art, the movement, the blink, the shadow. Putting them somewhere is " +
+                           "a separate act, on the Places tab, and it is called a placement.\n\n" +
+                           "One definition can have any number of placements — the same figure " +
+                           "in three rooms, or twice in one. Change the definition and every " +
+                           "placement changes with it. Change a placement and only that one " +
+                           "moves.\n\n" +
+                           "That split is the whole point of the tab. It is also the thing to " +
+                           "get straight before you wonder why editing one NPC moved another.",
+                    Kind = StepKind.Read,
+                    Tab = TabNpcs,
+                },
+                new TutorialStep
+                {
+                    Title = "Put the same person in twice",
+                    Body = "Go to your room and add the NPC you already made a SECOND time. Two " +
+                           "placements, one definition — the same drawing standing in two spots.\n\n" +
+                           "In a real pack this is a crowd: one figure, placed six times at " +
+                           "different positions and scales, is six people as far as the player " +
+                           "is concerned.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "btn:addNpcToPlace",
+                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    OnEnter = (vm, s) => s.Set("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0),
+                    IsDone = (vm, s) => s.GrewSince("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0),
+                    Hint = "+ Add NPC on your place, then pick the NPC you defined.",
+                },
+                new TutorialStep
+                {
+                    Title = "Tell them apart",
+                    Body = "Give the new placement its own Name. This is the placement's name, " +
+                           "not the NPC's: it is what a Set-Active action points at when a rule " +
+                           "wants to hide THIS one and leave the other standing.\n\n" +
+                           "Two placements with the same name in one room is the mistake to " +
+                           "avoid — a rule aiming at that name reaches whichever the game finds " +
+                           "first, and which one that is may change.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placeGameObjects",
+                    IsDone = (vm, s) => vm.SelectedPlace is { } p &&
+                                        p.NpcsNode.Npcs.Count >= 2 &&
+                                        p.NpcsNode.Npcs.Select(n => n.Name.Trim())
+                                         .Where(n => n.Length > 0).Distinct().Count() >= 2,
+                    Hint = "Select the new placement and type a Name unlike the other one's.",
+                },
+                new TutorialStep
+                {
+                    Title = "Back to the definition",
+                    Body = "Now change something on the NPC itself and watch BOTH placements " +
+                           "follow. Open the NPCs tab and select the NPC you defined — the " +
+                           "next two steps act on it.",
+                    // Read, not Do: a selection made earlier is still a selection,
+                    // so asking for one is a step that passes before it is read.
+                    Kind = StepKind.Read,
+                    Tab = TabNpcs,
+                    Anchor = "panel:npcDetail",
+                },
+                new TutorialStep
+                {
+                    Title = "Stand them on something",
+                    Body = "Turn on Reflection. It draws a mirrored copy beneath the pose, and " +
+                           "it is what makes a figure look like it is standing on a wet street " +
+                           "or a polished floor rather than in front of one.\n\n" +
+                           "It is off by default because most floors are not reflective, and a " +
+                           "reflection on a carpet reads as a mistake. Alpha is how visible it " +
+                           "is — the game's own reflections are a faint wash, not a second " +
+                           "character — and Y offset moves it to meet the feet rather than the " +
+                           "middle of the sprite.",
+                    Kind = StepKind.Do,
+                    Tab = TabNpcs,
+                    Anchor = "panel:npcReflection",
+                    IsDone = (vm, s) => vm.SelectedNpc is { ReflectionEnabled: true },
+                    Hint = "Enabled, in the Reflection box.",
+                },
+                new TutorialStep
+                {
+                    Title = "Give them eyes that close",
+                    Body = "An NPC blinks the same way a bust does, from one eyes-closed frame " +
+                           "drawn over the pose. Point Blink sprite at art for it — the practice " +
+                           "NPC art will do to see the mechanism.\n\n" +
+                           "Open wait min and max are the range the gap between blinks is drawn " +
+                           "from, so a room full of the same figure does not blink in unison, " +
+                           "and Closed hold is how long each blink lasts. Leave a blank blink " +
+                           "sprite and the NPC simply does not blink, which is a fine answer.",
+                    Kind = StepKind.Do,
+                    Tab = TabNpcs,
+                    Anchor = "panel:npcBlink",
+                    IsDone = (vm, s) => vm.SelectedNpc is { } n && n.BlinkSprite.Trim().Length > 0,
+                    Hint = "Blink sprite, in the Blink box.",
+                },
+                new TutorialStep
+                {
+                    Title = "The one to leave alone",
+                    Body = "Wet particles are the droplet effect, and they are off by default " +
+                           "for a reason: they suit somebody who has just come out of the water " +
+                           "and look like a fault on anybody else. Enabled turns the effect on " +
+                           "at all; Start active decides whether it is already running when the " +
+                           "room loads, rather than waiting for something to start it.\n\n" +
+                           "Leave both off. Knowing where they are is enough.",
+                    Kind = StepKind.Read,
+                    Tab = TabNpcs,
+                    Anchor = "panel:npcWet",
+                },
+                new TutorialStep
+                {
+                    Title = "A room with people in it",
+                    Body = "Both placements now reflect and blink, because both are the same " +
+                           "definition — and they stand in different spots under different " +
+                           "names, because a placement is its own thing.\n\n" +
+                           "That is the shape to remember: art and behaviour on the NPC, " +
+                           "position and identity on the placement. A crowd is one definition " +
+                           "and many placements; a cast is many definitions.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                },
+            },
+        },
+
+        new TutorialDef
+        {
             Id = "remembering",
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
-            Level = 10,
+            Level = 11,
             Steps = new[]
             {
                 new TutorialStep
@@ -817,7 +948,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
-            Level = 11,
+            Level = 12,
             Steps = new[]
             {
                 new TutorialStep
