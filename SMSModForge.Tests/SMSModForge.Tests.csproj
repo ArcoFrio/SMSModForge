@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <!--
+      net8.0-windows + UseWPF because the tests drive the real MainViewModel,
+      which lives in a WPF assembly. They never open a window: the view model
+      constructs with no Application, which is what makes this possible at all.
+    -->
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <!-- The editor's warnings are the editor's business. -->
+    <NoWarn>$(NoWarn);CS8600;CS8602;CS8604;CS8625</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="xunit" Version="2.9.2" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SMSModForge\SMSModForge.csproj" />
+  </ItemGroup>
+
+</Project>

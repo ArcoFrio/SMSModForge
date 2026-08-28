@@ -73,7 +73,16 @@ internal static class TutorialsPart2
                     Kind = StepKind.Do,
                     Tab = TabDialogues,
                     Anchor = "field:startConditions",
-                    IsDone = (vm, s) => vm.SelectedDialogue is { } d && d.StartConditions.Count > 0,
+                    // Baselined against the level the dialogue was born with.
+                    // Counting start conditions was meaningless here: the
+                    // pinned level row is injected on construction, so the
+                    // check was true before the author had done anything and
+                    // the step taught nothing. Asking for a CHANGE is the only
+                    // way to know the level was actually chosen.
+                    OnEnter = (vm, s) => s.Set("level", LevelTokenOf(vm.SelectedDialogue)),
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d &&
+                                        LevelTokenOf(d).Length > 0 &&
+                                        LevelTokenOf(d) != s.Get<string>("level"),
                     Hint = "Start conditions, then the level row pinned at the top.",
                 },
                 new TutorialStep
@@ -362,13 +371,17 @@ internal static class TutorialsPart2
                 new TutorialStep
                 {
                     Title = "Sit them on the floor",
-                    Body = "Turn on the shadow. Without one a figure looks pasted onto the room " +
-                           "rather than standing in it — it is the cheapest thing you can do for " +
-                           "how a room reads.",
-                    Kind = StepKind.Do,
+                    Body = "The shadow under an NPC is already on, and it is the cheapest thing " +
+                           "there is for how a room reads: without one a figure looks pasted onto " +
+                           "the picture rather than standing in it. Colour sets how dark it is, " +
+                           "and Sorting order how far forward it draws — well under the figure, " +
+                           "so it never crosses a leg. Worth turning OFF only for someone who is " +
+                           "not standing on anything, like a face at a window.",
+                    // Read, not Do: the box is ticked when the NPC is created,
+                    // so asking for it was a step that passed on arrival.
+                    Kind = StepKind.Read,
                     Tab = TabNpcs,
                     Anchor = "field:npcShadow",
-                    IsDone = (vm, s) => vm.SelectedNpc is { ShadowEnabled: true },
                     Hint = "Shadow, then tick Enabled.",
                 },
                 new TutorialStep
@@ -742,6 +755,20 @@ internal static class TutorialsPart2
     /// "the player will see the scene" — and a freshly added action row
     /// satisfies the first while never doing the second.
     /// </summary>
+    /// <summary>
+    /// The level a dialogue is gated on, read off the pinned LevelActive row
+    /// that every dialogue carries at index 0 of its start conditions.
+    /// <para/>
+    /// Empty when there is no dialogue or the row has somehow gone, which a
+    /// check should treat as "not chosen yet" rather than throwing.
+    /// </summary>
+    private static string LevelTokenOf(ViewModel.DialogueViewModel? d)
+    {
+        if (d == null || d.StartConditions.Count == 0) return "";
+        var row = d.StartConditions[0];
+        return row.Model.Params.TryGetValue("level", out var v) ? (v ?? "") : "";
+    }
+
     private static bool ShowsAScene(ViewModel.UpdateRuleViewModel r)
     {
         foreach (var a in r.Actions)

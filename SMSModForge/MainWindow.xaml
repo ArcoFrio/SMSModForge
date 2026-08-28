@@ -3372,7 +3372,7 @@
                                  and the live navigator buttons, same z-order as runtime. -->
                             <GroupBox view:TutorialAnchor.Id="panel:placePreview" Header="Preview">
                                 <StackPanel>
-                                    <ctl:PlacePreview view:TutorialAnchor.Id="panel:placePreview" x:Name="PlacePreviewMain" Margin="200,0"
+                                    <ctl:PlacePreview x:Name="PlacePreviewMain" Margin="200,0"
                                                       PackRoot="{Binding DataContext.PackRoot,
                                                                  RelativeSource={RelativeSource AncestorType=Window}}"
                                                       BaseSprite="{Binding BaseSprite}"

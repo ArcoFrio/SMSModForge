@@ -90,8 +90,19 @@ public sealed class TutorialDef
     /// <summary>One line on the button, saying what the author will end up with.</summary>
     public string Summary { get; init; } = "";
 
-    /// <summary>Rough ordering hint shown beside the title (1 = gentlest).</summary>
+    /// <summary>
+    /// Where this sits in the progression: 1 is the gentlest, and the catalog
+    /// is kept in this order because it is the order the list shows.
+    /// <para/>
+    /// Zero means the tutorial is not on the ladder at all — the diagnostic
+    /// walkthrough, which exists to prove the overlay still works and is not
+    /// something an author is ever meant to work through. Those sort last and
+    /// are left out of the progression checks.
+    /// </summary>
     public int Level { get; init; } = 1;
+
+    /// <summary>Whether this is part of the author-facing progression.</summary>
+    public bool IsOnLadder => Level > 0;
 
     public IReadOnlyList<TutorialStep> Steps { get; init; } = Array.Empty<TutorialStep>();
 }
