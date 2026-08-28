@@ -37,21 +37,46 @@ public static class BustComposer
         // chunky rather than smeared, which reads as low resolution instead of
         // as bad art. It also matches the composite pass below, which already
         // point-filters its overlays for the same reason.
+        //
+        // UNIFORM, and centred. This used to map the source's width onto 256 and
+        // its height onto 256 independently, which stretches anything that is not
+        // square — so a 512x256 bust looked square here and does not in game,
+        // where the runtime fits it with one pixels-per-unit for both axes and
+        // centres it on the same pivot. One scale for both axes, and transparent
+        // padding around the short side, is what the game does; the preview is
+        // only worth having if it agrees with it.
         int sw = converted.PixelWidth, sh = converted.PixelHeight;
         int srcStride = sw * 4;
         var src = new byte[srcStride * sh];
         converted.CopyPixels(src, srcStride, 0);
 
         var outBuf = new byte[JiggleShader.Stride * JiggleShader.Size];
-        for (int y = 0; y < JiggleShader.Size; y++)
+
+        // The larger ratio wins, so the art fits INSIDE the frame rather than
+        // overflowing it — matching FittedSprite in the plugin.
+        double scale = System.Math.Max((double)sw / JiggleShader.Size,
+                                       (double)sh / JiggleShader.Size);
+        if (scale <= 0) return outBuf;
+
+        int dw = System.Math.Max(1, (int)System.Math.Round(sw / scale));
+        int dh = System.Math.Max(1, (int)System.Math.Round(sh / scale));
+        if (dw > JiggleShader.Size) dw = JiggleShader.Size;
+        if (dh > JiggleShader.Size) dh = JiggleShader.Size;
+        int ox = (JiggleShader.Size - dw) / 2;
+        int oy = (JiggleShader.Size - dh) / 2;
+
+        for (int y = 0; y < dh; y++)
         {
-            int sy = (int)((long)y * sh / JiggleShader.Size);
+            int sy = (int)((long)y * sh / dh);
+            if (sy >= sh) sy = sh - 1;
             int srcRow = sy * srcStride;
-            int dstRow = y * JiggleShader.Stride;
-            for (int x = 0; x < JiggleShader.Size; x++)
+            int dstRow = (y + oy) * JiggleShader.Stride;
+            for (int x = 0; x < dw; x++)
             {
-                int si = srcRow + (int)((long)x * sw / JiggleShader.Size) * 4;
-                int di = dstRow + x * 4;
+                int sx = (int)((long)x * sw / dw);
+                if (sx >= sw) sx = sw - 1;
+                int si = srcRow + sx * 4;
+                int di = dstRow + (x + ox) * 4;
                 outBuf[di]     = src[si];
                 outBuf[di + 1] = src[si + 1];
                 outBuf[di + 2] = src[si + 2];
