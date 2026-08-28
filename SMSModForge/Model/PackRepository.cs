@@ -1,4 +1,4 @@
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -141,7 +141,17 @@ public static class PackRepository
     /// had to do was work out whether the errors were theirs. An empty pack
     /// says what it is.
     /// </summary>
-    public static ModPack CreateEmpty(string packId) => new() { PackId = packId };
+    public static ModPack CreateEmpty(string packId)
+    {
+        var pack = new ModPack { PackId = packId };
+        // The player is built in and shared by every pack, so a NEW pack has
+        // one too. It used to appear only after a save and a reload, because
+        // EnsurePlayer ran on Load and nowhere else -- so the one speaker an
+        // author is most likely to want first was missing for exactly as long
+        // as they had not saved yet.
+        CharacterMerge.EnsurePlayer(pack);
+        return pack;
+    }
 
     // ── Active pack tracking for cross-VM lookups ────────────────────────
 

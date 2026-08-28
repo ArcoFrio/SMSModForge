@@ -209,11 +209,127 @@ internal static class TutorialsPart2
 
         new TutorialDef
         {
+            Id = "lines-that-choose",
+            Group = "Dialogues",
+            Title = "Lines that choose themselves",
+            Summary = "Gate a line on the state of the room, and let two speakers share a scene.",
+            Level = 6,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "Not every line should play",
+                    Body = "So far every node in your dialogue runs when play reaches it. A " +
+                           "conversation that reacts to anything needs the opposite: lines that " +
+                           "sometimes do not.\n\n" +
+                           "That is what a node's own Conditions box is for, and it behaves in " +
+                           "two different ways depending on where the node sits. An ordinary " +
+                           "node whose conditions fail is SKIPPED — play carries on to the next " +
+                           "one. A node directly under a Choice is not offered at all: the " +
+                           "player never sees that option, rather than seeing it greyed out.",
+                    Kind = StepKind.Read,
+                    Tab = TabDialogues,
+                },
+                new TutorialStep
+                {
+                    Title = "Open the conversation you wrote",
+                    Body = "Same pack, same dialogue. Pick it in the list, then select any node " +
+                           "in the tree — the one you want the condition on.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:dialogueList",
+                    AlsoAllow = new[] { "panel:dialogueNodes" },
+                    IsDone = (vm, s) => vm.SelectedDialogue != null && vm.SelectedNode != null,
+                    Hint = "Click the dialogue, then a node in the list beside it.",
+                },
+                new TutorialStep
+                {
+                    Title = "Gate it on something real",
+                    Body = "Add a condition to that node and make it GameObjectActive, pointing " +
+                           "at the object you put in your room and left switched off.\n\n" +
+                           "This is worth doing with something you already built rather than an " +
+                           "invented example: the object is genuinely off, so the line genuinely " +
+                           "will not play, and when a later rule switches the object on the line " +
+                           "starts appearing. The conversation is reading the state of the room.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeConditions",
+                    IsDone = (vm, s) => vm.SelectedNode is { } n && n.Conditions.Count > 0,
+                    Hint = "+ Add condition in the Conditions box, then pick the type.",
+                },
+                new TutorialStep
+                {
+                    Title = "Conditions do not stop at objects",
+                    Body = "The same box offers everything the pack can ask about: which place " +
+                           "is on screen, what a variable holds, whether it is raining, a " +
+                           "percentage rolled once a day. Every condition in the list has to " +
+                           "pass, and an empty list always passes — which is why a node with no " +
+                           "conditions always plays.\n\n" +
+                           "Any condition can also be negated, which is usually shorter than " +
+                           "writing the opposite one.",
+                    Kind = StepKind.Read,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeConditions",
+                },
+                new TutorialStep
+                {
+                    Title = "Someone else in the room",
+                    Body = "A conversation is rarely one voice. The Actor field on a node says " +
+                           "who speaks it, and it holds from that node onward until another one " +
+                           "changes it — you do not set it per line.\n\n" +
+                           "Every pack has a speaker it did not create: the player. Add a node " +
+                           "and set its Actor to the player, and the line is the player talking " +
+                           "back. Any mod addressing you reaches that same character, which is " +
+                           "why its name and colour are fixed and yours to use rather than " +
+                           "define.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeEditor",
+                    AlsoAllow = new[] { "panel:dialogueNodes" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d &&
+                                        d.Nodes.Any(n => n.Actor == "player" &&
+                                                         n.Text.Trim().Length > 0),
+                    Hint = "Add a node, write a line, then set Actor to player.",
+                },
+                new TutorialStep
+                {
+                    Title = "Bringing branches back together",
+                    Body = "Two options that both end the conversation are easy. Two that " +
+                           "rejoin a shared ending are what tags are for.\n\n" +
+                           "Give the node you want to come back to a Tag — any short word. Then " +
+                           "on another node set Jump to Jump and put that word in Jump tag. Play " +
+                           "resumes there instead of carrying on down the list.\n\n" +
+                           "Give a tag to exactly one node. Two nodes with the same tag makes " +
+                           "every jump aimed at it ambiguous, and it resolves to whichever the " +
+                           "game reaches first.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeEditor",
+                    AlsoAllow = new[] { "panel:dialogueNodes" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d && JumpLandsOnATag(d),
+                    Hint = "Tag on one node, then Jump = Jump and Jump tag on another.",
+                },
+                new TutorialStep
+                {
+                    Title = "A conversation with a memory of the room",
+                    Body = "Your dialogue now has a line that only plays when the room is in a " +
+                           "particular state, a second speaker, and a branch that rejoins.\n\n" +
+                           "What it still cannot do is remember anything across visits — the " +
+                           "room's state is the room's, not the conversation's. That is what " +
+                           "variables are for, and they are the next group.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                },
+            },
+        },
+
+        new TutorialDef
+        {
             Id = "a-face-that-moves",
             Group = "Characters",
             Title = "A face that moves",
             Summary = "Give a bust its blink, its mouth and its expressions.",
-            Level = 6,
+            Level = 7,
             Steps = new[]
             {
                 new TutorialStep
@@ -338,7 +454,7 @@ internal static class TutorialsPart2
             Group = "Characters",
             Title = "Making it move",
             Summary = "Paint a jiggle mask and tune it until the bust moves the way you want.",
-            Level = 7,
+            Level = 8,
             Steps = new[]
             {
                 new TutorialStep
@@ -457,7 +573,7 @@ internal static class TutorialsPart2
             Group = "NPCs",
             Title = "Populating the room",
             Summary = "Add standing figures to your place, with shadows that sit them on the floor.",
-            Level = 8,
+            Level = 9,
             Steps = new[]
             {
                 new TutorialStep
@@ -587,7 +703,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
-            Level = 9,
+            Level = 10,
             Steps = new[]
             {
                 new TutorialStep
@@ -701,7 +817,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
-            Level = 10,
+            Level = 11,
             Steps = new[]
             {
                 new TutorialStep
@@ -897,6 +1013,28 @@ internal static class TutorialsPart2
         if (d == null || d.StartConditions.Count == 0) return "";
         var row = d.StartConditions[0];
         return row.Model.Params.TryGetValue("level", out var v) ? (v ?? "") : "";
+    }
+
+    /// <summary>
+    /// Whether some node jumps to a tag another node really carries.
+    /// <para/>
+    /// Both halves are checked because either alone does nothing: a tag nobody
+    /// jumps to is a label, and a jump to a tag nobody has stops the
+    /// conversation dead. Only the pair is the lesson.
+    /// </summary>
+    private static bool JumpLandsOnATag(ViewModel.DialogueViewModel d)
+    {
+        var tags = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        foreach (var n in d.Nodes)
+            if (!string.IsNullOrWhiteSpace(n.Tag)) tags.Add(n.Tag.Trim());
+        if (tags.Count == 0) return false;
+
+        foreach (var n in d.Nodes)
+            if (n.Model.Jump is { Mode: Model.JumpMode.Jump } j &&
+                !string.IsNullOrWhiteSpace(j.TargetTag) &&
+                tags.Contains(j.TargetTag.Trim()))
+                return true;
+        return false;
     }
 
     private static bool ShowsAScene(ViewModel.UpdateRuleViewModel r)

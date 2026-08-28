@@ -117,7 +117,7 @@ internal static class TutorialSolutions
         ["a-face-that-moves / Open the character you made"] = w =>
         {
             GiveACharacter(w);
-            w.Vm.SelectedOutfit = w.Vm.Characters[0].Outfits[0];
+            w.Vm.SelectedOutfit = w.Vm.Characters.First(c => !c.IsPlayer).Outfits[0];
         },
         ["a-face-that-moves / Give it a blink"] = w =>
         {
@@ -194,6 +194,38 @@ internal static class TutorialSolutions
         ["dressing-the-room / Leave it switched off"] = w =>
             w.Vm.SelectedPlace!.GameObjects[0].StartActive = false,
 
+        // ── 6. Lines that choose themselves ───────────────────────────
+        ["lines-that-choose / Open the conversation you wrote"] = w =>
+        {
+            GiveADialogueLine(w);
+            w.Vm.SelectedNode = w.Vm.SelectedDialogue!.Nodes[0];
+        },
+        ["lines-that-choose / Gate it on something real"] = w =>
+        {
+            var n = w.Vm.SelectedNode!;
+            w.Vm.AddNodeConditionCommand.Execute(null);
+            var c = n.Conditions.Last();
+            c.Model.Type = SMSModForge.Model.NodeConditionTypes.GameObjectActive;
+            c.Model.Params["target"] = "Lamp";
+        },
+        ["lines-that-choose / Someone else in the room"] = w =>
+        {
+            w.Vm.AddDialogueRootNodeCommand.Execute(null);
+            var n = w.Vm.SelectedNode!;
+            n.Text = "And what am I supposed to say to that?";
+            n.Actor = "player";
+        },
+        ["lines-that-choose / Bringing branches back together"] = w =>
+        {
+            // A tag on one node and a jump to it from another: either half
+            // alone does nothing, which is why the check wants both.
+            var d = w.Vm.SelectedDialogue!;
+            d.Nodes[0].Tag = "ending";
+            var last = d.Nodes[^1];
+            last.JumpMode = SMSModForge.Model.JumpMode.Jump;
+            last.JumpTargetTag = "ending";
+        },
+
         // ── 4. On the world map ───────────────────────────────────────
         ["on-the-world-map / Add a map button"] = w =>
         {
@@ -266,7 +298,7 @@ internal static class TutorialSolutions
         ["making-it-move / Open the character you made"] = w =>
         {
             GiveACharacter(w);
-            w.Vm.SelectedOutfit = w.Vm.Characters[0].Outfits[0];
+            w.Vm.SelectedOutfit = w.Vm.Characters.First(c => !c.IsPlayer).Outfits[0];
         },
         ["making-it-move / Pick a bust with something to move"] = w =>
             // The check is baselined against whatever was already there, so it
@@ -351,7 +383,10 @@ internal static class TutorialSolutions
 
     private static void GiveACharacter(TutorialWalker w)
     {
-        if (w.Vm.Characters.Count > 0) return;
+        // The built-in player is in every pack from the moment it exists, so
+        // "are there any characters" is always true and would skip this.
+        // What these walks need is a character the AUTHOR made.
+        if (w.Vm.Characters.Any(c => !c.IsPlayer)) return;
         w.SaveToRoot();
         w.CopyAssets();
         w.Vm.AddCharacterCommand.Execute(null);
