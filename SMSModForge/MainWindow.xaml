@@ -1375,7 +1375,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <TextBlock Text="Target:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                    <ComboBox Grid.Row="0" Grid.Column="1"
+                    <ComboBox ToolTip="Where this button takes the player." Grid.Row="0" Grid.Column="1"
                               ItemsSource="{Binding DataContext.AllTargetOptions,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                               SelectedValuePath="Token"
@@ -2542,7 +2542,7 @@
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Outfit name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                                                    ToolTip="What dialogue and actions reference this outfit by, and the GameObject the runtime builds."/>
-                                        <TextBox  Grid.Row="0" Grid.Column="1" Margin="0,2"
+                                        <TextBox ToolTip="What dialogue and actions reference this outfit by, and the GameObject the runtime builds."  Grid.Row="0" Grid.Column="1" Margin="0,2"
                                                   Text="{Binding GameObjectName, UpdateSourceTrigger=PropertyChanged}"
                                                   Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
                                                                RelativeSource={RelativeSource AncestorType=Window},
@@ -2588,12 +2588,12 @@
                                                 <StackPanel Orientation="Horizontal" Margin="0,2">
                                                     <TextBlock Text="Dialogue key:" Width="140" VerticalAlignment="Center"
                                                                ToolTip="What a dialogue node names as its speaker."/>
-                                                    <TextBox Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                    <TextBox ToolTip="What a dialogue node names as its speaker." Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                                                 </StackPanel>
                                                 <StackPanel Orientation="Horizontal" Margin="0,2">
                                                     <TextBlock Text="GameObject:" Width="140" VerticalAlignment="Center"
                                                                ToolTip="The object the character&apos;s bust is built under at runtime."/>
-                                                    <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
+                                                    <TextBox ToolTip="The object the character&apos;s bust is built under at runtime." Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Width="200"/>
                                                 </StackPanel>
                                             </StackPanel>
                                         </Expander>
@@ -2699,7 +2699,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Base:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ctl:PathPickerBox view:IssueTarget.Field="baseSprite"
+                                    <ctl:PathPickerBox view:IssueTarget.Field="baseSprite" ToolTip="The bust itself: 256x256 RGBA, relative to the pack folder."
                                                        view:TutorialAnchor.Id="field:baseSprite"
                                                        PathText="{Binding BaseSprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
@@ -2709,7 +2709,7 @@
                                         <Button view:TutorialAnchor.Id="btn:editMask" DockPanel.Dock="Right" Content="Edit Mask…"
                                                 Margin="4,0,0,0" Padding="6,0"
                                                 Click="EditMask_Click"/>
-                                        <ctl:PathPickerBox view:IssueTarget.Field="maskSprite"
+                                        <ctl:PathPickerBox view:IssueTarget.Field="maskSprite" ToolTip="Where the jiggle applies and how strongly. Leave it empty for a bust that does not move. Edit Mask opens the painter."
                                                            PathText="{Binding MaskSprite, UpdateSourceTrigger=PropertyChanged}"
                                                            PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"/>
                                     </DockPanel>
@@ -2717,14 +2717,14 @@
                                               IsChecked="{Binding BlinkEnabled}" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
                                               ToolTip="Untick for a bust with no blink art. Blink is not optional by omission — leaving the path empty makes the runtime treat the outfit as broken and skip the whole bust, so this is the way to say the character simply does not blink."/>
                                     <TextBlock Text="Blink:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ctl:PathPickerBox view:IssueTarget.Field="blinkSprite"
+                                    <ctl:PathPickerBox view:IssueTarget.Field="blinkSprite" ToolTip="The eyes-closed overlay. Used only while Has Blink frame is ticked."
                                                        PathText="{Binding BlinkSprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="3" Grid.Column="1"
                                                        IsEnabled="{Binding BlinkEnabled}"/>
-                                    <CheckBox view:TutorialAnchor.Id="field:hasMouth" Content="Has Mouth frames" IsChecked="{Binding MouthEnabled}" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                    <CheckBox view:TutorialAnchor.Id="field:hasMouth" Content="Has Mouth frames" IsChecked="{Binding MouthEnabled}" ToolTip="Tick when the bust has numbered mouth frames, so the mouth animates while the line types." Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
                                     <TextBlock Text="Mouth prefix:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  view:IssueTarget.Field="mouth" Text="{Binding MouthPrefix, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1"
+                                    <TextBox  view:IssueTarget.Field="mouth" Text="{Binding MouthPrefix, UpdateSourceTrigger=PropertyChanged}" ToolTip="The name the mouth frames share before their number: Mouth, for Mouth1.PNG through Mouth4.PNG." Grid.Row="5" Grid.Column="1"
                                               IsEnabled="{Binding MouthEnabled}"/>
                                     <TextBlock Text="(loads {prefix}1..4.PNG)" Grid.Row="6" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                 </Grid>
@@ -2744,9 +2744,9 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
-                                    <CheckBox view:TutorialAnchor.Id="field:hasExpressions" Content="Has Expressions" IsChecked="{Binding ExpressionEnabled}" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                    <CheckBox view:TutorialAnchor.Id="field:hasExpressions" Content="Has Expressions" IsChecked="{Binding ExpressionEnabled}" ToolTip="Tick when the bust has expression artwork a line can switch to." Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
                                     <TextBlock Text="Expr. prefix:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  view:IssueTarget.Field="expression" Text="{Binding ExpressionPrefix, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
+                                    <TextBox  view:IssueTarget.Field="expression" Text="{Binding ExpressionPrefix, UpdateSourceTrigger=PropertyChanged}" ToolTip="The name the expression files share before the expression: Expression, for ExpressionHappy.PNG." Grid.Row="1" Grid.Column="1"
                                               IsEnabled="{Binding ExpressionEnabled}"/>
                                     <TextBlock Text="(loads {prefix}Happy/Angry/Sad/Flirty.PNG)" Grid.Row="2" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                 </Grid>
@@ -2773,26 +2773,26 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Speed"        Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed."/>
-                                    <Slider Value="{Binding JiggleSpeed}"    Minimum="0" Maximum="10" Grid.Row="0" Grid.Column="1"/>
-                                    <TextBox Text="{Binding JiggleSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2"/>
+                                    <Slider ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed." Value="{Binding JiggleSpeed}"    Minimum="0" Maximum="10" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed." Text="{Binding JiggleSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2"/>
                                     <TextBlock Text="Strength"     Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength."/>
-                                    <Slider view:TutorialAnchor.Id="field:jiggle" view:IssueTarget.Field="jiggle.strength" Value="{Binding JiggleStrength}" Minimum="-0.5" Maximum="0.5" Grid.Row="1" Grid.Column="1"/>
-                                    <TextBox Text="{Binding JiggleStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2"/>
+                                    <Slider ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength." view:TutorialAnchor.Id="field:jiggle" view:IssueTarget.Field="jiggle.strength" Value="{Binding JiggleStrength}" Minimum="-0.5" Maximum="0.5" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength." Text="{Binding JiggleStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="2"/>
                                     <TextBlock Text="Wave frequency" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only."/>
-                                    <Slider Value="{Binding JiggleFrequency}" Minimum="0" Maximum="40" Grid.Row="2" Grid.Column="1"/>
-                                    <TextBox Text="{Binding JiggleFrequency, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2"/>
+                                    <Slider ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only." Value="{Binding JiggleFrequency}" Minimum="0" Maximum="40" Grid.Row="2" Grid.Column="1"/>
+                                    <TextBox ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only." Text="{Binding JiggleFrequency, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="2"/>
                                     <TextBlock Text="Noise scale"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fine the noise grain is. Drives the Noise layer only."/>
-                                    <Slider Value="{Binding NoiseScale}" Minimum="0" Maximum="80" Grid.Row="3" Grid.Column="1"/>
-                                    <TextBox Text="{Binding NoiseScale, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="2"/>
+                                    <Slider ToolTip="How fine the noise grain is. Drives the Noise layer only." Value="{Binding NoiseScale}" Minimum="0" Maximum="80" Grid.Row="3" Grid.Column="1"/>
+                                    <TextBox ToolTip="How fine the noise grain is. Drives the Noise layer only." Text="{Binding NoiseScale, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="2"/>
                                     <TextBlock Text="Noise speed"  Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the noise drifts. Drives the Noise layer only."/>
-                                    <Slider Value="{Binding NoiseSpeed}" Minimum="0" Maximum="5" Grid.Row="4" Grid.Column="1"/>
-                                    <TextBox Text="{Binding NoiseSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="2"/>
+                                    <Slider ToolTip="How fast the noise drifts. Drives the Noise layer only." Value="{Binding NoiseSpeed}" Minimum="0" Maximum="5" Grid.Row="4" Grid.Column="1"/>
+                                    <TextBox ToolTip="How fast the noise drifts. Drives the Noise layer only." Text="{Binding NoiseSpeed, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="2"/>
                                     <TextBlock Text="Noise strength" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" ToolTip="How much of the noise shows through. Drives the Noise layer only."/>
-                                    <Slider view:IssueTarget.Field="jiggle.noiseStrength" Value="{Binding NoiseStrength}" Minimum="0" Maximum="0.5" Grid.Row="5" Grid.Column="1"/>
-                                    <TextBox Text="{Binding NoiseStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"/>
+                                    <Slider ToolTip="How much of the noise shows through. Drives the Noise layer only." view:IssueTarget.Field="jiggle.noiseStrength" Value="{Binding NoiseStrength}" Minimum="0" Maximum="0.5" Grid.Row="5" Grid.Column="1"/>
+                                    <TextBox ToolTip="How much of the noise shows through. Drives the Noise layer only." Text="{Binding NoiseStrength, StringFormat=F3, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="2"/>
                                     <TextBlock Text="Tint (hex)"   Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding Tint, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"/>
-                                    <CheckBox Content="Pixel Snap" IsChecked="{Binding PixelSnap}" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"/>
+                                    <TextBox Text="{Binding Tint, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" ToolTip="Multiplies the bust&apos;s colour. Almost always left white."/>
+                                    <CheckBox Content="Pixel Snap" IsChecked="{Binding PixelSnap}" ToolTip="Rounds movement to whole pixels, matching the game&apos;s own look." Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="3"/>
                                 </Grid>
                             </GroupBox>
 
@@ -2844,16 +2844,16 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel>
                                 <TextBlock Text="Mouth frame"/>
-                                <ComboBox x:Name="MouthPicker" SelectedIndex="0">
+                                <ComboBox x:Name="MouthPicker" SelectedIndex="0"> ToolTip="Show the bust holding one particular mouth frame. Preview only - it changes nothing in the pack."
                                     <ComboBoxItem>Closed</ComboBoxItem>
                                     <ComboBoxItem>1</ComboBoxItem>
                                     <ComboBoxItem>2</ComboBoxItem>
                                     <ComboBoxItem>3</ComboBoxItem>
                                     <ComboBoxItem>4</ComboBoxItem>
                                 </ComboBox>
-                                <CheckBox x:Name="YappingToggle" Content="Yapping" Margin="2,6,0,0"/>
+                                <CheckBox ToolTip="Animate the mouth in the preview, the way it moves while a line types. Preview only." x:Name="YappingToggle" Content="Yapping" Margin="2,6,0,0"/>
                                 <CheckBox x:Name="BlinkToggle" Content="Blinking" IsChecked="True" Margin="2,6,0,0"/>
-                                <CheckBox x:Name="BreathingToggle" Content="Breathing" IsChecked="True" Margin="2,6,0,0"/>
+                                <CheckBox ToolTip="Run the idle breathing motion in the preview. Preview only." x:Name="BreathingToggle" Content="Breathing" IsChecked="True" Margin="2,6,0,0"/>
                                 <!-- Depth is a preview-only calibration: in game the
                                      offset moves the busts' parent, so its on-screen
                                      size depends on scene scale the editor can't see. -->
@@ -2869,7 +2869,7 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Expression"/>
-                                <ComboBox x:Name="ExpressionPicker" SelectedIndex="0">
+                                <ComboBox x:Name="ExpressionPicker" SelectedIndex="0"> ToolTip="Show the bust in one particular expression. Preview only - it changes nothing in the pack."
                                     <ComboBoxItem Content="None"/>
                                     <ComboBoxItem Content="Happy"/>
                                     <ComboBoxItem Content="Angry"/>
@@ -2945,10 +2945,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable key placements reference this NPC by."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="Stable key placements reference this NPC by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -3002,20 +3002,20 @@
                                         <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Speed:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed."/>
-                                    <TextBox Text="{Binding JiggleSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="How fast the movement cycles. Drives the Bounce and Wave layers; Noise has its own speed." Text="{Binding JiggleSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Strength:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength."/>
-                                    <TextBox Text="{Binding JiggleStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="How far the pixels travel. Drives the Bounce and Wave layers; Noise has its own strength." Text="{Binding JiggleStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                     <TextBlock Text="Wave frequency:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only."/>
-                                    <TextBox Text="{Binding JiggleFrequency, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+                                    <TextBox ToolTip="How many waves fit down the sprite: low sways, high ripples. Drives the Wave layer only." Text="{Binding JiggleFrequency, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
                                     <TextBlock Text="Noise scale:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fine the noise grain is. Drives the Noise layer only."/>
-                                    <TextBox Text="{Binding NoiseScale, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
+                                    <TextBox ToolTip="How fine the noise grain is. Drives the Noise layer only." Text="{Binding NoiseScale, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
                                     <TextBlock Text="Noise speed:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" ToolTip="How fast the noise drifts. Drives the Noise layer only."/>
-                                    <TextBox Text="{Binding NoiseSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
+                                    <TextBox ToolTip="How fast the noise drifts. Drives the Noise layer only." Text="{Binding NoiseSpeed, UpdateSourceTrigger=PropertyChanged}" Grid.Row="4" Grid.Column="1"/>
                                     <TextBlock Text="Noise strength:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" ToolTip="How much of the noise shows through. Drives the Noise layer only."/>
-                                    <TextBox Text="{Binding NoiseStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1"/>
+                                    <TextBox ToolTip="How much of the noise shows through. Drives the Noise layer only." Text="{Binding NoiseStrength, UpdateSourceTrigger=PropertyChanged}" Grid.Row="5" Grid.Column="1"/>
                                     <TextBlock Text="Tint (hex RGBA):" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding JiggleTint, UpdateSourceTrigger=PropertyChanged}" Grid.Row="6" Grid.Column="1"/>
-                                    <CheckBox Content="Pixel snap" IsChecked="{Binding PixelSnap}" Grid.Row="7" Grid.Column="1" Margin="0,4,0,0"/>
+                                    <TextBox Text="{Binding JiggleTint, UpdateSourceTrigger=PropertyChanged}" ToolTip="Multiplies the pose&apos;s colour. Almost always left white." Grid.Row="6" Grid.Column="1"/>
+                                    <CheckBox Content="Pixel snap" IsChecked="{Binding PixelSnap}" ToolTip="Rounds movement to whole pixels, matching the game&apos;s own look." Grid.Row="7" Grid.Column="1" Margin="0,4,0,0"/>
                                 </Grid>
                             </GroupBox>
 
@@ -3039,11 +3039,11 @@
                                                Text="Offset / rotation / scale are per-placement — edit the Blink transform on the Places tab."/>
                                     <TextBlock Text="Open wait min/max:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                     <StackPanel Orientation="Horizontal" Grid.Row="2" Grid.Column="1">
-                                        <TextBox Text="{Binding BlinkMinWait, UpdateSourceTrigger=PropertyChanged}" Width="70"/>
-                                        <TextBox Text="{Binding BlinkMaxWait, UpdateSourceTrigger=PropertyChanged}" Width="70" Margin="4,0,0,0"/>
+                                        <TextBox Text="{Binding BlinkMinWait, UpdateSourceTrigger=PropertyChanged}" ToolTip="Shortest time the eyes stay open between blinks. Each wait is drawn at random between this and the maximum." Width="70"/>
+                                        <TextBox Text="{Binding BlinkMaxWait, UpdateSourceTrigger=PropertyChanged}" ToolTip="Longest time the eyes stay open between blinks." Width="70" Margin="4,0,0,0"/>
                                     </StackPanel>
                                     <TextBlock Text="Closed hold:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox Text="{Binding BlinkHold, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1" Width="70" HorizontalAlignment="Left"/>
+                                    <TextBox Text="{Binding BlinkHold, UpdateSourceTrigger=PropertyChanged}" ToolTip="How long a blink lasts, in seconds." Grid.Row="3" Grid.Column="1" Width="70" HorizontalAlignment="Left"/>
                                 </Grid>
                             </GroupBox>
 
@@ -3051,7 +3051,7 @@
                                 <StackPanel>
                                     <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap" Margin="0,0,0,4"
                                                Text="Draws the pose again, flipped downward — the floor-reflection pattern several vanilla levels build by hand. It reuses the pose's own sprite and material, so it costs one renderer and no extra art. Vanilla draws these IN FRONT of the body, which is what makes them read as lying on the floor."/>
-                                    <CheckBox Content="Enabled" IsChecked="{Binding ReflectionEnabled}" Margin="0,0,0,4"/>
+                                    <CheckBox Content="Enabled" IsChecked="{Binding ReflectionEnabled}" ToolTip="Draw a mirrored copy beneath the pose, for wet streets and polished floors." Margin="0,0,0,4"/>
                                     <Grid Visibility="{Binding ReflectionEnabled, Converter={StaticResource BoolToVisibility}}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="140"/>
@@ -3077,14 +3077,14 @@
                                                  ToolTip="World units from the pose's origin. Negative pushes the reflection further down."/>
                                         <TextBlock Text="Sorting order:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                                         <TextBox Grid.Row="2" Grid.Column="1" Width="70" HorizontalAlignment="Left"
-                                                 Text="{Binding ReflectionSortingOrder, UpdateSourceTrigger=PropertyChanged}"/>
+                                                 Text="{Binding ReflectionSortingOrder, UpdateSourceTrigger=PropertyChanged}" ToolTip="How far forward the reflection draws. Higher is nearer the viewer."/>
                                     </Grid>
                                 </StackPanel>
                             </GroupBox>
 
                             <GroupBox view:TutorialAnchor.Id="field:npcShadow" Header="Shadow (procedural circle — deformed by transform)">
                                 <StackPanel>
-                                    <CheckBox Content="Enabled" IsChecked="{Binding ShadowEnabled}" Margin="0,0,0,4"/>
+                                    <CheckBox Content="Enabled" IsChecked="{Binding ShadowEnabled}" ToolTip="Draw a simple shadow under the NPC, shaped by the pose&apos;s own transform." Margin="0,0,0,4"/>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="140"/>
@@ -3098,17 +3098,17 @@
                                                    TextWrapping="Wrap" Margin="0,0,0,4"
                                                    Text="Offset / rotation / squash are per-placement — edit the Shadow transform on the Places tab."/>
                                         <TextBlock Text="Colour (hex RGBA):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding ShadowColor, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                        <TextBox Text="{Binding ShadowColor, UpdateSourceTrigger=PropertyChanged}" ToolTip="The shadow&apos;s shade, as hex RGBA." Grid.Row="1" Grid.Column="1"/>
                                         <TextBlock Text="Sorting order:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <TextBox Text="{Binding ShadowSortingOrder, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+                                        <TextBox Text="{Binding ShadowSortingOrder, UpdateSourceTrigger=PropertyChanged}" ToolTip="How far forward the shadow draws. Higher is nearer the viewer." Grid.Row="2" Grid.Column="1"/>
                                     </Grid>
                                 </StackPanel>
                             </GroupBox>
 
                             <GroupBox view:TutorialAnchor.Id="panel:npcWet" Header="Wet particles (optional)">
                                 <StackPanel>
-                                    <CheckBox Content="Enabled" IsChecked="{Binding WetEnabled}" Margin="0,0,0,4"/>
-                                    <CheckBox Content="Start active" IsChecked="{Binding WetStartActive}" Margin="0,0,0,4"/>
+                                    <CheckBox Content="Enabled" IsChecked="{Binding WetEnabled}" ToolTip="Whether this NPC has the wet effect at all. Off by default - it suits swimwear and wet variants, not everyone." Margin="0,0,0,4"/>
+                                    <CheckBox Content="Start active" IsChecked="{Binding WetStartActive}" ToolTip="Whether the wet effect is already running when the room loads, rather than waiting for something to switch it on." Margin="0,0,0,4"/>
                                     <TextBlock Foreground="Gray" FontSize="10" TextWrapping="Wrap"
                                                Text="Emitter offset / rotation / scale are per-placement — edit the Wet transform on the Places tab."/>
                                 </StackPanel>
@@ -3286,7 +3286,7 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Source place:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <ComboBox Grid.Row="0" Grid.Column="1"
+                                        <ComboBox ToolTip="Which of the game&apos;s own places this extension attaches to. What you add below appears when the player is there." Grid.Row="0" Grid.Column="1"
                                                   ItemsSource="{Binding DataContext.VanillaSourceOptions,
                                                                 RelativeSource={RelativeSource AncestorType=Window}}"
                                                   SelectedValuePath="Token"
@@ -3389,14 +3389,14 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name (button):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="(Used on the in-game map button label.)"
                                                Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;)."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+                                    <TextBox ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;)."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
                                     <TextBlock Text="Internal GO name:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  view:IssueTarget.Field="internalName" Text="{Binding InternalName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Grid.Column="1"/>
+                                    <TextBox  view:IssueTarget.Field="internalName" Text="{Binding InternalName, UpdateSourceTrigger=PropertyChanged}" ToolTip="The object the level is built as in game." Grid.Row="3" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -3430,13 +3430,13 @@
                                          to front, with each mask under the sprite it belongs to. -->
                                     <TextBlock Text="Back sprite (2048×1136):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="The layer drawn BEHIND — usually the room itself, or the distance seen past it. Sorting order −12 by default. Written to the pack as secondarySprite."/>
-                                    <ctl:PathPickerBox view:TutorialAnchor.Id="field:placeSecondarySprite" view:IssueTarget.Field="secondarySprite"
+                                    <ctl:PathPickerBox ToolTip="The layer drawn BEHIND — usually the room itself, or the distance seen past it. Sorting order −12 by default. Written to the pack as secondarySprite." view:TutorialAnchor.Id="field:placeSecondarySprite" view:IssueTarget.Field="secondarySprite"
                                                        PathText="{Binding SecondarySprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Front sprite (2048×1136):" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="The layer drawn IN FRONT of the back one — an object standing in the room, or a foreground the player looks past. Sorting order −10 by default. Written to the pack as baseSprite."/>
-                                    <ctl:PathPickerBox view:TutorialAnchor.Id="field:placeBaseSprite" view:IssueTarget.Field="baseSprite"
+                                    <ctl:PathPickerBox ToolTip="The layer drawn IN FRONT of the back one — an object standing in the room, or a foreground the player looks past. Sorting order −10 by default. Written to the pack as baseSprite." view:TutorialAnchor.Id="field:placeBaseSprite" view:IssueTarget.Field="baseSprite"
                                                        PathText="{Binding BaseSprite, UpdateSourceTrigger=PropertyChanged}"
                                                        PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                        Grid.Row="1" Grid.Column="1"/>
@@ -3495,7 +3495,7 @@
                                     <TextBlock Text="Parallax — front:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <Slider view:IssueTarget.Field="parallaxStrength" Value="{Binding ParallaxStrength}" Minimum="0" Maximum="1.5" Grid.Row="0" Grid.Column="1"
                                             ToolTip="How far the front sprite slides with the cursor. Every vanilla level uses 0.75. Written as parallaxStrength."/>
-                                    <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2"/>
+                                    <TextBox Text="{Binding ParallaxStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="2" ToolTip="How far the front layer slides as the cursor moves. Every place in the game uses the same value, so start there."/>
                                     <TextBlock Text="Parallax — back:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,4,0,0"/>
                                     <StackPanel view:TutorialAnchor.Id="field:parallax" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,4,0,0">
                                         <CheckBox Content="Same as front" IsChecked="{Binding ParallaxSecondaryLinked}" VerticalAlignment="Center"
@@ -3504,7 +3504,7 @@
                                                 Width="150" VerticalAlignment="Center" Margin="10,0,0,0"
                                                 IsEnabled="{Binding ParallaxSecondaryLinked, Converter={StaticResource InverseBoolConverter}}"
                                                 ToolTip="The back sprite. THIS is what creates the depth — set it away from the front. Vanilla uses 0.1 or 0.5 for a far background, 1.5 for one that overshoots the room. Written as parallaxSecondaryStrength."/>
-                                        <TextBox Text="{Binding ParallaxSecondaryStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}"
+                                        <TextBox Text="{Binding ParallaxSecondaryStrength, StringFormat=F2, UpdateSourceTrigger=PropertyChanged}" ToolTip="The back layer&apos;s own drift. Setting it away from the front is what creates depth."
                                                  Width="60" VerticalAlignment="Center" Margin="6,0,0,0"
                                                  IsEnabled="{Binding ParallaxSecondaryLinked, Converter={StaticResource InverseBoolConverter}}"/>
                                     </StackPanel>
@@ -3517,13 +3517,13 @@
                                     <TextBlock Text="Equal values slide the level as one flat card — the difference between them is the effect."
                                                Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Foreground="Gray" FontSize="10" Margin="0,2,0,0"/>
                                     <CheckBox Content="Keep beach audio (ocean ambience)"
-                                              IsChecked="{Binding KeepAudio}"
+                                              IsChecked="{Binding KeepAudio}" ToolTip="Carry the ocean ambience over from the beach this place is built on. Off for indoor rooms."
                                               Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,6,0,0"/>
                                     <CheckBox Content="Keep seagulls (particle system from Beach)"
-                                              IsChecked="{Binding KeepSeagulls}"
+                                              IsChecked="{Binding KeepSeagulls}" ToolTip="Carry the seagull particles over from the beach this place is built on. Independent of the audio."
                                               Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,4,0,0"/>
                                     <TextBlock Text="Weather:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" Margin="0,6,0,0"/>
-                                    <ComboBox SelectedItem="{Binding WeatherType}"
+                                    <ComboBox SelectedItem="{Binding WeatherType}" ToolTip="Whether the game&apos;s rain and snow run here. None is no weather, Inside is the muted indoor version seen through windows, Outside is the full effect."
                                               Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,6,0,0">
                                         <ComboBox.ItemsSource>
                                             <x:Array Type="{x:Type model:WeatherType}">
@@ -3807,10 +3807,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                     <!-- The roomtalk picker is gone: dialogues are hosted on a
                                          per-pack always-active container, and the only remaining
                                          use for a roomtalk — taking priority over vanilla — is
@@ -4054,7 +4054,7 @@
                                     <TextBlock Text="ID:"          Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBlock Text="{Binding Id}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Foreground="Gray"/>
                                     <TextBlock Text="Kind:"        Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ComboBox view:TutorialAnchor.Id="field:nodeKind" Grid.Row="1" Grid.Column="1"
+                                    <ComboBox ToolTip="Text plays a line. Choice offers this node&apos;s children and lets the player pick one. Random picks one of them itself." view:TutorialAnchor.Id="field:nodeKind" Grid.Row="1" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.NodeKinds,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               SelectedItem="{Binding Kind, UpdateSourceTrigger=PropertyChanged}"/>
@@ -4063,13 +4063,13 @@
                                          both to the same property makes SelectedItem null-out and flush an
                                          empty value back to the node being navigated away from when its
                                          value isn't in the (per-node, rebuilt) ItemsSource. -->
-                                    <ComboBox view:IssueTarget.Field="actor" Grid.Row="2" Grid.Column="1"
+                                    <ComboBox ToolTip="Who speaks this line, and every line after it until another node changes it. A character&apos;s runtime name; the line is labelled with that character&apos;s display name." view:IssueTarget.Field="actor" Grid.Row="2" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.ActorOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
                                               Text="{Binding Actor, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="Expression:"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ComboBox view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
+                                    <ComboBox ToolTip="Which expression the speaker wears from this node onward." view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeExpressionOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
@@ -4094,7 +4094,7 @@
                                          suggestions menu is internal and can't be extended, so
                                          NodeTextBox_ContextMenuOpening reproduces the suggestions and
                                          adds "Add to dictionary". -->
-                                    <TextBox  x:Name="NodeTextBox"
+                                    <TextBox  x:Name="NodeTextBox" ToolTip="The line itself. [PV:name] is replaced with a pack variable, and {Name} with one of the game&apos;s own."
                                               Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                                               Grid.Row="5" Grid.Column="1"
                                               AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60"
@@ -4108,12 +4108,12 @@
                                     <TextBlock Text="Children:"    Grid.Row="7" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBlock Text="{Binding ChildrenSummary}" Grid.Row="7" Grid.Column="1" Foreground="Gray"/>
                                     <TextBlock Text="Jump:"        Grid.Row="8" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ComboBox Grid.Row="8" Grid.Column="1"
+                                    <ComboBox ToolTip="Where play goes after this node. Continue moves to the next node down the list, whether or not it is a child. Exit stops the conversation. Jump resumes at the node carrying the tag named below." Grid.Row="8" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.JumpModes,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               SelectedItem="{Binding JumpMode, UpdateSourceTrigger=PropertyChanged}"/>
                                     <TextBlock Text="Jump tag:"    Grid.Row="9" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding JumpTargetTag, UpdateSourceTrigger=PropertyChanged}" Grid.Row="9" Grid.Column="1"/>
+                                    <TextBox  Text="{Binding JumpTargetTag, UpdateSourceTrigger=PropertyChanged}" ToolTip="Which tag to resume at, for Jump. It has to match another node&apos;s Tag exactly." Grid.Row="9" Grid.Column="1"/>
                                     <TextBlock Text="Duration:"    Grid.Row="10" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ComboBox Grid.Row="10" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.NodeDurations,
@@ -4279,10 +4279,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier actions/conditions reference this by."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -4402,7 +4402,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
                                               ToolTip="GameObject name under 12_AudioPlayer — also what SwitchMusic references in its `music` param."/>
@@ -4508,7 +4508,7 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
                                               ToolTip="Referenced by PlaySFX node actions as `clip`."/>
@@ -4529,7 +4529,7 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Audio path:"     Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <ctl:PathPickerBox PathText="{Binding AudioPath, UpdateSourceTrigger=PropertyChanged}"
+                                        <ctl:PathPickerBox PathText="{Binding AudioPath, UpdateSourceTrigger=PropertyChanged}" ToolTip="The audio file, relative to the pack folder. OGG, WAV and MP3 all work. Extra recordings named _1, _2 beside it are picked between at random."
                                                            PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            Filter="Audio files (*.ogg;*.wav;*.mp3)|*.ogg;*.wav;*.mp3|All files (*.*)|*.*"
                                                            Grid.Row="0" Grid.Column="1"/>
@@ -4556,7 +4556,7 @@
                                 <StackPanel>
                                     <TextBlock Foreground="Gray" FontSize="10" Margin="0,0,0,4" TextWrapping="Wrap"
                                                Text="Comma-separated list of text patterns. When any pattern appears in a dialogue node's text on node-start, the SFX fires automatically. If the effect has variants, one is picked at random each time — add them by putting files named &lt;name&gt;_1, &lt;name&gt;_2, … beside the base file (numbered without gaps). Convention: asterisk-bracketed lowercase tokens like *plap*, *smooch*. One SFX can carry multiple patterns — *yank*,*yeet* both fire the same clip just like the host mod does. Leave blank for an SFX that only plays via explicit PlaySFX actions."/>
-                                    <TextBox  Text="{Binding TextPatternsCsv, UpdateSourceTrigger=PropertyChanged}"/>
+                                    <TextBox  Text="{Binding TextPatternsCsv, UpdateSourceTrigger=PropertyChanged}" ToolTip="Words that fire this effect on their own when they appear in a line, comma-separated. The convention is a lowercase word between asterisks, like *plap*. Leave it empty for an effect only an action should play."/>
                                 </StackPanel>
                             </GroupBox>
                         </StackPanel>
@@ -4627,10 +4627,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier actions/conditions reference this by."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -4648,13 +4648,13 @@
                                             <RowDefinition Height="Auto"/>
                                         </Grid.RowDefinitions>
                                         <TextBlock Text="Sprite path:"   Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                        <ctl:PathPickerBox PathText="{Binding SpritePath, UpdateSourceTrigger=PropertyChanged}"
+                                        <ctl:PathPickerBox ToolTip="The image, relative to the pack folder. It fills the screen, so author it at the game&apos;s own resolution." PathText="{Binding SpritePath, UpdateSourceTrigger=PropertyChanged}"
                                                            PackRoot="{Binding DataContext.PackRoot, RelativeSource={RelativeSource AncestorType=Window}}"
                                                            Grid.Row="0" Grid.Column="1"/>
                                         <TextBlock Text="External path:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                         <!-- Absolute path by design (no PackRoot): the legacy external slot points
                                              outside the pack, so the picker stores the full path. -->
-                                        <ctl:PathPickerBox PathText="{Binding ExternalSpritePath, UpdateSourceTrigger=PropertyChanged}"
+                                        <ctl:PathPickerBox ToolTip="An absolute path to an image outside the pack. It makes the pack depend on that file being present, so prefer a bundled image; set both and the bundled one wins." PathText="{Binding ExternalSpritePath, UpdateSourceTrigger=PropertyChanged}"
                                                            Grid.Row="1" Grid.Column="1"/>
                                     </Grid>
                                 </StackPanel>
@@ -4787,9 +4787,9 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Name:"          Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox  Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1" ToolTip="What conditions, actions and [PV:] tokens refer to this variable by. Renaming it rewrites every reference at once."/>
                                     <TextBlock Text="Type:"          Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <ComboBox Grid.Row="1" Grid.Column="1"
+                                    <ComboBox ToolTip="Bool for yes-or-no, Int and Float for numbers, String for text, List for an ordered set of values." Grid.Row="1" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.VariableTypes,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               SelectedItem="{Binding Type, UpdateSourceTrigger=PropertyChanged}"/>
@@ -4842,7 +4842,7 @@
                                                 ToolTip="Append an initial entry to this list variable's starting contents."/>
                                     </StackPanel>
                                     <CheckBox view:TutorialAnchor.Id="field:persisted" Content="Persisted (writes to per-pack save file)"
-                                              IsChecked="{Binding Persisted}"
+                                              IsChecked="{Binding Persisted}" ToolTip="Save this with the player&apos;s game so it survives closing and reopening. Left off, it starts fresh every session."
                                               Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,4,0,0"/>
                                     <!-- Refresh mode: None / Daily reset / Daily random roll / Per-level-enter random roll.
                                          Daily is a once-per-day reset; DailyRandom / LevelRandom are random-gate
@@ -4887,7 +4887,7 @@
                                               ToolTip="Optional upper clamp for Int/Float variables. Also doubles as the upper bound for random refresh modes (defaults to 100 when unset)."/>
                                     <TextBlock Text="Description:"   Grid.Row="8" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                                     <TextBox  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}"
-                                              Grid.Row="8" Grid.Column="1" Margin="0,4,0,0"
+ ToolTip="A note to yourself. Shown only in the editor, never in game."                                              Grid.Row="8" Grid.Column="1" Margin="0,4,0,0"
                                               AcceptsReturn="True" TextWrapping="Wrap" MinHeight="40"/>
                                 </Grid>
                             </GroupBox>
@@ -4986,11 +4986,11 @@
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Text="Display name:"  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
 
                                     <TextBlock Text="Runtime name:"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier — used in logs and for the rule's edge tracking."/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <TextBox ToolTip="Stable identifier — used in logs and for the rule's edge tracking."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
 
                                     <TextBlock Text="Description:"   Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                                     <TextBox  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="0,4,0,0"
@@ -5147,7 +5147,7 @@
                                     <TextBlock Foreground="Red" FontSize="11" Margin="0,0,0,4"
                                                Text="{Binding CodeError}"
                                                Visibility="{Binding IsCodeValid, Converter={StaticResource InverseBoolToVisibility}}"/>
-                                    <TextBox  Text="{Binding CodeText, UpdateSourceTrigger=PropertyChanged}"
+                                    <TextBox ToolTip="This rule&apos;s conditions and actions as JSON. The two views round-trip, so you can move between them freely; a parse error keeps you here until it is fixed."  Text="{Binding CodeText, UpdateSourceTrigger=PropertyChanged}"
                                               AcceptsReturn="True" AcceptsTab="True"
                                               TextWrapping="NoWrap"
                                               VerticalScrollBarVisibility="Auto"
