@@ -1403,7 +1403,10 @@ public sealed class MainViewModel : ObservableObject
             () => SelectedCharacter?.AddExpression(),
             () => SelectedCharacter != null);
 
-        AddOutfitCommand   = new RelayCommand(AddOutfit, () => SelectedOutfit != null || Characters.Count > 0);
+        // An outfit belongs to one character, so there has to BE one selected,
+        // and it has to be a character an outfit means something for — a
+        // voice-only speaker (the player included) shows no bust at all.
+        AddOutfitCommand   = new RelayCommand(AddOutfit, CanAddOutfit);
         RemoveCharacterCommand = new RelayCommand(RemoveCharacter, () => SelectedCharacter != null);
         RemoveOutfitCommand    = new RelayCommand(RemoveOutfit,
             () => SelectedOutfit != null && SelectedCharacter != null);
@@ -2182,12 +2185,23 @@ public sealed class MainViewModel : ObservableObject
         RebuildActorAndBustOptions();
     }
 
+    /// <summary>
+    /// Whether + Outfit should be available: a character is selected, and it is
+    /// one that can wear an outfit at all.
+    /// <para/>
+    /// Selecting an outfit sets its owner too, so the character alone is enough
+    /// to ask.
+    /// </summary>
+    private bool CanAddOutfit()
+        => SelectedCharacter is { } ch && ch.BustSource != BustSource.None;
+
     private void AddOutfit()
     {
-        var ch = (SelectedOutfit != null
-            ? Characters.FirstOrDefault(c => c.Outfits.Contains(SelectedOutfit))
-            : null) ?? Characters.FirstOrDefault();
-        if (ch == null) return;
+        // No FirstOrDefault fallback. It used to add the outfit to whichever
+        // character sorted first when nothing was selected, which looks like a
+        // no-op until you find the outfit on a stranger.
+        var ch = SelectedCharacter;
+        if (ch == null || ch.BustSource == BustSource.None) return;
         ch.AddOutfit();
         SelectedOutfit = ch.Outfits.Last();
     }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -594,6 +594,63 @@ public partial class MainWindow : Window
     /// requires a code-behind nudge. Only outfit selection drives the editor;
     /// selecting a character is a no-op (the user can expand it).
     /// </summary>
+    /// <summary>
+    /// Stops the Characters sidebar being dragged narrower than its own
+    /// toolbar.
+    /// <para/>
+    /// A <see cref="ToolBar"/> that runs out of room does not clip — it moves
+    /// the buttons that no longer fit into an overflow popup behind a small
+    /// chevron. That is tidy and almost invisible: authors dragged the splitter
+    /// in and concluded the buttons did not exist. Giving the column a minimum
+    /// width takes the situation away rather than making the popup nicer.
+    /// <para/>
+    /// The width is measured rather than written down. Button widths follow the
+    /// theme's font and the display's scaling, so a literal number would be
+    /// right on one machine and wrong on the next.
+    /// </summary>
+    private void CharacterToolBar_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is not ToolBar bar) return;
+
+        // Two ways of asking, because neither is guaranteed on its own: the
+        // ToolBar's own measure includes its chrome but may answer for the
+        // laid-out width rather than the natural one, while summing the items
+        // gets every button (overflowed ones included) but no chrome. Whichever
+        // is larger is the one that actually fits everything.
+        bar.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        double whole = bar.DesiredSize.Width;
+
+        double items = 0;
+        foreach (var item in bar.Items)
+        {
+            if (item is not UIElement el) continue;
+            el.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+            items += el.DesiredSize.Width;
+        }
+        // Chrome the item sum cannot see: the ToolBar's border and padding.
+        items += bar.Padding.Left + bar.Padding.Right
+               + bar.BorderThickness.Left + bar.BorderThickness.Right;
+
+        double needed = Math.Max(whole, items);
+
+        // A measure that came back with nothing means neither call answered.
+        // Leaving MinWidth at zero would look exactly like success while
+        // changing nothing, so do not pretend — leave the column alone.
+        if (double.IsNaN(needed) || double.IsInfinity(needed) || needed < 1) return;
+
+        needed = Math.Ceiling(needed);
+        CharacterSidebarColumn.MinWidth = needed;
+        if (CharacterSidebarColumn.Width.IsAbsolute &&
+            CharacterSidebarColumn.Width.Value < needed)
+            CharacterSidebarColumn.Width = new GridLength(needed);
+
+        // The measures above ran outside a layout pass; ask for a fresh one so
+        // nothing is left holding a size taken at infinite width.
+        bar.InvalidateMeasure();
+        foreach (var item in bar.Items)
+            if (item is UIElement el) el.InvalidateMeasure();
+    }
+
     private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
         if (DataContext is not MainViewModel vm) return;

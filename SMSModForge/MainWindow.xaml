@@ -2382,7 +2382,16 @@
                         or the surrounding chrome get cramped.
                     -->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="280"/>
+                        <!--
+                            MinWidth is set from the toolbar's own measured width on
+                            load (CharacterToolBar_Loaded), not written here: the
+                            buttons' width depends on the theme's font and the user's
+                            DPI, so any number typed in would be wrong on somebody's
+                            machine. Dragging the splitter narrower than the buttons
+                            used to fold them into ToolBar's overflow popup, where
+                            authors did not find them at all.
+                        -->
+                        <ColumnDefinition x:Name="CharacterSidebarColumn" Width="280"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="540"/>
@@ -2390,14 +2399,16 @@
 
                     <!-- LEFT: character/outfit tree -->
                     <DockPanel view:TutorialAnchor.Id="panel:characterTree" Grid.Column="0">
-                        <ToolBar DockPanel.Dock="Top">
+                        <ToolBar x:Name="CharacterToolBar" DockPanel.Dock="Top"
+                                 Loaded="CharacterToolBar_Loaded">
                             <Button view:TutorialAnchor.Id="btn:addCharacter" Content="+ Character" Command="{Binding AddCharacterCommand}"
                                     ToolTip="A character this pack draws the bust for."/>
                             <Button Content="+ Vanilla" Command="{Binding AddVanillaCharacterCommand}"
                                     ToolTip="A character that borrows one of the game's own busts — pick which below. No art needed."/>
                             <Button Content="+ Voice" Command="{Binding AddVoiceCharacterCommand}"
                                     ToolTip="A speaking part with no bust at all, like John Dick."/>
-                            <Button Content="+ Outfit"    Command="{Binding AddOutfitCommand}"/>
+                            <Button Content="+ Outfit"    Command="{Binding AddOutfitCommand}"
+                                    ToolTip="Add an outfit to the selected character. Needs a character that has a bust — a voice-only character has nothing to dress."/>
                             <Separator/>
                             <Button Content="− Outfit" Command="{Binding RemoveOutfitCommand}"
                                     ToolTip="Delete the selected outfit."/>
