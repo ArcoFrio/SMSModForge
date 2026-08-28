@@ -174,7 +174,27 @@ internal static class TutorialSolutions
             b!.Target = "self:" + w.Vm.Places[0].Key;
         },
 
-        // ── 3. Your first conversation ────────────────────────────────
+        // ── 3. Putting things in the room ─────────────────────────────
+        ["dressing-the-room / Open the room you built"] = w =>
+        {
+            GiveAPlace(w);
+            w.Vm.SelectedPlace = w.Vm.Places[0];
+        },
+        ["dressing-the-room / Add an object"] = w =>
+            w.Vm.SelectedPlace!.AddGameObject(),
+        ["dressing-the-room / Give it a name and a picture"] = w =>
+        {
+            var g = w.Vm.SelectedPlace!.GameObjects[0];
+            g.Name = "Lamp";
+            g.Sprite = TutorialAssets.Npc(0);
+        },
+        ["dressing-the-room / Decide what it stands in front of"] = w =>
+            // Between the back layer at -12 and the front at -10.
+            w.Vm.SelectedPlace!.GameObjects[0].SortingOrder = -11,
+        ["dressing-the-room / Leave it switched off"] = w =>
+            w.Vm.SelectedPlace!.GameObjects[0].StartActive = false,
+
+        // ── 4. Your first conversation ────────────────────────────────
         ["first-conversation / Add a dialogue"] = w =>
         {
             GiveAPlace(w);

@@ -360,7 +360,154 @@ public static class TutorialCatalog
             },
         },
 
+        new TutorialDef
+        {
+            Id = "dressing-the-room",
+            Group = "Places",
+            Title = "Putting things in the room",
+            Summary = "Add objects to a place, layer them, and leave one switched off.",
+            Level = 3,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "A room is more than two pictures",
+                    Body = "The back and front layers are the room itself. Everything ELSE in it " +
+                           "is a GameObject: its own picture, at its own position, with its own " +
+                           "place in the stack — and, unlike the layers, something a dialogue or " +
+                           "a rule can switch on and off while the game runs.\n\n" +
+                           "That is how a room changes. A door that opens is two objects, one " +
+                           "switched off. A coat left on a chair is an object that appears once " +
+                           "a conversation has happened. A lamp that comes on at night is the " +
+                           "same trick again.\n\n" +
+                           "Object art is NOT a level layer, so it is not 2048 by 1136. Draw it " +
+                           "at whatever size the thing really is, on a transparent background; " +
+                           "it is placed in the room rather than filling it.",
+                    Kind = StepKind.Read,
+                    Tab = TabPlaces,
+                },
+                new TutorialStep
+                {
+                    Title = "Open the room you built",
+                    Body = "This carries on in the same pack. Click your place in the list on " +
+                           "the left — the one you made two tutorials ago, not a vanilla " +
+                           "extension.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placeList",
+                    IsDone = (vm, s) => vm.SelectedPlace != null,
+                    Hint = "Your places are the upper list; vanilla extensions are below it.",
+                },
+                new TutorialStep
+                {
+                    Title = "Add an object",
+                    Body = "Use + Add GameObject. It arrives empty and unnamed, which is fine — " +
+                           "the next step is what makes it a thing.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placeGameObjects",
+                    OnEnter = (vm, s) => s.Set("gos", CountGameObjects(vm)),
+                    IsDone = (vm, s) => s.GrewSince("gos", CountGameObjects(vm)),
+                    Hint = "+ Add GameObject, under the GameObjects box.",
+                },
+                new TutorialStep
+                {
+                    Title = "Give it a name and a picture",
+                    Body = "The name is how everything else finds this object — a rule that " +
+                           "switches it on names it, and names repeat all over a level, so pick " +
+                           "something you would recognise months from now.\n\n" +
+                           "For the picture, any of the practice art will do; the NPC art in " +
+                           "TutorialArt/NPCs is a convenient shape to see. It does not have to " +
+                           "be art you drew for this — an object is just a sprite in a room.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placeGameObjects",
+                    IsDone = (vm, s) => FirstGameObject(vm) is { } g &&
+                                        g.Name.Trim().Length > 0 && g.Sprite.Trim().Length > 0,
+                    Hint = "Select the object in the tree, then fill in Name and its sprite.",
+                },
+                new TutorialStep
+                {
+                    Title = "Decide what it stands in front of",
+                    Body = "Sorting order is the stack. The back layer sits at -12 and the front " +
+                           "layer at -10, so an object at -11 stands BETWEEN them: behind the " +
+                           "furniture in the front layer, in front of the wall behind it. " +
+                           "Anything above -10 draws over the whole room.\n\n" +
+                           "A new object starts at 0, which is over everything. Set it to -11 " +
+                           "and watch the preview put it into the room rather than on top of it.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placeGameObjects",
+                    AlsoAllow = new[] { "panel:placePreview" },
+                    IsDone = (vm, s) => FirstGameObject(vm) is { } g && g.SortingOrder < 0,
+                    Hint = "Sorting order, on the selected object. -11 puts it between the layers.",
+                },
+                new TutorialStep
+                {
+                    Title = "Leave it switched off",
+                    Body = "Untick Start active. The object is still in the room, at the position " +
+                           "you gave it — it simply is not shown when the player arrives.\n\n" +
+                           "This is half of every change a room ever makes. The other half is a " +
+                           "Set-Active action, from a dialogue node or an integration rule, " +
+                           "naming this object. Build the object switched off now and the rule " +
+                           "that reveals it has something to point at later.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placeGameObjects",
+                    IsDone = (vm, s) => FirstGameObject(vm) is { StartActive: false },
+                    Hint = "Start active, on the selected object. Untick it.",
+                },
+                new TutorialStep
+                {
+                    Title = "What the preview is telling you",
+                    Body = "An object that starts switched off is drawn faded, so you can still " +
+                           "position it — the game will draw nothing there until something turns " +
+                           "it on. Fade objects that start inactive turns that off while you " +
+                           "work.\n\n" +
+                           "The same goes for anything under a switched-off parent: the game " +
+                           "draws none of it, so the preview fades all of it. If a whole group " +
+                           "of your objects has gone pale, that is why.",
+                    Kind = StepKind.Read,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placePreview",
+                },
+                new TutorialStep
+                {
+                    Title = "A room that can change",
+                    Body = "You now have a room with something in it that is not part of the " +
+                           "picture — placed, layered, and waiting to be switched on.\n\n" +
+                           "Objects nest, so one can be a container for several and switching " +
+                           "the parent moves all of them at once. And the Documentation section " +
+                           "covers the rest of what a place carries: masks, weather, and the " +
+                           "beach ambience a room can keep or drop.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                },
+            },
+        },
+
     };
+
+    /// <summary>Every GameObject on the selected place, at any depth. Objects
+    /// nest, so a count that only saw the top level would miss one added inside
+    /// a container.</summary>
+    private static int CountGameObjects(ViewModel.MainViewModel vm)
+    {
+        int n = 0;
+        void Walk(ViewModel.GameObjectViewModel g)
+        {
+            n++;
+            foreach (var c in g.Children) Walk(c);
+        }
+        if (vm.SelectedPlace != null)
+            foreach (var g in vm.SelectedPlace.GameObjects) Walk(g);
+        return n;
+    }
+
+    /// <summary>The first GameObject on the selected place, which is the one a
+    /// step that just asked for one is talking about.</summary>
+    private static ViewModel.GameObjectViewModel? FirstGameObject(ViewModel.MainViewModel vm)
+        => vm.SelectedPlace?.GameObjects.Count > 0 ? vm.SelectedPlace.GameObjects[0] : null;
 
     /// <summary>
     /// The diagnostic walkthrough. Not for authors — it exercises the overlay,
