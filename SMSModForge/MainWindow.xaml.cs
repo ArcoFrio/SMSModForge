@@ -667,6 +667,51 @@ public partial class MainWindow : Window
         }
     }
 
+    // ── Silencing a validation issue ────────────────────────────────────
+    //
+    // The ignore list lives in the pack, so the judgement travels with the
+    // content it is about rather than sitting on one machine.
+
+    private SMSModForge.Validation.ValidationIssue? SelectedIssue
+        => IssueList?.SelectedItem as SMSModForge.Validation.ValidationIssue;
+
+    private void IgnoreIssue_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm && SelectedIssue is { } i)
+            vm.IgnoreIssue(i, wholeCode: false);
+    }
+
+    private void IgnoreIssueCode_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm || SelectedIssue is not { } i) return;
+        if (i.Code.Length == 0)
+        {
+            // Nothing to key a type-wide rule on. Say so rather than silently
+            // doing the single-issue thing under a menu item that promised more.
+            MessageBox.Show(this,
+                "This check has no code yet, so it can only be ignored one at a time.",
+                "Ignore every issue like it", MessageBoxButton.OK, MessageBoxImage.Information);
+            return;
+        }
+        vm.IgnoreIssue(i, wholeCode: true);
+    }
+
+    private void UnignoreIssue_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is MainViewModel vm && SelectedIssue is { } i)
+            vm.UnignoreIssue(i);
+    }
+
+    private void ClearIgnoredIssues_Click(object sender, RoutedEventArgs e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        if (MessageBox.Show(this,
+                $"Report all {vm.IgnoredIssueCount} ignored issue(s) again?",
+                "Stop ignoring all", MessageBoxButton.OKCancel,
+                MessageBoxImage.Question) == MessageBoxResult.OK)
+            vm.ClearIgnoredIssues();
+    }
+
     private void EditMask_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is not MainViewModel vm) return;

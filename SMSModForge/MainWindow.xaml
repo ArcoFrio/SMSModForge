@@ -2184,12 +2184,44 @@
                             </ItemsControl>
                         </GroupBox>
 
-                        <GroupBox Header="Double-click an issue to jump to it">
+                        <GroupBox>
+                            <GroupBox.Header>
+                                <DockPanel LastChildFill="False">
+                                    <TextBlock Text="Double-click an issue to jump to it" VerticalAlignment="Center"/>
+                                    <!-- Silenced issues are hidden, so say they exist. A count
+                                         nobody can see is how an ignore list turns into a place
+                                         problems go to be forgotten. -->
+                                    <Button DockPanel.Dock="Right" Content="Stop ignoring all"
+                                            Padding="8,0" Margin="8,0,0,0"
+                                            Click="ClearIgnoredIssues_Click"
+                                            Visibility="{Binding HasIgnoredIssues, Converter={StaticResource BoolToVisibility}}"
+                                            ToolTip="Empty the ignore list, so every silenced issue is reported again."/>
+                                    <CheckBox DockPanel.Dock="Right" VerticalAlignment="Center" Margin="12,0,0,0"
+                                              IsChecked="{Binding ShowIgnoredIssues}"
+                                              Visibility="{Binding HasIgnoredIssues, Converter={StaticResource BoolToVisibility}}"
+                                              ToolTip="List the issues you have silenced as well, so you can un-silence one.">
+                                        <TextBlock>
+                                            <Run Text="Show"/><Run Text=" "/><Run Text="{Binding IgnoredIssueCount, Mode=OneWay}"/><Run Text=" ignored"/>
+                                        </TextBlock>
+                                    </CheckBox>
+                                </DockPanel>
+                            </GroupBox.Header>
                             <ListBox x:Name="IssueList"
                                      ItemsSource="{Binding Issues}"
                                      HorizontalContentAlignment="Stretch"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                      MouseDoubleClick="IssueList_MouseDoubleClick">
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Ignore this issue" Click="IgnoreIssue_Click"
+                                                  ToolTip="Stop reporting this one thing, in this one place."/>
+                                        <MenuItem Header="Ignore every issue like it" Click="IgnoreIssueCode_Click"
+                                                  ToolTip="Stop reporting this kind of issue anywhere in the pack."/>
+                                        <Separator/>
+                                        <MenuItem Header="Stop ignoring this" Click="UnignoreIssue_Click"
+                                                  ToolTip="Report this again. Only does anything for an issue you have silenced."/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
                                         <Grid ToolTip="{Binding Message}" Cursor="Hand"

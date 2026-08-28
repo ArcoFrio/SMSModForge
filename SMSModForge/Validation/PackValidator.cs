@@ -7,7 +7,32 @@ namespace SMSModForge.Validation;
 
 public enum Severity { Info, Warning, Error }
 
-public sealed record ValidationIssue(Severity Severity, string Where, string Message);
+/// <summary>
+/// One problem found in a pack.
+/// <para/>
+/// <paramref name="Code"/> is a stable identifier for the KIND of problem, and
+/// exists so an author can silence one. Suppressing by message text would come
+/// undone the moment a message is reworded, and silently: the issue would
+/// simply reappear with no way to tell it from a new one. Codes are dotted and
+/// terminal — <c>art.bustSize</c>, not a sentence.
+/// <para/>
+/// It is empty on checks that predate this, which costs nothing: such an issue
+/// can still be dismissed individually through <see cref="Key"/>, it just
+/// cannot be dismissed by type until it is given a code.
+/// </summary>
+public sealed record ValidationIssue(Severity Severity, string Where, string Message,
+                                     string Code = "")
+{
+    /// <summary>
+    /// Identifies this one issue for suppression. The code plus the place it
+    /// was found, so silencing "this bust is 512x512" does not also silence a
+    /// different bust with the same problem.
+    /// <para/>
+    /// Falls back to the message for issues with no code yet — less durable,
+    /// but it is the only stable thing such an issue has.
+    /// </summary>
+    public string Key => Code.Length > 0 ? $"{Code}@{Where}" : $"{Where}|{Message}";
+}
 
 /// <summary>
 /// Verifies that a pack on disk is internally consistent and ready to ship to
@@ -16,9 +41,36 @@ public sealed record ValidationIssue(Severity Severity, string Where, string Mes
 /// </summary>
 public static class PackValidator
 {
-    public static List<ValidationIssue> Validate(ModPack pack, string packRoot)
+    /// <summary>
+    /// Every problem in the pack, minus whatever the author has chosen not to
+    /// hear about. Pass <paramref name="includeIgnored"/> to get the lot, which
+    /// is how the editor offers to un-ignore something.
+    /// </summary>
+    public static List<ValidationIssue> Validate(ModPack pack, string packRoot,
+                                                 bool includeIgnored = false)
+    {
+        var all = Collect(pack, packRoot);
+        if (includeIgnored || pack.IgnoredIssues.Count == 0) return all;
+
+        var ignored = new HashSet<string>(pack.IgnoredIssues, System.StringComparer.Ordinal);
+        return all.FindAll(i => !ignored.Contains(i.Key) && !ignored.Contains(i.Code));
+    }
+
+    /// <summary>Whether this issue is currently silenced, and by which entry —
+    /// the whole code, or just this one occurrence.</summary>
+    public static bool IsIgnored(ModPack pack, ValidationIssue issue)
+        => pack.IgnoredIssues.Contains(issue.Key) ||
+           (issue.Code.Length > 0 && pack.IgnoredIssues.Contains(issue.Code));
+
+    private static List<ValidationIssue> Collect(ModPack pack, string packRoot)
     {
         var issues = new List<ValidationIssue>();
+
+        // Art sizes. Kept in their own file: it is the only check that opens
+        // files rather than reading the manifest, and the only one whose cost
+        // grows with the size of the pack.
+        try { ArtDimensions.CheckAll(issues, pack, packRoot); }
+        catch (System.Exception) { /* never let a bad file stop the rest */ }
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", "packId is required"));

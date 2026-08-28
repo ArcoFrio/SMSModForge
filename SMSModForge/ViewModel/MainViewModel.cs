@@ -4205,8 +4205,62 @@ public sealed class MainViewModel : ObservableObject
     {
         Issues.Clear();
         if (PackRoot is null) return;
-        foreach (var issue in PackValidator.Validate(Pack, PackRoot))
+        foreach (var issue in PackValidator.Validate(Pack, PackRoot, ShowIgnoredIssues))
             Issues.Add(issue);
+        OnPropertyChanged(nameof(IgnoredIssueCount));
+        OnPropertyChanged(nameof(HasIgnoredIssues));
+    }
+
+    private bool _showIgnoredIssues;
+
+    /// <summary>
+    /// Show silenced issues in the list as well, so one can be un-silenced.
+    /// Not persisted: it is a way to go and look at something, not a setting.
+    /// </summary>
+    public bool ShowIgnoredIssues
+    {
+        get => _showIgnoredIssues;
+        set { if (_showIgnoredIssues == value) return; _showIgnoredIssues = value;
+              OnPropertyChanged(); Validate(); }
+    }
+
+    public int IgnoredIssueCount => Pack.IgnoredIssues.Count;
+    public bool HasIgnoredIssues => Pack.IgnoredIssues.Count > 0;
+
+    /// <summary>Whether an issue currently in the list is one of the silenced
+    /// ones — only possible while <see cref="ShowIgnoredIssues"/> is on.</summary>
+    public bool IsIssueIgnored(ValidationIssue issue)
+        => issue != null && PackValidator.IsIgnored(Pack, issue);
+
+    /// <summary>Silence this one occurrence, or every issue sharing its code.</summary>
+    public void IgnoreIssue(ValidationIssue issue, bool wholeCode)
+    {
+        if (issue == null) return;
+        string entry = wholeCode ? issue.Code : issue.Key;
+        if (string.IsNullOrEmpty(entry) || Pack.IgnoredIssues.Contains(entry)) return;
+        Undo.Checkpoint();
+        Pack.IgnoredIssues.Add(entry);
+        Validate();
+    }
+
+    /// <summary>Undo either kind of silencing for this issue.</summary>
+    public void UnignoreIssue(ValidationIssue issue)
+    {
+        if (issue == null) return;
+        int removed = Pack.IgnoredIssues.RemoveAll(
+            e => e == issue.Key || (issue.Code.Length > 0 && e == issue.Code));
+        if (removed == 0) return;
+        Undo.Checkpoint();
+        Validate();
+    }
+
+    /// <summary>Hear about everything again.</summary>
+    public void ClearIgnoredIssues()
+    {
+        if (Pack.IgnoredIssues.Count == 0) return;
+        Undo.Checkpoint();
+        Pack.IgnoredIssues.Clear();
+        Validate();
     }
 
     // ── Static helper for param-row boolean detection ───────────────────

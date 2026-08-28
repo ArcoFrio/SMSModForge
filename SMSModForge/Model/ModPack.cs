@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -27,6 +27,21 @@ public sealed class ModPack
     /// every authored key (outfits and places) at load time so two packs can
     /// both define a "newgirl" or "beach" key without colliding.
     /// </summary>
+    /// <summary>
+    /// Validation issues this author has decided not to hear about: either a
+    /// whole code (<c>art.bustSize</c>) or one occurrence of it
+    /// (<c>art.bustSize@characters[Anna].outfits[swim].baseSprite</c>).
+    /// <para/>
+    /// Stored in the pack rather than as an editor preference because the
+    /// judgement is about the pack's own content — "yes, this bust is meant to
+    /// be that size" — and anyone else opening the pack should not have to
+    /// make it again. The game never reads it.
+    /// </summary>
+    [JsonProperty("ignoredIssues", Order = 98, NullValueHandling = NullValueHandling.Ignore)]
+    public List<string> IgnoredIssues { get; set; } = new();
+
+    public bool ShouldSerializeIgnoredIssues() => IgnoredIssues.Count > 0;
+
     [JsonProperty("packId", Order = 1)]
     public string PackId { get; set; } = "Untitled";
 
