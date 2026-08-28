@@ -314,7 +314,9 @@ namespace SMSModForge.PackPlugin
                 return;
             }
             var tex = LoadTexture(pack, rel);
-            sr.sprite = Sprite.Create(tex, new Rect(0, 0, 256, 256), new Vector2(0.5f, 0.5f));
+            // Whatever size the PNG turned out to be, fitted to the 256x256
+            // frame the rest of the bust rig is built around.
+            sr.sprite = FittedSprite.CreateBust(tex);
         }
 
         /// <param name="linear">
@@ -328,6 +330,9 @@ namespace SMSModForge.PackPlugin
         /// </param>
         private static Texture2D LoadTexture(PackManifest pack, string rel, bool linear = false)
         {
+            // The dimensions here are a placeholder: LoadImage resizes the
+            // texture to whatever the PNG actually is. FittedSprite is what
+            // puts art of the wrong size back to the right on-screen size.
             var tex = new Texture2D(256, 256, TextureFormat.RGBA32, false, linear);
             byte[] bytes = pack.ReadBytes(rel);
             if (bytes != null) tex.LoadImage(bytes);

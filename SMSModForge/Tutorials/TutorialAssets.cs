@@ -32,6 +32,39 @@ public static class TutorialAssets
 
     // Pack-relative paths, as an author would type them into a sprite field.
     public static string Bust(int n) => $"{PackFolder}/Busts/Bust{n}/Bust{n}Base00.png";
+
+    /// <summary>Eyes-closed frame for one of the practice busts.</summary>
+    public static string BustBlink(int n) => $"{PackFolder}/Busts/Bust{n}/Bust{n}Blink.png";
+
+    /// <summary>
+    /// Stem for a bust's four mouth frames. The runtime appends 1..4 and the
+    /// extension, so this is what goes in the Mouth prefix box verbatim —
+    /// a step can therefore quote the exact string an author has to type.
+    /// </summary>
+    public static string MouthPrefix(int n) => $"{PackFolder}/Busts/Bust{n}/Mouth";
+
+    /// <summary>
+    /// Stem for a bust's four expressions. The runtime appends Happy, Angry,
+    /// Sad or Flirty and the extension — the four names are fixed, so art for
+    /// any other name is never looked up.
+    /// </summary>
+    public static string ExpressionPrefix(int n) => $"{PackFolder}/Busts/Bust{n}/Expression";
+
+    /// <summary>The expression names the runtime knows, in the order the
+    /// editor lists them. Anything else in an Expression box resolves to
+    /// nothing.</summary>
+    public static readonly string[] ExpressionNames = { "Happy", "Angry", "Sad", "Flirty" };
+
+    /// <summary>How many mouth frames a bust has. Fixed: the runtime looks up
+    /// exactly 1 through 4.</summary>
+    public const int MouthFrameCount = 4;
+
+    /// <summary>
+    /// The size every bust frame is authored at. Art of another size is fitted
+    /// to it rather than rejected, but authoring at this size is the way to
+    /// know exactly what a player will see.
+    /// </summary>
+    public const int BustPixels = 256;
     public static string RoomBase => $"{PackFolder}/Locations/RoomB.png";
     public static string RoomSecondary => $"{PackFolder}/Locations/Room.png";
     public static string Npc(int n) => $"{PackFolder}/NPCs/Dummy/DummyNPC{n}.png";

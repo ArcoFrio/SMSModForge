@@ -522,13 +522,21 @@ namespace SMSModForge.PackPlugin
             return Sprite.Create(tex, new Rect(0, 0, tex.width, tex.height), new Vector2(0.5f, 0.5f), 70.32f);
         }
 
+        /// <summary>
+        /// Load a level layer. The width and height are the frame the art is
+        /// EXPECTED at, not a promise about the file: LoadImage resizes the
+        /// texture to the PNG, and <see cref="FittedSprite"/> then scales the
+        /// result so a room drawn at some other resolution still fills the
+        /// same screen. Cutting the rect at the expected size instead, as
+        /// this used to, showed one corner of anything larger.
+        /// </summary>
         private static Sprite LoadLevelSprite(PackManifest pack, string rel, int width, int height, FilterMode filter)
         {
             var tex = new Texture2D(width, height, TextureFormat.RGBA32, false);
             tex.filterMode = filter;
             byte[] bytes = pack.ReadBytes(rel);
             if (bytes != null) tex.LoadImage(bytes);
-            return Sprite.Create(tex, new Rect(0, 0, width, height), new Vector2(0.5f, 0.5f), 70.32f);
+            return FittedSprite.Create(tex, width, height, FittedSprite.LevelPpu);
         }
 
         /// <summary>
