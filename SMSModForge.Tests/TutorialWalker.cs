@@ -194,7 +194,27 @@ internal static class TutorialSolutions
         ["dressing-the-room / Leave it switched off"] = w =>
             w.Vm.SelectedPlace!.GameObjects[0].StartActive = false,
 
-        // ── 4. Your first conversation ────────────────────────────────
+        // ── 4. On the world map ───────────────────────────────────────
+        ["on-the-world-map / Add a map button"] = w =>
+        {
+            GiveAPlace(w);
+            w.Vm.AddMapButtonCommand.Execute(null);
+        },
+        ["on-the-world-map / Say where it goes"] = w =>
+            w.Vm.MapButtons[^1].Target = "self:" + w.Vm.Places[0].Key,
+        ["on-the-world-map / Choose which menu it lives in"] = w =>
+        {
+            // Any district but the one it arrived in: the step is about making
+            // a choice, and a new button already sits in Foundry.
+            var b = w.Vm.MapButtons[^1];
+            var other = SMSModForge.Model.WorldMapDistricts.All
+                .First(d => d.GoName != b.District);
+            b.District = other.GoName;
+        },
+        ["on-the-world-map / Give it something to read"] = w =>
+            w.Vm.MapButtons[^1].Label = "The Old Workshop",
+
+        // ── 5. Your first conversation ────────────────────────────────
         ["first-conversation / Add a dialogue"] = w =>
         {
             GiveAPlace(w);

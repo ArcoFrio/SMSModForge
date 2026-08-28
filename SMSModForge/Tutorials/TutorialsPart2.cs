@@ -37,7 +37,7 @@ internal static class TutorialsPart2
             Group = "Dialogues",
             Title = "Your first conversation",
             Summary = "Write a dialogue that starts in your room, with a choice in it.",
-            Level = 4,
+            Level = 5,
             Steps = new[]
             {
                 new TutorialStep
@@ -213,7 +213,7 @@ internal static class TutorialsPart2
             Group = "Characters",
             Title = "A face that moves",
             Summary = "Give a bust its blink, its mouth and its expressions.",
-            Level = 5,
+            Level = 6,
             Steps = new[]
             {
                 new TutorialStep
@@ -338,7 +338,7 @@ internal static class TutorialsPart2
             Group = "Characters",
             Title = "Making it move",
             Summary = "Paint a jiggle mask and tune it until the bust moves the way you want.",
-            Level = 6,
+            Level = 7,
             Steps = new[]
             {
                 new TutorialStep
@@ -457,7 +457,7 @@ internal static class TutorialsPart2
             Group = "NPCs",
             Title = "Populating the room",
             Summary = "Add standing figures to your place, with shadows that sit them on the floor.",
-            Level = 7,
+            Level = 8,
             Steps = new[]
             {
                 new TutorialStep
@@ -587,7 +587,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
-            Level = 8,
+            Level = 9,
             Steps = new[]
             {
                 new TutorialStep
@@ -701,7 +701,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
-            Level = 9,
+            Level = 10,
             Steps = new[]
             {
                 new TutorialStep

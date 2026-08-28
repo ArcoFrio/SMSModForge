@@ -3677,7 +3677,8 @@
                         <Button view:TutorialAnchor.Id="btn:addMapButton" Content="+ Map button" Command="{Binding AddMapButtonCommand}"/>
                         <Button Content="− Remove selected" Command="{Binding RemoveMapButtonCommand}"/>
                     </ToolBar>
-                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ScrollViewer view:TutorialAnchor.Id="panel:mapButtonList"
+                                  VerticalScrollBarVisibility="Auto">
                         <ItemsControl x:Name="MapButtonList" ItemsSource="{Binding MapButtons}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type vm:MapButtonViewModel}">

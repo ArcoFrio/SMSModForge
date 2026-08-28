@@ -31,6 +31,7 @@ public static class TutorialCatalog
     private const int TabCharacters = 1;
     private const int TabNpcs = 2;
     private const int TabPlaces = 3;
+    private const int TabMapButtons = 4;
     private const int TabDialogues = 5;
     private const int TabScenes = 6;
     private const int TabWallpapers = 9;
@@ -203,7 +204,7 @@ public static class TutorialCatalog
             Id = "a-place",
             Group = "Places",
             Title = "A place of your own",
-            Summary = "Build a room out of two layers, give it depth, and put it on the map.",
+            Summary = "Build a room out of two layers, give it depth, and a door from your bedroom.",
             Level = 2,
             Steps = new[]
             {
@@ -482,6 +483,123 @@ public static class TutorialCatalog
                            "beach ambience a room can keep or drop.",
                     Kind = StepKind.Read,
                     Tab = TabModForge,
+                },
+            },
+        },
+
+        new TutorialDef
+        {
+            Id = "on-the-world-map",
+            Group = "Map Buttons",
+            Title = "On the world map",
+            Summary = "Put a place on the world map so a player can travel to it directly.",
+            Level = 4,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "Two ways to reach a room",
+                    Body = "You have already built one: a navigator button on the bedroom's " +
+                           "strip, which is a door from one room to another. It works, and it " +
+                           "is the right shape for somewhere that sits BEHIND another place — a " +
+                           "back office off a shop, a bedroom off a hall.\n\n" +
+                           "The world map is the other way, and it means something different. A " +
+                           "place on the map is somewhere a player can go from anywhere, a " +
+                           "destination in its own right rather than a room reached through " +
+                           "another one. Most somewheres want one or the other, not both.",
+                    Kind = StepKind.Read,
+                    Tab = TabMapButtons,
+                },
+                new TutorialStep
+                {
+                    Title = "Add a map button",
+                    Body = "Use + Map button. It appears as a card in the list — the map buttons " +
+                           "tab has no separate editor, each button IS its row.",
+                    Kind = StepKind.Do,
+                    Tab = TabMapButtons,
+                    Anchor = "btn:addMapButton",
+                    AlsoAllow = new[] { "panel:mapButtonList" },
+                    OnEnter = (vm, s) => s.Set("mapbtns", vm.MapButtons.Count),
+                    IsDone = (vm, s) => s.GrewSince("mapbtns", vm.MapButtons.Count),
+                    Hint = "+ Map button, at the top of the tab.",
+                },
+                new TutorialStep
+                {
+                    Title = "Say where it goes",
+                    Body = "Set Target place to the room you built. A button with no target is " +
+                           "the quietest mistake in the editor: it saves, it exports, it appears " +
+                           "on the map, and clicking it does nothing at all.\n\n" +
+                           "Validate catches it, which is the reason to run Validate before " +
+                           "every export rather than after something goes wrong.",
+                    Kind = StepKind.Do,
+                    Tab = TabMapButtons,
+                    Anchor = "panel:mapButtonList",
+                    IsDone = (vm, s) => vm.MapButtons.Count > 0 &&
+                                        vm.MapButtons[^1].Target.Trim().Length > 0,
+                    Hint = "Target place, on the card you just added.",
+                },
+                new TutorialStep
+                {
+                    Title = "Choose which menu it lives in",
+                    Body = "The world map is not one list of buttons — it is five radial menus, " +
+                           "one per district: Seaside, The Line, Neon Row, Shopside and " +
+                           "Foundry. District decides which one your button joins.\n\n" +
+                           "A new button arrives in Foundry because it had to arrive somewhere. " +
+                           "That is a default, not a decision. Pick the district your place " +
+                           "actually belongs to — a player who opens the wrong menu will not " +
+                           "find it, and nothing will tell them it exists.",
+                    Kind = StepKind.Do,
+                    Tab = TabMapButtons,
+                    Anchor = "panel:mapButtonList",
+                    OnEnter = (vm, s) => s.Set("district",
+                        vm.MapButtons.Count > 0 ? vm.MapButtons[^1].District : ""),
+                    IsDone = (vm, s) => vm.MapButtons.Count > 0 &&
+                                        vm.MapButtons[^1].District.Trim().Length > 0 &&
+                                        vm.MapButtons[^1].District != s.Get<string>("district"),
+                    Hint = "District, on the same card. Any of the five except the one it started in.",
+                },
+                new TutorialStep
+                {
+                    Title = "Give it something to read",
+                    Body = "Label is the text on the button. Write what a player would call the " +
+                           "place, not what you called it in the editor.\n\n" +
+                           "It also accepts [PV:name], which is replaced with one of your pack's " +
+                           "variables while the game runs — so a button can read \"The Shop\" " +
+                           "before a conversation and \"Anna's Shop\" after one, without a " +
+                           "second button.",
+                    Kind = StepKind.Do,
+                    Tab = TabMapButtons,
+                    Anchor = "panel:mapButtonList",
+                    IsDone = (vm, s) => vm.MapButtons.Count > 0 &&
+                                        vm.MapButtons[^1].Label.Trim().Length > 0,
+                    Hint = "Label, on the same card.",
+                },
+                new TutorialStep
+                {
+                    Title = "The two you can leave alone",
+                    Body = "Music switches the background track when the button is used, which " +
+                           "is worth setting for somewhere with its own atmosphere and worth " +
+                           "leaving empty otherwise — an empty Music keeps whatever was playing.\n\n" +
+                           "Conditions decide whether the button is shown at all. An empty list " +
+                           "means always, which is what you want for now. Fill it in and the " +
+                           "place stays off the map until the player has earned it — the same " +
+                           "condition rows you will meet on dialogues and rules.",
+                    Kind = StepKind.Read,
+                    Tab = TabMapButtons,
+                    Anchor = "panel:mapButtonList",
+                },
+                new TutorialStep
+                {
+                    Title = "Somewhere to go",
+                    Body = "Validate, export, and open the world map in game: your place is in " +
+                           "the district you chose, under the label you wrote.\n\n" +
+                           "You now have both routes — a door from the bedroom and a place on " +
+                           "the map — and they are independent. Removing one does not affect " +
+                           "the other, which is worth knowing when a place becomes reachable " +
+                           "two ways by accident.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                    Anchor = "btn:validate",
                 },
             },
         },
