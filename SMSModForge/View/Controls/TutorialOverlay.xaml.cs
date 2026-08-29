@@ -194,11 +194,12 @@ public partial class TutorialOverlay : UserControl
         try
         {
             var origin = el.TransformToVisual(this).Transform(new Point(0, 0));
+            var slot = new Rect(origin, new Size(el.ActualWidth, el.ActualHeight));
+
             // Quantised, because an animated control (the previews) shifts by
             // fractions of a pixel every frame, and that would otherwise count
             // as a change and force a redraw on every layout pass.
-            return SpotlightGeometry.Quantize(
-                new Rect(origin, new Size(el.ActualWidth, el.ActualHeight)));
+            return SpotlightGeometry.Quantize(slot);
         }
         catch (InvalidOperationException)
         {

@@ -3677,9 +3677,19 @@
                         <Button view:TutorialAnchor.Id="btn:addMapButton" Content="+ Map button" Command="{Binding AddMapButtonCommand}"/>
                         <Button Content="− Remove selected" Command="{Binding RemoveMapButtonCommand}"/>
                     </ToolBar>
-                    <ScrollViewer view:TutorialAnchor.Id="panel:mapButtonList"
-                                  VerticalScrollBarVisibility="Auto">
-                        <ItemsControl x:Name="MapButtonList" ItemsSource="{Binding MapButtons}">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <!--
+                            Top-aligned, and the anchor is on the list rather than the
+                            scroller around it. A ScrollViewer stretches content that
+                            is smaller than its viewport, so both reported the full
+                            height of the tab — which made the spotlight cover
+                            everything and left the callout no corner to sit in
+                            except on top of the fields.
+                        -->
+                        <ItemsControl x:Name="MapButtonList"
+                                      view:TutorialAnchor.Id="panel:mapButtonList"
+                                      VerticalAlignment="Top"
+                                      ItemsSource="{Binding MapButtons}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate DataType="{x:Type vm:MapButtonViewModel}">
                                     <Border BorderBrush="LightGray" BorderThickness="1"
