@@ -8,6 +8,11 @@
 /// </summary>
 public sealed record TutorialListItem(Tutorials.TutorialDef Def, bool IsComplete)
 {
+    /// <summary>Finished, but an older version of it. Worth saying out loud:
+    /// what this author learned may not be what the tutorial says now, and
+    /// they are the last people who would think to check.</summary>
+    public bool IsOutdated => Services.EditorPrefs.IsTutorialOutdated(Def.Id, Def.Revision);
+
     public string Title => Def.Title;
     public string Summary => Def.Summary;
 
@@ -24,8 +29,14 @@ public sealed record TutorialListItem(Tutorials.TutorialDef Def, bool IsComplete
     public string LevelLabel => Def.IsOnLadder ? Def.Level.ToString() : "";
 
     /// <summary>Label on the button: finishing once makes it a revisit.</summary>
-    public string ActionLabel => IsComplete ? "Again" : "Start";
+    public string ActionLabel => IsOutdated ? "What changed" : IsComplete ? "Again" : "Start";
 
     /// <summary>Tick shown beside a finished one.</summary>
-    public string Mark => IsComplete ? "✓" : "";
+    // An updated tutorial is not ticked: leaving the tick on says "you know
+    // this" about a version that no longer exists.
+    public string Mark => IsOutdated ? "!" : IsComplete ? "✓" : "";
+
+    /// <summary>Shown beside an updated tutorial, so the badge is not a
+    /// mystery.</summary>
+    public string UpdatedNote => IsOutdated ? "Updated since you took it" : "";
 }

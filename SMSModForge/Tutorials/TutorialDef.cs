@@ -105,6 +105,21 @@ public sealed class TutorialDef
     public bool IsOnLadder => Level > 0;
 
     /// <summary>
+    /// Bumped whenever this tutorial changes enough that somebody who has
+    /// already finished it should be told.
+    /// <para/>
+    /// Completion is remembered per id, so a tutorial that gains steps or has
+    /// its instructions corrected stays ticked for everyone who took the old
+    /// one — and the people most likely to be misled by a stale memory of it
+    /// are exactly those who worked through the version that was wrong. The
+    /// list shows an updated tutorial as unfinished again, with a note saying
+    /// why, rather than silently.
+    /// <para/>
+    /// Raise it for a change worth re-reading. Leave it alone for a typo.
+    /// </summary>
+    public int Revision { get; init; } = 1;
+
+    /// <summary>
     /// Which run of tutorials this belongs to, shown as a heading above them.
     /// <para/>
     /// Groups follow the tabs, because that is how someone decides what to

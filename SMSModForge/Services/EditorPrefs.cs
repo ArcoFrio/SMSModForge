@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -64,16 +64,58 @@ public static class EditorPrefs
         => GetString(KeyTutorialsDone, "").Split(',',
                StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-    public static bool IsTutorialComplete(string id)
+    /// <summary>
+    /// Which revision of a tutorial this author finished, or 0 for one they
+    /// have never finished.
+    /// <para/>
+    /// Entries are stored as <c>id@revision</c>. An entry with no revision is
+    /// from before this was recorded and counts as revision 1, so upgrading
+    /// does not un-tick everything somebody has already done.
+    /// </summary>
+    public static int CompletedRevision(string id)
     {
-        foreach (var s in CompletedTutorials) if (s == id) return true;
-        return false;
+        if (string.IsNullOrWhiteSpace(id)) return 0;
+        foreach (var entry in CompletedTutorials)
+        {
+            int at = entry.LastIndexOf('@');
+            string entryId = at > 0 ? entry.Substring(0, at) : entry;
+            if (!string.Equals(entryId, id, StringComparison.Ordinal)) continue;
+            if (at <= 0) return 1;
+            return int.TryParse(entry.Substring(at + 1), out int rev) && rev > 0 ? rev : 1;
+        }
+        return 0;
     }
 
-    public static void MarkTutorialComplete(string id)
+    /// <summary>Whether this author has finished the tutorial at all, whichever
+    /// version of it they saw.</summary>
+    public static bool IsTutorialComplete(string id) => CompletedRevision(id) > 0;
+
+    /// <summary>
+    /// Whether they finished it, but an older version of it — the case worth
+    /// telling them about, since what they learned may no longer be what the
+    /// tutorial says.
+    /// </summary>
+    public static bool IsTutorialOutdated(string id, int currentRevision)
     {
-        if (string.IsNullOrWhiteSpace(id) || IsTutorialComplete(id)) return;
-        var all = new List<string>(CompletedTutorials) { id };
+        int done = CompletedRevision(id);
+        return done > 0 && done < currentRevision;
+    }
+
+    public static void MarkTutorialComplete(string id, int revision = 1)
+    {
+        if (string.IsNullOrWhiteSpace(id)) return;
+        if (CompletedRevision(id) >= revision) return;
+
+        // One entry per tutorial: finishing a newer revision replaces the
+        // record of the older one rather than sitting beside it.
+        var all = new List<string>();
+        foreach (var entry in CompletedTutorials)
+        {
+            int at = entry.LastIndexOf('@');
+            string entryId = at > 0 ? entry.Substring(0, at) : entry;
+            if (!string.Equals(entryId, id, StringComparison.Ordinal)) all.Add(entry);
+        }
+        all.Add(id + "@" + (revision > 0 ? revision : 1));
         SetString(KeyTutorialsDone, string.Join(",", all));
     }
 

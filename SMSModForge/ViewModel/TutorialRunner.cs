@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows.Threading;
 using SMSModForge.Tutorials;
 
@@ -145,7 +145,7 @@ public sealed class TutorialRunner : ObservableObject
         if (IsLastStep)
         {
             // Reaching the end is what counts as done; Exit is not.
-            Services.EditorPrefs.MarkTutorialComplete(_tutorial.Id);
+            Services.EditorPrefs.MarkTutorialComplete(_tutorial.Id, _tutorial.Revision);
             Stop();
             return;
         }

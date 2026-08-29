@@ -96,8 +96,14 @@ internal static class TutorialsPart2
                     Anchor = "btn:addRootNode",
                     AlsoAllow = new[] { "panel:nodeEditor" },
                     OnEnter = (vm, s) => s.Set("nodes", vm.SelectedDialogue?.Nodes.Count ?? 0),
+                    // The actor is checked as well as the text. The step always
+                    // asked for both and only ever looked at one, so a line
+                    // with nobody speaking it passed — and a line with no
+                    // actor shows no name in game.
                     IsDone = (vm, s) => vm.SelectedDialogue is { } d && d.Nodes.Count > 0 &&
-                                        vm.SelectedNode is { } n && n.Text.Trim().Length > 0,
+                                        vm.SelectedNode is { } n &&
+                                        n.Text.Trim().Length > 0 &&
+                                        n.Actor.Trim().Length > 0,
                     Hint = "+ Root, then fill in Actor and Text in the Node box.",
                 },
                 new TutorialStep
@@ -121,7 +127,10 @@ internal static class TutorialsPart2
                            "child IS an option, and the child's Text is the label on its button, " +
                            "not a line somebody says. Write all three: anything left blank shows " +
                            "up in game as blank, which is what an empty node looks like from " +
-                           "the outside.",
+                           "the outside.\n\n" +
+                           "Give the CHOICE node an actor too — its text is spoken, so it needs " +
+                           "somebody to speak it. The children do not: an option is a button, " +
+                           "not a line, and nobody says it aloud.",
                     Kind = StepKind.Free,
                     Tab = TabDialogues,
                     Anchor = "field:nodeKind",
@@ -157,7 +166,10 @@ internal static class TutorialsPart2
                            "something to skip: add one more root node below the choice with a " +
                            "closing line, then set ONE of your two options to Exit. Take that " +
                            "option in game and the conversation stops; take the other and it " +
-                           "carries on into the closing line.",
+                           "carries on into the closing line.\n\n" +
+                           "Give the closing line an actor as well. Every node that SAYS " +
+                           "something needs one — a line with no speaker shows no name, which " +
+                           "reads as a fault rather than as a narrator.",
                     Kind = StepKind.Do,
                     Tab = TabDialogues,
                     Anchor = "panel:dialogueNodes",

@@ -272,7 +272,10 @@ internal static class TutorialSolutions
         ["first-conversation / Write a line"] = w =>
         {
             w.Vm.AddDialogueRootNodeCommand.Execute(null);
-            w.Vm.SelectedNode!.Text = "Hello there.";
+            var n = w.Vm.SelectedNode!;
+            n.Text = "Hello there.";
+            // Somebody has to say it. A line with no actor shows no name.
+            n.Actor = w.Vm.Characters.First(c => !c.IsPlayer).Key;
         },
         ["first-conversation / Give the player a say"] = w =>
         {
