@@ -243,6 +243,44 @@ public partial class TutorialOverlay : UserControl
         return new Size(Math.Ceiling(size.Width), Math.Ceiling(size.Height));
     }
 
+    /// <summary>
+    /// Let the wheel through the dimmed area.
+    /// <para/>
+    /// The dim is a filled Path, so it swallows the wheel along with the
+    /// clicks it is meant to swallow. Blocking clicks is the point — the lit
+    /// area is what a step allows — but blocking SCROLLING strands people: a
+    /// reader scrolled past the control a step wants cannot scroll back to it,
+    /// and the step is unfinishable through no fault of theirs.
+    /// <para/>
+    /// Only the dimmed area is forwarded. Over a lit hole the Path is not there
+    /// to hit and the control gets the wheel itself, so intercepting there
+    /// would deliver it twice and scroll at double speed.
+    /// </summary>
+    private void Overlay_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+    {
+        if (_window == null || e.Handled) return;
+
+        var atWindow = e.GetPosition(_window);
+        foreach (var hole in _lastHoles)
+            if (hole.Contains(atWindow))
+                return;   // lit: the control underneath is already getting this
+
+        // Find what is under the pointer with the overlay itself taken out of
+        // the running, then hand the event to it.
+        bool wasHitTestable = IsHitTestVisible;
+        IsHitTestVisible = false;
+        var under = _window.InputHitTest(atWindow) as UIElement;
+        IsHitTestVisible = wasHitTestable;
+        if (under == null) return;
+
+        under.RaiseEvent(new MouseWheelEventArgs(e.MouseDevice, e.Timestamp, e.Delta)
+        {
+            RoutedEvent = MouseWheelEvent,
+            Source = under,
+        });
+        e.Handled = true;
+    }
+
     // ── Dragging the instructions out of the way ─────────────────────
     //
     // Automatic placement puts the callout in the least-blocked corner. That is
