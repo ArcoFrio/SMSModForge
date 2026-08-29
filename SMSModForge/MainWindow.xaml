@@ -4424,7 +4424,7 @@
                         <TextBlock DockPanel.Dock="Top" Text="Music"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
                         <ToolBar DockPanel.Dock="Top">
-                            <Button Content="+ Music"   Command="{Binding AddMusicCommand}"/>
+                            <Button view:TutorialAnchor.Id="btn:addMusic" Content="+ Music"   Command="{Binding AddMusicCommand}"/>
                             <Button Content="+ Folder" Tag="{Binding MusicTree}" Click="UnitAddFolder_Click"
                                     ToolTip="Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack)."/>
                             <Button Content="Rename" Tag="{Binding MusicTree}" Click="UnitRenameFolder_Click"
@@ -4443,7 +4443,7 @@
                     </DockPanel>
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
-                    <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto"
+                    <ScrollViewer view:TutorialAnchor.Id="panel:musicDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
                                   DataContext="{Binding SelectedMusic}">
                         <StackPanel Margin="8">
                             <GroupBox Header="Identity">
@@ -4530,7 +4530,7 @@
                         <TextBlock DockPanel.Dock="Top" Text="SFX"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
                         <ToolBar DockPanel.Dock="Top">
-                            <Button Content="+ SFX"     Command="{Binding AddSfxCommand}"/>
+                            <Button view:TutorialAnchor.Id="btn:addSfx" Content="+ SFX"     Command="{Binding AddSfxCommand}"/>
                             <Button Content="+ Folder" Tag="{Binding SfxTree}" Click="UnitAddFolder_Click"
                                     ToolTip="Add a folder. Drag items/folders to organize (cosmetic — doesn't change the pack)."/>
                             <Button Content="Rename" Tag="{Binding SfxTree}" Click="UnitRenameFolder_Click"
@@ -4549,7 +4549,7 @@
                     </DockPanel>
                     <GridSplitter Grid.Column="1" Width="4" Background="LightGray" HorizontalAlignment="Stretch"/>
 
-                    <ScrollViewer Grid.Column="2" VerticalScrollBarVisibility="Auto"
+                    <ScrollViewer view:TutorialAnchor.Id="panel:sfxDetail" Grid.Column="2" VerticalScrollBarVisibility="Auto"
                                   DataContext="{Binding SelectedSfx}">
                         <StackPanel Margin="8">
                             <GroupBox Header="Identity">

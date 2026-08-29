@@ -830,11 +830,145 @@ internal static class TutorialsPart2
 
         new TutorialDef
         {
+            Id = "sound-in-a-room",
+            Group = "Media",
+            Title = "Sound in a room",
+            Summary = "Add a music track and a sound effect, and make one fire from a line.",
+            Level = 11,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "Two different jobs",
+                    Body = "Music is the track underneath everything: one at a time, looping, " +
+                           "changed by an action or by a map button. SFX are one-shots — a door, " +
+                           "a slap, a splash — and several can play at once without cutting each " +
+                           "other off.\n\n" +
+                           "Both take OGG, WAV or MP3, so use whatever your source gives you " +
+                           "rather than converting for the sake of it. The practice files are " +
+                           "deliberately one of each: an MP3 track and a WAV effect.\n\n" +
+                           "Keep music long enough to loop without becoming obvious, and effects " +
+                           "short. An effect that runs for two seconds is still playing when the " +
+                           "line that fired it has gone.",
+                    Kind = StepKind.Read,
+                    Tab = TabMusic,
+                },
+                new TutorialStep
+                {
+                    Title = "Add a track",
+                    Body = "Use + Music, then point Audio path at the practice track in " +
+                           "TutorialArt/Audio. Give it a display name you would recognise in a " +
+                           "list of twenty.",
+                    Kind = StepKind.Do,
+                    Tab = TabMusic,
+                    Anchor = "btn:addMusic",
+                    AlsoAllow = new[] { "panel:musicDetail" },
+                    IsDone = (vm, s) => vm.SelectedMusic is { } m &&
+                                        m.AudioPath.Trim().Length > 0,
+                    Hint = "+ Music, then Audio path in the pane on the right.",
+                },
+                new TutorialStep
+                {
+                    Title = "Hear it without leaving the editor",
+                    Body = "Play sounds the track at the volume beside it. It plays ONCE here " +
+                           "whatever Loop says — looping is a runtime behaviour, and the preview " +
+                           "is for checking the file is the file you meant.\n\n" +
+                           "Loop and Volume can both be left blank, and blank means \"do what " +
+                           "the game normally does\" rather than zero. Fill them in only when " +
+                           "you want to differ from that.",
+                    Kind = StepKind.Read,
+                    Tab = TabMusic,
+                    Anchor = "panel:musicDetail",
+                },
+                new TutorialStep
+                {
+                    Title = "Add an effect",
+                    Body = "Now the SFX tab. Same shape: + SFX, then Audio path at the door " +
+                           "sound in TutorialArt/Audio.\n\n" +
+                           "Default volume is what plays when something asks for this effect " +
+                           "without saying how loud — which is most of the time.",
+                    Kind = StepKind.Do,
+                    Tab = TabSfx,
+                    Anchor = "btn:addSfx",
+                    AlsoAllow = new[] { "panel:sfxDetail" },
+                    IsDone = (vm, s) => vm.SelectedSfx is { } fx &&
+                                        fx.AudioPath.Trim().Length > 0,
+                    Hint = "+ SFX, then Audio path in the pane on the right.",
+                },
+                new TutorialStep
+                {
+                    Title = "The part you would never guess",
+                    Body = "An effect does not need an action. Auto-trigger patterns is a " +
+                           "comma-separated list of text, and whenever one of those appears in a " +
+                           "line of dialogue the effect fires by itself.\n\n" +
+                           "The convention is a lowercase word between asterisks — *door* — " +
+                           "because it reads as a stage direction in the script and never " +
+                           "collides with an ordinary word. Put a pattern in now.\n\n" +
+                           "This is how a scene gets its sound without every line carrying an " +
+                           "action. It is also completely invisible from the tab, which is the " +
+                           "only reason this step exists.",
+                    Kind = StepKind.Do,
+                    Tab = TabSfx,
+                    Anchor = "panel:sfxDetail",
+                    IsDone = (vm, s) => vm.SelectedSfx is { } fx &&
+                                        fx.TextPatternsCsv.Trim().Length > 0,
+                    Hint = "Auto-trigger patterns, on the SFX you just made. Try *door*.",
+                },
+                new TutorialStep
+                {
+                    Title = "Say it in a line",
+                    Body = "Go back to your conversation and put the pattern into a node's text " +
+                           "— the actual characters, asterisks and all. When that line plays, " +
+                           "the effect plays with it.\n\n" +
+                           "The pattern stays in the text as written, so pick something you are " +
+                           "content for a player to read, or keep it to a line where a stage " +
+                           "direction belongs.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeEditor",
+                    AlsoAllow = new[] { "panel:dialogueNodes" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d &&
+                                        d.Nodes.Any(n => n.Text.Contains('*')),
+                    Hint = "Select a node and add your pattern to its Text.",
+                },
+                new TutorialStep
+                {
+                    Title = "More than one take",
+                    Body = "One more thing with no field for it. Put extra recordings beside the " +
+                           "first with _1, _2, _3 on the end of the same name, and the game picks " +
+                           "between them at random each time the effect plays.\n\n" +
+                           "Audio/Door.wav picks up Audio/Door_1.wav and Audio/Door_2.wav on its " +
+                           "own. Number them without gaps — counting stops at the first missing " +
+                           "number, so _1, _2, _4 loads two of the three. The extensions do not " +
+                           "have to match, so a WAV alongside an OGG is fine.\n\n" +
+                           "It is the difference between a door that sounds the same every time " +
+                           "and one that does not.",
+                    Kind = StepKind.Read,
+                    Tab = TabSfx,
+                    Anchor = "panel:sfxDetail",
+                },
+                new TutorialStep
+                {
+                    Title = "A pack that makes noise",
+                    Body = "You have a track, an effect, and a line that fires it without being " +
+                           "asked. Scenes and Wallpapers are the other two media tabs and you " +
+                           "have already met both — a scene in the rules tutorial, a wallpaper " +
+                           "in the variables one.\n\n" +
+                           "That is every tab in the editor. What is left is not more kinds of " +
+                           "thing, it is more of what you can already do.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                },
+            },
+        },
+
+        new TutorialDef
+        {
             Id = "remembering",
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
-            Level = 11,
+            Level = 12,
             Steps = new[]
             {
                 new TutorialStep
@@ -948,7 +1082,7 @@ internal static class TutorialsPart2
             Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
-            Level = 12,
+            Level = 13,
             Steps = new[]
             {
                 new TutorialStep

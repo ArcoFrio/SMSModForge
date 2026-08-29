@@ -345,6 +345,31 @@ internal static class TutorialSolutions
         ["npcs-that-belong / Give them eyes that close"] = w =>
             w.Vm.SelectedNpc!.BlinkSprite = TutorialAssets.Npc(1),
 
+
+        // ── 11. Sound in a room ───────────────────────────────────────
+        ["sound-in-a-room / Add a track"] = w =>
+        {
+            GiveADialogueLine(w);
+            w.Vm.AddMusicCommand.Execute(null);
+            w.Vm.SelectedMusic!.AudioPath = TutorialAssets.Music;
+            w.Vm.SelectedMusic!.DisplayName = "Neon Rain";
+        },
+        ["sound-in-a-room / Add an effect"] = w =>
+        {
+            w.Vm.AddSfxCommand.Execute(null);
+            w.Vm.SelectedSfx!.AudioPath = TutorialAssets.Sfx;
+            w.Vm.SelectedSfx!.DisplayName = "Door";
+        },
+        ["sound-in-a-room / The part you would never guess"] = w =>
+            w.Vm.SelectedSfx!.TextPatternsCsv = "*door*",
+        ["sound-in-a-room / Say it in a line"] = w =>
+        {
+            // The pattern goes into the text as written -- asterisks included,
+            // which is what the runtime looks for.
+            var d = w.Vm.SelectedDialogue!;
+            d.Nodes[0].Text = "*door* Oh — you are back.";
+        },
+
         // ── 6. Remembering things ─────────────────────────────────────
         ["remembering / Declare one"] = w =>
         {

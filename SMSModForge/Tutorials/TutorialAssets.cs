@@ -70,6 +70,20 @@ public static class TutorialAssets
     public static string Npc(int n) => $"{PackFolder}/NPCs/Dummy/DummyNPC{n}.png";
     public static string Scene => $"{PackFolder}/Scenes/Dummy/DummyScene01.png";
 
+    /// <summary>
+    /// A music track. An MP3 on purpose: the game takes OGG, WAV and MP3, and a
+    /// practice pack that only ever shows one of them teaches that one is the
+    /// format.
+    /// <para/>
+    /// The name is the file's own. Practice art can be called whatever we like;
+    /// audio from elsewhere carries its attribution in its filename, and
+    /// renaming it would quietly strip that.
+    /// </summary>
+    public static string Music => $"{PackFolder}/Audio/Neon Rain.mp3";
+
+    /// <summary>A sound effect — a door opening, as a WAV.</summary>
+    public static string Sfx => $"{PackFolder}/Audio/15419__pagancow__dorm-door-opening.wav";
+
     /// <summary>Wallpaper art. Separate from <see cref="Scene"/> on purpose:
     /// the two are different features that happen to both be pictures, and the
     /// tutorials used the scene art for both until it was pointed out.</summary>
@@ -111,6 +125,9 @@ public static class TutorialAssets
     public static bool IsCopied(string? packRoot)
         => !string.IsNullOrEmpty(packRoot) &&
            Directory.Exists(Path.Combine(packRoot!, PackFolder)) &&
-           Directory.EnumerateFiles(Path.Combine(packRoot!, PackFolder), "*.png",
+           // Any file, not just a PNG: the practice assets are audio as well as
+           // art now, and a check that only counted pictures would call the
+           // folder empty for a tutorial that needs a sound.
+           Directory.EnumerateFiles(Path.Combine(packRoot!, PackFolder), "*",
                                     SearchOption.AllDirectories).Any();
 }

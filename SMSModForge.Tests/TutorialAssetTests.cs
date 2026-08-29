@@ -86,6 +86,10 @@ public class TutorialAssetTests
             TutorialAssets.RoomBase, TutorialAssets.RoomSecondary,
             TutorialAssets.Npc(0), TutorialAssets.Npc(1),
             TutorialAssets.Scene, TutorialAssets.Wallpaper,
+            // Audio too: the build glob was PNG-only until the Media tutorial
+            // needed a sound, and a path that ships in the repo but not in the
+            // output is exactly the failure this test exists to catch.
+            TutorialAssets.Music, TutorialAssets.Sfx,
         }.Where(p => !Exists(p)).ToList();
 
         Assert.True(missing.Count == 0,

@@ -129,7 +129,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Resources\TutorialAssets\**\*.png;Resources\TutorialAssets\**\*.PNG"
+    <!--
+      Audio as well as art. The glob used to be PNG-only, so a tutorial that
+      told an author to pick a sound would have pointed at a file the build
+      never copied — present in the repo, absent everywhere it mattered.
+    -->
+    <Content Include="Resources\TutorialAssets\**\*.png;Resources\TutorialAssets\**\*.PNG;Resources\TutorialAssets\**\*.ogg;Resources\TutorialAssets\**\*.wav;Resources\TutorialAssets\**\*.mp3"
              Exclude="Resources\TutorialAssets\**\modpack.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
