@@ -37,10 +37,22 @@
             </Rectangle.Effect>
         </Rectangle>
 
+        <!--
+            Draggable. The automatic placement picks the least-blocked corner,
+            which is the right default and still lands on the control when a
+            step lights something large enough to reach every corner — a whole
+            list, say. Being able to shove it aside is the only answer that
+            works in every one of those cases.
+        -->
         <Border x:Name="Callout" HorizontalAlignment="Left" VerticalAlignment="Top"
                 MaxWidth="380" CornerRadius="6" Padding="16,13,16,13"
                 Background="{DynamicResource Theme.Surface}"
-                BorderBrush="#FFC428" BorderThickness="1">
+                BorderBrush="#FFC428" BorderThickness="1"
+                Cursor="SizeAll"
+                ToolTip="Drag to move these instructions out of the way."
+                MouseLeftButtonDown="Callout_MouseLeftButtonDown"
+                MouseMove="Callout_MouseMove"
+                MouseLeftButtonUp="Callout_MouseLeftButtonUp">
             <Border.Effect>
                 <DropShadowEffect Color="#000000" ShadowDepth="3" BlurRadius="18" Opacity="0.5"/>
             </Border.Effect>

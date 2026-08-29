@@ -90,6 +90,7 @@ public class TutorialAssetTests
             // needed a sound, and a path that ships in the repo but not in the
             // output is exactly the failure this test exists to catch.
             TutorialAssets.Music, TutorialAssets.Sfx,
+            TutorialAssets.Prop,
         }.Where(p => !Exists(p)).ToList();
 
         Assert.True(missing.Count == 0,

@@ -71,6 +71,15 @@ public static class TutorialAssets
     public static string Scene => $"{PackFolder}/Scenes/Dummy/DummyScene01.png";
 
     /// <summary>
+    /// A prop: a vase, drawn at its own size on a transparent background.
+    /// <para/>
+    /// Deliberately NOT a level layer and not NPC art. An object in a room is
+    /// neither, and handing an author one of those to stand in for a prop
+    /// teaches them the wrong shape for the next thing they draw.
+    /// </summary>
+    public static string Prop => $"{PackFolder}/Locations/Vase.png";
+
+    /// <summary>
     /// A music track. An MP3 on purpose: the game takes OGG, WAV and MP3, and a
     /// practice pack that only ever shows one of them teaches that one is the
     /// format.

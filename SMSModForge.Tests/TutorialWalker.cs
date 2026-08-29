@@ -166,6 +166,8 @@ internal static class TutorialSolutions
             w.Vm.AddVanillaExtensionCommand.Execute(null),
         ["a-place / Aim it at the bedroom"] = w =>
             w.Vm.SelectedVanillaExtension!.Source = Bedroom,
+        ["a-place / Say what the button reads"] = w =>
+            w.Vm.SelectedPlace!.NavigatorButtons[0].Label = "My Room",
         ["a-place / Point it at your room"] = w =>
         {
             // The check counts buttons on an extension that lead to a pack
@@ -185,8 +187,16 @@ internal static class TutorialSolutions
         ["dressing-the-room / Give it a name and a picture"] = w =>
         {
             var g = w.Vm.SelectedPlace!.GameObjects[0];
-            g.Name = "Lamp";
-            g.Sprite = TutorialAssets.Npc(0);
+            g.Name = "Vase";
+            g.Sprite = TutorialAssets.Prop;
+        },
+        ["dressing-the-room / Put it where you want it"] = w =>
+        {
+            // The gizmo writes the same X and Y a person could type, so moving
+            // it through the view model is the same act.
+            var g = w.Vm.SelectedPlace!.GameObjects[0];
+            g.X += 1.5f;
+            g.Y -= 0.75f;
         },
         ["dressing-the-room / Decide what it stands in front of"] = w =>
             // Between the back layer at -12 and the front at -10.

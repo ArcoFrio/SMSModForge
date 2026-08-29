@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using SMSModForge.Tutorials;
 using SMSModForge.ViewModel;
 
@@ -126,6 +127,9 @@ public partial class TutorialOverlay : UserControl
 
             _anchor?.BringIntoView();
             _corner = -1;            // a new step may want a different corner
+            // A step the reader shoved aside does not decide where the NEXT
+            // step's instructions go: the geometry places each one afresh.
+            _userPlaced = null;
             _forceRefresh = true;
             Refresh();
             if (_anchor != null) Flash?.Invoke(_anchor);
@@ -238,8 +242,70 @@ public partial class TutorialOverlay : UserControl
         return new Size(Math.Ceiling(size.Width), Math.Ceiling(size.Height));
     }
 
+    // ── Dragging the instructions out of the way ─────────────────────
+    //
+    // Automatic placement puts the callout in the least-blocked corner. That is
+    // right nearly always, and cannot be right when a step lights something big
+    // enough to reach all four — the map button list, for one, where the
+    // callout came to rest over the dropdown the step was asking the reader to
+    // open. There is no corner to move to in that case, so the reader gets to
+    // move it themselves.
+
+    private bool _dragging;
+    private Point _dragFrom;
+    private Thickness _dragStartMargin;
+
+    /// <summary>Where the reader has put the callout, if they have moved it.
+    /// Cleared whenever the step changes, so each step starts placed by the
+    /// geometry rather than wherever the last one was shoved.</summary>
+    private Thickness? _userPlaced;
+
+    private void Callout_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        _dragging = true;
+        _dragFrom = e.GetPosition(this);
+        _dragStartMargin = Callout.Margin;
+        Callout.CaptureMouse();
+        e.Handled = true;
+    }
+
+    private void Callout_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (!_dragging) return;
+        var now = e.GetPosition(this);
+
+        // Kept inside the window: a callout dragged off the edge is a callout
+        // the reader cannot get back without restarting the tutorial.
+        double maxLeft = Math.Max(0, ActualWidth - Callout.ActualWidth);
+        double maxTop = Math.Max(0, ActualHeight - Callout.ActualHeight);
+        double left = Math.Clamp(_dragStartMargin.Left + (now.X - _dragFrom.X), 0, maxLeft);
+        double top = Math.Clamp(_dragStartMargin.Top + (now.Y - _dragFrom.Y), 0, maxTop);
+
+        var m = new Thickness(left, top, 0, 0);
+        Callout.Margin = m;
+        _userPlaced = m;
+        e.Handled = true;
+    }
+
+    private void Callout_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        if (!_dragging) return;
+        _dragging = false;
+        Callout.ReleaseMouseCapture();
+        e.Handled = true;
+    }
+
     private void PlaceCallout(IReadOnlyList<Rect> holes, Size window)
     {
+        // A reader who has moved it has said where they want it. Re-placing on
+        // the next layout pass would drag it back and read as the window
+        // fighting them.
+        if (_userPlaced is { } placed)
+        {
+            if (Callout.Margin != placed) Callout.Margin = placed;
+            return;
+        }
+
         var wanted = CalloutSize(window);
         _lastCallout = wanted;
 

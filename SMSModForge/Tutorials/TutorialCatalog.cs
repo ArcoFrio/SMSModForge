@@ -134,8 +134,14 @@ public static class TutorialCatalog
                     Title = "Give them a face",
                     Body = "Every character needs at least one outfit, and every outfit needs a " +
                            "base sprite: the picture of them from the chest up. Point this one " +
-                           "at any bust in TutorialArt/Busts — they differ in shape, which will " +
-                           "matter when you paint a jiggle mask later.\n\n" +
+                           "at one of the five practice busts. They live in TutorialArt/Busts, " +
+                           "one folder each, and the base picture is the file whose name ends in " +
+                           "Base00 — so Bust1 is TutorialArt/Busts/Bust1/Bust1Base00.png, and " +
+                           "Bust2 through Bust5 follow the same pattern.\n\n" +
+                           "Any of them works here. They differ in shape on purpose, which will " +
+                           "matter when you paint a jiggle mask later; the fuller ones give you " +
+                           "more to see. The other files in those folders are the blink, mouth " +
+                           "and expression art, and a later tutorial uses them.\n\n" +
                            "Bust art is 256 by 256 pixels, PNG, with a transparent background. " +
                            "Other sizes are scaled to fit rather than refused, but 256 is the " +
                            "only size whose pixels land exactly as you drew them, and anything " +
@@ -294,6 +300,24 @@ public static class TutorialCatalog
                 },
                 new TutorialStep
                 {
+                    Title = "Say what the button reads",
+                    Body = "Set the button's Label. Without one the game falls back to a name " +
+                           "worked out from the target, which is usually close but rarely what " +
+                           "you would have written — and it is the difference between a button " +
+                           "that says \"My Room\" and one that says whatever the level happens " +
+                           "to be called underneath.\n\n" +
+                           "Write what a player would call the place. The label also takes " +
+                           "[PV:name] tokens, so a button can change what it says once " +
+                           "something in the pack has happened.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:navigatorButtons",
+                    IsDone = (vm, s) => vm.SelectedPlace is { } p &&
+                                        p.NavigatorButtons.Any(b => b.Label.Trim().Length > 0),
+                    Hint = "The Label box on the navigator button row.",
+                },
+                new TutorialStep
+                {
                     Title = "A door from your bedroom",
                     Body = "Now the way in. The bedroom every save starts in is the one place " +
                            "you can always reach, so that is where the door goes — a vanilla " +
@@ -417,15 +441,36 @@ public static class TutorialCatalog
                     Body = "The name is how everything else finds this object — a rule that " +
                            "switches it on names it, and names repeat all over a level, so pick " +
                            "something you would recognise months from now.\n\n" +
-                           "For the picture, any of the practice art will do; the NPC art in " +
-                           "TutorialArt/NPCs is a convenient shape to see. It does not have to " +
-                           "be art you drew for this — an object is just a sprite in a room.",
+                           "For the picture use TutorialArt/Locations/Vase.png. It is worth " +
+                           "looking at before you pick it: it is a vase and almost nothing " +
+                           "else, on a transparent background, at the size a vase actually is. " +
+                           "Compare that to Room.png, which contains the same vase inside a " +
+                           "full 2048 by 1136 room — the padding IS the difference between a " +
+                           "layer and a prop. Art with a room's worth of empty space around it " +
+                           "cannot be placed, only laid over everything.",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:placeGameObjects",
                     IsDone = (vm, s) => FirstGameObject(vm) is { } g &&
                                         g.Name.Trim().Length > 0 && g.Sprite.Trim().Length > 0,
                     Hint = "Select the object in the tree, then fill in Name and its sprite.",
+                },
+                new TutorialStep
+                {
+                    Title = "Put it where you want it",
+                    Body = "Drag the object in the preview. The gizmo moves the real position — " +
+                           "this is not a preview-only control, it is the same X and Y you " +
+                           "could type in by hand, and typing is the fallback when you want an " +
+                           "exact number rather than a look.\n\n" +
+                           "Put the vase somewhere it could plausibly stand. It will be drawing " +
+                           "over the whole room at the moment, which the next step fixes.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:placePreview",
+                    AlsoAllow = new[] { "panel:placeGameObjects" },
+                    OnEnter = (vm, s) => s.Set("pos", PropPosition(vm)),
+                    IsDone = (vm, s) => PropPosition(vm) != s.Get<string>("pos"),
+                    Hint = "Click the object in the preview, then drag it.",
                 },
                 new TutorialStep
                 {
@@ -503,10 +548,14 @@ public static class TutorialCatalog
                            "strip, which is a door from one room to another. It works, and it " +
                            "is the right shape for somewhere that sits BEHIND another place — a " +
                            "back office off a shop, a bedroom off a hall.\n\n" +
-                           "The world map is the other way, and it means something different. A " +
-                           "place on the map is somewhere a player can go from anywhere, a " +
-                           "destination in its own right rather than a room reached through " +
-                           "another one. Most somewheres want one or the other, not both.",
+                           "The world map is the other way, and it means something different. " +
+                           "A place on the map is a destination in its own right rather than a " +
+                           "room reached through another one.\n\n" +
+                           "The map is not open from everywhere, mind: the player reaches it by " +
+                           "going to the Garage, into the Car, and pressing Drive. So a map " +
+                           "button suits somewhere they would deliberately travel to, and a " +
+                           "navigator button suits somewhere they walk into from next door. " +
+                           "Most places want one or the other, not both.",
                     Kind = StepKind.Read,
                     Tab = TabMapButtons,
                 },
@@ -605,6 +654,13 @@ public static class TutorialCatalog
         },
 
     };
+
+    /// <summary>Where the first GameObject on the selected place sits, as a
+    /// string so a step can baseline it and notice any move at all — dragging
+    /// is imprecise by nature, so the check asks whether it CHANGED rather than
+    /// where it ended up.</summary>
+    private static string PropPosition(ViewModel.MainViewModel vm)
+        => FirstGameObject(vm) is { } g ? g.X + "," + g.Y : "";
 
     /// <summary>Every GameObject on the selected place, at any depth. Objects
     /// nest, so a count that only saw the top level would miss one added inside
