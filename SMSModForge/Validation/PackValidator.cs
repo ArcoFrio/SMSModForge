@@ -58,6 +58,50 @@ public static class PackValidator
 
     /// <summary>Whether this issue is currently silenced, and by which entry —
     /// the whole code, or just this one occurrence.</summary>
+    /// <summary>
+    /// On-start actions on a Choice's options, which the editor no longer
+    /// offers and older packs may still carry.
+    /// <para/>
+    /// The reason they went is that nobody can currently say WHEN one of those
+    /// nodes counts as having started. If it is when the menu is drawn rather
+    /// than when the player picks an option, then every option's on-start
+    /// actions run every time the choice appears — including the ones nobody
+    /// took. A pack built on that assumption looks correct while it is being
+    /// written and behaves strangely in play, which is the worst shape a bug
+    /// can have.
+    /// <para/>
+    /// A warning rather than an error: the actions are still in the manifest
+    /// and the runtime will still run them, so nothing is silently dropped.
+    /// It is a decision the author needs to make, not one to make for them.
+    /// </summary>
+    private static void CheckChoiceOptionActions(List<ValidationIssue> issues, ModPack pack)
+    {
+        foreach (var d in pack.Dialogues)
+        {
+            // A node is an option when a Choice lists it as a child.
+            var optionIds = new HashSet<int>();
+            foreach (var n in d.Nodes)
+                if (n.Kind == DialogueNodeKind.Choice)
+                    foreach (var childId in n.Children)
+                        optionIds.Add(childId);
+
+            foreach (var n in d.Nodes)
+            {
+                if (!optionIds.Contains(n.Id)) continue;
+                if (n.ActionsOnStart == null || n.ActionsOnStart.Count == 0) continue;
+
+                issues.Add(new(Severity.Warning,
+                    $"dialogues[{d.Key}].nodes[{n.Id}].actionsOnStart",
+                    $"This node is one of a Choice's options and has {n.ActionsOnStart.Count} " +
+                    "action(s) on start. When an option counts as STARTED is not something the " +
+                    "pack can rely on — it may be when the menu is drawn rather than when the " +
+                    "player picks it, in which case these run for options nobody chose. Move " +
+                    "them to Actions on finish, which happens once the option has been taken.",
+                    "dialogue.choiceOptionOnStart"));
+            }
+        }
+    }
+
     public static bool IsIgnored(ModPack pack, ValidationIssue issue)
         => pack.IgnoredIssues.Contains(issue.Key) ||
            (issue.Code.Length > 0 && pack.IgnoredIssues.Contains(issue.Code));
@@ -71,6 +115,8 @@ public static class PackValidator
         // grows with the size of the pack.
         try { ArtDimensions.CheckAll(issues, pack, packRoot); }
         catch (System.Exception) { /* never let a bad file stop the rest */ }
+
+        CheckChoiceOptionActions(issues, pack);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", "packId is required"));

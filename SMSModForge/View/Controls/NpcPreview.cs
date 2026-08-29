@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.IO;
 using System.Threading.Tasks;
@@ -150,7 +150,14 @@ public sealed class NpcPreview : Grid
 
     private void OnNpcProp(object? _, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName is null || _pathProps.Contains(e.PropertyName)) Reload();
+        if (e.PropertyName is null || _pathProps.Contains(e.PropertyName)) { Reload(); return; }
+
+        // The mask editor clears its live buffer on close, and the preview then
+        // falls back to the file it last read — which for an existing mask was
+        // read before any editing. One read when the buffer goes away, so the
+        // picture does not revert to the old mask the moment the editor shuts.
+        if (e.PropertyName == nameof(NpcViewModel.LiveMaskBgra) && Npc?.LiveMaskBgra == null)
+            Reload();
         else Relayout();   // jiggle / shadow / colour edits: no file I/O, just re-place
     }
 

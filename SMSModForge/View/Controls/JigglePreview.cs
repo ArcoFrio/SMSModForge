@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -271,6 +271,23 @@ public sealed class JigglePreview : Image
             Outfit.PropertyChanged += (_, e) =>
             {
                 if (e.PropertyName is null || _texturePathProps.Contains(e.PropertyName))
+                {
+                    ReloadTextures();
+                    return;
+                }
+
+                // The mask editor hands the preview a live buffer while it is
+                // open and clears it on close. At that moment the preview falls
+                // back to the file it last READ — which, for a mask that
+                // already had a path, was read before any of this editing
+                // happened. The picture would change the instant the editor
+                // closed, back to the mask as it was, and look like the work
+                // had been thrown away.
+                //
+                // One read, when the live buffer goes away. Not on
+                // LiveMaskRevision, which fires per brush stamp.
+                if (e.PropertyName == nameof(OutfitViewModel.LiveMaskBgra) &&
+                    Outfit.LiveMaskBgra == null)
                     ReloadTextures();
             };
         }

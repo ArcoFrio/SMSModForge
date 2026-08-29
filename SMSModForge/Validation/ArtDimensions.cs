@@ -19,6 +19,12 @@ namespace SMSModForge.Validation;
 /// a size that is simply not the expected one (rescaled, still fine), and an
 /// ASPECT that is not the frame's (letterboxed, with transparent bars where the
 /// art does not reach). The second is nearly always a mistake.
+/// <para/>
+/// MASKS are deliberately not checked. A mask is sampled in UV space, so its
+/// resolution is free — PlaceFactory says as much where it loads one — and the
+/// editor's own mask painter always writes a 256x256 buffer. Checking them
+/// meant painting a place mask in ModForge produced a file ModForge then
+/// complained about.
 /// </summary>
 internal static class ArtDimensions
 {
@@ -28,7 +34,6 @@ internal static class ArtDimensions
     public const string CodeBustAspect  = "art.bustAspect";
     public const string CodeLevelSize   = "art.levelSize";
     public const string CodeLevelAspect = "art.levelAspect";
-    public const string CodeMaskSize    = "art.maskSize";
     public const string CodeUnreadable  = "art.unreadable";
 
     // The frames themselves live with the fitting rule, so a check and a
@@ -36,8 +41,6 @@ internal static class ArtDimensions
     public const int BustPixels = Rendering.ArtFit.BustPixels;
     public const int LevelWidth = Rendering.ArtFit.LevelWidth;
     public const int LevelHeight = Rendering.ArtFit.LevelHeight;
-    public const int LevelMaskWidth = Rendering.ArtFit.LevelMaskWidth;
-    public const int LevelMaskHeight = Rendering.ArtFit.LevelMaskHeight;
 
     /// <summary>
     /// Read a PNG's dimensions without decoding the pixels.
@@ -127,8 +130,6 @@ internal static class ArtDimensions
 
                 Check(issues, packRoot, o.BaseSprite, $"{w}.baseSprite",
                       BustPixels, BustPixels, CodeBustSize, CodeBustAspect, "The bust");
-                Check(issues, packRoot, o.MaskSprite, $"{w}.maskSprite",
-                      BustPixels, BustPixels, CodeMaskSize, CodeMaskSize, "The jiggle mask");
                 if (o.BlinkEnabled)
                     Check(issues, packRoot, o.BlinkSprite, $"{w}.blinkSprite",
                           BustPixels, BustPixels, CodeBustSize, CodeBustAspect, "The blink frame");
@@ -158,8 +159,6 @@ internal static class ArtDimensions
                   LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, "The front layer");
             Check(issues, packRoot, p.SecondarySprite, $"{w}.secondarySprite",
                   LevelWidth, LevelHeight, CodeLevelSize, CodeLevelAspect, "The back layer");
-            Check(issues, packRoot, p.MaskSprite, $"{w}.maskSprite",
-                  LevelMaskWidth, LevelMaskHeight, CodeMaskSize, CodeMaskSize, "The mask");
         }
     }
 }

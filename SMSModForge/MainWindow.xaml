@@ -4221,7 +4221,20 @@
                                 </DockPanel>
                             </GroupBox>
 
-                            <GroupBox Header="Actions on start">
+                            <!--
+                                Hidden on a Choice option. When GC2 considers such a node
+                                "started" is not something we can currently answer — an
+                                option may well be started as the menu is drawn, in which
+                                case every option's on-start actions would fire whether or
+                                not the player picked it. Offering the box while that is
+                                unknown invites packs that half-work.
+
+                                On-finish is unaffected: an option finishes when it has
+                                been taken, which is the moment authors actually want.
+                            -->
+                            <GroupBox Header="Actions on start"
+                                      Visibility="{Binding IsChoiceChild,
+                                                   Converter={StaticResource InverseBoolToVisibility}}">
                                 <DockPanel>
                                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
                                                 HorizontalAlignment="Left" Margin="0,6,0,0">
@@ -4244,6 +4257,14 @@
                                                   ItemTemplate="{StaticResource ActionRowTemplate}"/>
                                 </DockPanel>
                             </GroupBox>
+
+                            <Border Margin="0,6,0,0" Padding="10,8" CornerRadius="4"
+                                    BorderThickness="1" BorderBrush="{DynamicResource Theme.Accent}"
+                                    Background="{DynamicResource Theme.Surface}"
+                                    Visibility="{Binding IsChoiceChild, Converter={StaticResource BoolToVisibility}}">
+                                <TextBlock TextWrapping="Wrap" FontSize="11" Opacity="0.85"
+                                           Text="This node is one of a Choice's options, so it has no Actions on start. When an option counts as having started is not something the pack can rely on — it may be the moment the menu is drawn rather than the moment the player picks it, which would run the actions for options nobody chose. Put them on Actions on finish, which happens when the option has actually been taken."/>
+                            </Border>
 
                             <GroupBox view:TutorialAnchor.Id="panel:actionsOnFinishBox" Header="Actions on finish">
                                 <DockPanel>
