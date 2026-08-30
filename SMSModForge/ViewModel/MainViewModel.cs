@@ -591,6 +591,10 @@ public sealed class MainViewModel : ObservableObject
                     RebuildSelectedNodeExpressionOptions();
                     RebuildSelectedNodeOutfitOptions();
                 }
+                OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
+                // Tag list is per-dialogue but excludes the selected node, so it
+                // rebuilds on every node change rather than only on actor changes.
+                RebuildSelectedNodeJumpTagOptions();
 
                 // Restore — WPF binding or the rebuild may have cleared these.
                 if (_selectedNode != null)
@@ -629,9 +633,18 @@ public sealed class MainViewModel : ObservableObject
         if (e.PropertyName == nameof(DialogueNodeViewModel.Actor))
         {
             OnPropertyChanged(nameof(SelectedNodeActorBustKey));
+            OnPropertyChanged(nameof(SelectedNodeActorIsPlayer));
             RebuildSelectedNodeExpressionOptions();
             RebuildSelectedNodeOutfitOptions();
             ApplyDefaultOutfitForActorChange();
+        }
+        else if (e.PropertyName == nameof(DialogueNodeViewModel.Tag))
+        {
+            // Retagging the selected node changes what every OTHER node could
+            // jump to; this list excludes the selected node, so what it needs to
+            // catch is the tag arriving before the author moves on and selects
+            // the node that will aim at it.
+            RebuildSelectedNodeJumpTagOptions();
         }
         else if (e.PropertyName == nameof(DialogueNodeViewModel.Outfit))
         {
@@ -722,6 +735,45 @@ public sealed class MainViewModel : ObservableObject
         // selection, so a Clear could empty the bound Expression combo.
         SyncOptions(SelectedNodeExpressionOptions,
             exprs.OrderBy(e => e, StringComparer.OrdinalIgnoreCase).ToList());
+    }
+
+    /// <summary>
+    /// Whether the selected node is spoken by the player.
+    /// <para/>
+    /// The player's bust is the game's, not the pack's: there are no authored
+    /// expressions or outfits to choose from, so the two pickers are hidden
+    /// rather than left offering nothing. Anything already stored in those
+    /// fields is left alone — hiding a field is not a reason to edit a pack.
+    /// </summary>
+    public bool SelectedNodeActorIsPlayer =>
+        SpeakerFor(SelectedNode?.Actor ?? "")?.IsPlayer == true;
+
+    /// <summary>
+    /// Every tag in the selected node's dialogue — the destinations a Jump can
+    /// actually land on. A jump has to match a tag exactly, and a tag that does
+    /// not exist fails silently at runtime, so the list is the difference
+    /// between choosing a destination and remembering one.
+    /// <para/>
+    /// The combo stays editable: a tag can legitimately be typed before the node
+    /// carrying it has been written.
+    /// </summary>
+    public ObservableCollection<string> SelectedNodeJumpTagOptions { get; } = new();
+
+    private void RebuildSelectedNodeJumpTagOptions()
+    {
+        var tags = new System.Collections.Generic.List<string>();
+        var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        if (SelectedDialogue != null)
+            foreach (var n in SelectedDialogue.Nodes)
+            {
+                // A node's own tag is not a destination for itself: jumping to it
+                // is a one-node loop with nothing in between.
+                if (ReferenceEquals(n, SelectedNode)) continue;
+                var t = n.Tag?.Trim() ?? "";
+                if (t.Length > 0 && seen.Add(t)) tags.Add(t);
+            }
+        tags.Sort(StringComparer.OrdinalIgnoreCase);
+        SyncOptions(SelectedNodeJumpTagOptions, tags);
     }
 
     /// <summary>

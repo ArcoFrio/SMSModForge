@@ -4230,20 +4230,27 @@
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
                                               Text="{Binding Actor, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <TextBlock Text="Expression:"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <!-- Expression and Outfit are hidden while the player is speaking: the
+                                         player's bust belongs to the game, so a pack has no expressions or
+                                         outfits to offer and both pickers would stand there empty. -->
+                                    <TextBlock Text="Expression:"  Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
+                                               Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"/>
                                     <ComboBox ToolTip="Which expression the speaker wears from this node onward." view:IssueTarget.Field="expression" Grid.Row="3" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeExpressionOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
+                                              Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"
                                               Text="{Binding Expression, UpdateSourceTrigger=PropertyChanged}"/>
                                     <!-- Outfit: optional per-node bust switch. The picker lists the
                                          speaking actor's authored outfits; empty keeps the current bust.
                                          A $varName picks the outfit dynamically from a pack variable. -->
-                                    <TextBlock Text="Outfit:"      Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Outfit:"      Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
+                                               Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"/>
                                     <ComboBox Grid.Row="4" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.SelectedNodeOutfitOptions,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               IsEditable="True"
+                                              Visibility="{Binding DataContext.SelectedNodeActorIsPlayer, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource InverseBoolToVisibility}}"
                                               Text="{Binding Outfit, UpdateSourceTrigger=PropertyChanged}"
                                               ToolTip="Switch the actor to one of their outfits for this node onward. Pick an outfit, or type $variableName to use the outfit named by a pack variable's current value (so this node chooses the outfit dynamically). Leave blank to keep the actor's current bust."/>
                                     <TextBlock Text="Text:"        Grid.Row="5" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
@@ -4274,19 +4281,33 @@
                                               ItemsSource="{Binding DataContext.JumpModes,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               SelectedItem="{Binding JumpMode, UpdateSourceTrigger=PropertyChanged}"/>
-                                    <TextBlock Text="Jump tag:"    Grid.Row="9" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding JumpTargetTag, UpdateSourceTrigger=PropertyChanged}" ToolTip="Which tag to resume at, for Jump. It has to match another node&apos;s Tag exactly." Grid.Row="9" Grid.Column="1"/>
+                                    <!-- "Jump to", not "Jump tag": beside a Tag field that NAMES this node,
+                                         two fields both called tag read as the same thing. This one is a
+                                         destination, and it only appears once Jump is the mode — Continue and
+                                         Exit have nowhere to go, so a tag typed against either is stored and
+                                         then ignored. The list is the dialogue's own tags, still editable so a
+                                         tag can be aimed at before the node carrying it exists. -->
+                                    <TextBlock Text="Jump to:"     Grid.Row="9" Grid.Column="0" VerticalAlignment="Center"
+                                               Visibility="{Binding IsJump, Converter={StaticResource BoolToVisibility}}"/>
+                                    <ComboBox Grid.Row="9" Grid.Column="1"
+                                              IsEditable="True"
+                                              ItemsSource="{Binding DataContext.SelectedNodeJumpTagOptions,
+                                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                                              Text="{Binding JumpTargetTag, UpdateSourceTrigger=PropertyChanged}"
+                                              Visibility="{Binding IsJump, Converter={StaticResource BoolToVisibility}}"
+                                              ToolTip="Which tagged node to resume at. It has to match that node&apos;s Tag exactly; a tag that does not exist fails silently at runtime, so pick from the list where you can."/>
                                     <TextBlock Text="Duration:"    Grid.Row="10" Grid.Column="0" VerticalAlignment="Center"/>
                                     <ComboBox Grid.Row="10" Grid.Column="1"
                                               ItemsSource="{Binding DataContext.NodeDurations,
                                                             RelativeSource={RelativeSource AncestorType=Window}}"
                                               SelectedItem="{Binding Duration, UpdateSourceTrigger=PropertyChanged}"
                                               ToolTip="How a text line advances. UntilInteraction waits for the player; Timeout auto-advances after the typewriter finishes."/>
-                                    <TextBlock Text="Timeout (s):" Grid.Row="11" Grid.Column="0" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Timeout (s):" Grid.Row="11" Grid.Column="0" VerticalAlignment="Center"
+                                               Visibility="{Binding IsTimeout, Converter={StaticResource BoolToVisibility}}"/>
                                     <TextBox  Text="{Binding Timeout, Converter={x:Static conv:SingleConverter.Instance}}"
                                               Grid.Row="11" Grid.Column="1"
-                                              IsEnabled="{Binding IsTimeout}"
-                                              ToolTip="Seconds the line lingers after typing finishes (Timeout mode only). Decimals OK, e.g. 1.5."/>
+                                              Visibility="{Binding IsTimeout, Converter={StaticResource BoolToVisibility}}"
+                                              ToolTip="Seconds the line lingers after typing finishes. Decimals OK, e.g. 1.5."/>
                                 </Grid>
                             </GroupBox>
 

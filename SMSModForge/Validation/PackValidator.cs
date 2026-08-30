@@ -168,6 +168,38 @@ public static class PackValidator
         }
     }
 
+    /// <summary>
+    /// A Choice node with no children — a menu with nothing to pick.
+    /// <para/>
+    /// Worth checking because the editor used to produce these by itself: a
+    /// node added with + Child or + Sibling inherited the kind of the node it
+    /// was added from, so every option under a Choice became a Choice too, and
+    /// so did everything under those. New nodes no longer inherit the kind, but
+    /// packs authored before that carry the damage in the manifest, where it is
+    /// invisible until the conversation is played.
+    /// <para/>
+    /// A warning rather than an error: the fix is one dropdown, and the author
+    /// is the one who knows whether a menu was intended here.
+    /// </summary>
+    private static void CheckChoicesWithoutOptions(List<ValidationIssue> issues, ModPack pack)
+    {
+        foreach (var d in pack.Dialogues)
+            foreach (var n in d.Nodes)
+            {
+                if (n.Kind != DialogueNodeKind.Choice) continue;
+                if (n.Children != null && n.Children.Count > 0) continue;
+
+                issues.Add(new(Severity.Warning,
+                    $"dialogues[{d.Key}].nodes[{n.Id}].kind",
+                    "This node is a Choice with no children, so it is a menu offering " +
+                    "nothing to pick. If it is meant to be a line, set Kind to Text. " +
+                    "Older packs collect these on their own: adding a node with + Child " +
+                    "or + Sibling used to copy the kind of the node it came from, so " +
+                    "every option under a Choice was saved as a Choice as well.",
+                    "dialogue.choiceWithoutOptions"));
+            }
+    }
+
     public static bool IsIgnored(ModPack pack, ValidationIssue issue)
         => pack.IgnoredIssues.Contains(issue.Key) ||
            (issue.Code.Length > 0 && pack.IgnoredIssues.Contains(issue.Code));
@@ -183,6 +215,7 @@ public static class PackValidator
         catch (System.Exception) { /* never let a bad file stop the rest */ }
 
         CheckChoiceOptionActions(issues, pack);
+        CheckChoicesWithoutOptions(issues, pack);
         CheckKinWordsInText(issues, pack);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))

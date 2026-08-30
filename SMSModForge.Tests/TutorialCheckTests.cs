@@ -102,23 +102,25 @@ public class TutorialCheckTests
         d.Nodes[0].JumpTargetTag = "ending";
         Assert.False(step.IsDone!(w.Vm, scratch), "a jump with no tag passes the step");
 
-        // Both halves, aimed backwards: the last node sent to the first. This
-        // is a conversation the player cannot leave, and it is what the step's
-        // own instructions used to describe.
+        // Both halves on the SAME node: the only jump that can never go
+        // anywhere. (Jumping backwards is not one of these — a menu whose
+        // options return to the Choice is a standard shape, and the step after
+        // this one teaches it.)
+        d.Nodes[0].Tag = "ending";
+        Assert.False(step.IsDone!(w.Vm, scratch), "a node aimed at its own tag passes the step");
+
+        // Two nodes, and the jump lands.
+        d.Nodes[0].Tag = "";
+        d.Nodes[^1].Tag = "ending";
+        Assert.True(step.IsDone!(w.Vm, scratch), "a jump onto another node's tag does not pass the step");
+
+        // Backwards, which is legitimate and must also pass.
+        d.Nodes[^1].Tag = "";
         d.Nodes[0].JumpMode = JumpMode.Continue;
         d.Nodes[0].JumpTargetTag = "";
-        d.Nodes[0].Tag = "ending";
+        d.Nodes[0].Tag = "back";
         d.Nodes[^1].JumpMode = JumpMode.Jump;
-        d.Nodes[^1].JumpTargetTag = "ending";
-        Assert.False(step.IsDone!(w.Vm, scratch), "a jump back to the first node passes the step");
-
-        // And forwards, which is the arrangement the step teaches.
-        d.Nodes[0].Tag = "";
-        d.Nodes[^1].JumpMode = JumpMode.Continue;
-        d.Nodes[^1].JumpTargetTag = "";
-        d.Nodes[^1].Tag = "ending";
-        d.Nodes[0].JumpMode = JumpMode.Jump;
-        d.Nodes[0].JumpTargetTag = "ending";
-        Assert.True(step.IsDone!(w.Vm, scratch), "a forward jump onto a tag does not pass the step");
+        d.Nodes[^1].JumpTargetTag = "back";
+        Assert.True(step.IsDone!(w.Vm, scratch), "a backward jump onto a tag does not pass the step");
     }
 }

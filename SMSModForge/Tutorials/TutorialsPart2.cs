@@ -333,13 +333,14 @@ internal static class TutorialsPart2
                            "A TAG is a name you give a node so another node can send play to " +
                            "it. Two fields do it. Tag, on the node being aimed AT: a short word, " +
                            "yours to choose, and it is a label rather than anything the player " +
-                           "sees. Jump, on the node doing the aiming: set it to Jump and type " +
-                           "that same word into Jump tag.\n\n" +
-                           "Build it in that order. First tag your closing line — the one you " +
-                           "added last tutorial — with something like ending. Then take the " +
-                           "option you did NOT set to Exit, add a Child under it, and write the " +
-                           "reaction that answer deserves. On that child set Jump to Jump and " +
-                           "Jump tag to ending.\n\n" +
+                           "sees. Jump, on the node doing the aiming: set it to Jump, and a " +
+                           "Jump to box appears listing the tags in this dialogue.\n\n" +
+                           "Build it in that order — the tag first, so it is there to be " +
+                           "picked. Tag your closing line, the one you added last tutorial, " +
+                           "with something like ending. Then take the option you did NOT set " +
+                           "to Exit, add a Child under it, and write the reaction that answer " +
+                           "deserves. On that child set Jump to Jump, and choose ending in the " +
+                           "Jump to box.\n\n" +
                            "Play now runs the option, the reaction, and then lands on the " +
                            "closing line. The other option still ends where it ended. One " +
                            "ending, written once, reached two ways — and nothing repeats, " +
@@ -353,12 +354,21 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
-                    Title = "Two ways to get it wrong",
-                    Body = "Jump backwards and the conversation loops. Sending play to a node it " +
-                           "has already been through is how you write something a player cannot " +
-                           "leave — the same lines again, and again. Jump FORWARD, to a node " +
-                           "that comes after, unless you have deliberately built a way out of " +
-                           "the loop.\n\n" +
+                    Title = "Jumping backwards on purpose",
+                    Body = "Forward is not the only direction, and backwards is not a mistake. " +
+                           "Jumping back to a Choice is one of the most useful shapes there is, " +
+                           "and the game itself is full of it: a menu where each option answers " +
+                           "and then returns, except one that carries the conversation on. Ask " +
+                           "about the weather, come back. Ask about her sister, come back. Say " +
+                           "you should get going, and that one continues.\n\n" +
+                           "To build it, tag the Choice node itself, then give the last line of " +
+                           "each returning branch a jump to that tag. The option that leaves " +
+                           "simply does not jump — it continues, or exits.\n\n" +
+                           "The one thing to be sure of is a way out. If every option comes " +
+                           "back, the player cannot leave; at least one has to not return. Put " +
+                           "that option in the menu from the start rather than behind a " +
+                           "condition, or a player who fails the condition is stuck in a " +
+                           "conversation with no exit.\n\n" +
                            "And give a tag to exactly one node. Two nodes carrying the same tag " +
                            "make every jump aimed at it ambiguous: play goes to whichever the " +
                            "game reaches first, which is not something you chose and may not " +
@@ -1463,26 +1473,26 @@ internal static class TutorialsPart2
             if (!string.IsNullOrWhiteSpace(n.Tag)) tags.Add(n.Tag.Trim());
         if (tags.Count == 0) return false;
 
-        // Forward only, judged by position in d.Nodes — which
-        // DialogueViewModel.RecomputeDepths keeps in DFS preorder, so list
-        // position is play order rather than the order nodes were added.
-        //
-        // A jump to a node that comes earlier sends play back
-        // through lines it has already run, which is a conversation the player
-        // cannot leave — and it is what the previous wording accidentally
-        // described. A deliberate loop is a real thing to build, just not the
-        // thing this step is teaching.
-        for (int i = 0; i < d.Nodes.Count; i++)
+        // Any direction. This used to insist the target come later in play
+        // order, on the theory that jumping back writes a conversation the
+        // player cannot leave — which is wrong. Jumping back to a Choice is a
+        // standard shape (each option answers and returns, one option leaves),
+        // and the step after this one now teaches it. The only jump that can
+        // never do anything is a node aimed at its own tag, so that is the only
+        // one refused here.
+        foreach (var n in d.Nodes)
         {
-            var n = d.Nodes[i];
             if (n.Model.Jump is not { Mode: Model.JumpMode.Jump } j) continue;
             if (string.IsNullOrWhiteSpace(j.TargetTag)) continue;
 
             string want = j.TargetTag.Trim();
-            for (int k = i + 1; k < d.Nodes.Count; k++)
-                if (string.Equals(d.Nodes[k].Tag?.Trim(), want,
+            foreach (var other in d.Nodes)
+            {
+                if (ReferenceEquals(other, n)) continue;
+                if (string.Equals(other.Tag?.Trim(), want,
                                   StringComparison.OrdinalIgnoreCase))
                     return true;
+            }
         }
         return false;
     }

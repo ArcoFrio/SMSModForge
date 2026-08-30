@@ -302,9 +302,17 @@ public sealed class DialogueViewModel : ObservableObject
     /// so adding the next line of a scene doesn't mean re-picking the speaker
     /// and their expression every time.
     /// <para/>
-    /// Four fields deliberately don't:
+    /// Five fields deliberately don't:
     /// <list type="bullet">
     ///   <item><c>Id</c> — allocated by the caller.</item>
+    ///   <item><c>Kind</c> — a new node is always a plain line. Choice and
+    ///   Random are structural: a Choice's children are its options and a
+    ///   Random's are its alternatives, and neither is itself a menu. Copying
+    ///   the kind made every option a Choice, which in turn made ITS children
+    ///   read as options — so a follow-up line under an option lost its
+    ///   Actions-on-start box, and the runtime would have built it as a
+    ///   one-entry menu rather than a line. Authoring a nested menu is one
+    ///   dropdown; the cascade was silent.</item>
     ///   <item><c>Text</c> — the one thing that's always different.</item>
     ///   <item><c>Children</c> — a new node starts as a leaf; copying the list
     ///   would give two parents the same children and knot the tree.</item>
@@ -317,6 +325,7 @@ public sealed class DialogueViewModel : ObservableObject
     private static DialogueNodeDef CloneForNewNode(DialogueNodeDef template)
     {
         var def = Services.EditorClipboard.CloneOne(template);
+        def.Kind = DialogueNodeKind.Text;
         def.Text = "";
         def.Tag = null;
         def.Children = new List<int>();

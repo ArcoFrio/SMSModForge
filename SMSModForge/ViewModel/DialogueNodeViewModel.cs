@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using SMSModForge.Model;
@@ -253,9 +253,15 @@ public sealed class DialogueNodeViewModel : ObservableObject
                 Model.Jump.Mode = value;
             }
             OnPropertyChanged();
+            OnPropertyChanged(nameof(IsJump));
             OnPropertyChanged(nameof(JumpTargetTag));
         }
     }
+
+    /// <summary>Whether the destination field applies. Continue and Exit have
+    /// nowhere to go, so a tag typed against either is stored and then ignored
+    /// — which reads as a jump that does not work.</summary>
+    public bool IsJump => JumpMode == JumpMode.Jump;
 
     public string JumpTargetTag
     {
