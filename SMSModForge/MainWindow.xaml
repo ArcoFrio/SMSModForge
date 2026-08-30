@@ -4159,7 +4159,7 @@
                                          suggestions menu is internal and can't be extended, so
                                          NodeTextBox_ContextMenuOpening reproduces the suggestions and
                                          adds "Add to dictionary". -->
-                                    <TextBox  x:Name="NodeTextBox" ToolTip="The line itself. [PV:name] is replaced with a pack variable, and {Name} with one of the game&apos;s own."
+                                    <TextBox  x:Name="NodeTextBox" ToolTip="The line itself. [PV:name] is replaced with a pack variable. {PC} is the player&apos;s name, and {M} {D} {B} are what this player calls their mother, father and brother — write those rather than the words, because players choose them."
                                               Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
                                               Grid.Row="5" Grid.Column="1"
                                               AcceptsReturn="True" TextWrapping="Wrap" MinHeight="60"

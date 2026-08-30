@@ -59,6 +59,72 @@ public static class PackValidator
     /// <summary>Whether this issue is currently silenced, and by which entry —
     /// the whole code, or just this one occurrence.</summary>
     /// <summary>
+    /// Dialogue text that spells out a family word the player chose for
+    /// themselves.
+    /// <para/>
+    /// The game lets a player decide what they call their mother, father and
+    /// brother, and gives dialogue <c>{M}</c>, <c>{D}</c> and <c>{B}</c> to say
+    /// it back to them. A line that writes "Mom" instead says Mom to everybody
+    /// — including the player who picked something else, who has no way to tell
+    /// a pack's line from the game getting their choice wrong.
+    /// <para/>
+    /// Only whole words count. "Mom" is caught; "moment" and "Brotherhood" are
+    /// not, and neither is a word inside a token that is already correct.
+    /// <para/>
+    /// A warning, never an error. A character genuinely called Mom by somebody
+    /// who is not their child is a legitimate line, which is exactly why this
+    /// is a note the author can dismiss rather than a rule.
+    /// </summary>
+    private static void CheckKinWordsInText(List<ValidationIssue> issues, ModPack pack)
+    {
+        // The word, and the token that should almost always replace it.
+        var kin = new (string Word, string Token)[]
+        {
+            ("mom", "{M}"), ("mum", "{M}"), ("mother", "{M}"),
+            ("dad", "{D}"), ("father", "{D}"),
+            ("brother", "{B}"),
+        };
+
+        foreach (var d in pack.Dialogues)
+        {
+            foreach (var n in d.Nodes)
+            {
+                string text = n.Text;
+                if (string.IsNullOrWhiteSpace(text)) continue;
+
+                foreach (var (word, token) in kin)
+                {
+                    if (!ContainsWord(text, word)) continue;
+                    issues.Add(new(Severity.Warning,
+                        $"dialogues[{d.Key}].nodes[{n.Id}].text",
+                        $"This line writes \"{word}\". Players choose what they call their " +
+                        $"family, so {token} says it back the way they picked it — writing the " +
+                        "word says it to everyone, including whoever chose something else.",
+                        "dialogue.kinWord"));
+                    break;   // one note per line is enough to make the point
+                }
+            }
+        }
+    }
+
+    /// <summary>Whole-word, case-insensitive. Matching anywhere would flag
+    /// "moment" and "Brotherhood", and an author who is told about those stops
+    /// reading the warnings.</summary>
+    private static bool ContainsWord(string text, string word)
+    {
+        int i = 0;
+        while ((i = text.IndexOf(word, i, System.StringComparison.OrdinalIgnoreCase)) >= 0)
+        {
+            bool startsClean = i == 0 || !char.IsLetter(text[i - 1]);
+            int after = i + word.Length;
+            bool endsClean = after >= text.Length || !char.IsLetter(text[after]);
+            if (startsClean && endsClean) return true;
+            i = after;
+        }
+        return false;
+    }
+
+    /// <summary>
     /// On-start actions on a Choice's options, which the editor no longer
     /// offers and older packs may still carry.
     /// <para/>
@@ -117,6 +183,7 @@ public static class PackValidator
         catch (System.Exception) { /* never let a bad file stop the rest */ }
 
         CheckChoiceOptionActions(issues, pack);
+        CheckKinWordsInText(issues, pack);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", "packId is required"));
