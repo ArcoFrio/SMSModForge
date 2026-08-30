@@ -840,7 +840,11 @@ public static class PackValidator
                 if (!c.Params.ContainsKey("level")) issues.Add(new(Severity.Error, cWhere, "Param 'level' is required"));
                 break;
             case NodeConditionTypes.GameObjectActive:
-                if (!c.Params.ContainsKey("path")) issues.Add(new(Severity.Error, cWhere, "Param 'path' is required"));
+                // 'target' is canonical. 'path' is the spelling from before the
+                // category row and the runtime still reads it, so a pack that
+                // predates the change is complete as it stands.
+                if (!c.Params.ContainsKey("target") && !c.Params.ContainsKey("path"))
+                    issues.Add(new(Severity.Error, cWhere, "Param 'target' is required"));
                 break;
             case NodeConditionTypes.VariableStartsWith:
             {

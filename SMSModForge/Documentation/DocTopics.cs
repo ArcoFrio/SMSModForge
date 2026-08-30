@@ -590,7 +590,7 @@ public static class DocTopics
                     new DocBullet("ListCount", "Compare how many entries a list holds against a number. Equals zero is the empty test, and negating that gives has something in it.")),
                 new DocSection("Where things are",
                     new DocBullet("LevelActive", "Passes while a particular place is the one on screen."),
-                    new DocBullet("GameObjectActive", "Passes while a particular object is switched on.")),
+                    new DocBullet("GameObjectActive", "Passes while a particular object is switched on. It says which object with the same Category and Target row an action uses — see The target picker — because it is reading back exactly what switching something on and off writes.")),
                 new DocSection("Chance and time",
                     new DocBullet("DailyChance", "A percentage rolled once per in-game day, which then holds steady for the rest of it. Every use is its own independent gate — two rules at seventy percent are two separate coin flips, not one shared answer."),
                     new DocBullet("Random", "A percentage rolled fresh every time it is checked."),
@@ -653,7 +653,7 @@ public static class DocTopics
                     new DocBullet("Anything that targets an object gives you the same picker — see The target picker."))),
 
             new DocTopic("The target picker",
-                "The shared row for saying which object an action should act on.",
+                "The shared row for saying which object to act on, or ask about.",
                 new DocSection("Categories",
                     new DocBullet("Bust", "A character's bust, as it currently stands on screen."),
                     new DocBullet("GameObjects", "Something your pack added to a place. Pick the place first, then the object within it."),
@@ -666,8 +666,10 @@ public static class DocTopics
                     new DocBullet("Layer", "Which of a place's two pieces of artwork to act on, when the category is Places — Back or Front, the same words the Places tab uses.")),
                 new DocSection("Worth knowing",
                     new DocBullet("Not every action offers every category. Switching something on or off leaves out Places, because activating a whole place is what moving between places is for."),
+                    new DocBullet("The GameObjectActive condition uses the same row, and offers the same four categories switching something on and off does. Asking whether a whole place is on screen is what LevelActive is for."),
                     new DocBullet("Objects that start switched off are still found, so an action can turn on something that was never visible."),
-                    new DocBullet("A target that resolves to nothing is reported in the game's log rather than stopping anything, so a mistyped name shows up as an action that quietly does nothing.")))),
+                    new DocBullet("A target that resolves to nothing is reported in the game's log rather than stopping anything, so a mistyped name shows up as an action that quietly does nothing."),
+                    new DocBullet("In a condition there is no log line for it: an object that cannot be found reads the same as one switched off. Negate therefore means off or absent, not off — so a mistyped target in a negated condition passes rather than complaining.")))),
 
         new DocPart("Finishing a pack",
 

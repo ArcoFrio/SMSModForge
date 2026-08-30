@@ -665,6 +665,103 @@
                         </ItemsControl.Style>
                     </ItemsControl>
 
+                    <!-- Category + Target for GameObjectActive — the same row the
+                         Set-Active action uses, because the condition asks about exactly
+                         what that action sets. Category swaps the Target autocomplete;
+                         GameObjects resolves the object inside the chosen Level. -->
+                    <Grid Margin="0,2,0,0">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsGoActiveFamily}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Category" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{x:Static vm:NodeConditionViewModel.GoCategories}"
+                                  SelectedItem="{Binding GoCategory, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="How the target resolves: a bust, a GameObject inside a level, a scene, or a raw GO name/path. Asking whether a whole level is on screen is what LevelActive is for."/>
+
+                        <!-- Level (GameObjects category only). Without it the lookup is
+                             global, so a same-named object in the level being left can
+                             answer for the one being entered. -->
+                        <TextBlock Text="Level" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <!-- No DisplayMemberPath: the implicit NavigatorTargetOption template
+                             shows the friendly label while ToString() (= Token) is what lands
+                             in the edit box — see NavigatorTargetOption's class comment. -->
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{Binding GoOverlayLevelOptions}"
+                                  SelectedValuePath="Token"
+                                  SelectedValue="{Binding GoOverlayLevel, UpdateSourceTrigger=PropertyChanged}"
+                                  IsEditable="True"
+                                  Text="{Binding GoOverlayLevel, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Which level the object lives in — only levels with authored GameObjects are listed. The Target dropdown follows this choice and stays disabled until one is chosen.">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsGoOverlayCategory}" Value="True">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+
+                        <TextBlock Text="Target" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
+                                  IsEditable="True"
+                                  IsEnabled="{Binding IsGoTargetEnabled}"
+                                  Text="{Binding GoTarget, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Autocompletes from the selected Category; stays editable so any GO name/path works. An object that cannot be found reads as switched off.">
+                            <ComboBox.Style>
+                                <Style TargetType="ComboBox">
+                                    <!-- default: Direct Path → all pack-named GOs -->
+                                    <Setter Property="ItemsSource"
+                                            Value="{Binding DataContext.GameObjectNameOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="Bust">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding DataContext.BustNameOnlyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="GameObjects">
+                                            <Setter Property="ItemsSource" Value="{Binding GoOverlayOptions}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding GoCategory}" Value="Scene">
+                                            <Setter Property="ItemsSource"
+                                                    Value="{Binding DataContext.SceneKeyOptions, RelativeSource={RelativeSource AncestorType=Window}}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ComboBox.Style>
+                        </ComboBox>
+                    </Grid>
+
                     <!-- Unified Variable editor. Source picks Pack (per-pack store) vs
                          Vanilla (a GC2 global from the 1.8E catalog); the Name list follows
                          the Source. Comparison maps to the underlying Variable* type. -->

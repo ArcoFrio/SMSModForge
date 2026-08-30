@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Globalization;
@@ -259,10 +259,52 @@ namespace SMSModForge.PackPlugin
                     }
                 case "GameObjectActive":
                     {
-                        string path = (string)p["path"];
-                        if (string.IsNullOrEmpty(path)) return false;
-                        // Try absolute path first, then a recursive search.
-                        var go = GameObject.Find(path);
+                        // Same kind-dispatched targeting as SetGameObjectActive, so a
+                        // condition addresses an object exactly the way the action that
+                        // toggles it does. 'target' is canonical; 'path' is the spelling
+                        // from before the category row and is still read, so a pack
+                        // authored against it keeps working untouched.
+                        string kind = (string)p["kind"] ?? "";
+                        // $varName is accepted here as everywhere else, so a gate can ask
+                        // about whichever object a variable currently names.
+                        string target = DerefValue((string)p["target"] ?? (string)p["path"] ?? "", vars);
+                        if (string.IsNullOrEmpty(target)) return false;
+
+                        GameObject go;
+                        if (kind == "Scene")
+                        {
+                            // Scene keys are pack-local, so this resolves against the
+                            // pack that authored the condition rather than by name.
+                            var sctx = Plugin.FindContext(thisPackId);
+                            go = sctx?.Scenes != null && sctx.Scenes.TryGet(target, out var sentry)
+                                ? sentry.SceneGo : null;
+                        }
+                        else
+                        {
+                            // GameObjects with a level named: resolve strictly inside that
+                            // level, including inactive children, so a same-named object
+                            // in the level being left cannot answer for the one being
+                            // entered. Anything else resolves globally.
+                            GameObject levelGo = null;
+                            if (kind == "GameObjects" || kind == "Level Overlay")
+                            {
+                                string overlayLevel = DerefValue((string)p["overlayLevel"] ?? "", vars);
+                                if (!string.IsNullOrEmpty(overlayLevel))
+                                {
+                                    var level5 = GameObject.Find("5_Levels");
+                                    levelGo = Plugin.ResolveLevelTarget(overlayLevel, thisPackId,
+                                                                       level5 != null ? level5.transform : null);
+                                }
+                            }
+                            go = levelGo != null
+                                ? TransformExtensions.FindDescendantIncludingInactive(levelGo.transform, target)
+                                : TransformExtensions.ResolveGameObject(target);
+                        }
+
+                        // Resolution now finds inactive objects, which GameObject.Find
+                        // could not. Both "not found" and "found but off" still read
+                        // false, so the answer is unchanged for packs that already
+                        // worked — what changes is that the right object is found.
                         return go != null && go.activeInHierarchy;
                     }
                 case "Random":

@@ -215,8 +215,14 @@ internal static class TutorialSolutions
             var n = w.Vm.SelectedNode!;
             w.Vm.AddNodeConditionCommand.Execute(null);
             var c = n.Conditions.Last();
-            c.Model.Type = SMSModForge.Model.NodeConditionTypes.GameObjectActive;
-            c.Model.Params["path"] = "Lamp";
+            // Through the view model, not the def: setting the type is what
+            // seeds the category, and the category setter is what clears a
+            // target belonging to the previous one. Editing the def underneath
+            // both would test a state the editor cannot produce.
+            c.Type = SMSModForge.Model.NodeConditionTypes.GameObjectActive;
+            c.GoCategory = SMSModForge.ViewModel.NodeActionViewModel.CatOverlay;
+            c.GoOverlayLevel = "place:" + w.Vm.Places[0].Key;
+            c.GoTarget = "Lamp";
         },
         ["lines-that-choose / Someone else in the room"] = w =>
         {

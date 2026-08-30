@@ -260,11 +260,16 @@ internal static class TutorialsPart2
                     Body = "Add a condition to that node with + Add condition, then finish it — " +
                            "an empty condition row is not a gate, it is a blank that always " +
                            "passes.\n\n" +
-                           "Set its Type to GameObjectActive. That gives the row one more " +
-                           "field, GO path — fill it with the object you put in the room and " +
-                           "left switched off. It is a dropdown you can also type into: it " +
-                           "offers the GameObjects your pack has named, so pick yours from the " +
-                           "list rather than typing the name out.\n\n" +
+                           "Set its Type to GameObjectActive. The row then asks the same " +
+                           "three things in the same order the Set-Active action asks them: " +
+                           "Category, Level, Target. That is deliberate — a condition reads " +
+                           "back exactly what that action sets, so it addresses the object " +
+                           "the same way.\n\n" +
+                           "Set Category to GameObjects, since the object lives inside a " +
+                           "place. Set Level to your place: the Target dropdown stays " +
+                           "disabled until you do, because it lists that level's objects and " +
+                           "nothing else. Then pick the object you put in the room and left " +
+                           "switched off.\n\n" +
                            "Doing this against something you already built matters. The object " +
                            "is genuinely off, so the line genuinely will not play — and when a " +
                            "rule switches the object on later, the line starts appearing on its " +
@@ -279,9 +284,9 @@ internal static class TutorialsPart2
                     IsDone = (vm, s) => vm.SelectedNode is { } n &&
                                         n.Conditions.Any(c =>
                                             c.Model.Type == Model.NodeConditionTypes.GameObjectActive &&
-                                            c.Model.Params.TryGetValue("path", out var t) &&
+                                            c.Model.Params.TryGetValue("target", out var t) &&
                                             !string.IsNullOrWhiteSpace(t)),
-                    Hint = "Type = GameObjectActive, then fill in the GO path field it adds.",
+                    Hint = "Type = GameObjectActive, then Category, Level and Target below it.",
                 },
                 new TutorialStep
                 {

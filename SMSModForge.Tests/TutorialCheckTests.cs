@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using SMSModForge.Model;
 using SMSModForge.Tutorials;
@@ -72,14 +72,14 @@ public class TutorialCheckTests
         Assert.False(step.IsDone!(w.Vm, scratch),
             "a condition of the wrong type passes the step");
 
-        // The type the step names, with the field it adds left blank — the
-        // exact half-finished state that was reported.
+        // The type the step names, with the target left blank — the exact
+        // half-finished state that was reported.
         c.Model.Type = NodeConditionTypes.GameObjectActive;
-        c.Model.Params["path"] = "";
+        c.Model.Params["target"] = "";
         Assert.False(step.IsDone!(w.Vm, scratch),
-            "GameObjectActive with no GO path passes the step");
+            "GameObjectActive with no target passes the step");
 
-        c.Model.Params["path"] = "Lamp";
+        c.Model.Params["target"] = "Lamp";
         Assert.True(step.IsDone!(w.Vm, scratch),
             "the finished condition does not pass the step");
     }

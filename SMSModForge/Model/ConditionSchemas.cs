@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SMSModForge.Model;
@@ -96,10 +96,20 @@ public static class ConditionSchemas
                 "Level token (vanilla:<go> or place:<key>). Passes when the matching " +
                 "5_Levels child is currently active in the scene."),
         },
+        // Targeting (kind / target / overlayLevel) comes from the shared
+        // category row — the same one SetGameObjectActive uses, since the
+        // condition asks about exactly what that action sets. Only the key
+        // the row does not draw itself is declared here; the legacy 'path'
+        // spelling is migrated to 'target' by NodeConditionViewModel and
+        // still read by the runtime.
         [NodeConditionTypes.GameObjectActive] = new[]
         {
-            new ParamSchema("path", "GO path", ParamType.GameObjectPath, "",
-                "Scene-graph path; passes when the resolved GO has activeSelf == true."),
+            new ParamSchema("target", "Target", ParamType.GameObjectPath, "",
+                "The object to test. Category decides how it resolves: a bust, an overlay " +
+                "inside a chosen level, a scene, or a raw GameObject name or hierarchy " +
+                "path. Passes while the resolved object is active in the hierarchy — one " +
+                "that cannot be found reads the same as one switched off, so Negate says " +
+                "\"off or absent\" rather than \"off\"."),
         },
 
         // ── Misc ──────────────────────────────────────────────────────

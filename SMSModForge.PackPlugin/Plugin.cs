@@ -575,7 +575,10 @@ namespace SMSModForge.PackPlugin
             return true;
         }
 
-        private static PackContext FindContext(string packId)
+        /// <summary>The loaded context for a pack id, or null. Internal because
+        /// the condition evaluator resolves Scene-category targets against the
+        /// authoring pack's own registry — two packs may both define a "kiss01".</summary>
+        internal static PackContext FindContext(string packId)
         {
             if (string.IsNullOrEmpty(packId)) return null;
             for (int i = 0; i < _contexts.Count; i++)

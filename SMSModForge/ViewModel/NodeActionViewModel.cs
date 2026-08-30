@@ -271,8 +271,11 @@ public sealed class NodeActionViewModel : ObservableObject
     private const string CatOverlayLegacy = "Level Overlay";
 
     /// <summary>Map a stored category token to its canonical value (migrating the
-    /// pre-rename "Level Overlay" token).</summary>
-    private static string NormalizeCategory(string kind)
+    /// pre-rename "Level Overlay" token). Internal because the GameObjectActive
+    /// condition shares this row, and a category token that meant one thing to the
+    /// action that sets an object and another to the condition that reads it back
+    /// would be a bug in whichever of the two was second.</summary>
+    internal static string NormalizeCategory(string kind)
         => kind == CatOverlayLegacy ? CatOverlay : kind;
 
     /// <summary>A whole level, addressed by its place token

@@ -50,6 +50,7 @@ public sealed class NodeConditionViewModel : ObservableObject
             () => !IsLocked && _removeCallback != null);
         CopyCommand = new RelayCommand(() => Services.EditorClipboard.SetConditions(new[] { Model }));
         NormalizeVariable();   // fold legacy GameVariable* into Variable* + source=vanilla
+        NormalizeGoActive();   // fold legacy GameObjectActive 'path' into kind + target
         RebuildParamRows();
 
         // Group recursion: a group (All/Any) owns a child list instead of
@@ -149,6 +150,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         var schemas = ConditionSchemas.For(Model.Type);
         foreach (var schema in schemas)
         {
+            if (IsGoActiveFamily && GoCategoryRowKeys.Contains(schema.Key)) continue;
             var paramType = schema.Type;
             ParamRowViewModel? capturedRow = null;
             var row = new ParamRowViewModel(
@@ -187,6 +189,17 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(Display));
             OnPropertyChanged(nameof(DisplayType));
             OnPropertyChanged(nameof(IsVariableFamily));
+            // Seed 'kind' the moment the type becomes GameObjectActive, so the
+            // category row opens on a real choice rather than reading a missing
+            // param as Direct Path without ever having said so.
+            NormalizeGoActive();
+            OnPropertyChanged(nameof(IsGoActiveFamily));
+            OnPropertyChanged(nameof(GoCategory));
+            OnPropertyChanged(nameof(GoTarget));
+            OnPropertyChanged(nameof(GoOverlayLevel));
+            OnPropertyChanged(nameof(IsGoOverlayCategory));
+            OnPropertyChanged(nameof(IsGoTargetEnabled));
+            OnPropertyChanged(nameof(GoOverlayOptions));
             RebuildParamRows();
         }
     }
@@ -418,6 +431,136 @@ public sealed class NodeConditionViewModel : ObservableObject
             return prefix + Type + " — " + string.Join(", ", pairs);
         }
     }
+
+    // ── GameObjectActive: the Set-Active category row, on a condition ───
+    //
+    // The condition asks about exactly what SetGameObjectActive sets, so it
+    // addresses its object the same way: a Category drives the canonical
+    // 'kind' param (Bust / GameObjects / Scene / Direct Path), 'target' is
+    // what to look up, and 'overlayLevel' scopes a GameObjects target to one
+    // level so a same-named overlay in the level being left cannot answer for
+    // the one being entered.
+    //
+    // The option providers below are NodeActionViewModel's own statics rather
+    // than copies of them. A target list that differed between the action that
+    // switches something on and the condition that reads it back would be a
+    // bug in whichever of the two was written second.
+
+    /// <summary>Param keys the shared category row renders, so the
+    /// schema-driven rows skip them and nothing is drawn twice.</summary>
+    private static readonly HashSet<string> GoCategoryRowKeys = new()
+    {
+        "kind", "target", "overlayLevel",
+        "path",   // legacy, migrated by NormalizeGoActive
+    };
+
+    /// <summary>True for the one condition that resolves a GameObject the way
+    /// the Set-Active action does. Drives which controls the row shows.</summary>
+    public bool IsGoActiveFamily => Model.Type == NodeConditionTypes.GameObjectActive;
+
+    /// <summary>Categories offered here — the same four the Set-Active action
+    /// offers. No Places: asking whether a whole level is on screen is what
+    /// LevelActive already does, and it resolves place tokens through the
+    /// registry rather than by name.</summary>
+    public static IReadOnlyList<string> GoCategories => NodeActionViewModel.SetActiveCategories;
+
+    /// <summary>Migrate a pre-category condition (<c>path</c> alone) to the
+    /// canonical <c>kind</c> + <c>target</c> shape. Idempotent — safe to run on
+    /// every bind and on every type change.</summary>
+    private void NormalizeGoActive()
+    {
+        if (!IsGoActiveFamily) return;
+        if (!Model.Params.ContainsKey("target") &&
+            Model.Params.TryGetValue("path", out var legacy) &&
+            !string.IsNullOrEmpty(legacy))
+            Model.Params["target"] = legacy;
+        Model.Params.Remove("path");
+        // A path written before categories existed was resolved by name, which
+        // is what Direct Path means.
+        if (!Model.Params.ContainsKey("kind"))
+            Model.Params["kind"] = NodeActionViewModel.CatPath;
+    }
+
+    /// <summary>How the target resolves, stored in the canonical <c>kind</c> param.</summary>
+    public string GoCategory
+    {
+        get => Model.Params.TryGetValue("kind", out var k) && !string.IsNullOrEmpty(k)
+            ? NodeActionViewModel.NormalizeCategory(k)
+            : NodeActionViewModel.CatPath;
+        set
+        {
+            if (value == GoCategory) return;
+            Model.Params["kind"] = value;
+            // The old target belongs to the old category's list; keeping it would
+            // leave a name the new list cannot offer sitting in the box, looking
+            // chosen.
+            Model.Params.Remove("target");
+            if (value != NodeActionViewModel.CatOverlay) Model.Params.Remove("overlayLevel");
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(GoTarget));
+            OnPropertyChanged(nameof(GoOverlayLevel));
+            OnPropertyChanged(nameof(IsGoOverlayCategory));
+            OnPropertyChanged(nameof(IsGoTargetEnabled));
+            OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(Display));
+            OnPropertyChanged(nameof(ParamsAsText));
+        }
+    }
+
+    /// <summary>What to look up: a scene key under the Scene category, a
+    /// GameObject name or hierarchy path under any other.</summary>
+    public string GoTarget
+    {
+        get => Model.Params.TryGetValue("target", out var t) ? t : "";
+        set
+        {
+            if (string.IsNullOrEmpty(value)) Model.Params.Remove("target");
+            else Model.Params["target"] = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Display));
+            OnPropertyChanged(nameof(ParamsAsText));
+        }
+    }
+
+    /// <summary>GameObjects category only: which level the object lives in, as a
+    /// level token. Empty resolves globally, which is the pre-category
+    /// behaviour and can answer with a same-named object in another level.</summary>
+    public string GoOverlayLevel
+    {
+        get => Model.Params.TryGetValue("overlayLevel", out var l) ? l : "";
+        set
+        {
+            if (string.IsNullOrEmpty(value)) Model.Params.Remove("overlayLevel");
+            else Model.Params["overlayLevel"] = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(IsGoTargetEnabled));
+            OnPropertyChanged(nameof(Display));
+            OnPropertyChanged(nameof(ParamsAsText));
+        }
+    }
+
+    public bool IsGoOverlayCategory => GoCategory == NodeActionViewModel.CatOverlay;
+
+    /// <summary>The GameObjects target list is level-scoped, so its combo stays
+    /// disabled until a level is chosen. Every other category is always on.</summary>
+    public bool IsGoTargetEnabled =>
+        !IsGoOverlayCategory || !string.IsNullOrEmpty(GoOverlayLevel);
+
+    /// <summary>Strictly the chosen level's GameObjects — no whole-pack fallback,
+    /// since the combo is disabled until a level is picked and a name from some
+    /// other level could never resolve inside this one.</summary>
+    public IEnumerable<string> GoOverlayOptions =>
+        string.IsNullOrEmpty(GoOverlayLevel)
+            ? Array.Empty<string>()
+            : NodeActionViewModel.StrictOverlayProvider?.Invoke(GoOverlayLevel)
+              ?? Array.Empty<string>();
+
+    /// <summary>Levels that actually carry GameObjects — pack places and vanilla
+    /// extensions alike.</summary>
+    public IEnumerable<NavigatorTargetOption> GoOverlayLevelOptions =>
+        NodeActionViewModel.OverlayLevelProvider?.Invoke()
+        ?? Array.Empty<NavigatorTargetOption>();
 
     /// <summary>
     /// Shortcut for the <c>level</c> param used by
