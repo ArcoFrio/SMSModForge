@@ -599,7 +599,12 @@ internal static class TutorialsPart2
                     Title = "Paint where it should move",
                     Body = "Open Edit Mask and paint the Bounce layer over the parts that should " +
                            "move. Keep away from the edges — a mask that reaches the outline " +
-                           "drags the whole silhouette and reads as a wobble rather than weight.",
+                           "drags the whole silhouette and reads as a wobble rather than weight.\n\n" +
+                           "Saving offers to put the file beside the bust art, named after it: " +
+                           "Bust4Base.png gets Bust4BaseMask.png. Nothing requires that — a mask " +
+                           "can live anywhere inside the pack — but a mask is unreadable on its " +
+                           "own, and months later the only thing that says which sprite it was " +
+                           "drawn for is where it sits and what it is called.",
                     Kind = StepKind.Free,
                     Tab = TabCharacters,
                     Anchor = "btn:editMask",
@@ -629,13 +634,19 @@ internal static class TutorialsPart2
                     Title = "What the preview can show you",
                     Body = "Breathing is already on, and it is the mask doing its work — the " +
                            "fastest way to tell whether you painted too much. Depth beside it is " +
-                           "how pronounced that idle motion is. The other controls drive the " +
-                           "overlays: Blinking cycles the blink frame, Yapping runs the mouth, " +
-                           "Mouth frame holds one frame still so you can look at it, and " +
-                           "Expression swaps in one of the four overlay faces. On this character " +
-                           "those four do nothing, because you turned blink, mouth and " +
-                           "expressions off in the first tutorial — which is itself worth seeing " +
-                           "once, so you recognise it later.",
+                           "how pronounced that idle motion is.\n\n" +
+                           "The other controls drive the overlays you added last tutorial: " +
+                           "Blinking cycles the blink frame, Yapping runs the mouth, Mouth frame " +
+                           "holds one frame still so you can look at it, and Expression swaps in " +
+                           "one of the four faces. Turn them on while the mask is running — " +
+                           "that combination is what the player actually sees.\n\n" +
+                           "Watch the face while you do. An overlay does not bend with the " +
+                           "sprite the way the body does: it reads the mask ONCE, at the middle " +
+                           "of its own art, and then the whole eye or mouth slides that far as " +
+                           "one rigid piece. Paint heavily across the face and the features do " +
+                           "not squash with it — they detach and swim. A light touch there, or " +
+                           "nothing at all, is why most busts move at the chest and hair and " +
+                           "keep the face still.",
                     Kind = StepKind.Read,
                     Tab = TabCharacters,
                     Anchor = "panel:characterPreview",

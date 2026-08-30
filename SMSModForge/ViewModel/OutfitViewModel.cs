@@ -12,7 +12,39 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
 {
     public OutfitDef Model { get; }
 
-    public OutfitViewModel(OutfitDef model) { Model = model; }
+    public OutfitViewModel(OutfitDef model)
+    {
+        Model = model;
+        ResetJiggleCommand = new RelayCommand(p =>
+        {
+            Model.Jiggle.ResetToDefault(p as string ?? "");
+            RaiseJiggleChanged();
+        });
+    }
+
+    /// <summary>
+    /// Put one jiggle field back to its default. The parameter is the
+    /// <see cref="JiggleParams"/> property name, so each Default button names
+    /// the row it sits on.
+    /// <para/>
+    /// A command rather than a method call per button, which also makes each
+    /// reset its own undo step.
+    /// </summary>
+    public RelayCommand ResetJiggleCommand { get; }
+
+    /// <summary>One field changed, but which one is the command's business, not
+    /// this method's — there are eight and they are all cheap to re-read.</summary>
+    private void RaiseJiggleChanged()
+    {
+        OnPropertyChanged(nameof(JiggleSpeed));
+        OnPropertyChanged(nameof(JiggleStrength));
+        OnPropertyChanged(nameof(JiggleFrequency));
+        OnPropertyChanged(nameof(NoiseScale));
+        OnPropertyChanged(nameof(NoiseSpeed));
+        OnPropertyChanged(nameof(NoiseStrength));
+        OnPropertyChanged(nameof(Tint));
+        OnPropertyChanged(nameof(PixelSnap));
+    }
 
     public string Key
     {

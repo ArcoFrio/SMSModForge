@@ -1,4 +1,4 @@
-using System.Linq;
+﻿using System.Linq;
 using SMSModForge.Model;
 
 namespace SMSModForge.ViewModel;
@@ -35,7 +35,33 @@ public sealed class NpcViewModel : ObservableObject, IMaskEditorHost
 {
     public NpcDef Model { get; }
 
-    public NpcViewModel(NpcDef model) { Model = model; }
+    public NpcViewModel(NpcDef model)
+    {
+        Model = model;
+        ResetJiggleCommand = new RelayCommand(p =>
+        {
+            Model.Jiggle.ResetToDefault(p as string ?? "");
+            RaiseJiggleChanged();
+        });
+    }
+
+    /// <summary>Same contract as the outfit editor's — see
+    /// <see cref="OutfitViewModel.ResetJiggleCommand"/>. An NPC uses the same
+    /// shader and the same defaults, so a Default here means the same thing
+    /// it does there.</summary>
+    public RelayCommand ResetJiggleCommand { get; }
+
+    private void RaiseJiggleChanged()
+    {
+        OnPropertyChanged(nameof(JiggleSpeed));
+        OnPropertyChanged(nameof(JiggleStrength));
+        OnPropertyChanged(nameof(JiggleFrequency));
+        OnPropertyChanged(nameof(NoiseScale));
+        OnPropertyChanged(nameof(NoiseSpeed));
+        OnPropertyChanged(nameof(NoiseStrength));
+        OnPropertyChanged(nameof(JiggleTint));
+        OnPropertyChanged(nameof(PixelSnap));
+    }
 
     public string Key
     {

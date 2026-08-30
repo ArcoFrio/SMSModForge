@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
@@ -656,11 +656,12 @@ public partial class MaskEditorWindow : Window
         string relPath = _host.MaskPath;
         if (string.IsNullOrWhiteSpace(relPath))
         {
+            var (startIn, proposed) = SaveDefaults();
             var dialog = new SaveFileDialog
             {
-                InitialDirectory = _packRoot,
+                InitialDirectory = startIn,
                 Filter = "PNG (*.png)|*.png",
-                FileName = $"{_host.Key}_mask.PNG",
+                FileName = proposed,
                 Title = "Save mask PNG",
             };
             if (dialog.ShowDialog(this) != true) return false;
@@ -693,6 +694,39 @@ public partial class MaskEditorWindow : Window
                             MessageBoxButton.OK, MessageBoxImage.Error);
             return false;
         }
+    }
+
+    /// <summary>
+    /// Where the Save-As dialog opens, and the filename it proposes.
+    /// <para/>
+    /// Both come from the art being painted over: a mask belongs beside the
+    /// sprite it was drawn for, and naming it after that sprite is what makes
+    /// a folder of them readable later — AnnaBase.png next to AnnaBaseMask.png,
+    /// rather than a pile of files whose names only match by memory. The
+    /// author can still put it anywhere inside the pack; this only decides
+    /// where the dialog starts.
+    /// <para/>
+    /// Falls back to the pack root and the host key when there is no pose
+    /// sprite to take either from.
+    /// </summary>
+    private (string Directory, string FileName) SaveDefaults()
+    {
+        string fallback = $"{_host.Key}_mask.PNG";
+        string pose = _host.PoseSpritePath ?? "";
+        if (string.IsNullOrWhiteSpace(pose)) return (_packRoot, fallback);
+
+        string abs;
+        try { abs = Path.Combine(_packRoot, Normalize(pose)); }
+        catch { return (_packRoot, fallback); }   // unusable characters in the path
+
+        string dir = Path.GetDirectoryName(abs) ?? _packRoot;
+        // A path typed but not yet drawn has no folder on disk; opening the
+        // dialog somewhere that does not exist just drops it at the root with
+        // no explanation, so choose the root deliberately instead.
+        if (!Directory.Exists(dir)) dir = _packRoot;
+
+        string stem = Path.GetFileNameWithoutExtension(abs);
+        return (dir, stem.Length == 0 ? fallback : stem + "Mask.png");
     }
 
     private void SavePng(string absPath)
