@@ -408,6 +408,25 @@ internal static class TutorialSolutions
             w.Vm.SelectedWallpaper!.AddUnlockConditionCommand.Execute(null);
         },
 
+
+        // ── 13. Putting a value into a line ───────────────────────────
+        ["values-in-text / Show your variable in a line"] = w =>
+        {
+            GiveADialogueLine(w);
+            w.Vm.SelectedDialogue!.Nodes[0].Text = "You have [PV:MetTheGirl] of those.";
+        },
+        ["values-in-text / Use a variable instead of typing a value"] = w =>
+        {
+            var n = w.Vm.SelectedDialogue!.Nodes[0];
+            w.Vm.SelectedNode = n;
+            w.Vm.AddNodeActionOnFinishCommand.Execute(null);
+            var a = n.ActionsOnFinish.Last();
+            a.Model.Type = SMSModForge.Model.NodeActionTypes.SetVariable;
+            a.Model.Params["name"] = "Copy";
+            // One dollar and a name: the value comes from the variable.
+            a.Model.Params["value"] = "$MetTheGirl";
+        },
+
         // ── 7. Rules that run themselves ──────────────────────────────
         ["rules / Make one"] = w =>
         {

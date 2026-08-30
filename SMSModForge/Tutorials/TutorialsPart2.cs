@@ -1090,11 +1090,122 @@ internal static class TutorialsPart2
 
         new TutorialDef
         {
+            Id = "values-in-text",
+            Group = "Logic",
+            Title = "Putting a value into a line",
+            Summary = "Show a variable in dialogue, and use one in place of a typed-in value.",
+            Level = 13,
+            Steps = new[]
+            {
+                new TutorialStep
+                {
+                    Title = "Four ways, and they are not interchangeable",
+                    Body = "You have a variable. So far it can only gate things — a line plays " +
+                           "or it does not. It can also be SHOWN, and used in place of values " +
+                           "you would otherwise type.\n\n" +
+                           "There are four notations and each works in one place:\n\n" +
+                           "[PV:name] puts one of YOUR variables into dialogue text or a button " +
+                           "label. {PC}, {M}, {D} and {B} put the GAME's names into dialogue " +
+                           "text. $name uses a variable's value in an action or condition box " +
+                           "instead of a fixed one. {item} stands for the current value in a " +
+                           "rule that repeats over a list.\n\n" +
+                           "Using the wrong one is quiet: the text simply shows the notation you " +
+                           "typed, because nothing was there to replace it.",
+                    Kind = StepKind.Read,
+                    Tab = TabVariables,
+                },
+                new TutorialStep
+                {
+                    Title = "Show your variable in a line",
+                    Body = "Go to your conversation and put [PV:name] into a node's text, with " +
+                           "the name of the variable you declared — square brackets, PV, a " +
+                           "colon, the name, and a closing bracket, spelled exactly.\n\n" +
+                           "The line will read the variable's value where the token sits. That " +
+                           "is how a character says a number back to the player, or a name the " +
+                           "player chose earlier in your own pack.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeEditor",
+                    AlsoAllow = new[] { "panel:dialogueNodes" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d &&
+                                        d.Nodes.Any(n => n.Text.Contains("[PV:")),
+                    Hint = "Select a node and add [PV:yourVariable] to its Text.",
+                },
+                new TutorialStep
+                {
+                    Title = "The names the player chose",
+                    Body = "The game has names of its own, and they are not yours to set. " +
+                           "{PC} is the player's name. {M}, {D} and {B} are what THIS player " +
+                           "calls their mother, father and brother — they picked those words at " +
+                           "the start, and they differ from player to player.\n\n" +
+                           "So write {M} rather than Mom. A line that spells the word out says " +
+                           "it to everyone, including the player who chose something else, and " +
+                           "they cannot tell your line from the game losing their choice. " +
+                           "Validate warns about it if you forget.\n\n" +
+                           "Those four are the ones known to work. What makes a braced word one " +
+                           "of these is not documented, so treat any other as unsupported until " +
+                           "you have watched it resolve in game.",
+                    Kind = StepKind.Read,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeEditor",
+                },
+                new TutorialStep
+                {
+                    Title = "Use a variable instead of typing a value",
+                    Body = "The other direction. Anywhere an action or a condition takes a " +
+                           "value, $name uses whatever that variable currently holds instead of " +
+                           "a number or word you fix now.\n\n" +
+                           "Add an action to a node and put $ followed by your variable's name " +
+                           "in one of its boxes. One dollar sign and the name, no brackets — a " +
+                           "different notation from the text one, which is the part worth " +
+                           "remembering.\n\n" +
+                           "This is what lets a rule act on whatever a variable currently names " +
+                           "— hiding whichever object was showing, without listing every " +
+                           "object it might have been.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:actionsOnFinishBox",
+                    AlsoAllow = new[] { "panel:dialogueNodes", "panel:nodeEditor" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d && UsesADollarValue(d),
+                    Hint = "Add an action on finish, then type $ and your variable name into a value box.",
+                },
+                new TutorialStep
+                {
+                    Title = "And one for lists",
+                    Body = "The fourth is for integration rules, which you will meet next. A " +
+                           "rule can repeat over a list — every value in a List variable, or a " +
+                           "few typed in — and {item} stands for whichever value it is running " +
+                           "for at the time.\n\n" +
+                           "The name is yours: the box beside it sets the word, and item is " +
+                           "only the default. One rule written once then does the work of six " +
+                           "near-identical ones.",
+                    Kind = StepKind.Read,
+                    Tab = TabVariables,
+                },
+                new TutorialStep
+                {
+                    Title = "Which one goes where",
+                    Body = "Worth keeping straight, because none of them complains when it is " +
+                           "in the wrong place:\n\n" +
+                           "[PV:name] — your variables, in text and button labels.\n" +
+                           "{PC} {M} {D} {B} — the game's names, in text.\n" +
+                           "$name — your variables, in action and condition value boxes.\n" +
+                           "{item} — the current value, inside a repeating rule.\n\n" +
+                           "A token in the wrong place is shown to the player exactly as you " +
+                           "typed it. If a line reads [PV:gold] in game, that is this.",
+                    Kind = StepKind.Read,
+                    Tab = TabModForge,
+                },
+            },
+        },
+
+        new TutorialDef
+        {
             Id = "rules",
             Group = "Logic",
             Title = "Rules that run themselves",
             Summary = "Make the pack do something without anyone talking to it.",
-            Level = 13,
+            Level = 14,
             Steps = new[]
             {
                 new TutorialStep
@@ -1311,6 +1422,33 @@ internal static class TutorialsPart2
                 !string.IsNullOrWhiteSpace(j.TargetTag) &&
                 tags.Contains(j.TargetTag.Trim()))
                 return true;
+        return false;
+    }
+
+    /// <summary>
+    /// Whether any action in the dialogue takes its value from a variable
+    /// rather than a typed-in one.
+    /// <para/>
+    /// Looks at the parameters as authored, since $ is a notation the runtime
+    /// resolves rather than a field of its own — there is nothing else to
+    /// check but the text the author put in the box.
+    /// </summary>
+    private static bool UsesADollarValue(ViewModel.DialogueViewModel d)
+    {
+        foreach (var n in d.Nodes)
+            foreach (var list in new[] { n.Model.ActionsOnStart, n.Model.ActionsOnFinish })
+            {
+                if (list == null) continue;
+                foreach (var a in list)
+                    foreach (var kv in a.Params)
+                    {
+                        var v = kv.Value?.Trim();
+                        // "$$" is an escaped dollar, not a reference.
+                        if (!string.IsNullOrEmpty(v) && v.Length > 1 &&
+                            v[0] == '$' && v[1] != '$')
+                            return true;
+                    }
+            }
         return false;
     }
 
