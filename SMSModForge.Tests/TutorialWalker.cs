@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
@@ -216,7 +216,7 @@ internal static class TutorialSolutions
             w.Vm.AddNodeConditionCommand.Execute(null);
             var c = n.Conditions.Last();
             c.Model.Type = SMSModForge.Model.NodeConditionTypes.GameObjectActive;
-            c.Model.Params["target"] = "Lamp";
+            c.Model.Params["path"] = "Lamp";
         },
         ["lines-that-choose / Someone else in the room"] = w =>
         {
@@ -225,15 +225,43 @@ internal static class TutorialSolutions
             n.Text = "And what am I supposed to say to that?";
             n.Actor = "player";
         },
-        ["lines-that-choose / Bringing branches back together"] = w =>
+        ["lines-that-choose / Letting one option say more"] = w =>
         {
-            // A tag on one node and a jump to it from another: either half
-            // alone does nothing, which is why the check wants both.
+            // This tutorial starts from a bare dialogue, so build the shape
+            // tutorial 5 leaves behind first: a choice, two options, one of
+            // them exiting, and a closing line after both.
             var d = w.Vm.SelectedDialogue!;
-            d.Nodes[0].Tag = "ending";
-            var last = d.Nodes[^1];
-            last.JumpMode = SMSModForge.Model.JumpMode.Jump;
-            last.JumpTargetTag = "ending";
+
+            w.Vm.SelectedNode = null;
+            w.Vm.AddDialogueRootNodeCommand.Execute(null);
+            var choice = w.Vm.SelectedNode!;
+            choice.Kind = SMSModForge.Model.DialogueNodeKind.Choice;
+            choice.Text = "What do you say?";
+
+            foreach (var label in new[] { "Say hello", "Say nothing" })
+            {
+                w.Vm.SelectedNode = choice;
+                w.Vm.AddDialogueChildNodeCommand.Execute(null);
+                w.Vm.SelectedNode!.Text = label;
+            }
+            d.Nodes.First(n => n.Text == "Say nothing").JumpMode =
+                SMSModForge.Model.JumpMode.Exit;
+
+            w.Vm.SelectedNode = null;
+            w.Vm.AddDialogueRootNodeCommand.Execute(null);
+            var closing = w.Vm.SelectedNode!;
+            closing.Text = "Well. See you around.";
+            closing.Tag = "ending";
+
+            // The reaction hangs off the option that does NOT exit — a child
+            // under the exiting one would never be reached — and jumps
+            // forward to the ending both branches now share.
+            w.Vm.SelectedNode = d.Nodes.First(n => n.Text == "Say hello");
+            w.Vm.AddDialogueChildNodeCommand.Execute(null);
+            var reaction = w.Vm.SelectedNode!;
+            reaction.Text = "Good. I was starting to think you had forgotten how.";
+            reaction.JumpMode = SMSModForge.Model.JumpMode.Jump;
+            reaction.JumpTargetTag = "ending";
         },
 
         // ── 4. On the world map ───────────────────────────────────────

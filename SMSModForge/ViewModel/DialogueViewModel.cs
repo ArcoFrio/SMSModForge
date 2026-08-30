@@ -1,3 +1,4 @@
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -36,6 +37,43 @@ public sealed class DialogueViewModel : ObservableObject
     public DialogueDef Model { get; }
     public ObservableCollection<DialogueNodeViewModel> Nodes { get; }
     public ObservableCollection<NodeConditionViewModel> StartConditions { get; }
+
+    /// <summary>
+    /// Whether the runtime name still follows the display name.
+    /// <para/>
+    /// Same arrangement as characters: a NEW dialogue derives its key from
+    /// whatever gets typed as the display name, and stops the moment the
+    /// author edits the key themselves. An existing dialogue never re-derives,
+    /// because its key is what logs and other packs already refer to it by and
+    /// renaming it underneath them is not something a display-name edit should
+    /// do.
+    /// </summary>
+    private bool _keyFollowsDisplay;
+
+    /// <summary>Other dialogues in the pack, for keeping derived keys unique.
+    /// Supplied by the owner rather than looked up, since a view model has no
+    /// business knowing where the list lives.</summary>
+    private Func<IEnumerable<DialogueViewModel>>? _siblings;
+
+    public bool KeyIsDerived => _keyFollowsDisplay;
+
+    /// <summary>Start deriving the key from the display name. Called for a
+    /// dialogue the author has just added, never for one being loaded.</summary>
+    public void DeriveKeyFromDisplayName(Func<IEnumerable<DialogueViewModel>> siblings)
+    {
+        _siblings = siblings;
+        _keyFollowsDisplay = true;
+    }
+
+    private void DeriveKey()
+    {
+        var others = (_siblings?.Invoke() ?? Enumerable.Empty<DialogueViewModel>())
+            .Where(d => !ReferenceEquals(d, this))
+            .Select(d => d.Model.Key);
+        Model.Key = CharacterDef.UniqueIdentifier(Model.DisplayName, others);
+        OnPropertyChanged(nameof(Key));
+        OnPropertyChanged(nameof(Display));
+    }
 
     public DialogueViewModel(DialogueDef model)
     {
@@ -89,13 +127,28 @@ public sealed class DialogueViewModel : ObservableObject
     public string Key
     {
         get => Model.Key;
-        set { Model.Key = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            Model.Key = value;
+            // Typing a key is a decision, and it sticks: from here the display
+            // name no longer touches it.
+            _keyFollowsDisplay = false;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(KeyIsDerived));
+            OnPropertyChanged(nameof(Display));
+        }
     }
 
     public string DisplayName
     {
         get => Model.DisplayName;
-        set { Model.DisplayName = value; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        set
+        {
+            Model.DisplayName = value;
+            OnPropertyChanged();
+            if (_keyFollowsDisplay) DeriveKey();
+            OnPropertyChanged(nameof(Display));
+        }
     }
 
     public string RoomTalk

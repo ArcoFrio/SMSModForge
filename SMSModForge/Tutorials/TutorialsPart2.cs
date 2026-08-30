@@ -257,17 +257,31 @@ internal static class TutorialsPart2
                 new TutorialStep
                 {
                     Title = "Gate it on something real",
-                    Body = "Add a condition to that node and make it GameObjectActive, pointing " +
-                           "at the object you put in your room and left switched off.\n\n" +
-                           "This is worth doing with something you already built rather than an " +
-                           "invented example: the object is genuinely off, so the line genuinely " +
-                           "will not play, and when a later rule switches the object on the line " +
-                           "starts appearing. The conversation is reading the state of the room.",
+                    Body = "Add a condition to that node with + Add condition, then finish it — " +
+                           "an empty condition row is not a gate, it is a blank that always " +
+                           "passes.\n\n" +
+                           "Set its Type to GameObjectActive. That gives the row one more " +
+                           "field, GO path — fill it with the object you put in the room and " +
+                           "left switched off. It is a dropdown you can also type into: it " +
+                           "offers the GameObjects your pack has named, so pick yours from the " +
+                           "list rather than typing the name out.\n\n" +
+                           "Doing this against something you already built matters. The object " +
+                           "is genuinely off, so the line genuinely will not play — and when a " +
+                           "rule switches the object on later, the line starts appearing on its " +
+                           "own. The conversation is reading the state of the room.",
                     Kind = StepKind.Do,
                     Tab = TabDialogues,
                     Anchor = "panel:nodeConditions",
-                    IsDone = (vm, s) => vm.SelectedNode is { } n && n.Conditions.Count > 0,
-                    Hint = "+ Add condition in the Conditions box, then pick the type.",
+                    // The old check counted rows, so a condition added and left
+                    // blank passed the step — and a blank condition always
+                    // passes at runtime too, so the author would have learned
+                    // the shape of a gate that does not gate.
+                    IsDone = (vm, s) => vm.SelectedNode is { } n &&
+                                        n.Conditions.Any(c =>
+                                            c.Model.Type == Model.NodeConditionTypes.GameObjectActive &&
+                                            c.Model.Params.TryGetValue("path", out var t) &&
+                                            !string.IsNullOrWhiteSpace(t)),
+                    Hint = "Type = GameObjectActive, then fill in the GO path field it adds.",
                 },
                 new TutorialStep
                 {
@@ -305,21 +319,48 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
-                    Title = "Bringing branches back together",
-                    Body = "Two options that both end the conversation are easy. Two that " +
-                           "rejoin a shared ending are what tags are for.\n\n" +
-                           "Give the node you want to come back to a Tag — any short word. Then " +
-                           "on another node set Jump to Jump and put that word in Jump tag. Play " +
-                           "resumes there instead of carrying on down the list.\n\n" +
-                           "Give a tag to exactly one node. Two nodes with the same tag makes " +
-                           "every jump aimed at it ambiguous, and it resolves to whichever the " +
-                           "game reaches first.",
+                    Title = "Letting one option say more",
+                    Body = "Last tutorial you gave one option Exit and let the other fall " +
+                           "through to your closing line. Both are still one line long. Real " +
+                           "dialogue is lopsided — one answer earns a reaction, the other does " +
+                           "not — and the branch that reacts still has to end up somewhere, or " +
+                           "you write the ending twice.\n\n" +
+                           "A TAG is a name you give a node so another node can send play to " +
+                           "it. Two fields do it. Tag, on the node being aimed AT: a short word, " +
+                           "yours to choose, and it is a label rather than anything the player " +
+                           "sees. Jump, on the node doing the aiming: set it to Jump and type " +
+                           "that same word into Jump tag.\n\n" +
+                           "Build it in that order. First tag your closing line — the one you " +
+                           "added last tutorial — with something like ending. Then take the " +
+                           "option you did NOT set to Exit, add a Child under it, and write the " +
+                           "reaction that answer deserves. On that child set Jump to Jump and " +
+                           "Jump tag to ending.\n\n" +
+                           "Play now runs the option, the reaction, and then lands on the " +
+                           "closing line. The other option still ends where it ended. One " +
+                           "ending, written once, reached two ways — and nothing repeats, " +
+                           "because every jump here goes forward.",
                     Kind = StepKind.Do,
                     Tab = TabDialogues,
                     Anchor = "panel:nodeEditor",
                     AlsoAllow = new[] { "panel:dialogueNodes" },
                     IsDone = (vm, s) => vm.SelectedDialogue is { } d && JumpLandsOnATag(d),
-                    Hint = "Tag on one node, then Jump = Jump and Jump tag on another.",
+                    Hint = "Tag the closing line, then + Child on the non-Exit option and set its Jump to that tag.",
+                },
+                new TutorialStep
+                {
+                    Title = "Two ways to get it wrong",
+                    Body = "Jump backwards and the conversation loops. Sending play to a node it " +
+                           "has already been through is how you write something a player cannot " +
+                           "leave — the same lines again, and again. Jump FORWARD, to a node " +
+                           "that comes after, unless you have deliberately built a way out of " +
+                           "the loop.\n\n" +
+                           "And give a tag to exactly one node. Two nodes carrying the same tag " +
+                           "make every jump aimed at it ambiguous: play goes to whichever the " +
+                           "game reaches first, which is not something you chose and may not " +
+                           "stay the same.",
+                    Kind = StepKind.Read,
+                    Tab = TabDialogues,
+                    Anchor = "panel:nodeEditor",
                 },
                 new TutorialStep
                 {
@@ -1417,11 +1458,27 @@ internal static class TutorialsPart2
             if (!string.IsNullOrWhiteSpace(n.Tag)) tags.Add(n.Tag.Trim());
         if (tags.Count == 0) return false;
 
-        foreach (var n in d.Nodes)
-            if (n.Model.Jump is { Mode: Model.JumpMode.Jump } j &&
-                !string.IsNullOrWhiteSpace(j.TargetTag) &&
-                tags.Contains(j.TargetTag.Trim()))
-                return true;
+        // Forward only, judged by position in d.Nodes — which
+        // DialogueViewModel.RecomputeDepths keeps in DFS preorder, so list
+        // position is play order rather than the order nodes were added.
+        //
+        // A jump to a node that comes earlier sends play back
+        // through lines it has already run, which is a conversation the player
+        // cannot leave — and it is what the previous wording accidentally
+        // described. A deliberate loop is a real thing to build, just not the
+        // thing this step is teaching.
+        for (int i = 0; i < d.Nodes.Count; i++)
+        {
+            var n = d.Nodes[i];
+            if (n.Model.Jump is not { Mode: Model.JumpMode.Jump } j) continue;
+            if (string.IsNullOrWhiteSpace(j.TargetTag)) continue;
+
+            string want = j.TargetTag.Trim();
+            for (int k = i + 1; k < d.Nodes.Count; k++)
+                if (string.Equals(d.Nodes[k].Tag?.Trim(), want,
+                                  StringComparison.OrdinalIgnoreCase))
+                    return true;
+        }
         return false;
     }
 

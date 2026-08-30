@@ -3318,6 +3318,10 @@ public sealed class MainViewModel : ObservableObject
         };
         Pack.Dialogues.Add(def);
         var vm = HookDebugTracking(new DialogueViewModel(def));
+        // A new dialogue's runtime name follows whatever display name gets
+        // typed, the way a new character's does — and stops following the
+        // moment the author edits the key themselves.
+        vm.DeriveKeyFromDisplayName(() => Dialogues);
         Dialogues.Add(vm);
         // Place the new dialogue where the selection points — selected folder,
         // the folder holding the selected dialogue, else root.

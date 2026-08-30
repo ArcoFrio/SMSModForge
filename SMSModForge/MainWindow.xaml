@@ -3872,10 +3872,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this dialogue is called in the editor&apos;s own lists. The only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by."/>
-                                    <TextBox ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                               ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established dialogue is never renamed underneath whatever already points at it."/>
+                                    <TextBox ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established dialogue is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                     <!-- The roomtalk picker is gone: dialogues are hosted on a
                                          per-pack always-active container, and the only remaining
                                          use for a roomtalk — taking priority over vanilla — is
