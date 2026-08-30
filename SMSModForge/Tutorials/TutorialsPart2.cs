@@ -640,13 +640,17 @@ internal static class TutorialsPart2
                            "holds one frame still so you can look at it, and Expression swaps in " +
                            "one of the four faces. Turn them on while the mask is running — " +
                            "that combination is what the player actually sees.\n\n" +
-                           "Watch the face while you do. An overlay does not bend with the " +
-                           "sprite the way the body does: it reads the mask ONCE, at the middle " +
-                           "of its own art, and then the whole eye or mouth slides that far as " +
-                           "one rigid piece. Paint heavily across the face and the features do " +
-                           "not squash with it — they detach and swim. A light touch there, or " +
-                           "nothing at all, is why most busts move at the chest and hair and " +
-                           "keep the face still.",
+                           "Watch the face while you do, because the mask does not reach it. " +
+                           "Only the base sprite is displaced; the blink, the mouth and the " +
+                           "expressions sit on top of it exactly where they were drawn and do " +
+                           "not move at all.\n\n" +
+                           "So paint across the face and the face slides out from under its own " +
+                           "eyes and mouth. Nothing looks wrong until an overlay is showing, " +
+                           "which is why it is easy to miss: turn Blinking and Yapping on and " +
+                           "the drift is obvious.\n\n" +
+                           "That is the whole reason most busts move at the chest and the hair " +
+                           "and leave the face alone. Keep the mask off it, or dark enough there " +
+                           "that nothing separates.",
                     Kind = StepKind.Read,
                     Tab = TabCharacters,
                     Anchor = "panel:characterPreview",
