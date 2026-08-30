@@ -449,39 +449,57 @@ internal static class TutorialsPart2
                 new TutorialStep
                 {
                     Title = "Watch it happen",
-                    Body = "Tick Blinking under the preview. The eyes shut every few seconds, on " +
-                           "a random wait, exactly as the game runs it — so if the blink art is " +
-                           "off by a few pixels you will see it here rather than in game.",
+                    Body = "Look at the preview — it is already blinking. The eyes shut every " +
+                           "few seconds on a random wait, exactly as the game runs it, so blink " +
+                           "art that is off by a few pixels shows itself here rather than in " +
+                           "game.\n\n" +
+                           "Blinking is the tickbox under the preview, on by default. Untick it " +
+                           "to hold the eyes open while you look at something else. It is a " +
+                           "preview control and changes nothing in the pack.",
                     Kind = StepKind.Read,
                     Tab = TabCharacters,
-                    Anchor = "panel:characterPreview",
+                    // The preview pane, not the bust: panel:characterPreview is the
+                    // art alone, so the toggles this step is about sat outside the
+                    // lit area and could not be reached.
+                    Anchor = "panel:bustPreviewPane",
                 },
                 new TutorialStep
                 {
                     Title = "Four mouths, named by a prefix",
-                    Body = "Mouth frames are not chosen one by one. You give a PREFIX, and the " +
-                           "game adds 1, 2, 3 and 4 to it — so a prefix of " +
-                           "TutorialArt/Busts/Bust1/Mouth finds Mouth1.png through Mouth4.png.\n\n" +
-                           "That is exactly four frames: not three, not five. Tick Has Mouth " +
-                           "frames and type the prefix, without the number and without .png.",
+                    Body = "Mouth frames are not chosen one by one. You give a PREFIX — a path " +
+                           "from the pack root, like the Base and Blink rows above, but stopping " +
+                           "short of the number and the .png. The game adds 1, 2, 3 and 4 to it, " +
+                           "so TutorialArt/Busts/Bust1/Mouth finds Mouth1.png through " +
+                           "Mouth4.png. The grey text after the box shows what it is currently " +
+                           "going to look for.\n\n" +
+                           "That is exactly four frames: not three, not five.\n\n" +
+                           "Tick Has Mouth frames. The folder is already filled in — it was " +
+                           "copied from the blink path you just set, since overlays for one " +
+                           "outfit live together — so what is left is the filename part. Put " +
+                           "Mouth on the end of it.",
                     Kind = StepKind.Do,
                     Tab = TabCharacters,
                     Anchor = "panel:outfitSprites",
                     AlsoAllow = new[] { "field:hasMouth" },
+                    // A bare folder does not pass. The blink path seeds this field
+                    // with one, so "not empty" would be true the moment the step
+                    // opened and Next would light up for work nobody had done.
                     IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
-                                        o.MouthEnabled && o.MouthPrefix.Trim().Length > 0,
-                    Hint = "Has Mouth frames, then the Mouth prefix box below it.",
+                                        o.MouthEnabled && NamesAFile(o.MouthPrefix),
+                    Hint = "Has Mouth frames, then add Mouth after the folder already in the box.",
                 },
                 new TutorialStep
                 {
                     Title = "Hear it talk",
-                    Body = "Tick Yapping under the preview and the mouth cycles the way it does " +
-                           "while a line types. Mouth frame beside it holds one frame still, " +
-                           "which is how you check a single drawing.\n\n" +
+                    Body = "Tick Yapping under the preview — unlike Blinking this one starts " +
+                           "off — and the mouth cycles the way it does while a line types.\n\n" +
+                           "Mouth frame beside it holds one frame still instead, which is how " +
+                           "you check a single drawing: pick 1 to 4 to see that frame on its " +
+                           "own, or Closed for none of them.\n\n" +
                            "Both are preview controls. Neither changes the pack.",
                     Kind = StepKind.Read,
                     Tab = TabCharacters,
-                    Anchor = "panel:characterPreview",
+                    Anchor = "panel:bustPreviewPane",
                 },
                 new TutorialStep
                 {
@@ -490,6 +508,8 @@ internal static class TutorialsPart2
                            "than a number — and only four names exist: Happy, Angry, Sad and " +
                            "Flirty. A prefix of TutorialArt/Busts/Bust1/Expression finds " +
                            "ExpressionHappy.png and its three siblings.\n\n" +
+                           "Same box, at the bottom: tick Has Expressions, and again the folder " +
+                           "is already there. Add Expression after it.\n\n" +
                            "Any other name is never looked for. If you want a fifth mood, it has " +
                            "to be a different outfit.",
                     Kind = StepKind.Do,
@@ -497,21 +517,23 @@ internal static class TutorialsPart2
                     Anchor = "panel:outfitExpressions",
                     AlsoAllow = new[] { "field:hasExpressions" },
                     IsDone = (vm, s) => vm.SelectedOutfit is { } o &&
-                                        o.ExpressionEnabled && o.ExpressionPrefix.Trim().Length > 0,
-                    Hint = "Has Expressions, then the Expr. prefix box in the same panel.",
+                                        o.ExpressionEnabled && NamesAFile(o.ExpressionPrefix),
+                    Hint = "Has Expressions, at the bottom of the Sprites and expressions box.",
                 },
                 new TutorialStep
                 {
                     Title = "Try them on",
-                    Body = "Expression under the preview swaps between them. In a conversation " +
-                           "this is a node's Expression field, and it holds until another node " +
-                           "changes it — an angry line does not go back to neutral by itself.\n\n" +
+                    Body = "The Expression dropdown under the preview swaps between them — try " +
+                           "each one and watch the face change, with None for the plain base.\n\n" +
+                           "In a conversation this is a node's Expression field, and it holds " +
+                           "until another node changes it: an angry line does not go back to " +
+                           "neutral by itself.\n\n" +
                            "That is the whole bust: one base picture, one blink, four mouths, " +
                            "four expressions. Everything a character does on screen comes out of " +
                            "those, and you now have all of them.",
                     Kind = StepKind.Read,
                     Tab = TabCharacters,
-                    Anchor = "panel:characterPreview",
+                    Anchor = "panel:bustPreviewPane",
                 },
             },
         },
@@ -1466,6 +1488,19 @@ internal static class TutorialsPart2
     /// jumps to is a label, and a jump to a tag nobody has stops the
     /// conversation dead. Only the pair is the lesson.
     /// </summary>
+    /// <summary>
+    /// Whether a prefix has a filename part, not just a folder.
+    /// <para/>
+    /// Setting the blink path copies its folder into the empty prefix fields,
+    /// which is a head start rather than an answer: a prefix ending in a slash
+    /// would send the game looking for 1.png at the top of that folder.
+    /// </summary>
+    private static bool NamesAFile(string prefix)
+    {
+        string p = (prefix ?? "").Trim();
+        return p.Length > 0 && !p.EndsWith("/") && !p.EndsWith("\\\\");
+    }
+
     private static bool JumpLandsOnATag(ViewModel.DialogueViewModel d)
     {
         var tags = new HashSet<string>(StringComparer.OrdinalIgnoreCase);

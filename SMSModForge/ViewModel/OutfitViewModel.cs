@@ -60,7 +60,46 @@ public sealed class OutfitViewModel : ObservableObject, IFilterableTreeNode, IMa
     public string BlinkSprite
     {
         get => Model.BlinkSprite;
-        set { Model.BlinkSprite = value; OnPropertyChanged(); }
+        set { Model.BlinkSprite = value; OnPropertyChanged(); SeedPrefixesFromBlink(); }
+    }
+
+    /// <summary>
+    /// Put the blink art's folder into whichever prefix field is still empty.
+    /// <para/>
+    /// The overlays of one outfit almost always sit together, so by the time
+    /// the blink path is filled in the folder for the mouth and expression
+    /// frames is already known — and typing it a third time by hand is where
+    /// the typos come from. Only the folder is copied: the filename part is the
+    /// author's to choose, and guessing it would be worse than leaving it.
+    /// <para/>
+    /// Empty fields only, so this never overwrites an answer. It also fires only
+    /// once the path names a PNG, which keeps it from filling the prefix with
+    /// half a folder while someone is still typing the blink path.
+    /// <para/>
+    /// Runs on edits, not on load: an outfit read from disk keeps exactly the
+    /// prefixes it was saved with.
+    /// </summary>
+    private void SeedPrefixesFromBlink()
+    {
+        string path = Model.BlinkSprite ?? "";
+        if (!path.EndsWith(".png", System.StringComparison.OrdinalIgnoreCase)) return;
+
+        string folder = FolderOf(path);
+        if (folder.Length == 0) return;
+
+        if (string.IsNullOrWhiteSpace(MouthPrefix)) MouthPrefix = folder;
+        if (string.IsNullOrWhiteSpace(ExpressionPrefix)) ExpressionPrefix = folder;
+    }
+
+    /// <summary>Everything up to and including the last separator, in the
+    /// forward-slash form pack paths are stored in. Empty when the path names a
+    /// file at the pack root, which has no folder to copy.</summary>
+    private static string FolderOf(string path)
+    {
+        if (string.IsNullOrWhiteSpace(path)) return "";
+        string norm = path.Replace('\\', '/');
+        int slash = norm.LastIndexOf('/');
+        return slash < 0 ? "" : norm.Substring(0, slash + 1);
     }
 
     public bool BlinkEnabled

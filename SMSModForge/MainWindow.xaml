@@ -2831,7 +2831,7 @@
                                 </DockPanel>
                             </GroupBox>
 
-                            <GroupBox view:TutorialAnchor.Id="panel:outfitSprites" Header="Sprites (relative to pack root, 256×256 PNG)"
+                            <GroupBox view:TutorialAnchor.Id="panel:outfitSprites" Header="Sprites and expressions (relative to pack root, 256×256 PNG)"
                                       Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
                                                    RelativeSource={RelativeSource AncestorType=Window},
                                                    Converter={StaticResource BoolToVisibility}}">
@@ -2841,6 +2841,7 @@
                                         <ColumnDefinition Width="*"/>
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="Auto"/>
@@ -2874,32 +2875,45 @@
                                                        Grid.Row="3" Grid.Column="1"
                                                        IsEnabled="{Binding BlinkEnabled}"/>
                                     <CheckBox view:TutorialAnchor.Id="field:hasMouth" Content="Has Mouth frames" IsChecked="{Binding MouthEnabled}" ToolTip="Tick when the bust has numbered mouth frames, so the mouth animates while the line types." Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
+                                    <!-- Both prefix fields hold a PATH, not just a filename fragment, and
+                                         that was the thing people got wrong: the grey line under each one
+                                         used to describe a naming rule without ever saying where the file
+                                         was looked for. The trailing hint now shows the whole thing as one
+                                         line — what you typed, then what the game adds. -->
                                     <TextBlock Text="Mouth prefix:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  view:IssueTarget.Field="mouth" Text="{Binding MouthPrefix, UpdateSourceTrigger=PropertyChanged}" ToolTip="The name the mouth frames share before their number: Mouth, for Mouth1.PNG through Mouth4.PNG." Grid.Row="5" Grid.Column="1"
-                                              IsEnabled="{Binding MouthEnabled}"/>
-                                    <TextBlock Text="(loads {prefix}1..4.PNG)" Grid.Row="6" Grid.Column="1" Foreground="Gray" FontSize="10"/>
-                                </Grid>
-                            </GroupBox>
+                                    <ctl:SuffixHintBox view:IssueTarget.Field="mouth" Grid.Row="5" Grid.Column="1"
+                                                       Text="{Binding MouthPrefix, UpdateSourceTrigger=PropertyChanged}"
+                                                       Suffix="1.png/2.png/3.png/4.png"
+                                                       IsEnabled="{Binding MouthEnabled}"
+                                                       ToolTip="Path and filename start that the four mouth frames share, relative to the pack root — the same kind of path as the Base and Blink rows above, just without the number and the .png. Art/Anna/Mouth loads Art/Anna/Mouth1.png through Mouth4.png."/>
+                                    <TextBlock Text="A path from the pack root, without the number: Art/Anna/Mouth"
+                                               Grid.Row="6" Grid.Column="1" Foreground="Gray" FontSize="10"/>
 
-                            <GroupBox view:TutorialAnchor.Id="panel:outfitExpressions" Header="Expressions"
-                                      Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
-                                                   RelativeSource={RelativeSource AncestorType=Window},
-                                                   Converter={StaticResource BoolToVisibility}}">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="140"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="Auto"/>
-                                    </Grid.RowDefinitions>
-                                    <CheckBox view:TutorialAnchor.Id="field:hasExpressions" Content="Has Expressions" IsChecked="{Binding ExpressionEnabled}" ToolTip="Tick when the bust has expression artwork a line can switch to." Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
-                                    <TextBlock Text="Expr. prefix:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  view:IssueTarget.Field="expression" Text="{Binding ExpressionPrefix, UpdateSourceTrigger=PropertyChanged}" ToolTip="The name the expression files share before the expression: Expression, for ExpressionHappy.PNG." Grid.Row="1" Grid.Column="1"
-                                              IsEnabled="{Binding ExpressionEnabled}"/>
-                                    <TextBlock Text="(loads {prefix}Happy/Angry/Sad/Flirty.PNG)" Grid.Row="2" Grid.Column="1" Foreground="Gray" FontSize="10"/>
+                                    <!-- Expressions used to be a box of their own. They are the same kind
+                                         of thing as everything above — art for this outfit, named by a
+                                         prefix — and a whole panel for one tickbox and one field put them
+                                         further from the sprites they belong with. The anchor id stays on
+                                         the rows so tutorials still point at exactly these. -->
+                                    <Grid view:TutorialAnchor.Id="panel:outfitExpressions" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="140"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <CheckBox view:TutorialAnchor.Id="field:hasExpressions" Content="Has Expressions" IsChecked="{Binding ExpressionEnabled}" ToolTip="Tick when the bust has expression artwork a line can switch to." Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,6,0,0"/>
+                                        <TextBlock Text="Expr. prefix:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
+                                        <ctl:SuffixHintBox view:IssueTarget.Field="expression" Grid.Row="1" Grid.Column="1"
+                                                           Text="{Binding ExpressionPrefix, UpdateSourceTrigger=PropertyChanged}"
+                                                           Suffix="Happy.png/Angry.png/Sad.png/Flirty.png"
+                                                           IsEnabled="{Binding ExpressionEnabled}"
+                                                           ToolTip="Path and filename start that the four expression files share, relative to the pack root. Art/Anna/Expression loads Art/Anna/ExpressionHappy.png and its three siblings. Only those four names are ever looked for."/>
+                                        <TextBlock Text="A path from the pack root, without the mood: Art/Anna/Expression"
+                                                   Grid.Row="2" Grid.Column="1" Foreground="Gray" FontSize="10"/>
+                                    </Grid>
                                 </Grid>
                             </GroupBox>
 
@@ -2995,7 +3009,8 @@
                             </Grid.ColumnDefinitions>
                             <StackPanel>
                                 <TextBlock Text="Mouth frame"/>
-                                <ComboBox x:Name="MouthPicker" SelectedIndex="0"> ToolTip="Show the bust holding one particular mouth frame. Preview only - it changes nothing in the pack."
+                                <ComboBox x:Name="MouthPicker" SelectedIndex="0"
+                                          ToolTip="Show the bust holding one particular mouth frame. Preview only - it changes nothing in the pack.">
                                     <ComboBoxItem>Closed</ComboBoxItem>
                                     <ComboBoxItem>1</ComboBoxItem>
                                     <ComboBoxItem>2</ComboBoxItem>
@@ -3020,7 +3035,8 @@
                             </StackPanel>
                             <StackPanel Grid.Column="1">
                                 <TextBlock Text="Expression"/>
-                                <ComboBox x:Name="ExpressionPicker" SelectedIndex="0"> ToolTip="Show the bust in one particular expression. Preview only - it changes nothing in the pack."
+                                <ComboBox x:Name="ExpressionPicker" SelectedIndex="0"
+                                          ToolTip="Show the bust in one particular expression. Preview only - it changes nothing in the pack.">
                                     <ComboBoxItem Content="None"/>
                                     <ComboBoxItem Content="Happy"/>
                                     <ComboBoxItem Content="Angry"/>
