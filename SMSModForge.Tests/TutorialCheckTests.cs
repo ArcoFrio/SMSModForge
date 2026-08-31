@@ -85,6 +85,24 @@ public class TutorialCheckTests
     }
 
     [Fact]
+    public void Placing_an_npc_wants_one_actually_chosen()
+    {
+        var (w, step, scratch) = Reach("populating", "Put them in the room");
+        using var _ = w;
+
+        // The + button on its own gives an empty row: a placement of nobody,
+        // which costs nothing, breaks nothing and shows nothing.
+        w.Vm.SelectedPlace = w.Vm.Places[0];
+        var placed = w.Vm.SelectedPlace!.NpcsNode.AddNpc();
+        Assert.False(step.IsDone!(w.Vm, scratch),
+            "a placement with no NPC chosen passes the step");
+
+        placed.Npc = w.Vm.Npcs[0].Key;
+        Assert.True(step.IsDone!(w.Vm, scratch),
+            "a placement naming an NPC does not pass the step");
+    }
+
+    [Fact]
     public void Rejoining_branches_wants_the_jump_to_go_forward()
     {
         var (w, step, scratch) = Reach(Tutorial, "Letting one option say more");

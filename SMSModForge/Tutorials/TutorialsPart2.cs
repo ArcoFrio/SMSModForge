@@ -631,6 +631,25 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
+                    Title = "The droplets, over here too",
+                    Body = "Under Jiggle there is a Particles box with one tickbox in it. The " +
+                           "game's Wet particle preset — the droplets it uses for swim and " +
+                           "shower art — is attached to every pack bust whether you ask for it " +
+                           "or not; the tickbox only decides whether it is PLAYING when the " +
+                           "bust appears.\n\n" +
+                           "Leave it off for an ordinary outfit, or a dry character talks to " +
+                           "the player in the rain. Tick it on the swimsuit or just-out-of-the-" +
+                           "shower variant, which is the whole reason it exists.\n\n" +
+                           "NPCs have the same setting on their own tab, with one difference " +
+                           "worth knowing now: for an NPC the emitter's POSITION is set per " +
+                           "placement rather than on the definition, because the same figure " +
+                           "can stand in more than one room.",
+                    Kind = StepKind.Read,
+                    Tab = TabCharacters,
+                    Anchor = "panel:outfitParticles",
+                },
+                new TutorialStep
+                {
                     Title = "What the preview can show you",
                     Body = "Breathing is already on, and it is the mask doing its work — the " +
                            "fastest way to tell whether you painted too much. Depth beside it is " +
@@ -748,9 +767,14 @@ internal static class TutorialsPart2
                 new TutorialStep
                 {
                     Title = "Put them in the room",
-                    Body = "Back on Places, use + Add NPC on the place you built, and choose the " +
-                           "one you just made. The same NPC can stand in as many rooms as you " +
-                           "like — you are placing a copy, not moving the original.",
+                    Body = "Back on Places, use + Add NPC on the place you built. That gives you " +
+                           "an empty placement row, and the first field on it is the one that " +
+                           "matters: NPC. Pick the one you just defined.\n\n" +
+                           "A row with that field blank is a placement of nobody. It costs " +
+                           "nothing, breaks nothing and shows nothing, which is exactly why it " +
+                           "is easy to leave behind and hard to find later.\n\n" +
+                           "The same NPC can stand in as many rooms as you like — you are " +
+                           "placing a copy, not moving the original.",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "btn:addNpcToPlace",
@@ -760,8 +784,13 @@ internal static class TutorialsPart2
                     // place you built" is unfinishable without it.
                     AlsoAllow = new[] { "panel:placeGameObjects", "panel:placeList" },
                     OnEnter = (vm, s) => s.Set("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0),
-                    IsDone = (vm, s) => s.GrewSince("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0),
-                    Hint = "+ Add NPC, under GameObjects on the Places tab.",
+                    // Adding the row is half of it. The NPC field decides who is
+                    // standing there, and a placement that never gets one is the
+                    // quiet kind of mistake: the room simply has nobody in it.
+                    IsDone = (vm, s) => s.GrewSince("placed", vm.SelectedPlace?.NpcsNode.Npcs.Count ?? 0) &&
+                                        vm.SelectedPlace is { } pl &&
+                                        pl.NpcsNode.Npcs.Any(n => !string.IsNullOrWhiteSpace(n.Npc)),
+                    Hint = "+ Add NPC under GameObjects, then pick your NPC in the row's NPC box.",
                 },
                 new TutorialStep
                 {
@@ -774,8 +803,11 @@ internal static class TutorialsPart2
                     Tab = TabPlaces,
                     Anchor = "panel:placeGameObjects",
                     AlsoAllow = new[] { "panel:placeList" },
+                    // The same row from the previous step, so it has to be the
+                    // one that actually names somebody.
                     IsDone = (vm, s) => vm.SelectedPlace is { } p &&
-                                        p.NpcsNode.Npcs.Any(n => n.StartActive),
+                                        p.NpcsNode.Npcs.Any(n => n.StartActive &&
+                                                                 !string.IsNullOrWhiteSpace(n.Npc)),
                     Hint = "Start active, on the placement's own row under GameObjects.",
                 },
                 new TutorialStep
@@ -783,7 +815,17 @@ internal static class TutorialsPart2
                     Title = "Place them properly",
                     Body = "Drag them somewhere that makes sense for the room, and check the " +
                            "sorting order so they are not standing behind the furniture. The " +
-                           "preview shows it at the size players will see.",
+                           "preview shows it at the size players will see.\n\n" +
+                           "Click the figure and a small toolbar appears in the top-right " +
+                           "corner of the preview. Its first row is what you are moving: Body, " +
+                           "Shadow, Blink or Wet. The second is how — Move, Rotate or Scale.\n\n" +
+                           "That is how a shadow gets nudged out from under someone standing " +
+                           "half behind a table, or the droplet emitter gets lifted to where " +
+                           "the water would actually be. All four live on the PLACEMENT, not " +
+                           "on the NPC, so moving the shadow here does not move it in any " +
+                           "other room the same NPC stands in.\n\n" +
+                           "The same fields are on the placement row under Part transforms, if " +
+                           "you would rather type a number than drag.",
                     Kind = StepKind.Read,
                     Tab = TabPlaces,
                     Anchor = "panel:placePreview",

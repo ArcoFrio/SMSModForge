@@ -2161,6 +2161,14 @@
 
         <!-- Status / issues bar -->
         <StatusBar DockPanel.Dock="Bottom">
+            <!-- The notice is FIRST because a StatusBar lays its items out in a
+                 DockPanel: docking it right before the issue count is added is
+                 what pins it to the far edge rather than trailing the count. -->
+            <StatusBarItem DockPanel.Dock="Right">
+                <TextBlock FontWeight="SemiBold" Margin="0,0,4,0"
+                           Text="ModForge is free — get it from the Starmaker Story Discord. If you paid for it, you were scammed."
+                           ToolTip="ModForge is free software and is only ever distributed through the Starmaker Story Discord server. Nobody is authorised to sell it, and there is no paid version, no premium build and no early access. If you paid anyone for this program, you were scammed — the same copy, and every update, is free on the Discord."/>
+            </StatusBarItem>
             <TextBlock>
                 <Run Text="{Binding Issues.Count, Mode=OneWay}"/>
                 <Run Text=" issue(s)"/>
@@ -2989,7 +2997,7 @@
                                 </Grid>
                             </GroupBox>
 
-                            <GroupBox Header="Particles"
+                            <GroupBox view:TutorialAnchor.Id="panel:outfitParticles" Header="Particles"
                                       Visibility="{Binding DataContext.SelectedCharacter.IsPackBust,
                                                    RelativeSource={RelativeSource AncestorType=Window},
                                                    Converter={StaticResource BoolToVisibility}}">
