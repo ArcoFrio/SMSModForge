@@ -3272,10 +3272,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="Stable key placements reference this NPC by."/>
-                                    <TextBox ToolTip="Stable key placements reference this NPC by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                               ToolTip="Stable key placements reference this NPC by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established NPC is never renamed underneath whatever already points at it."/>
+                                    <TextBox ToolTip="Stable key placements reference this NPC by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established NPC is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -3741,12 +3741,12 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name (button):" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="(Used on the in-game map button label.)"
                                                Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;)."/>
-                                    <TextBox ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;)."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+                                               ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;). Filled in from the display name while you have not set one yourself; type here and it stops following, so an established place is never renamed underneath whatever already points at it."/>
+                                    <TextBox ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;). Filled in from the display name while you have not set one yourself; type here and it stops following, so an established place is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
                                     <TextBlock Text="Internal GO name:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox  view:IssueTarget.Field="internalName" Text="{Binding InternalName, UpdateSourceTrigger=PropertyChanged}" ToolTip="The object the level is built as in game." Grid.Row="3" Grid.Column="1"/>
                                 </Grid>
@@ -4732,10 +4732,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="Stable identifier actions/conditions reference this by."/>
-                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                               ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."/>
+                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -4855,10 +4855,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
-                                              ToolTip="GameObject name under 12_AudioPlayer — also what SwitchMusic references in its `music` param."/>
+                                              ToolTip="GameObject name under 12_AudioPlayer — also what SwitchMusic references in its `music` param. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established track is never renamed underneath whatever already points at it."/>
                                 </Grid>
                             </GroupBox>
 
@@ -4961,10 +4961,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
-                                              ToolTip="Referenced by PlaySFX node actions as `clip`."/>
+                                              ToolTip="Referenced by PlaySFX node actions as `clip`. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established effect is never renamed underneath whatever already points at it."/>
                                 </Grid>
                             </GroupBox>
 
@@ -5080,10 +5080,10 @@
                                         <RowDefinition Height="Auto"/>
                                     </Grid.RowDefinitions>
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="Stable identifier actions/conditions reference this by."/>
-                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                               ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."/>
+                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
                                 </Grid>
                             </GroupBox>
 
@@ -5439,11 +5439,11 @@
                                     </Grid.RowDefinitions>
 
                                     <TextBlock Text="Display name:"  Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists. Yours to read; the runtime name beside it is what the pack points at."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
+                                    <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
 
                                     <TextBlock Text="Runtime name:"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
-                                               ToolTip="Stable identifier — used in logs and for the rule's edge tracking."/>
-                                    <TextBox ToolTip="Stable identifier — used in logs and for the rule's edge tracking."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                               ToolTip="Stable identifier — used in logs and for the rule's edge tracking. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established rule is never renamed underneath whatever already points at it."/>
+                                    <TextBox ToolTip="Stable identifier — used in logs and for the rule's edge tracking. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established rule is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
 
                                     <TextBlock Text="Description:"   Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                                     <TextBox  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="0,4,0,0"
