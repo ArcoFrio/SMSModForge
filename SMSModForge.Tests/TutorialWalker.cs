@@ -457,6 +457,24 @@ internal static class TutorialSolutions
             a.Model.Params["name"] = "MetTheGirl";
             a.Model.Params["value"] = "true";
         },
+        ["remembering / When one value is not enough"] = w =>
+        {
+            w.Vm.AddVariableCommand.Execute(null);
+            w.Vm.SelectedVariable!.Name = "TopicsDiscussed";
+            // The type is the whole point of the step; the check counts
+            // List-typed variables, not variables.
+            w.Vm.SelectedVariable!.Model.Type = SMSModForge.Model.PackVariableType.List;
+        },
+        ["remembering / Putting things in and asking what is there"] = w =>
+        {
+            var n = w.Vm.SelectedDialogue!.Nodes[0];
+            w.Vm.SelectedNode = n;
+            w.Vm.AddNodeActionOnFinishCommand.Execute(null);
+            var a = n.ActionsOnFinish.Last();
+            a.Model.Type = SMSModForge.Model.NodeActionTypes.AddToList;
+            a.Model.Params["list"] = "TopicsDiscussed";
+            a.Model.Params["value"] = "TheWeather";
+        },
         ["remembering / Give them something to unlock"] = w =>
         {
             w.Vm.AddWallpaperCommand.Execute(null);
@@ -471,7 +489,7 @@ internal static class TutorialSolutions
             GiveADialogueLine(w);
             w.Vm.SelectedDialogue!.Nodes[0].Text = "You have [PV:MetTheGirl] of those.";
         },
-        ["values-in-text / Use a variable instead of typing a value"] = w =>
+        ["values-in-text / A value you do not know yet"] = w =>
         {
             var n = w.Vm.SelectedDialogue!.Nodes[0];
             w.Vm.SelectedNode = n;

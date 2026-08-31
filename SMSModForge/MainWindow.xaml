@@ -1495,10 +1495,17 @@
                     <TextBox Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Row="1" Grid.Column="1"
                              ToolTip="Button text. Supports [PV:variableName] tokens that re-resolve live from String pack variables — change the variable via a dialogue action or Integration rule and the button renames in place."/>
+                    <!-- The pack's own tracks, by runtime name. Editable rather than a
+                         closed list: the field names a child under 12_AudioPlayer, and the
+                         game's own tracks live there too, so a pack may legitimately point
+                         at one it did not author. -->
                     <TextBlock Text="Music (optional):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
-                             Grid.Row="2" Grid.Column="1"
-                             ToolTip="Optional name of a child under 12_AudioPlayer to enable when this button is pressed"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1"
+                              IsEditable="True"
+                              ItemsSource="{Binding DataContext.MusicKeyOptions,
+                                            RelativeSource={RelativeSource AncestorType=Window}}"
+                              Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
+                              ToolTip="Track to switch to when this button is pressed, by its runtime name on the Music tab. Editable, so a vanilla track already under 12_AudioPlayer can be named too; blank leaves the music alone."/>
                     <!-- Conditions -->
                     <TextBlock Text="Conditions:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                     <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,2,0,0">
@@ -3921,9 +3928,12 @@
 
                                             <!-- Music -->
                                             <TextBlock Text="Music (optional):" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"/>
-                                            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
-                                                     Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
-                                                     ToolTip="Optional child name under 12_AudioPlayer to enable on click (e.g. MyTrack)"/>
+                                            <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
+                                                      IsEditable="True"
+                                                      ItemsSource="{Binding DataContext.MusicKeyOptions,
+                                                                    RelativeSource={RelativeSource AncestorType=Window}}"
+                                                      Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
+                                                      ToolTip="Track to switch to when this button is pressed, by its runtime name on the Music tab. Editable, so a vanilla track already under 12_AudioPlayer can be named too; blank leaves the music alone."/>
 
                                             <!-- Visibility conditions — same row shape the
                                                  navigator buttons use. All must pass for the
@@ -3978,6 +3988,51 @@
                         <ContentControl DockPanel.Dock="Top" Focusable="False"
                                         DataContext="{Binding DialogueTreeFilter}"
                                         Template="{StaticResource SidebarSearchTemplate}"/>
+                        <!-- Token cheatsheet, pinned under the list. These four are the ones
+                             confirmed to resolve, and three of them stand for a name the PLAYER
+                             chose — which is exactly why they are easy to forget and write out
+                             by hand instead. Docked before the TreeView so the tree keeps the
+                             remaining height. -->
+                        <Border DockPanel.Dock="Bottom" Margin="4,4,4,4" Padding="6,4"
+                                CornerRadius="3" BorderThickness="1"
+                                BorderBrush="{DynamicResource Theme.Accent}"
+                                Background="{DynamicResource Theme.Surface}"
+                                ToolTip="The game lets each player choose what they call their family, so these three differ from save to save. Writing the word yourself says it to everyone — including the player who chose something else, who cannot tell your line from the game losing their choice. Validate warns when it spots one.">
+                            <StackPanel>
+                                <TextBlock Text="In dialogue text" FontWeight="SemiBold" FontSize="10"
+                                           Margin="0,0,0,3" Opacity="0.8"/>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{}{PC}"
+                                               FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                    <TextBlock Grid.Row="0" Grid.Column="1" Text="the player’s name"
+                                               FontSize="10" Opacity="0.85" VerticalAlignment="Center" Margin="0,0,0,1"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{}{M}"
+                                               FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                    <TextBlock Grid.Row="1" Grid.Column="1" Text="what they call Anna"
+                                               FontSize="10" Opacity="0.85" VerticalAlignment="Center" Margin="0,0,0,1"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{}{D}"
+                                               FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                    <TextBlock Grid.Row="2" Grid.Column="1" Text="what they call Josef"
+                                               FontSize="10" Opacity="0.85" VerticalAlignment="Center" Margin="0,0,0,1"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{}{B}"
+                                               FontFamily="Consolas" FontSize="11" Margin="0,0,8,1"/>
+                                    <TextBlock Grid.Row="3" Grid.Column="1" Text="what they call Adrian"
+                                               FontSize="10" Opacity="0.85" VerticalAlignment="Center" Margin="0,0,0,1"/>
+                                </Grid>
+                                <TextBlock Text="Players rename all three — write the token, not the name."
+                                           FontSize="9" Opacity="0.7" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                            </StackPanel>
+                        </Border>
                         <TreeView x:Name="DialogueTreeView"
                                   ItemsSource="{Binding DialogueTree}"
                                   SelectedItemChanged="DialogueTree_SelectedItemChanged"

@@ -222,6 +222,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "lines-that-choose",
+            // Rewritten since authors first ran it: gates, jumps and the returning-menu shape.
+            Revision = 2,
             Group = "Dialogues",
             Title = "Lines that choose themselves",
             Summary = "Gate a line on the state of the room, and let two speakers share a scene.",
@@ -394,6 +396,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "a-face-that-moves",
+            // Rewritten since authors first ran it: the prefix fields and the preview controls.
+            Revision = 2,
             Group = "Characters",
             Title = "A face that moves",
             Summary = "Give a bust its blink, its mouth and its expressions.",
@@ -541,6 +545,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "making-it-move",
+            // Rewritten since authors first ran it: where masks go, and why the face stays still.
+            Revision = 2,
             Group = "Characters",
             Title = "Making it move",
             Summary = "Paint a jiggle mask and tune it until the bust moves the way you want.",
@@ -694,6 +700,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "populating",
+            // Rewritten since authors first ran it: placements, and the preview gizmo.
+            Revision = 2,
             Group = "NPCs",
             Title = "Populating the room",
             Summary = "Add standing figures to your place, with shadows that sit them on the floor.",
@@ -847,6 +855,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "npcs-that-belong",
+            // Rewritten since authors first ran it: NPC blink art, and positioning a reflection.
+            Revision = 2,
             Group = "NPCs",
             Title = "One person, two places",
             Summary = "Reuse an NPC, and give it a reflection and a blink so it sits in the room.",
@@ -989,6 +999,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "sound-in-a-room",
+            // Rewritten since authors first ran it: playing a track, and the PlaySFX action.
+            Revision = 2,
             Group = "Media",
             Title = "Sound in a room",
             Summary = "Add a music track and a sound effect, and make one fire from a line.",
@@ -1055,7 +1067,11 @@ internal static class TutorialsPart2
                            "through that door now changes the music.\n\n" +
                            "One track plays at a time, and pressing the button switches to " +
                            "this one, so a button that leads back out wants a Music of its " +
-                           "own or the room's track follows the player out.",
+                           "own or the room's track follows the player out.\n\n" +
+                           "Map buttons have the same box, and it is the more common place " +
+                           "for it: the world map is how a player reaches most locations, so " +
+                           "if you built one in tutorial 4, give it the same treatment. Same " +
+                           "field, same runtime name, same one-at-a-time rule.",
                     Kind = StepKind.Do,
                     Tab = TabPlaces,
                     Anchor = "panel:extNavigatorButtons",
@@ -1178,6 +1194,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "remembering",
+            // Rewritten since authors first ran it: list variables.
+            Revision = 2,
             Group = "Logic",
             Title = "Remembering things",
             Summary = "Give the pack a memory, and use it to gate what players can see.",
@@ -1277,6 +1295,71 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
+                    Title = "When one value is not enough",
+                    Body = "Bool, Int, Float and String each hold ONE thing. A LIST holds " +
+                           "any number of strings, in order, and it exists for the question " +
+                           "the other four answer badly: which of these has the player " +
+                           "already done?\n\n" +
+                           "Six topics they can ask about is six Bools and six conditions " +
+                           "with the other four. It is one List with the topics they have " +
+                           "used in it, and the same single condition on every option.\n\n" +
+                           "Add one now: + Variable, Type set to List. Give it a name that " +
+                           "reads as a plural, because that is what it holds — " +
+                           "TopicsDiscussed rather than Topic.",
+                    Kind = StepKind.Do,
+                    Tab = TabVariables,
+                    Anchor = "btn:addVariable",
+                    AlsoAllow = new[] { "panel:variableDetail" },
+                    OnEnter = (vm, s) => s.Set("lists", ListCount(vm)),
+                    IsDone = (vm, s) => s.GrewSince("lists", ListCount(vm)),
+                    Hint = "+ Variable, then set Type to List and rename it.",
+                },
+                new TutorialStep
+                {
+                    Title = "Putting things in and asking what is there",
+                    Body = "A list has its own verbs, and they are the whole feature.\n\n" +
+                           "To CHANGE it, from a node action: Add to list appends a value, " +
+                           "Remove from list takes the first matching one back out, and " +
+                           "Clear list empties it. Adding the same value twice really does " +
+                           "store it twice — nothing de-duplicates for you, so check before " +
+                           "you add if that matters.\n\n" +
+                           "To ASK about it, from conditions: ListContains passes when a " +
+                           "particular value is in there — negate it for \"has not been used " +
+                           "yet\", which is the shape you want on a menu option. ListCount " +
+                           "compares how many entries there are against a number, so equals " +
+                           "zero means empty and negating that means something is in it.\n\n" +
+                           "Two more read it: Random from list picks one entry and writes it " +
+                           "into another variable, and List count writes the size into an " +
+                           "Int. Both are operations on the Variable action rather than " +
+                           "actions of their own.\n\n" +
+                           "Add one to your list from a node now — an action on finish, Add " +
+                           "to list, naming the list and a value.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:actionsOnFinishBox",
+                    AlsoAllow = new[] { "panel:dialogueNodes", "panel:nodeEditor" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d &&
+                                        d.Nodes.Any(n => HasListAction(n)),
+                    Hint = "+ Add action on a node, Type = AddToList, then the list and a value.",
+                },
+                new TutorialStep
+                {
+                    Title = "The list you will actually use it for",
+                    Body = "The pattern worth remembering, because it turns up constantly: a " +
+                           "Choice whose options each add their own name to a list and gate " +
+                           "themselves on NOT containing it.\n\n" +
+                           "The player sees the topics they have not asked about yet, the " +
+                           "menu shrinks as they work through it, and when the last one goes " +
+                           "the choice is empty — so keep one option outside the pattern that " +
+                           "always shows and ends the conversation.\n\n" +
+                           "Written with Bools that is a variable and a condition per topic. " +
+                           "Written with a list it is the same two rows on every option, and " +
+                           "adding a seventh topic costs nothing.",
+                    Kind = StepKind.Read,
+                    Tab = TabVariables,
+                },
+                new TutorialStep
+                {
                     Title = "Watch it change something",
                     Body = "Export and go through. Check the wallpaper is locked, have the " +
                            "conversation that sets your variable, then check again. That " +
@@ -1292,6 +1375,8 @@ internal static class TutorialsPart2
         new TutorialDef
         {
             Id = "values-in-text",
+            // Rewritten since authors first ran it: who the family tokens name, and what $ is for.
+            Revision = 2,
             Group = "Logic",
             Title = "Putting a value into a line",
             Summary = "Show a variable in dialogue, and use one in place of a typed-in value.",
@@ -1336,13 +1421,16 @@ internal static class TutorialsPart2
                 {
                     Title = "The names the player chose",
                     Body = "The game has names of its own, and they are not yours to set. " +
-                           "{PC} is the player's name. {M}, {D} and {B} are what THIS player " +
-                           "calls their mother, father and brother — they picked those words at " +
-                           "the start, and they differ from player to player.\n\n" +
-                           "So write {M} rather than Mom. A line that spells the word out says " +
-                           "it to everyone, including the player who chose something else, and " +
-                           "they cannot tell your line from the game losing their choice. " +
-                           "Validate warns about it if you forget.\n\n" +
+                           "{PC} is the player's name. The other three stand for the family, " +
+                           "one token each:\n\n" +
+                           "{M} is what this player calls Anna. {D} is what they call Josef. " +
+                           "{B} is what they call Adrian.\n\n" +
+                           "Each player chose those words at the start, so they differ from " +
+                           "save to save — which is the whole reason the tokens exist.\n\n" +
+                           "So write {M} rather than Mom, or Anna. A line that spells it out " +
+                           "says that one word to everyone, including the player who chose " +
+                           "something else, and they cannot tell your line from the game " +
+                           "losing their choice. Validate warns about it if you forget.\n\n" +
                            "Those four are the ones known to work. What makes a braced word one " +
                            "of these is not documented, so treat any other as unsupported until " +
                            "you have watched it resolve in game.",
@@ -1352,21 +1440,35 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
-                    Title = "Use a variable instead of typing a value",
-                    Body = "The other direction. Anywhere an action or a condition takes a " +
-                           "value, $name uses whatever that variable currently holds instead of " +
-                           "a number or word you fix now.\n\n" +
-                           "Add an action to a node and put $ followed by your variable's name " +
-                           "in one of its boxes. One dollar sign and the name, no brackets — a " +
-                           "different notation from the text one, which is the part worth " +
-                           "remembering.\n\n" +
-                           "This is what lets a rule act on whatever a variable currently names " +
-                           "— hiding whichever object was showing, without listing every " +
-                           "object it might have been.",
+                    Title = "A value you do not know yet",
+                    Body = "[PV:name] SHOWS a variable to the player. $name is the other " +
+                           "direction: it hands the variable's value to an action or a " +
+                           "condition, in place of the number or word you would otherwise " +
+                           "type in. Nobody reads it — it never reaches the screen.\n\n" +
+                           "Why that matters: a typed-in value is decided now, while you are " +
+                           "authoring. A $name value is decided later, while the game is " +
+                           "running, and can be different every time.\n\n" +
+                           "Make one and watch. Declare a String variable — call it " +
+                           "LastPropShown — and leave its default empty. Then on some node, " +
+                           "add TWO actions on finish. The first is a Variable action, " +
+                           "Operation Set, writing the name of the prop you put in your room " +
+                           "into LastPropShown. The second is Set-Active with its Target " +
+                           "typed as $LastPropShown — one dollar sign, then the variable " +
+                           "name, no brackets and no spaces.\n\n" +
+                           "The second action does not name the prop. It hides whatever the " +
+                           "first one wrote down. Change what the first action writes — from " +
+                           "a different node, or an integration rule — and the second acts " +
+                           "on something else without being edited.\n\n" +
+                           "That is the shape it earns its keep in: one action that says " +
+                           "\"put back whatever was showing\" instead of one action per " +
+                           "object that might have been. It works in condition boxes too, so " +
+                           "a gate can compare against a value chosen at runtime.\n\n" +
+                           "One trap: $$ is how you write a literal dollar sign, for the rare " +
+                           "line where you want one.",
                     Kind = StepKind.Do,
                     Tab = TabDialogues,
                     Anchor = "panel:actionsOnFinishBox",
-                    AlsoAllow = new[] { "panel:dialogueNodes", "panel:nodeEditor" },
+                    AlsoAllow = new[] { "panel:dialogueNodes", "panel:nodeEditor", "panel:variableDetail" },
                     IsDone = (vm, s) => vm.SelectedDialogue is { } d && UsesADollarValue(d),
                     Hint = "Add an action on finish, then type $ and your variable name into a value box.",
                 },
@@ -1627,6 +1729,34 @@ internal static class TutorialsPart2
     /// <summary>Whether a node fires a sound through an action rather than
     /// through text. Either list counts: an effect on start and one on finish
     /// are both the action route, and which fits is the author's call.</summary>
+    /// <summary>How many List-typed variables the pack declares.</summary>
+    private static int ListCount(ViewModel.MainViewModel vm)
+    {
+        int n = 0;
+        foreach (var v in vm.Variables)
+            if (v.Model.Type == Model.PackVariableType.List) n++;
+        return n;
+    }
+
+    /// <summary>Whether a node writes to a list. Add is what the step asks
+    /// for; the other two are the same lesson, so an author who reached for
+    /// Remove or Clear instead has understood it.</summary>
+    private static bool HasListAction(ViewModel.DialogueNodeViewModel n)
+    {
+        foreach (var list in new[] { n.Model.ActionsOnStart, n.Model.ActionsOnFinish })
+        {
+            if (list == null) continue;
+            foreach (var a in list)
+                if ((a.Type == Model.NodeActionTypes.AddToList ||
+                     a.Type == Model.NodeActionTypes.RemoveFromList ||
+                     a.Type == Model.NodeActionTypes.ClearList) &&
+                    a.Params.TryGetValue("list", out var l) &&
+                    !string.IsNullOrWhiteSpace(l))
+                    return true;
+        }
+        return false;
+    }
+
     private static bool HasPlaySfx(ViewModel.DialogueNodeViewModel n)
     {
         foreach (var list in new[] { n.Model.ActionsOnStart, n.Model.ActionsOnFinish })

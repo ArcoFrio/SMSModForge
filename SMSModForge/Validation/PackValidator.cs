@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using System.IO;
 using System.Linq;
 using SMSModForge.Model;
@@ -200,6 +201,87 @@ public static class PackValidator
             }
     }
 
+    /// <summary>
+    /// <c>[PV:name]</c> tokens that will not do what they look like.
+    /// <para/>
+    /// Two failures, both silent, which is the whole reason to check them:
+    /// <list type="bullet">
+    ///   <item>A name no variable in this pack declares. The runtime asks the
+    ///   store for it and the store answers with an empty string, so the token
+    ///   does not stay on screen looking wrong — it VANISHES, and the line just
+    ///   reads oddly with a word missing.</item>
+    ///   <item>A token that never closes: <c>[PV:gold</c>, or a bracket that
+    ///   turned into a brace. The pattern needs a closing <c>]</c>, so a
+    ///   mistyped one matches nothing and is printed to the player exactly as
+    ///   it was typed.</item>
+    /// </list>
+    /// Warnings, not errors: a name can legitimately be filled in later, and a
+    /// stray bracket in ordinary prose is the author's business.
+    /// </summary>
+    private static void CheckTextTokens(List<ValidationIssue> issues, ModPack pack)
+    {
+        var declared = new HashSet<string>(System.StringComparer.Ordinal);
+        foreach (var v in pack.Variables) declared.Add(v.Name);
+
+        void Sweep(string text, string where)
+        {
+            if (string.IsNullOrEmpty(text) || text.IndexOf("[PV:", System.StringComparison.Ordinal) < 0)
+                return;
+
+            foreach (Match m in TokenRx.Matches(text))
+            {
+                string name = m.Groups[1].Value.Trim();
+                // A templated name ({item} inside a repeating rule) is resolved
+                // before the runtime ever sees it, so it cannot be checked here.
+                if (name.Length == 0 || IsTemplated(name) || declared.Contains(name)) continue;
+                issues.Add(new(Severity.Warning, where,
+                    $"Text uses [PV:{name}], but no variable called '{name}' is declared in " +
+                    "this pack. An undeclared name reads as an empty string, so the token " +
+                    "disappears from the line rather than showing up as a mistake.",
+                    "text.unknownPackVar"));
+            }
+
+            // Every "[PV:" that TokenRx did not consume never closed.
+            int opens = CountOccurrences(text, "[PV:");
+            int closed = TokenRx.Matches(text).Count;
+            if (opens > closed)
+                issues.Add(new(Severity.Warning, where,
+                    "Text has a [PV: that never closes with a ]. The token only counts " +
+                    "when it ends in a square bracket, so this one is shown to the player " +
+                    "exactly as it was typed.",
+                    "text.malformedToken"));
+        }
+
+        foreach (var d in pack.Dialogues)
+            foreach (var n in d.Nodes)
+                Sweep(n.Text, $"dialogues[{d.Key}].nodes[{n.Id}].text");
+
+        // Button labels resolve the same syntax, live, every tick.
+        foreach (var b in pack.MapButtons)
+            Sweep(b.Label, $"mapButtons[{b.Target}].label");
+
+        foreach (var pl in pack.Places)
+            foreach (var b in pl.NavigatorButtons)
+                Sweep(b.Label, $"places[{pl.Key}].navigatorButtons.label");
+
+        foreach (var e in pack.VanillaExtensions)
+            foreach (var b in e.NavigatorButtons)
+                Sweep(b.Label, $"vanillaExtensions[{e.Source}].navigatorButtons.label");
+    }
+
+    /// <summary>Same pattern the runtime substitutes with — see
+    /// TextPlaceholders in the plugin. Kept identical on purpose: a checker
+    /// that accepted more than the runtime does would pass tokens that then
+    /// fail in game.</summary>
+    private static readonly Regex TokenRx = new(@"\[PV:([^\]]+)\]", RegexOptions.Compiled);
+
+    private static int CountOccurrences(string haystack, string needle)
+    {
+        int n = 0, i = 0;
+        while ((i = haystack.IndexOf(needle, i, System.StringComparison.Ordinal)) >= 0)
+        { n++; i += needle.Length; }
+        return n;
+    }
     public static bool IsIgnored(ModPack pack, ValidationIssue issue)
         => pack.IgnoredIssues.Contains(issue.Key) ||
            (issue.Code.Length > 0 && pack.IgnoredIssues.Contains(issue.Code));
@@ -217,6 +299,7 @@ public static class PackValidator
         CheckChoiceOptionActions(issues, pack);
         CheckChoicesWithoutOptions(issues, pack);
         CheckKinWordsInText(issues, pack);
+        CheckTextTokens(issues, pack);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", "packId is required"));
