@@ -2395,30 +2395,53 @@
                                      ItemsSource="{Binding Issues}"
                                      HorizontalContentAlignment="Stretch"
                                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                     MouseDoubleClick="IssueList_MouseDoubleClick">
+                                     MouseDoubleClick="IssueList_MouseDoubleClick"
+                                     ContextMenuOpening="IssueList_ContextMenuOpening">
+                                <!-- The three entries are enabled by what the selected row IS,
+                                     in IssueList_ContextMenuOpening. All three used to be offered
+                                     on every row, including "Stop ignoring this" on rows that are
+                                     not ignored — which reads as an action with no way to reach
+                                     it, since silenced issues are hidden until the Show checkbox
+                                     above lists them. -->
                                 <ListBox.ContextMenu>
                                     <ContextMenu>
-                                        <MenuItem Header="Ignore this issue" Click="IgnoreIssue_Click"
+                                        <MenuItem x:Name="MenuIgnoreIssue" Header="Ignore this issue" Click="IgnoreIssue_Click"
                                                   ToolTip="Stop reporting this one thing, in this one place."/>
-                                        <MenuItem Header="Ignore every issue like it" Click="IgnoreIssueCode_Click"
+                                        <MenuItem x:Name="MenuIgnoreCode" Header="Ignore every issue like it" Click="IgnoreIssueCode_Click"
                                                   ToolTip="Stop reporting this kind of issue anywhere in the pack."/>
                                         <Separator/>
-                                        <MenuItem Header="Stop ignoring this" Click="UnignoreIssue_Click"
-                                                  ToolTip="Report this again. Only does anything for an issue you have silenced."/>
+                                        <MenuItem x:Name="MenuUnignoreIssue" Header="Stop ignoring this" Click="UnignoreIssue_Click"
+                                                  ToolTip="Report this one again. Enabled only on a row that is already silenced — tick Show ignored above to list those."/>
                                     </ContextMenu>
                                 </ListBox.ContextMenu>
                                 <ListBox.ItemTemplate>
                                     <DataTemplate>
+                                        <!-- Dimmed and marked when the row is one of the silenced ones,
+                                             which only appear at all while Show ignored is ticked. Without
+                                             the marking the list mixes dealt-with and outstanding issues
+                                             with nothing to tell them apart. -->
                                         <Grid ToolTip="{Binding Message}" Cursor="Hand"
                                               Background="Transparent">
+                                            <Grid.Style>
+                                                <Style TargetType="Grid">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Ignored}" Value="True">
+                                                            <Setter Property="Opacity" Value="0.55"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Grid.Style>
                                             <Grid.ColumnDefinitions>
                                                 <ColumnDefinition Width="60"/>
                                                 <ColumnDefinition Width="180"/>
+                                                <ColumnDefinition Width="Auto"/>
                                                 <ColumnDefinition Width="*"/>
                                             </Grid.ColumnDefinitions>
                                             <TextBlock Grid.Column="0" Text="{Binding Severity}" FontWeight="Bold"/>
                                             <TextBlock Grid.Column="1" Text="{Binding Where}"   Foreground="Gray" TextTrimming="CharacterEllipsis"/>
-                                            <TextBlock Grid.Column="2" Text="{Binding Message}" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Grid.Column="2" Text="ignored  " Foreground="Gray" FontStyle="Italic"
+                                                       Visibility="{Binding Ignored, Converter={StaticResource BoolToVisibility}}"/>
+                                            <TextBlock Grid.Column="3" Text="{Binding Message}" TextTrimming="CharacterEllipsis"/>
                                         </Grid>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>

@@ -675,6 +675,33 @@ public partial class MainWindow : Window
     private SMSModForge.Validation.ValidationIssue? SelectedIssue
         => IssueList?.SelectedItem as SMSModForge.Validation.ValidationIssue;
 
+    /// <summary>
+    /// Enable each entry by what the selected row actually is.
+    /// <para/>
+    /// All three used to be offered on every row. "Stop ignoring this" on an
+    /// issue that is not ignored reads as an action with no way to reach it —
+    /// silenced issues are hidden until Show ignored is ticked, so the question
+    /// it raises is how anyone was ever meant to click it. Greying it out
+    /// answers that: on a silenced row it lights up.
+    /// </summary>
+    private void IssueList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        var issue = SelectedIssue;
+
+        // No row under the pointer means nothing to act on. Cancelling beats
+        // showing three greyed-out entries.
+        if (issue == null) { e.Handled = true; return; }
+
+        MenuIgnoreIssue.IsEnabled = !issue.Ignored;
+        // A code-wide rule needs a code, and the older checks do not have one.
+        MenuIgnoreCode.IsEnabled = !issue.Ignored && issue.Code.Length > 0;
+        MenuUnignoreIssue.IsEnabled = issue.Ignored;
+
+        MenuIgnoreCode.ToolTip = issue.Code.Length > 0
+            ? "Stop reporting this kind of issue anywhere in the pack."
+            : "This check has no code yet, so it can only be ignored one at a time.";
+    }
+
     private void IgnoreIssue_Click(object sender, RoutedEventArgs e)
     {
         if (DataContext is MainViewModel vm && SelectedIssue is { } i)

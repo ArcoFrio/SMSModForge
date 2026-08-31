@@ -15,6 +15,19 @@
   edge phase on a dialogue node's own conditions, which are checked once when
   the conversation reaches the node and so will almost never catch one.
 
+### Fixed
+
+- The app icon carried a single 32x32 frame, so everywhere Windows wanted
+  something bigger it was upscaling 32 pixels. It now holds 16 through 256,
+  each resampled from the 512x512 source.
+- Context menus painted a light band down their left edge, over the start of
+  every label — the stock popup template drew its own icon gutter behind the
+  themed one.
+- The issues list marks the silenced issues when it shows them, and its context
+  menu enables each entry by what the selected row actually is. "Stop ignoring
+  this" was previously offered on every row, including ones that were not
+  ignored, which read as an action with no way to reach it.
+
 ## 1.1.0
 
 The first update since the initial release. It is mostly about **learning the

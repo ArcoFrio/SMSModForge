@@ -33,6 +33,15 @@ public sealed record ValidationIssue(Severity Severity, string Where, string Mes
     /// but it is the only stable thing such an issue has.
     /// </summary>
     public string Key => Code.Length > 0 ? $"{Code}@{Where}" : $"{Where}|{Message}";
+
+    /// <summary>
+    /// Set only on the issues returned by a listing that asked for silenced
+    /// ones as well. A list that mixes live and silenced issues without
+    /// distinguishing them is worse than either on its own — the author cannot
+    /// tell which ones are already dealt with, and the un-silence action has no
+    /// visible target.
+    /// </summary>
+    public bool Ignored { get; init; }
 }
 
 /// <summary>
@@ -51,10 +60,17 @@ public static class PackValidator
                                                  bool includeIgnored = false)
     {
         var all = Collect(pack, packRoot);
-        if (includeIgnored || pack.IgnoredIssues.Count == 0) return all;
+        if (pack.IgnoredIssues.Count == 0) return all;
 
         var ignored = new HashSet<string>(pack.IgnoredIssues, System.StringComparer.Ordinal);
-        return all.FindAll(i => !ignored.Contains(i.Key) && !ignored.Contains(i.Code));
+        bool IsSilenced(ValidationIssue i) =>
+            ignored.Contains(i.Key) || (i.Code.Length > 0 && ignored.Contains(i.Code));
+
+        if (!includeIgnored) return all.FindAll(i => !IsSilenced(i));
+
+        // Stamped rather than filtered, so the caller can show which of the
+        // rows it is listing are the silenced ones.
+        return all.ConvertAll(i => IsSilenced(i) ? i with { Ignored = true } : i);
     }
 
     /// <summary>Whether this issue is currently silenced, and by which entry —
