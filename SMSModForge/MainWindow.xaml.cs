@@ -1587,19 +1587,30 @@ public partial class MainWindow : Window
         return FindByDataContext(host, wanted);
     }
 
-    /// <summary>Depth-first search for the element bound to one particular
-    /// view model. The innermost match wins — an outer container carries the
-    /// same DataContext by inheritance, and flashing that would light up the
-    /// whole DiceRoll again.</summary>
+    /// <summary>
+    /// The OUTERMOST element bound to one particular view model, searching
+    /// downwards from <paramref name="root"/>.
+    /// <para/>
+    /// Outermost, not innermost, because DataContext is inherited: every
+    /// descendant of the branch's row reports the same one, so the deepest
+    /// match is whatever leaf happens to be last — a label, in practice, which
+    /// is why the flash showed as a faint glow around the word "Type". The
+    /// first match on the way down is the root of that action's own template,
+    /// which is the row a person is looking for.
+    /// <para/>
+    /// The DiceRoll's own row does not match: its DataContext is the DiceRoll
+    /// action, and the branch action's begins at the element hosting the
+    /// nested template.
+    /// </summary>
     private static FrameworkElement? FindByDataContext(DependencyObject root, object target)
     {
         int count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
         for (int i = 0; i < count; i++)
         {
             var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
-            if (FindByDataContext(child, target) is FrameworkElement deeper) return deeper;
             if (child is FrameworkElement fe && ReferenceEquals(fe.DataContext, target))
                 return fe;
+            if (FindByDataContext(child, target) is FrameworkElement deeper) return deeper;
         }
         return null;
     }
