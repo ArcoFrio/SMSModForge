@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -107,6 +107,22 @@ public sealed class UpdateRuleViewModel : ObservableObject
         }
     }
 
+    // ── Runtime name, derived ──────────────────────────────────────
+    //
+    // See DerivedKey for the rule. In short: a NEW rule takes its key from
+    // whatever is typed as the display name, editing the key stops that for
+    // good, and a rule loaded from disk never re-derives.
+
+    private readonly DerivedKey _derivedKey = new();
+
+    /// <summary>Whether the runtime name still follows the display name.</summary>
+    public bool KeyIsDerived => _derivedKey.IsDerived;
+
+    /// <summary>Start deriving the key. Called for a rule the author has just
+    /// added, never for one being loaded.</summary>
+    public void DeriveKeyFromDisplayName(System.Func<System.Collections.Generic.IEnumerable<string>> siblingKeys)
+        => _derivedKey.Follow(siblingKeys);
+
     public string Key
     {
         get => Model.Key;
@@ -114,6 +130,8 @@ public sealed class UpdateRuleViewModel : ObservableObject
         {
             if (Model.Key == value) return;
             Model.Key = value;
+            // Typing a key is a decision, and it sticks.
+            _derivedKey.Stop();
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
         }
@@ -126,6 +144,11 @@ public sealed class UpdateRuleViewModel : ObservableObject
         {
             if (Model.DisplayName == value) return;
             Model.DisplayName = value;
+            if (_derivedKey.Next(value, Model.Key) is { } derived && derived != Model.Key)
+            {
+                Model.Key = derived;
+                OnPropertyChanged(nameof(Key));
+            }
             OnPropertyChanged();
             OnPropertyChanged(nameof(Display));
         }

@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -122,7 +122,15 @@ namespace SMSModForge.PackPlugin
                         // whichever GameObject a variable currently names — e.g. hiding
                         // "the one that was showing" without listing every candidate.
                         string target = Deref((string)p["target"] ?? (string)p["path"] ?? (string)p["scene"] ?? "", ctx);
-                        bool.TryParse((string)p["active"] ?? "true", out var active);
+                        // Three states, not two. "toggle" flips whatever the object is
+                        // currently doing, which is the one thing a fixed true/false
+                        // cannot express - a light switch rather than a light setting.
+                        // Anything else parses as before, so packs written against the
+                        // bool are untouched.
+                        string activeParam = (string)p["active"] ?? "true";
+                        bool toggle = string.Equals(activeParam, "toggle",
+                                                    System.StringComparison.OrdinalIgnoreCase);
+                        bool.TryParse(activeParam, out var active);
 
                         // A variable that hasn't been set yet resolves to empty; that
                         // means "nothing to act on", not a missing object.
@@ -130,7 +138,7 @@ namespace SMSModForge.PackPlugin
 
                         if (kind == "Scene")
                         {
-                            ToggleScene(target, active, ctx);
+                            ToggleScene(target, active, ctx, toggle);
                         }
                         else
                         {
@@ -181,7 +189,12 @@ namespace SMSModForge.PackPlugin
                                 if (go == null)
                                     ctx.Log?.LogWarning("[SMSModForge.PackPlugin] SetGameObjectActive: '" + target + "' not found");
                             }
-                            if (go != null) go.SetActive(active);
+                            // activeSelf, not activeInHierarchy: the question is what
+                            // THIS object is set to, not whether a parent happens to be
+                            // switched off around it. Flipping on activeInHierarchy would
+                            // read an object inside a hidden room as "off" and turn it on
+                            // to no effect, then off again next time.
+                            if (go != null) go.SetActive(toggle ? !go.activeSelf : active);
                         }
                         return false;
                     }
@@ -1121,10 +1134,21 @@ namespace SMSModForge.PackPlugin
         /// Shared by the unified <c>SetGameObjectActive { kind: Scene }</c> action
         /// and the legacy <c>ActivateScene</c> alias.
         /// </summary>
-        private static void ToggleScene(string sceneKey, bool active, PackContext ctx)
+        /// <summary>
+        /// Switch a scene on or off, or <paramref name="flip"/> it to the
+        /// opposite of whatever it is now.
+        /// <para/>
+        /// The activation sound follows the state the scene ENDS in, so a flip
+        /// that turns it on plays it and a flip that turns it off does not — the
+        /// same rule the fixed states already followed.
+        /// </summary>
+        private static void ToggleScene(string sceneKey, bool active, PackContext ctx,
+                                        bool flip = false)
         {
             if (ctx.Scenes != null && ctx.Scenes.TryGet(sceneKey, out var entry))
             {
+                if (flip)
+                    active = entry.SceneGo != null && !entry.SceneGo.activeSelf;
                 if (entry.SceneGo != null) entry.SceneGo.SetActive(active);
                 // Only emit the activation sound when turning the scene ON.
                 if (active && !string.IsNullOrEmpty(entry.ActivationSignal))

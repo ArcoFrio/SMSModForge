@@ -2303,6 +2303,9 @@ public sealed class MainViewModel : ObservableObject
         Pack.Places.Add(def);
         var vm = new PlaceViewModel(def);
         Places.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => Places.Select(x => x.Key));
         PlaceTree.PlaceNew(vm);
         RebuildTargetOptions();
         RebuildDialogueRoomTalkOptions();
@@ -3789,6 +3792,9 @@ public sealed class MainViewModel : ObservableObject
         Pack.Scenes.Add(def);
         var vm = new SceneViewModel(def);
         Scenes.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => Scenes.Select(x => x.Key));
         SceneTree.PlaceNew(vm);
         RebuildSceneOptions();
         // Select what was just created, the way adding a variable or a dialogue
@@ -3832,6 +3838,9 @@ public sealed class MainViewModel : ObservableObject
         Pack.Npcs.Add(def);
         var vm = new NpcViewModel(def);
         Npcs.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => Npcs.Select(x => x.Key));
         NpcTree.PlaceNew(vm);
         RebuildNpcOptions();
     }
@@ -3883,6 +3892,9 @@ public sealed class MainViewModel : ObservableObject
         Pack.Wallpapers.Add(def);
         var vm = new WallpaperViewModel(def);
         Wallpapers.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => Wallpapers.Select(x => x.Key));
         WallpaperTree.PlaceNew(vm);
     }
 
@@ -3916,6 +3928,9 @@ public sealed class MainViewModel : ObservableObject
         Pack.Music.Add(def);
         var vm = new MusicViewModel(def);
         Music.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => Music.Select(x => x.Key));
         MusicTree.PlaceNew(vm);
         RebuildMusicKeyOptions();
     }
@@ -3965,6 +3980,9 @@ public sealed class MainViewModel : ObservableObject
         var vm = new SfxViewModel(def);
         vm.PropertyChanged += OnSfxChanged;
         Sfx.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => Sfx.Select(x => x.Key));
         SfxTree.PlaceNew(vm);
         RebuildSfxKeyOptions();
     }
@@ -4054,6 +4072,9 @@ public sealed class MainViewModel : ObservableObject
         Pack.IntegrationRules.Add(def);
         var vm = new UpdateRuleViewModel(def);
         IntegrationRules.Add(vm);
+        // A unit the author just added follows its display name until they
+        // type a key of their own — see DerivedKey.
+        vm.DeriveKeyFromDisplayName(() => IntegrationRules.Select(x => x.Key));
         PlaceNewIntegrationRuleInTree(vm);
     }
 

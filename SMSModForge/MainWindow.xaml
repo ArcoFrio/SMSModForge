@@ -1346,6 +1346,8 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <!-- The line under the Switch picker explaining the state. -->
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
                         <TextBlock Text="Category" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
@@ -1457,10 +1459,19 @@
                                   Visibility="{Binding ShowsPlaceLayer, Converter={StaticResource BoolToVisibility}}"
                                   ToolTip="Which of the level's two sprites to act on — the same Back and Front the Places tab authors. Front is sorting order −10, Back is −12. Saved to the pack under the game's own names: Front writes layer=Base, Back writes layer=Secondary."/>
 
-                        <CheckBox Grid.Row="4" Grid.Column="1" Content="Active" Margin="0,2,0,0"
-                                  IsChecked="{Binding Active}"
+                        <!-- Three states, not a tick. Toggle is the one a checkbox could not
+                             offer: flip it to whatever it is not. -->
+                        <TextBlock Text="Switch" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" Margin="0,2,4,0"
+                                   Visibility="{Binding ShowsActiveToggle, Converter={StaticResource BoolToVisibility}}"/>
+                        <ComboBox Grid.Row="4" Grid.Column="1" Margin="0,2,0,0"
+                                  ItemsSource="{x:Static vm:NodeActionViewModel.SwitchModes}"
+                                  SelectedItem="{Binding SwitchMode, UpdateSourceTrigger=PropertyChanged}"
                                   Visibility="{Binding ShowsActiveToggle, Converter={StaticResource BoolToVisibility}}"
-                                  ToolTip="SetActive(true/false). For Scene, unchecking turns the scene off silently; checking activates it and plays its sound."/>
+                                  ToolTip="Activate switches it on, Deactivate switches it off, and Toggle flips it to the opposite of whatever it is now. For a Scene, activating also plays its sound - including when a Toggle is what turned it on."/>
+                        <TextBlock Grid.Row="5" Grid.Column="1" Foreground="Gray" FontSize="10"
+                                   TextWrapping="Wrap" Margin="0,1,0,0"
+                                   Text="{Binding SwitchHelp}"
+                                   Visibility="{Binding ShowsActiveToggle, Converter={StaticResource BoolToVisibility}}"/>
                     </Grid>
 
                     <!-- ── DiceRoll: weighted one-of-N branch editor ─────────

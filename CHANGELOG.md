@@ -14,6 +14,14 @@
 - Validate flags a missing key, a key name the picker does not carry, and an
   edge phase on a dialogue node's own conditions, which are checked once when
   the conversation reaches the node and so will almost never catch one.
+- **Set-Active gains a Toggle**, alongside Activate and Deactivate: flip the
+  target to the opposite of whatever it currently is. It reads the object's own
+  state, so a parent hidden around it does not count as off.
+- **Runtime names derive from display names** for NPCs, places, scenes, music,
+  SFX, wallpapers and integration rules, the way characters and dialogues
+  already did. Type a key of your own and it stops following; a unit loaded
+  from disk never re-derives, since its key is what everything else refers to
+  it by.
 
 ### Fixed
 

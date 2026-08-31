@@ -649,12 +649,60 @@ public sealed class NodeActionViewModel : ObservableObject
         }
     }
 
-    /// <summary>SetActive(active) toggle. Defaults true. Applies to every category
-    /// (Scene deactivation just turns the scene GO off, silently).</summary>
+    // ── What the switch does ─────────────────────────────────────
+    //
+    // Three states in one param. On and Off are the booleans the field always
+    // held; Flip is the thing a boolean cannot say — "whatever it is now, make
+    // it the other one" — which is a light switch rather than a light setting.
+    // Stored in the same 'active' param so nothing about the manifest changes
+    // shape, and anything that is not "toggle" still parses as a bool.
+
+    public const string SwitchOn = "Activate";
+    public const string SwitchOff = "Deactivate";
+    public const string SwitchFlip = "Toggle";
+
+    public static IReadOnlyList<string> SwitchModes { get; } =
+        new[] { SwitchOn, SwitchOff, SwitchFlip };
+
+    /// <summary>The stored value: <c>true</c>, <c>false</c> or <c>toggle</c>.</summary>
+    public string SwitchMode
+    {
+        get
+        {
+            if (!Model.Params.TryGetValue("active", out var v) || string.IsNullOrEmpty(v))
+                return SwitchOn;   // absent has always meant on
+            if (string.Equals(v, "toggle", StringComparison.OrdinalIgnoreCase)) return SwitchFlip;
+            return bool.TryParse(v, out var b) && !b ? SwitchOff : SwitchOn;
+        }
+        set
+        {
+            Model.Params["active"] = value == SwitchFlip ? "toggle"
+                                   : value == SwitchOff ? "false" : "true";
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Active));
+            OnPropertyChanged(nameof(SwitchHelp));
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    /// <summary>A line under the picker saying what the chosen state does. Flip
+    /// is the one that needs explaining, and explaining it once beside the
+    /// control beats a tooltip nobody opens.</summary>
+    public string SwitchHelp => SwitchMode switch
+    {
+        SwitchOff => "Switches it off, whether or not it was on.",
+        SwitchFlip => "Switches it to the opposite of whatever it is now — on if it " +
+                      "is off, off if it is on.",
+        _ => "Switches it on, whether or not it was off.",
+    };
+
+    /// <summary>The old boolean view of the same param, kept because the
+    /// Display summary and existing bindings read it. Flip reports as true,
+    /// which is the closest a boolean gets to a state it cannot represent.</summary>
     public bool Active
     {
-        get => !Model.Params.TryGetValue("active", out var v) || !bool.TryParse(v, out var b) || b;
-        set { Model.Params["active"] = value ? "true" : "false"; OnPropertyChanged(); OnPropertyChanged(nameof(Display)); }
+        get => SwitchMode != SwitchOff;
+        set { SwitchMode = value ? SwitchOn : SwitchOff; }
     }
 
     /// <summary>

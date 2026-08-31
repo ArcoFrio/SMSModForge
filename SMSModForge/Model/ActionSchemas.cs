@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace SMSModForge.Model;
@@ -67,8 +67,11 @@ public static class ActionSchemas
                 "A pack overlay/bust name (autocompleted), a vanilla GO name, or a full " +
                 "hierarchy path ('5_Levels/14_Beach/Foreground/Thing'). Inactive objects " +
                 "are found too, so this can activate something that starts disabled."),
-            new ParamSchema("active", "Active", ParamType.Bool, "true",
-                "True to SetActive(true), false for SetActive(false)."),
+            new ParamSchema("active", "Active", ParamType.String, "true",
+                "true to switch the target on, false to switch it off, or toggle to " +
+                "flip it to the opposite of whatever it currently is. Toggle reads " +
+                "the object's own state, so a parent being hidden around it does not " +
+                "count as off."),
         },
         // Targeting params (kind/target/overlayLevel) are supplied by the
         // shared category row, same as SetGameObjectActive — only what is
