@@ -1500,7 +1500,15 @@ public partial class MainWindow : Window
 
         // List-row fields first: the list itself carries the tag (e.g.
         // "actionsOnFinish"), which would otherwise prefix-match the whole list.
-        var m = Regex.Match(field, @"^(?<list>actionsOnStart|actionsOnFinish|startConditions)\.(?<type>.+)$");
+        // The position is optional so that an issue recorded before Where
+        // carried one still finds its row by type.
+        var m = Regex.Match(field,
+            @"^(?<list>actionsOnStart|actionsOnFinish|startConditions|conditions)\[(?<i>\d+)\]\.(?<type>.+)$");
+        if (m.Success)
+            return FindListRow(m.Groups["list"].Value, m.Groups["type"].Value,
+                               int.Parse(m.Groups["i"].Value));
+
+        m = Regex.Match(field, @"^(?<list>actionsOnStart|actionsOnFinish|startConditions)\.(?<type>.+)$");
         if (m.Success) return FindListRow(m.Groups["list"].Value, m.Groups["type"].Value);
 
         if (FindFieldElement(this, field) is FrameworkElement tagged) return tagged;
@@ -1510,23 +1518,41 @@ public partial class MainWindow : Window
         return null;
     }
 
-    /// <summary>Finds the row in a tagged action/condition list whose VM type matches.</summary>
-    private FrameworkElement? FindListRow(string listToken, string type)
+    /// <summary>
+    /// The row in a tagged action/condition list that an issue is about.
+    /// <para/>
+    /// By POSITION when the issue names one, because a node commonly carries
+    /// several actions of the same type — two Variable actions in a row is
+    /// ordinary — and matching on type alone always found the first, so
+    /// double-clicking the second issue flashed the wrong control.
+    /// <para/>
+    /// The type is still checked against whatever sits at that position: a
+    /// pack edited since Validate last ran can have moved things, and
+    /// flashing confidently at the wrong row is worse than the old fuzzy
+    /// match. When they disagree it falls back to the search by type.
+    /// </summary>
+    private FrameworkElement? FindListRow(string listToken, string type, int index = -1)
     {
         if (FindFieldElement(this, listToken) is not System.Windows.Controls.ItemsControl list) return null;
+
+        if (index >= 0 && index < list.Items.Count &&
+            RowType(list.Items[index]) == type &&
+            list.ItemContainerGenerator.ContainerFromItem(list.Items[index]) is FrameworkElement at)
+            return at;
+
         foreach (var item in list.Items)
-        {
-            string? t = item switch
-            {
-                NodeActionViewModel a => a.Type,
-                NodeConditionViewModel c => c.Type,
-                _ => null,
-            };
-            if (t == type && list.ItemContainerGenerator.ContainerFromItem(item) is FrameworkElement fe)
+            if (RowType(item) == type &&
+                list.ItemContainerGenerator.ContainerFromItem(item) is FrameworkElement fe)
                 return fe;
-        }
         return null;
     }
+
+    private static string? RowType(object item) => item switch
+    {
+        NodeActionViewModel a => a.Type,
+        NodeConditionViewModel c => c.Type,
+        _ => null,
+    };
 
     /// <summary>Depth-first search of the visual tree for the control tagged with a matching field token.</summary>
     private static FrameworkElement? FindFieldElement(DependencyObject root, string field)

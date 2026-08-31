@@ -32,7 +32,22 @@ public sealed record ValidationIssue(Severity Severity, string Where, string Mes
     /// Falls back to the message for issues with no code yet — less durable,
     /// but it is the only stable thing such an issue has.
     /// </summary>
-    public string Key => Code.Length > 0 ? $"{Code}@{Where}" : $"{Where}|{Message}";
+    public string Key => Code.Length > 0 ? $"{Code}@{Placeless}" : $"{Placeless}|{Message}";
+
+    /// <summary>
+    /// <see cref="Where"/> with list POSITIONS dropped.
+    /// <para/>
+    /// Where now says which action or condition in a list an issue is about,
+    /// so that double-clicking it can jump to that one. An ignore entry must
+    /// not be that specific: it is written into the pack, and keying it on a
+    /// position would come undone the moment an action is inserted above the
+    /// one that was silenced. Dropping the digits also keeps the entries
+    /// already saved in packs working.
+    /// </summary>
+    private string Placeless => IndexRx.Replace(Where ?? "", "");
+
+    private static readonly Regex IndexRx =
+        new(@"\[\d+\]", RegexOptions.Compiled);
 
     /// <summary>
     /// Set only on the issues returned by a listing that asked for silenced
@@ -277,12 +292,14 @@ public static class PackValidator
             Sweep(b.Label, $"mapButtons[{b.Target}].label");
 
         foreach (var pl in pack.Places)
-            foreach (var b in pl.NavigatorButtons)
-                Sweep(b.Label, $"places[{pl.Key}].navigatorButtons.label");
+            for (int i = 0; i < pl.NavigatorButtons.Count; i++)
+                Sweep(pl.NavigatorButtons[i].Label,
+                      $"places[{pl.Key}].navigatorButtons[{i}].label");
 
         foreach (var e in pack.VanillaExtensions)
-            foreach (var b in e.NavigatorButtons)
-                Sweep(b.Label, $"vanillaExtensions[{e.Source}].navigatorButtons.label");
+            for (int i = 0; i < e.NavigatorButtons.Count; i++)
+                Sweep(e.NavigatorButtons[i].Label,
+                      $"vanillaExtensions[{e.Source}].navigatorButtons[{i}].label");
     }
 
     /// <summary>Same pattern the runtime substitutes with — see
@@ -649,8 +666,9 @@ public static class PackValidator
                     "'Prioritize this dialogue over vanilla' has no effect here — this level has no vanilla entry dialogue to suppress", "dialogue.prioritizeNoEffect"));
             }
 
-            foreach (var c in d.StartConditions)
-                ValidateNodeCondition(c, $"{dWhere}.startConditions", packVarNames, issues);
+            for (int si = 0; si < d.StartConditions.Count; si++)
+                ValidateNodeCondition(d.StartConditions[si], $"{dWhere}.startConditions[{si}]",
+                                      packVarNames, issues);
 
             // Build node-id set + tag set so jumps/children can be cross-checked.
             var nodeIds = new HashSet<int>();
@@ -729,20 +747,28 @@ public static class PackValidator
                 // A node's own conditions are evaluated once, when GC2 reaches
                 // the node — unlike the dialogue's start conditions above,
                 // which the dispatcher polls every frame.
-                foreach (var c in n.Conditions)
-                    ValidateNodeCondition(c, nWhere, packVarNames, issues, ConditionContext.OneShot);
-                foreach (var act in n.ActionsOnStart)
-                    ValidateNodeAction(act, $"{nWhere}.actionsOnStart", packVarNames, actorKeysInPack, issues);
-                foreach (var act in n.ActionsOnFinish)
-                    ValidateNodeAction(act, $"{nWhere}.actionsOnFinish", packVarNames, actorKeysInPack, issues);
+                // Indexed, so an issue on the third action says the THIRD. Without
+                // it every action of the same type on a node produced the same
+                // Where, and double-clicking any of them jumped to the first.
+                for (int ci = 0; ci < n.Conditions.Count; ci++)
+                    ValidateNodeCondition(n.Conditions[ci], $"{nWhere}.conditions[{ci}]",
+                                          packVarNames, issues, ConditionContext.OneShot);
+                for (int ai = 0; ai < n.ActionsOnStart.Count; ai++)
+                    ValidateNodeAction(n.ActionsOnStart[ai], $"{nWhere}.actionsOnStart[{ai}]",
+                                       packVarNames, actorKeysInPack, issues);
+                for (int ai = 0; ai < n.ActionsOnFinish.Count; ai++)
+                    ValidateNodeAction(n.ActionsOnFinish[ai], $"{nWhere}.actionsOnFinish[{ai}]",
+                                       packVarNames, actorKeysInPack, issues);
             }
         }
 
         // Wallpaper unlock conditions — the standard condition list, polled
         // per frame by the runtime's visibility tick.
         foreach (var w in pack.Wallpapers)
-            foreach (var c in w.UnlockConditions)
-                ValidateNodeCondition(c, $"wallpapers.{w.Key}.unlockConditions", packVarNames, issues);
+            for (int ui = 0; ui < w.UnlockConditions.Count; ui++)
+                ValidateNodeCondition(w.UnlockConditions[ui],
+                                      $"wallpapers.{w.Key}.unlockConditions[{ui}]",
+                                      packVarNames, issues);
 
         // Integration rules — the IF conditions plus every else-if branch.
         // These carry the Rule context, the one host where a Timer's interval
@@ -750,11 +776,13 @@ public static class PackValidator
         foreach (var r in pack.IntegrationRules)
         {
             var rWhere = $"integrationRules.{r.Key}";
-            foreach (var c in r.Conditions)
-                ValidateNodeCondition(c, $"{rWhere}.conditions", packVarNames, issues, ConditionContext.Rule);
+            for (int ci = 0; ci < r.Conditions.Count; ci++)
+                ValidateNodeCondition(r.Conditions[ci], $"{rWhere}.conditions[{ci}]",
+                                      packVarNames, issues, ConditionContext.Rule);
             for (int i = 0; i < r.Branches.Count; i++)
-                foreach (var c in r.Branches[i].Conditions)
-                    ValidateNodeCondition(c, $"{rWhere}.branches[{i}].conditions", packVarNames,
+                for (int ci = 0; ci < r.Branches[i].Conditions.Count; ci++)
+                    ValidateNodeCondition(r.Branches[i].Conditions[ci],
+                                          $"{rWhere}.branches[{i}].conditions[{ci}]", packVarNames,
                                           issues, ConditionContext.Rule);
         }
 
@@ -870,31 +898,39 @@ public static class PackValidator
         foreach (var d in pack.Dialogues)
         {
             var dw = $"dialogues.{d.Key}";
-            foreach (var c in d.StartConditions) WalkCondition(c, $"{dw}.startConditions");
+            for (int i = 0; i < d.StartConditions.Count; i++)
+                WalkCondition(d.StartConditions[i], $"{dw}.startConditions[{i}]");
             foreach (var n in d.Nodes)
             {
                 var nw = $"{dw}.nodes[{n.Id}]";
-                foreach (var c in n.Conditions) WalkCondition(c, $"{nw}.conditions");
-                foreach (var a in n.ActionsOnStart) WalkAction(a, $"{nw}.actionsOnStart");
-                foreach (var a in n.ActionsOnFinish) WalkAction(a, $"{nw}.actionsOnFinish");
+                for (int i = 0; i < n.Conditions.Count; i++)
+                    WalkCondition(n.Conditions[i], $"{nw}.conditions[{i}]");
+                for (int i = 0; i < n.ActionsOnStart.Count; i++)
+                    WalkAction(n.ActionsOnStart[i], $"{nw}.actionsOnStart[{i}]");
+                for (int i = 0; i < n.ActionsOnFinish.Count; i++)
+                    WalkAction(n.ActionsOnFinish[i], $"{nw}.actionsOnFinish[{i}]");
             }
         }
 
         foreach (var r in pack.IntegrationRules)
         {
             var rw = $"integrationRules.{r.Key}";
-            foreach (var c in r.Conditions) WalkCondition(c, $"{rw}.conditions");
-            foreach (var a in r.Actions) WalkAction(a, $"{rw}.actions");
+            for (int i = 0; i < r.Conditions.Count; i++)
+                WalkCondition(r.Conditions[i], $"{rw}.conditions[{i}]");
+            for (int i = 0; i < r.Actions.Count; i++)
+                WalkAction(r.Actions[i], $"{rw}.actions[{i}]");
             for (int i = 0; i < r.Branches.Count; i++)
             {
-                foreach (var c in r.Branches[i].Conditions) WalkCondition(c, $"{rw}.branches[{i}].conditions");
-                foreach (var a in r.Branches[i].Actions) WalkAction(a, $"{rw}.branches[{i}].actions");
+                for (int k = 0; k < r.Branches[i].Conditions.Count; k++)
+                    WalkCondition(r.Branches[i].Conditions[k], $"{rw}.branches[{i}].conditions[{k}]");
+                for (int k = 0; k < r.Branches[i].Actions.Count; k++)
+                    WalkAction(r.Branches[i].Actions[k], $"{rw}.branches[{i}].actions[{k}]");
             }
         }
 
         foreach (var w in pack.Wallpapers)
-            foreach (var c in w.UnlockConditions)
-                WalkCondition(c, $"wallpapers.{w.Key}.unlockConditions");
+            for (int wi = 0; wi < w.UnlockConditions.Count; wi++)
+                WalkCondition(w.UnlockConditions[wi], $"wallpapers.{w.Key}.unlockConditions[{wi}]");
     }
 
     /// <summary>
