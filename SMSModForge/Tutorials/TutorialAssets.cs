@@ -68,6 +68,10 @@ public static class TutorialAssets
     public static string RoomBase => $"{PackFolder}/Locations/RoomB.png";
     public static string RoomSecondary => $"{PackFolder}/Locations/Room.png";
     public static string Npc(int n) => $"{PackFolder}/NPCs/Dummy/DummyNPC{n}.png";
+
+    /// <summary>Eyes-closed frame for one of the practice NPCs. Drawn over the
+    /// pose the same way a bust's blink is drawn over its base.</summary>
+    public static string NpcBlink(int n) => $"{PackFolder}/NPCs/Dummy/DummyNPC{n}Blink.png";
     public static string Scene => $"{PackFolder}/Scenes/Dummy/DummyScene01.png";
 
     /// <summary>

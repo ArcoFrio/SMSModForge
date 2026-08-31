@@ -390,7 +390,7 @@ internal static class TutorialSolutions
         ["npcs-that-belong / Stand them on something"] = w =>
             w.Vm.SelectedNpc!.ReflectionEnabled = true,
         ["npcs-that-belong / Give them eyes that close"] = w =>
-            w.Vm.SelectedNpc!.BlinkSprite = TutorialAssets.Npc(1),
+            w.Vm.SelectedNpc!.BlinkSprite = TutorialAssets.NpcBlink(1),
 
 
         // ── 11. Sound in a room ───────────────────────────────────────
@@ -400,6 +400,19 @@ internal static class TutorialSolutions
             w.Vm.AddMusicCommand.Execute(null);
             w.Vm.SelectedMusic!.AudioPath = TutorialAssets.Music;
             w.Vm.SelectedMusic!.DisplayName = "Neon Rain";
+        },
+        ["sound-in-a-room / Make something play it"] = w =>
+        {
+            // The door from tutorial 3, rebuilt here: this tutorial starts from
+            // a bare pack, so the extension and its button have to exist before
+            // there is anywhere to put a track.
+            w.Vm.AddVanillaExtensionCommand.Execute(null);
+            var ext = w.Vm.SelectedVanillaExtension!;
+            ext.Source = Bedroom;
+            var btn = ext.AddNavigatorButton()!;
+            btn.Target = "self:" + w.Vm.Places[0].Key;
+            // The RUNTIME name, which is what the runtime looks the track up by.
+            btn.Music = w.Vm.Music[0].Key;
         },
         ["sound-in-a-room / Add an effect"] = w =>
         {
@@ -415,6 +428,15 @@ internal static class TutorialSolutions
             // which is what the runtime looks for.
             var d = w.Vm.SelectedDialogue!;
             d.Nodes[0].Text = "*door* Oh — you are back.";
+        },
+        ["sound-in-a-room / The other way to fire one"] = w =>
+        {
+            // The same effect, fired without putting anything in the line.
+            var d = w.Vm.SelectedDialogue!;
+            w.Vm.SelectedNode = d.Nodes[0];
+            var a = d.Nodes[0].AddActionOnFinish();
+            a.Model.Type = SMSModForge.Model.NodeActionTypes.PlaySFX;
+            a.Model.Params["clip"] = w.Vm.Sfx[0].Key;
         },
 
         // ── 6. Remembering things ─────────────────────────────────────

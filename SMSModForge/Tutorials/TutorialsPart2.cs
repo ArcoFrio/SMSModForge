@@ -924,7 +924,17 @@ internal static class TutorialsPart2
                            "reflection on a carpet reads as a mistake. Alpha is how visible it " +
                            "is — the game's own reflections are a faint wash, not a second " +
                            "character — and Y offset moves it to meet the feet rather than the " +
-                           "middle of the sprite.",
+                           "middle of the sprite.\n\n" +
+                           "You do not have to guess that offset. Once reflection is on, a " +
+                           "Reflection chip appears in the preview toolbar on the Places tab " +
+                           "alongside Body, Shadow, Blink and Wet — pick it and drag the " +
+                           "reflection up or down against the actual floor of the actual room.\n\n" +
+                           "It drags vertically and nothing else, because that offset is the " +
+                           "only number there is: the mirror is dropped a full pose height " +
+                           "automatically, and this is the correction on top. And unlike the " +
+                           "other four, it belongs to the NPC rather than the placement, so " +
+                           "moving it here moves it in every room that NPC stands in. The " +
+                           "toolbar says so while it is selected.",
                     Kind = StepKind.Do,
                     Tab = TabNpcs,
                     Anchor = "panel:npcReflection",
@@ -935,8 +945,9 @@ internal static class TutorialsPart2
                 {
                     Title = "Give them eyes that close",
                     Body = "An NPC blinks the same way a bust does, from one eyes-closed frame " +
-                           "drawn over the pose. Point Blink sprite at art for it — the practice " +
-                           "NPC art will do to see the mechanism.\n\n" +
+                           "drawn over the pose. Point Blink sprite at the blink art beside the " +
+                           "pose you used: TutorialArt/NPCs/Dummy, where DummyNPC0.png has " +
+                           "DummyNPC0Blink.png next to it.\n\n" +
                            "Open wait min and max are the range the gap between blinks is drawn " +
                            "from, so a room full of the same figure does not blink in unison, " +
                            "and Closed hold is how long each blink lasts. Leave a blank blink " +
@@ -1003,9 +1014,13 @@ internal static class TutorialsPart2
                 new TutorialStep
                 {
                     Title = "Add a track",
-                    Body = "Use + Music, then point Audio path at the practice track in " +
-                           "TutorialArt/Audio. Give it a display name you would recognise in a " +
-                           "list of twenty.",
+                    Body = "Use + Music, then point Audio path at TutorialArt/Audio/Neon " +
+                           "Rain.mp3 — the longer of the two files in that folder, and the one " +
+                           "meant to loop under a scene.\n\n" +
+                           "Give it a display name you would recognise in a list of twenty. " +
+                           "Note the Runtime name beside it: that key is what everything else " +
+                           "in the pack asks for this track by, and you will type it into a " +
+                           "button in two steps' time.",
                     Kind = StepKind.Do,
                     Tab = TabMusic,
                     Anchor = "btn:addMusic",
@@ -1029,9 +1044,35 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
+                    Title = "Make something play it",
+                    Body = "A track nobody starts is a file in a folder. The shortest way to " +
+                           "hear yours in game is the door you already built: back in " +
+                           "tutorial 3 you put a navigator button on My Room pointing at your " +
+                           "place.\n\n" +
+                           "Open that vanilla extension on the Places tab, find the button, " +
+                           "and put your track's RUNTIME NAME in its Music box — the key from " +
+                           "the Music tab, not the display name and not the filename. Walking " +
+                           "through that door now changes the music.\n\n" +
+                           "One track plays at a time, and pressing the button switches to " +
+                           "this one, so a button that leads back out wants a Music of its " +
+                           "own or the room's track follows the player out.",
+                    Kind = StepKind.Do,
+                    Tab = TabPlaces,
+                    Anchor = "panel:extNavigatorButtons",
+                    AlsoAllow = new[] { "panel:placeList" },
+                    IsDone = (vm, s) => vm.VanillaExtensions.Any(
+                        e => e.NavigatorButtons.Any(
+                            b => b.Music.Trim().Length > 0 &&
+                                 vm.Music.Any(m => m.Key == b.Music.Trim()))),
+                    Hint = "Places tab, your My Room extension, the navigator button's Music box.",
+                },
+                new TutorialStep
+                {
                     Title = "Add an effect",
-                    Body = "Now the SFX tab. Same shape: + SFX, then Audio path at the door " +
-                           "sound in TutorialArt/Audio.\n\n" +
+                    Body = "Now the SFX tab. Same shape: + SFX, then Audio path at the OTHER " +
+                           "file in TutorialArt/Audio — the short WAV, which is a door opening. " +
+                           "Its filename is somebody's credit for the recording, which is why " +
+                           "it looks like that and why it has not been renamed.\n\n" +
                            "Default volume is what plays when something asks for this effect " +
                            "without saying how loud — which is most of the time.",
                     Kind = StepKind.Do,
@@ -1080,6 +1121,29 @@ internal static class TutorialsPart2
                 },
                 new TutorialStep
                 {
+                    Title = "The other way to fire one",
+                    Body = "Patterns are not the only route. A node can carry a PlaySFX " +
+                           "action, on start or on finish, naming the effect by its runtime " +
+                           "name — with a Volume to override the default and a Delay to hold " +
+                           "it back a moment.\n\n" +
+                           "The two do the same job and differ in exactly one way: the " +
+                           "pattern has to be IN the line, so the player reads *door* along " +
+                           "with everything else. The action does not, so the sound plays " +
+                           "over a line with nothing odd in it. Everything else is the same, " +
+                           "including the random variants in the next step.\n\n" +
+                           "Use patterns where the stage direction belongs in the script, and " +
+                           "the action where it does not. Add one now, on the same " +
+                           "conversation.",
+                    Kind = StepKind.Do,
+                    Tab = TabDialogues,
+                    Anchor = "panel:actionsOnFinishBox",
+                    AlsoAllow = new[] { "panel:dialogueNodes", "panel:nodeEditor" },
+                    IsDone = (vm, s) => vm.SelectedDialogue is { } d &&
+                                        d.Nodes.Any(n => HasPlaySfx(n)),
+                    Hint = "+ Add action on a node, Type = PlaySFX, then pick your effect.",
+                },
+                new TutorialStep
+                {
                     Title = "More than one take",
                     Body = "One more thing with no field for it. Put extra recordings beside the " +
                            "first with _1, _2, _3 on the end of the same name, and the game picks " +
@@ -1089,7 +1153,9 @@ internal static class TutorialsPart2
                            "number, so _1, _2, _4 loads two of the three. The extensions do not " +
                            "have to match, so a WAV alongside an OGG is fine.\n\n" +
                            "It is the difference between a door that sounds the same every time " +
-                           "and one that does not.",
+                           "and one that does not. Both routes draw from the same set: a " +
+                           "pattern in a line and a PlaySFX action pick a variant the same " +
+                           "way.",
                     Kind = StepKind.Read,
                     Tab = TabSfx,
                     Anchor = "panel:sfxDetail",
@@ -1556,6 +1622,23 @@ internal static class TutorialsPart2
     {
         string p = (prefix ?? "").Trim();
         return p.Length > 0 && !p.EndsWith("/") && !p.EndsWith("\\\\");
+    }
+
+    /// <summary>Whether a node fires a sound through an action rather than
+    /// through text. Either list counts: an effect on start and one on finish
+    /// are both the action route, and which fits is the author's call.</summary>
+    private static bool HasPlaySfx(ViewModel.DialogueNodeViewModel n)
+    {
+        foreach (var list in new[] { n.Model.ActionsOnStart, n.Model.ActionsOnFinish })
+        {
+            if (list == null) continue;
+            foreach (var a in list)
+                if (a.Type == Model.NodeActionTypes.PlaySFX &&
+                    a.Params.TryGetValue("clip", out var c) &&
+                    !string.IsNullOrWhiteSpace(c))
+                    return true;
+        }
+        return false;
     }
 
     private static bool JumpLandsOnATag(ViewModel.DialogueViewModel d)

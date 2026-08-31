@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using SMSModForge.Tutorials;
@@ -26,6 +26,15 @@ public class TutorialAssetTests
     {
         get
         {
+            // The BUILD OUTPUT first, not the repo. The editor's Content glob
+            // is what decides whether an asset reaches a machine that is not
+            // this one, and a file present in the repo but missing from the
+            // glob is the exact failure this test claims to catch - which it
+            // could not, while it read the source folder.
+            string output = Path.Combine(System.AppContext.BaseDirectory,
+                                         "Resources", "TutorialAssets");
+            if (Directory.Exists(output)) return output;
+
             var dir = new DirectoryInfo(System.AppContext.BaseDirectory);
             while (dir != null)
             {
@@ -85,6 +94,7 @@ public class TutorialAssetTests
         {
             TutorialAssets.RoomBase, TutorialAssets.RoomSecondary,
             TutorialAssets.Npc(0), TutorialAssets.Npc(1),
+            TutorialAssets.NpcBlink(0), TutorialAssets.NpcBlink(1),
             TutorialAssets.Scene, TutorialAssets.Wallpaper,
             // Audio too: the build glob was PNG-only until the Media tutorial
             // needed a sound, and a path that ships in the repo but not in the

@@ -2379,7 +2379,7 @@ public sealed class PlacePreview : Grid
     }
 
     private enum GizmoMode { Move, Rotate, Scale }
-    private enum GizmoPart { Body, Shadow, Blink, Wet }
+    private enum GizmoPart { Body, Shadow, Blink, Wet, Reflection }
     private enum GizmoHandle { None, MoveX, MoveY, MoveFree, RotZ, RotX, RotY, ScaleX, ScaleY, ScaleUniform }
 
     /// <summary>One editable transform, abstracted so the gizmo drives NPC parts
@@ -2412,6 +2412,41 @@ public sealed class PlacePreview : Grid
         public bool CanRotate => true;
         public bool CanScale => true;
         public bool SupportsTilt => true;
+    }
+
+    /// <summary>
+    /// The reflection's vertical nudge, which is not a transform like the
+    /// other parts and does not live in the same place.
+    /// <para/>
+    /// Two differences the toolbar has to respect. It is ONE number — the
+    /// mirror is dropped a full pose height automatically, and this is the
+    /// correction on top — so there is no X, no rotation and no scale to drag.
+    /// And it belongs to the NPC DEFINITION rather than the placement, so
+    /// dragging it here moves the reflection under that NPC in every room it
+    /// stands in. The gizmo title says so; without that the edit looks local
+    /// and is not.
+    /// </summary>
+    private sealed class NpcReflectionTarget : IGizmoTarget
+    {
+        private readonly NpcViewModel _def;
+        public NpcReflectionTarget(NpcViewModel def) => _def = def;
+
+        // X is pinned: the reflection sits directly under the pose by
+        // construction, and a sideways nudge has nowhere to be stored.
+        public double X { get => 0; set { } }
+        public double Y
+        {
+            get => _def.ReflectionOffsetY;
+            set => _def.ReflectionOffsetY = (float)value;
+        }
+        public double RotZ { get => 0; set { } }
+        public double RotX { get => 0; set { } }
+        public double RotY { get => 0; set { } }
+        public double ScaleX { get => 1; set { } }
+        public double ScaleY { get => 1; set { } }
+        public bool CanRotate => false;
+        public bool CanScale => false;
+        public bool SupportsTilt => false;
     }
 
     private sealed class OverlayTarget : IGizmoTarget
@@ -2463,6 +2498,9 @@ public sealed class PlacePreview : Grid
     private TextBlock _gizmoTitle = new();
     private StackPanel _partRow = new();
     private Button _btnBody = new(), _btnShadow = new(), _btnBlink = new(), _btnWet = new();
+    /// <summary>Only shown when the selected placement's NPC has its
+    /// reflection switched on — there is nothing to drag otherwise.</summary>
+    private Button _btnReflection = new();
     private Button _btnMove = new(), _btnRotate = new(), _btnScale = new();
 
     // Object menu — the left-side hierarchy of every GameObject + NPC in the
@@ -2564,6 +2602,16 @@ public sealed class PlacePreview : Grid
             target = new NpcPartTarget(_selPlacement.Body);
             frame = FrameFromParent(pe.ParentWorld);
         }
+        else if (_selPart == GizmoPart.Reflection)
+        {
+            // Not a placement part: the offset lives on the NPC definition, so
+            // the chip is only offered when that definition can be resolved and
+            // has its reflection switched on.
+            var def = DefFor(_selPlacement);
+            if (def == null || !def.ReflectionEnabled) return false;
+            target = new NpcReflectionTarget(def);
+            frame = FrameFromParent(pe.ParentWorld.Then(LeafAff(_selPlacement.Body)));
+        }
         else
         {
             // Shadow / Blink / Wet are children of the body, so their frame is
@@ -2581,6 +2629,15 @@ public sealed class PlacePreview : Grid
         return true;
     }
 
+    /// <summary>The NPC definition a placement points at, or null when its
+    /// npc key names nothing in the catalog (an unfinished placement).</summary>
+    private NpcViewModel? DefFor(NpcPlacementViewModel? pl)
+    {
+        if (pl == null || string.IsNullOrEmpty(pl.Npc)) return null;
+        return NpcCatalog?.Cast<object>().OfType<NpcViewModel>()
+            .FirstOrDefault(n => n.Key == pl.Npc);
+    }
+
     private static GizmoFrame FrameFromParent(in Aff p) => new(
         new Point(WorldOriginX + p.Tx * PixelsPerUnit, WorldOriginY - p.Ty * PixelsPerUnit),
         new Vector(p.A * PixelsPerUnit, -p.B * PixelsPerUnit),
@@ -2590,6 +2647,12 @@ public sealed class PlacePreview : Grid
 
     private void RefreshGizmo()
     {
+        // Toolbar first. Which chips apply can change without the selection
+        // changing - switching an NPC's reflection off is the case that matters,
+        // and its chip would otherwise sit there until something else was
+        // clicked, offering a part that no longer exists.
+        UpdateGizmoToolbar();
+
         bool hasSelection = _selPlacement != null || _selNode != null;
         if (hasSelection && TryResolveSelection(out var target, out var frame))
         {
@@ -2834,8 +2897,10 @@ public sealed class PlacePreview : Grid
         _btnShadow = MakeChip("Shadow", () => SetPart(GizmoPart.Shadow));
         _btnBlink = MakeChip("Blink", () => SetPart(GizmoPart.Blink));
         _btnWet = MakeChip("Wet", () => SetPart(GizmoPart.Wet));
+        _btnReflection = MakeChip("Reflection", () => SetPart(GizmoPart.Reflection));
         _partRow = new StackPanel { Orientation = Orientation.Horizontal, Margin = new Thickness(0, 0, 0, 4) };
-        foreach (var b in new[] { _btnBody, _btnShadow, _btnBlink, _btnWet }) _partRow.Children.Add(b);
+        foreach (var b in new[] { _btnBody, _btnShadow, _btnBlink, _btnWet, _btnReflection })
+            _partRow.Children.Add(b);
 
         _btnMove = MakeChip("Move", () => SetMode(GizmoMode.Move));
         _btnRotate = MakeChip("Rotate", () => SetMode(GizmoMode.Rotate));
@@ -2917,21 +2982,37 @@ public sealed class PlacePreview : Grid
 
         bool isNpc = _selPlacement != null;
         _partRow.Visibility = isNpc ? Visibility.Visible : Visibility.Collapsed;
-        _gizmoTitle.Text = isNpc
-            ? $"NPC: {(string.IsNullOrWhiteSpace(_selPlacement!.Name) ? _selPlacement.Npc : _selPlacement.Name)}"
-            : $"GameObject: {_selNodePath}";
+
+        // The reflection is the NPC's, not this placement's, and dragging it
+        // moves it in every room that NPC stands in. Saying so in the title is
+        // the only warning there is — the drag itself looks local.
+        bool reflectable = isNpc && DefFor(_selPlacement) is { ReflectionEnabled: true };
+        _btnReflection.Visibility = reflectable ? Visibility.Visible : Visibility.Collapsed;
+        if (!reflectable && _selPart == GizmoPart.Reflection) _selPart = GizmoPart.Body;
+
+        _gizmoTitle.Text = !isNpc
+            ? $"GameObject: {_selNodePath}"
+            : _selPart == GizmoPart.Reflection
+                ? $"Reflection of {_selPlacement!.Npc} — shared by every placement"
+                : $"NPC: {(string.IsNullOrWhiteSpace(_selPlacement!.Name) ? _selPlacement.Npc : _selPlacement.Name)}";
 
         Paint(_btnBody, _selPart == GizmoPart.Body);
         Paint(_btnShadow, _selPart == GizmoPart.Shadow);
         Paint(_btnBlink, _selPart == GizmoPart.Blink);
         Paint(_btnWet, _selPart == GizmoPart.Wet);
+        Paint(_btnReflection, _selPart == GizmoPart.Reflection);
+
+        // A reflection has one number to it — a vertical nudge — so Rotate and
+        // Scale would be handles that move nothing. Force Move rather than
+        // leave a mode selected that silently does nothing.
+        bool transformable = _selPart != GizmoPart.Reflection;
+        if (!transformable) _gizmoMode = GizmoMode.Move;
 
         Paint(_btnMove, _gizmoMode == GizmoMode.Move);
         Paint(_btnRotate, _gizmoMode == GizmoMode.Rotate);
         Paint(_btnScale, _gizmoMode == GizmoMode.Scale);
-        // NPC parts and overlays both support Move / Rotate / Scale now.
-        _btnRotate.IsEnabled = true;
-        _btnScale.IsEnabled = true;
+        _btnRotate.IsEnabled = transformable;
+        _btnScale.IsEnabled = transformable;
     }
 
     private static void Paint(Button b, bool on)
