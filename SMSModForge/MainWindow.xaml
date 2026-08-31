@@ -1,4 +1,13 @@
-﻿<Window x:Class="SMSModForge.MainWindow"
+﻿<!--
+    MinWidth / MinHeight: the tab splitters are proportional, so panes shrink
+    with the window - but two tabs carry a preview pane that is deliberately a
+    FIXED width (Characters 540, NPCs 620) because the art inside is rendered at
+    a known size, and the Characters sidebar takes its minimum from its own
+    toolbar. Below about 1120 the fixed pane plus that minimum leaves the middle
+    column nothing and the right of the tab goes off screen, which is not a
+    state worth letting somebody reach.
+-->
+<Window x:Class="SMSModForge.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="clr-namespace:SMSModForge.ViewModel"
@@ -11,6 +20,7 @@
         Title="{Binding Title}"
         Icon="Resources/SMSModForge.ico"
         Width="1400" Height="900"
+        MinWidth="1120" MinHeight="640"
         Background="{DynamicResource Theme.Window}"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
@@ -2664,9 +2674,9 @@
                             used to fold them into ToolBar's overflow popup, where
                             authors did not find them at all.
                         -->
-                        <ColumnDefinition x:Name="CharacterSidebarColumn" Width="280"/>
+                        <ColumnDefinition x:Name="CharacterSidebarColumn" Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="540"/>
                     </Grid.ColumnDefinitions>
 
@@ -3219,9 +3229,9 @@
                          Busts tab: no GridSplitter, width sized to the 600px
                          NpcPreview. -->
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="4*"/>
                         <ColumnDefinition Width="620"/>
                     </Grid.ColumnDefinitions>
 
@@ -3483,9 +3493,9 @@
             <TabItem Header="Places">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="280"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- LEFT: places list + vanilla extensions list -->
@@ -4072,11 +4082,11 @@
             <TabItem Header="Dialogues">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="DlgListCol" Width="260"/>
+                        <ColumnDefinition x:Name="DlgListCol" Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition x:Name="DlgMiddleCol" Width="380"/>
+                        <ColumnDefinition x:Name="DlgMiddleCol" Width="3*" MinWidth="260"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="6*"/>
                     </Grid.ColumnDefinitions>
 
                     <!-- LEFT: dialogues folder tree (cosmetic grouping; drag to organize). -->
@@ -4671,9 +4681,9 @@
             <TabItem Header="Scenes">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">
@@ -4803,9 +4813,9 @@
             <TabItem Header="Music">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">
@@ -4909,9 +4919,9 @@
             <TabItem Header="SFX">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">
@@ -5019,9 +5029,9 @@
             <TabItem Header="Wallpapers">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">
@@ -5140,9 +5150,9 @@
             <TabItem Header="Variables">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">
@@ -5353,9 +5363,9 @@
             <TabItem Header="Integration">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="260"/>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="8*"/>
                     </Grid.ColumnDefinitions>
 
                     <DockPanel Grid.Column="0">

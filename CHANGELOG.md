@@ -25,6 +25,13 @@
 
 ### Fixed
 
+- **Resizable panes are proportional.** Every tab's splitter columns were fixed
+  pixel widths, and a drag wrote another fixed width, so a layout arranged on a
+  maximised window kept those exact widths on a small one — the content column
+  was squeezed to nothing and the right of the tab sat off screen. They are
+  shares now, so panes scale with the window. Saved layouts store the ratio
+  rather than the pixels; a layout saved by 1.1.0 is ignored once, and the
+  window will not size below what its widest tab needs.
 - The app icon carried a single 32x32 frame, so everywhere Windows wanted
   something bigger it was upscaling 32 pixels. It now holds 16 through 256,
   each resampled from the 512x512 source.

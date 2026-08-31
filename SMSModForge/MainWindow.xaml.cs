@@ -266,23 +266,58 @@ public partial class MainWindow : Window
         box.ContextMenu = menu;
     }
 
-    /// <summary>Restore user-adjusted resizable column widths from the last session.</summary>
+    /// <summary>
+    /// Restore the resizable column proportions from the last session.
+    /// <para/>
+    /// Proportions, not widths. These used to be saved as pixels and restored
+    /// as pixels, so a layout arranged on a maximised window came back at the
+    /// same absolute size on a small one — the panes kept their width, the
+    /// content column was squeezed to nothing, and the right of the tab was
+    /// simply off screen. A star value cannot do that: it is a share of
+    /// whatever width there happens to be.
+    /// <para/>
+    /// A value saved by an older build is a pixel count, which would read as an
+    /// enormous star weight and hand one pane the entire tab. Those are
+    /// recognised by being far too large to be a ratio and ignored, so the
+    /// first run after upgrading starts from the defaults.
+    /// </summary>
     private void RestoreUiLayout()
     {
         var sizes = SMSModForge.Services.UiLayoutService.Load();
-        if (sizes.TryGetValue("DlgListCol", out var listW) && listW > 0)
-            DlgListCol.Width = new GridLength(listW);
-        if (sizes.TryGetValue("DlgMiddleCol", out var midW) && midW > 0)
-            DlgMiddleCol.Width = new GridLength(midW);
+        Apply(DlgListCol, "DlgListCol");
+        Apply(DlgMiddleCol, "DlgMiddleCol");
+
+        void Apply(System.Windows.Controls.ColumnDefinition col, string key)
+        {
+            if (!sizes.TryGetValue(key, out var share)) return;
+            if (share <= 0 || share > MaxStar) return;   // a pixel width from an older build
+            col.Width = new GridLength(share, GridUnitType.Star);
+        }
     }
 
-    /// <summary>Persist the resizable column widths so the layout survives a restart.</summary>
+    /// <summary>
+    /// The largest star weight a saved layout may carry. Comfortably above any
+    /// ratio a person can produce by dragging a splitter, and far below the
+    /// pixel widths older builds wrote, so the two cannot be confused.
+    /// </summary>
+    private const double MaxStar = 100;
+
+    /// <summary>Persist the column proportions so the layout survives a restart.</summary>
     private void SaveUiLayout()
     {
         var sizes = new Dictionary<string, double>();
-        if (DlgListCol.ActualWidth > 0) sizes["DlgListCol"] = DlgListCol.ActualWidth;
-        if (DlgMiddleCol.ActualWidth > 0) sizes["DlgMiddleCol"] = DlgMiddleCol.ActualWidth;
+        Read(DlgListCol, "DlgListCol");
+        Read(DlgMiddleCol, "DlgMiddleCol");
         if (sizes.Count > 0) SMSModForge.Services.UiLayoutService.Save(sizes);
+
+        void Read(System.Windows.Controls.ColumnDefinition col, string key)
+        {
+            // A splitter drag rewrites these as star values, so this is the
+            // ratio the author arranged. Guarded anyway: a column that somehow
+            // ended up absolute would otherwise be saved as a pixel count.
+            if (col.Width.IsStar && col.Width.Value > 0 && col.Width.Value <= MaxStar)
+                sizes[key] = col.Width.Value;
+        }
     }
 
     /// <summary>
