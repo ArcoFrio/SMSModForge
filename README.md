@@ -1,4 +1,4 @@
-# SMSModForge 1.0.0
+# SMSModForge 1.1.0
 
 A toolkit for making mod content for **Starmaker Story 1.8E**, in two parts:
 
@@ -57,10 +57,14 @@ folder.
 
 The editor teaches itself. On the **⚒ ModForge** tab you will find:
 
-- **Seven guided tutorials** that walk you through building a real pack, one
-  control at a time — a character, a room you can walk into, a conversation,
-  a jiggle mask, NPCs, variables, and rules. Everything they make is kept;
-  each tutorial carries on in the pack the last one left.
+- **Fourteen guided tutorials** that walk you through building a real pack, one
+  control at a time — a character and its face, a room you can walk into and
+  dress, a door on the world map, conversations that branch and remember, a
+  jiggle mask, NPCs, music and sound, variables, and rules. They run in order,
+  each one carrying on in the pack the last one left, and everything they make
+  is kept. The practice art and audio ship with the editor.
+- A tutorial you have finished stays ticked, and says so if it has been
+  rewritten since you ran it.
 - **A 33-topic reference** with search, covering every tab and field.
 - **Validate**, which lists what is wrong with your pack and jumps you to it.
 

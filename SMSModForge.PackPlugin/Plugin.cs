@@ -29,7 +29,7 @@ namespace SMSModForge.PackPlugin
         // Matches the editor. The two ship together and a pack written by one
         // is loaded by the other, so a reader comparing them should not have to
         // work out which numbering applies to which half.
-        public const string pluginVersion = "1.0.0";
+        public const string pluginVersion = "1.1.0";
 
         public static bool loaded;
         public static Scene currentScene;
