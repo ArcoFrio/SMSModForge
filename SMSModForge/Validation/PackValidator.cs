@@ -892,7 +892,7 @@ public static class PackValidator
             CheckParams(a.Params, ActionSchemas.For(a.Type), aw);
             if (a.Branches != null)
                 for (int i = 0; i < a.Branches.Count; i++)
-                    WalkAction(a.Branches[i].Action, $"{aw}.branch[{i + 1}]");
+                    WalkAction(a.Branches[i].Action, $"{aw}.branch[{i}]");
         }
 
         foreach (var d in pack.Dialogues)
@@ -1203,7 +1203,10 @@ public static class PackValidator
                             issues.Add(new(Severity.Error, aWhere,
                                 $"Branch {i + 1} has no action", "action.diceBranchNoAction"));
                         else
-                            ValidateNodeAction(b.Action, $"{aWhere}.branch[{i + 1}]",
+                            // 0-based, like actionsOnStart[i] and the rest. The
+                            // message above stays 1-based because that one is read
+                            // by a person.
+                            ValidateNodeAction(b.Action, $"{aWhere}.branch[{i}]",
                                                packVarNames, actorKeysInPack, issues);
                     }
                     if (total != 100)

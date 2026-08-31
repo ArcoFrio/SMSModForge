@@ -40,6 +40,10 @@
   found by matching its type, so with two Variable actions on a node both
   issues flashed the first. Ignore entries deliberately stay position-free, so
   inserting an action above a silenced one does not un-silence it.
+- The same jump works for an action inside a DiceRoll branch. Those rows live
+  inside the DiceRoll's own row rather than in the node's action list, so the
+  search that finds every other action could not see them and the jump fell
+  back to flashing the whole node.
 - **"Ignore every issue like it" now works on every check.** It needs a code to
   key a pack-wide rule on, and only 7 of 115 checks had one, so the option was
   greyed out almost everywhere. All 115 are coded now.

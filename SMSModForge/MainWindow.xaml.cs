@@ -1505,8 +1505,21 @@ public partial class MainWindow : Window
         var m = Regex.Match(field,
             @"^(?<list>actionsOnStart|actionsOnFinish|startConditions|conditions)\[(?<i>\d+)\]\.(?<type>.+)$");
         if (m.Success)
-            return FindListRow(m.Groups["list"].Value, m.Groups["type"].Value,
-                               int.Parse(m.Groups["i"].Value));
+        {
+            string rest = m.Groups["type"].Value;
+            int at = int.Parse(m.Groups["i"].Value);
+
+            // A DiceRoll holds an action per branch, so the offending one is a
+            // row INSIDE the row. Locate the DiceRoll first, then the branch.
+            var nested = Regex.Match(rest,
+                @"^(?<outer>[A-Za-z]+)\.branch\[(?<b>\d+)\]\.(?<inner>.+)$");
+            if (nested.Success)
+                return FindBranchRow(m.Groups["list"].Value, at,
+                                     int.Parse(nested.Groups["b"].Value),
+                                     nested.Groups["inner"].Value);
+
+            return FindListRow(m.Groups["list"].Value, rest, at);
+        }
 
         m = Regex.Match(field, @"^(?<list>actionsOnStart|actionsOnFinish|startConditions)\.(?<type>.+)$");
         if (m.Success) return FindListRow(m.Groups["list"].Value, m.Groups["type"].Value);
@@ -1544,6 +1557,50 @@ public partial class MainWindow : Window
             if (RowType(item) == type &&
                 list.ItemContainerGenerator.ContainerFromItem(item) is FrameworkElement fe)
                 return fe;
+        return null;
+    }
+
+    /// <summary>
+    /// The row for an action nested inside a DiceRoll branch.
+    /// <para/>
+    /// These are rendered by the same action template as any other row, but
+    /// they live inside the DiceRoll's own row rather than in the node's
+    /// action list — so the list search that finds every other action cannot
+    /// see them, and a warning on one used to fall back to flashing the whole
+    /// node. Found by walking the DiceRoll row's subtree for the element
+    /// bound to that branch's action.
+    /// </summary>
+    private FrameworkElement? FindBranchRow(string listToken, int actionIndex,
+                                            int branchIndex, string innerType)
+    {
+        if (FindFieldElement(this, listToken) is not System.Windows.Controls.ItemsControl list) return null;
+        if (actionIndex < 0 || actionIndex >= list.Items.Count) return null;
+
+        if (list.Items[actionIndex] is not NodeActionViewModel dice) return null;
+        if (branchIndex < 0 || branchIndex >= dice.DiceBranches.Count) return null;
+
+        var wanted = dice.DiceBranches[branchIndex].Action;
+        if (wanted == null || wanted.Type != innerType) return null;
+
+        if (list.ItemContainerGenerator.ContainerFromItem(dice) is not DependencyObject host)
+            return null;
+        return FindByDataContext(host, wanted);
+    }
+
+    /// <summary>Depth-first search for the element bound to one particular
+    /// view model. The innermost match wins — an outer container carries the
+    /// same DataContext by inheritance, and flashing that would light up the
+    /// whole DiceRoll again.</summary>
+    private static FrameworkElement? FindByDataContext(DependencyObject root, object target)
+    {
+        int count = System.Windows.Media.VisualTreeHelper.GetChildrenCount(root);
+        for (int i = 0; i < count; i++)
+        {
+            var child = System.Windows.Media.VisualTreeHelper.GetChild(root, i);
+            if (FindByDataContext(child, target) is FrameworkElement deeper) return deeper;
+            if (child is FrameworkElement fe && ReferenceEquals(fe.DataContext, target))
+                return fe;
+        }
         return null;
     }
 
