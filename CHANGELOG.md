@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- **An `InputKey` condition** — gate anything on a keyboard key or a mouse
+  button. Four phases: **Pressed** and **Released** are moments, true once per
+  press; **Down** and **Up** are states, true for as long as they hold.
+- The key is chosen from grouped dropdowns rather than typed. The game reads
+  keys by position rather than by the letter on the cap, so the groups that
+  move between keyboard layouts say so in their headings, and the ones that do
+  not — mouse, arrows, modifiers, function keys, numpad — come first.
+- Validate flags a missing key, a key name the picker does not carry, and an
+  edge phase on a dialogue node's own conditions, which are checked once when
+  the conversation reaches the node and so will almost never catch one.
+
 ## 1.1.0
 
 The first update since the initial release. It is mostly about **learning the

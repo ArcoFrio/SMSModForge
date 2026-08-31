@@ -112,6 +112,24 @@ public static class ConditionSchemas
                 "\"off or absent\" rather than \"off\"."),
         },
 
+        // Device / key / phase are drawn by the shared input row instead, the
+        // way the Set-Active family draws its own targeting: the key list has
+        // to follow the device picker, which a flat schema row cannot do.
+        // Declared here anyway so the validator and the docs see them.
+        [NodeConditionTypes.InputKey] = new[]
+        {
+            new ParamSchema("key", "Key", ParamType.String, "",
+                "Unity KeyCode name for the key or mouse button, e.g. Space, Mouse0, " +
+                "F1. Reported by POSITION rather than by the letter printed on the " +
+                "cap, so the letter and number rows land elsewhere on a non-US " +
+                "layout; the picker groups those separately."),
+            new ParamSchema("phase", "When", ParamType.Choice, "Pressed",
+                "Pressed and Released are moments, true once per press. Down and Up " +
+                "are states, true for as long as they hold. An edge only means " +
+                "something where the condition is re-checked continuously.",
+                fixedOptions: new[] { "Pressed", "Down", "Released", "Up" }),
+        },
+
         // ── Misc ──────────────────────────────────────────────────────
         // Deprecated — no longer offered in the Type combo, but the schema
         // stays so packs authored before DailyChance still render/edit.

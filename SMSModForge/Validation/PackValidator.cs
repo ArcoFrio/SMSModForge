@@ -955,6 +955,34 @@ public static class PackValidator
             case NodeConditionTypes.LevelActive:
                 if (!c.Params.ContainsKey("level")) issues.Add(new(Severity.Error, cWhere, "Param 'level' is required"));
                 break;
+            case NodeConditionTypes.InputKey:
+            {
+                if (!c.Params.TryGetValue("key", out var ikey) || string.IsNullOrWhiteSpace(ikey))
+                    issues.Add(new(Severity.Error, cWhere, "Param 'key' is required"));
+                else if (!InputKeys.IsKnown(ikey))
+                    issues.Add(new(Severity.Warning, cWhere,
+                        $"'{ikey}' is not one of the keys the picker offers. The runtime " +
+                        "resolves any Unity KeyCode name, so a hand-written one may still " +
+                        "work — but a misspelling never matches anything and never says so.",
+                        "input.unknownKey"));
+
+                string phase = c.Params.TryGetValue("phase", out var ph) ? ph : "";
+                if (phase.Length > 0 && !InputPhases.All.Contains(phase))
+                    issues.Add(new(Severity.Error, cWhere,
+                        $"'{phase}' is not one of Pressed, Down, Released or Up."));
+                // An edge on a node's own conditions is this condition's one real
+                // trap: GC2 checks those once, when it reaches the node, so "was it
+                // pressed in that exact instant" is a coin flip the author will
+                // read as the condition being broken.
+                else if (context == ConditionContext.OneShot && InputPhases.IsEdge(phase))
+                    issues.Add(new(Severity.Warning, cWhere,
+                        $"{phase} is true for one moment, but a node's own conditions are " +
+                        "checked once, when the conversation reaches the node. The two will " +
+                        "almost never line up. Use Down or Up here, or move the check to an " +
+                        "integration rule, which is re-tested every frame.",
+                        "input.edgeInOneShot"));
+                break;
+            }
             case NodeConditionTypes.GameObjectActive:
                 // 'target' is canonical. 'path' is the spelling from before the
                 // category row and the runtime still reads it, so a pack that

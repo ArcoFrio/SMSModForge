@@ -685,6 +685,9 @@ namespace SMSModForge.PackPlugin
             }
             _dispatchers.Clear();
             _contexts.Clear();
+            // The key watch list was built out of the conditions those packs
+            // ran; nothing should still be polled for a pack that is gone.
+            InputRuntime.Reset();
             _dialogueHosts.Clear();
             _sharedSkin = null;
             _levelWatches.Clear();
@@ -996,6 +999,12 @@ namespace SMSModForge.PackPlugin
             if (currentScene.name != "CoreGameScene") return;
             if (loaded)
             {
+                // Input first, before anything that can read a condition.
+                // Edges are true for one sampled frame, so every consumer in
+                // this frame has to be looking at the same sample — and rules
+                // deliberately skip frames further down, which is exactly why
+                // this cannot be left to Input.GetKeyDown at the point of use.
+                InputRuntime.Sample();
                 // Slot-switch detection first — every variable Tick below
                 // reads pack state, so we want the file backing it to
                 // match the currently-active NanoSave slot.

@@ -151,6 +151,7 @@ public sealed class NodeConditionViewModel : ObservableObject
         foreach (var schema in schemas)
         {
             if (IsGoActiveFamily && GoCategoryRowKeys.Contains(schema.Key)) continue;
+            if (IsInputFamily) continue;   // device / key / phase are their own row
             var paramType = schema.Type;
             ParamRowViewModel? capturedRow = null;
             var row = new ParamRowViewModel(
@@ -200,6 +201,12 @@ public sealed class NodeConditionViewModel : ObservableObject
             OnPropertyChanged(nameof(IsGoOverlayCategory));
             OnPropertyChanged(nameof(IsGoTargetEnabled));
             OnPropertyChanged(nameof(GoOverlayOptions));
+            OnPropertyChanged(nameof(IsInputFamily));
+            OnPropertyChanged(nameof(InputDevice));
+            OnPropertyChanged(nameof(InputKeyOptions));
+            OnPropertyChanged(nameof(InputKeyToken));
+            OnPropertyChanged(nameof(InputPhase));
+            OnPropertyChanged(nameof(InputPhaseHelp));
             RebuildParamRows();
         }
     }
@@ -431,6 +438,113 @@ public sealed class NodeConditionViewModel : ObservableObject
             return prefix + Type + " — " + string.Join(", ", pairs);
         }
     }
+
+    // ── InputKey: device, key, and what about it ───────────────────
+    //
+    // Three pickers rather than a typed key name. A key nobody can spell
+    // wrong is the whole point: KeyCode names are not what is printed on the
+    // caps (Alpha1, Return, Mouse0), so a text box here would be a field an
+    // author guesses at and only finds out about in game.
+    //
+    // Device is an editor-side filter and is NOT stored. A mouse button is a
+    // KeyCode like any other, so the manifest needs one key param either way,
+    // and inferring the device back from the token means one less thing that
+    // can disagree with itself.
+
+    public bool IsInputFamily => Model.Type == NodeConditionTypes.InputKey;
+
+    public static IReadOnlyList<string> InputDevices => InputKeys.Devices;
+    public static IReadOnlyList<string> InputPhaseOptions => InputPhases.All;
+
+    /// <summary>
+    /// The device the author has picked, when they have picked one. Editor-only
+    /// state, deliberately not a param: a mouse button is a KeyCode like any
+    /// other, so the manifest has nothing to say about devices.
+    /// <para/>
+    /// It cannot be inferred from the key alone, which is what the first version
+    /// tried. Switching to Mouse clears the key (a keyboard key is not in the
+    /// mouse list), and an empty key infers back to Keyboard - so the picker
+    /// snapped straight back and the list never changed.
+    /// </summary>
+    private string _inputDevice;
+
+    /// <summary>Which picker to show. Falls back to reading the stored key, so a
+    /// condition loaded from disk lands on the right one with nothing stored.</summary>
+    public string InputDevice
+    {
+        get => _inputDevice ?? InputKeys.DeviceOf(GetParam("key"));
+        set
+        {
+            if (value == InputDevice) return;
+            _inputDevice = value;
+            // The old key belongs to the other device's list; keeping it would
+            // leave a name the new list cannot offer sitting in the box.
+            SetParam("key", "");
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(InputKeyOptions));
+            OnPropertyChanged(nameof(InputKeyToken));
+        }
+    }
+
+    /// <summary>
+    /// The keys for the chosen device, as a GROUPED view so the dropdown can
+    /// show headings.
+    /// <para/>
+    /// Built fresh on every read rather than cached: the list depends on the
+    /// device picker, and a view held from the first read would keep showing the
+    /// other device's keys. It is ninety-odd items off a static list, so the
+    /// rebuild costs nothing worth caching around.
+    /// </summary>
+    public System.ComponentModel.ICollectionView InputKeyOptions
+    {
+        get
+        {
+            var src = new System.Windows.Data.CollectionViewSource
+            {
+                Source = InputKeys.For(InputDevice).ToList(),
+            };
+            src.GroupDescriptions.Add(
+                new System.Windows.Data.PropertyGroupDescription(nameof(InputKeyOption.Group)));
+            return src.View;
+        }
+    }
+
+    /// <summary>The stored KeyCode name. Bound by SelectedValue, so the token is
+    /// what lands in the param while the author only ever sees the label.</summary>
+    public string InputKeyToken
+    {
+        get => GetParam("key");
+        set
+        {
+            SetParam("key", value ?? "");
+            // Keep the filter honest if a key arrives from anywhere but the
+            // picker - a paste, or an undo restoring the other device's key.
+            if (!string.IsNullOrEmpty(value)) _inputDevice = InputKeys.DeviceOf(value);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(InputDevice));
+        }
+    }
+
+    public string InputPhase
+    {
+        get
+        {
+            var p = GetParam("phase");
+            return string.IsNullOrEmpty(p) ? InputPhases.Pressed : p;
+        }
+        set
+        {
+            SetParam("phase", value ?? InputPhases.Pressed);
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(InputPhaseHelp));
+        }
+    }
+
+    /// <summary>One line under the phase picker saying what the chosen phase
+    /// does. The four are easy to mix up and the difference between a moment
+    /// and a state is the thing that decides whether the condition works.</summary>
+    public string InputPhaseHelp => InputPhases.Describe(InputPhase);
+
 
     // ── GameObjectActive: the Set-Active category row, on a condition ───
     //

@@ -307,6 +307,15 @@ namespace SMSModForge.PackPlugin
                         // worked — what changes is that the right object is found.
                         return go != null && go.activeInHierarchy;
                     }
+                case "InputKey":
+                    {
+                        // Resolve registers the key for sampling the first time it
+                        // is seen, so the watch list is built out of the conditions
+                        // that actually run rather than declared up front.
+                        var code = InputRuntime.Resolve((string)p["key"], log);
+                        if (code == null) return false;
+                        return InputRuntime.Test(code.Value, (string)p["phase"] ?? "Pressed");
+                    }
                 case "Random":
                     {
                         // Deprecated — re-rolls on every evaluation. Kept so packs

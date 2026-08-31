@@ -665,6 +665,79 @@
                         </ItemsControl.Style>
                     </ItemsControl>
 
+                    <!-- InputKey: device, key, phase. The key list follows the device
+                         picker, which is why this is a hand-built row rather than
+                         schema-driven ones — a schema row cannot depend on a sibling.
+
+                         The list is GROUPED, and the group headings carry the keyboard-
+                         layout warning: Unity reports letters and digits by position, so
+                         "A" is wherever A sits on a US board. Saying that in the heading
+                         puts it where somebody choosing a key cannot miss it, and puts
+                         the groups that do not move (mouse, arrows, modifiers, function
+                         keys, numpad) at the top where they are the easy default. -->
+                    <Grid Margin="0,2,0,0">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsInputFamily}" Value="True">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="110"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Text="Device" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <ComboBox Grid.Row="0" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{x:Static vm:NodeConditionViewModel.InputDevices}"
+                                  SelectedItem="{Binding InputDevice, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Which list of keys to choose from. Mouse buttons are keys like any other to the game; this only filters the picker below."/>
+
+                        <TextBlock Text="Key" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <ComboBox Grid.Row="1" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{Binding InputKeyOptions}"
+                                  SelectedValuePath="Token"
+                                  DisplayMemberPath="Label"
+                                  SelectedValue="{Binding InputKeyToken, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="The key or button to watch. Groups near the bottom sit in different places on different keyboard layouts — prefer the ones above them for anything a player has to be able to press.">
+                            <ComboBox.GroupStyle>
+                                <GroupStyle>
+                                    <GroupStyle.HeaderTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}" FontWeight="SemiBold"
+                                                       Opacity="0.75" FontSize="10" Margin="0,4,0,1"/>
+                                        </DataTemplate>
+                                    </GroupStyle.HeaderTemplate>
+                                </GroupStyle>
+                            </ComboBox.GroupStyle>
+                            <ComboBox.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel/>
+                                </ItemsPanelTemplate>
+                            </ComboBox.ItemsPanel>
+                        </ComboBox>
+
+                        <TextBlock Text="When" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Margin="0,0,4,2"/>
+                        <ComboBox Grid.Row="2" Grid.Column="1" Margin="0,0,0,2"
+                                  ItemsSource="{x:Static vm:NodeConditionViewModel.InputPhaseOptions}"
+                                  SelectedItem="{Binding InputPhase, UpdateSourceTrigger=PropertyChanged}"
+                                  ToolTip="Pressed and Released are moments — true once per press, and only useful where the condition is re-checked continuously (integration rules, button visibility, dialogue start conditions). Down and Up are states and work anywhere."/>
+
+                        <TextBlock Grid.Row="3" Grid.Column="1" Foreground="Gray" FontSize="10"
+                                   TextWrapping="Wrap" Margin="0,0,0,2"
+                                   Text="{Binding InputPhaseHelp}"/>
+                    </Grid>
+
                     <!-- Category + Target for GameObjectActive — the same row the
                          Set-Active action uses, because the condition asks about exactly
                          what that action sets. Category swaps the Target autocomplete;

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
 
@@ -190,6 +190,21 @@ public static class NodeConditionTypes
     /// </summary>
     public const string Timer = "Timer";
 
+    /// <summary>
+    /// A keyboard key or mouse button. Params: <c>key</c> (a Unity
+    /// <c>KeyCode</c> name — see <see cref="InputKeys"/>) and <c>phase</c>
+    /// (<see cref="InputPhases"/>).
+    /// <para/>
+    /// Two of the four phases are edges, true for one moment rather than for
+    /// as long as something holds. That makes them useful where a condition is
+    /// re-checked continuously — integration rules, button visibility, dialogue
+    /// start conditions — and close to useless on a dialogue NODE's own
+    /// conditions, which GC2 checks once when it reaches the node: the odds of
+    /// the key going down in that exact moment are not odds a pack should be
+    /// built on. Down and Up are states and work anywhere.
+    /// </summary>
+    public const string InputKey = "InputKey";
+
     /// <summary>Always-true condition (useful for testing).</summary>
     public const string AlwaysTrue = "AlwaysTrue";
 
@@ -227,7 +242,7 @@ public static class NodeConditionTypes
         GameVariableNumberGreaterThan, GameVariableNumberGreaterOrEqual,
         GameVariableNumberLessThan, GameVariableNumberLessOrEqual,
         LevelActive, GameObjectActive, DailyChance, AlwaysTrue, Weather,
-        VariableStartsWith, ListContains, ListCount,
+        VariableStartsWith, ListContains, ListCount, InputKey,
     };
 
     /// <summary>

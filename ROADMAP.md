@@ -22,42 +22,6 @@ and conditions, closer to the Places tab's GameObject tree).
 Worth settling before any of it is designed, because the two answers share
 almost no code.
 
-### A key-press condition
-
-A condition that passes on a keyboard key, so a pack can put something behind
-a keypress rather than behind a button or a line of dialogue.
-
-The interesting part is not reading the key. It is that "pressed" and "held"
-are different questions, and the condition vocabulary already has a context
-split that decides which one is answerable where:
-
-- **Polled** (dialogue start conditions, button visibility) re-evaluates every
-  frame, so *is this key down* works and *was it just pressed* is a single
-  frame the author will usually miss.
-- **Rule** polls too, but has a discrete fired moment. *Is this key down* here
-  re-fires on every frame the key is held, which is the same trap `Random`
-  falls into per-frame and why `Timer` is offered only on rules.
-- **OneShot** (a node's own conditions, level hooks) is checked once when the
-  node is reached. Asking whether a key happened to be down at that instant is
-  almost never what anybody means, so this may simply not belong there.
-
-So the shape is probably two conditions rather than one, offered in different
-contexts, rather than a single type with a mode dropdown that is wrong in two
-of the three places it appears.
-
-Points to decide:
-
-- **Edge detection needs somewhere to live.** `ConditionEvaluator` is handed
-  the variable store, a logger and a pack id, and nothing else. `DailyChance`
-  got around having no state by deriving its roll from (pack, id, day); a key
-  press cannot be derived and needs per-frame state kept somewhere.
-- **Whose key is it.** The game has its own bindings and the player may be
-  typing into a field. A pack reading raw input will fight both unless there
-  is a rule about when a pack condition is allowed to see a key at all.
-- **Which keys to offer.** A closed list an author picks from is safer than a
-  typed key name, and it is the only version that can leave out the keys the
-  game already owns.
-
 ### Auto-update, from the GitHub releases
 
 The editor should notice when a newer version has been published and offer it,
