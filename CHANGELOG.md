@@ -25,11 +25,16 @@
   in. It stays selectable, because the runtime names units by key in its log,
   validation messages are keyed on it, and a cross-pack reference is written as
   pack.key — so it is worth reading even though there is nothing to type.
-- A button's Music box lists **Music**, the game's own default track, above the
-  pack's own — so a button leaving a themed area can put the ordinary music
-  back. It also offers **(leave unchanged)** for the button that should not
-  touch the music; that is what an empty field always did, and picking it still
-  stores nothing.
+- **Every music dropdown lists the game's own tracks** as well as the pack's —
+  all 38 of them, under **This pack** / **The game’s own** headings. Buttons,
+  navigator buttons and the SwitchMusic action all name a child of the same
+  object, so pointing one at the game’s own music was always legal; until now
+  you had to know how it was spelled. The fields stay typable: the list comes
+  from a dump of an older build, so anything added since can still be entered
+  by hand.
+- Button Music boxes also offer **(leave unchanged)** for the button that should
+  not touch the music; that is what an empty field always did, and picking it
+  still stores nothing.
 - Renaming a track refreshes the music dropdowns. SFX already did this; music
   did not, so a renamed track went on being offered under its old key until the
   app restarted.

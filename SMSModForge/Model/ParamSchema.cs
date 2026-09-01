@@ -1,4 +1,4 @@
-namespace SMSModForge.Model;
+﻿namespace SMSModForge.Model;
 
 /// <summary>
 /// Logical kind of a single action / condition parameter, used by the
@@ -90,9 +90,10 @@ public enum ParamType
     /// shared between the game and packs.</summary>
     SignalRef,
 
-    /// <summary>Pack-local music key. Combobox bound to
-    /// <c>MainViewModel.MusicKeyOptions</c>; editable so vanilla
-    /// <c>12_AudioPlayer</c> children remain reachable by name.</summary>
+    /// <summary>A music object under <c>12_AudioPlayer</c>: the pack's tracks
+    /// and the game's, grouped. Combobox bound to
+    /// <c>MainViewModel.MusicKeyOptionsGrouped</c>; editable, because the
+    /// catalogue of the game's tracks is a snapshot and may not be current.</summary>
     MusicRef,
 
     /// <summary>Pack-local SFX key. Combobox bound to

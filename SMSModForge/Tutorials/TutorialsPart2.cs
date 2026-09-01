@@ -1067,7 +1067,10 @@ internal static class TutorialsPart2
                            "through that door now changes the music.\n\n" +
                            "One track plays at a time, and pressing the button switches to " +
                            "this one, so a button that leads back out wants a Music of its " +
-                           "own or the room's track follows the player out.\n\n" +
+                           "own or the room's track follows the player out. The same box " +
+                           "lists the game's own tracks under their own heading, and the " +
+                           "one called Music is the ordinary everyday music — that is " +
+                           "usually what the way back out should say.\n\n" +
                            "Map buttons have the same box, and it is the more common place " +
                            "for it: the world map is how a player reaches most locations, so " +
                            "if you built one in tutorial 4, give it the same treatment. Same " +

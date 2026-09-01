@@ -168,7 +168,7 @@ public static class ActionSchemas
         [NodeActionTypes.SwitchMusic] = new[]
         {
             new ParamSchema("music", "Music key", ParamType.MusicRef, "",
-                "Pack music key, or the name of a vanilla 12_AudioPlayer child."),
+                "A track from the Music tab, or one of the game's own. Both are children of 12_AudioPlayer, so either can be named."),
         },
         [NodeActionTypes.PlaySFX] = new[]
         {

@@ -220,10 +220,11 @@ public sealed class MainViewModel : ObservableObject
     public ObservableCollection<NavigatorTargetOption> SceneOptions { get; } = new();
 
     /// <summary>
-    /// Pack music keys available to <see cref="NodeActionTypes.SwitchMusic"/>'s
-    /// <c>music</c> param. Rebuilt from the Music tab; <c>IsEditable</c>
-    /// stays on so authors can still pick a vanilla <c>12_AudioPlayer</c>
-    /// child by name.
+    /// Music names available to <see cref="NodeActionTypes.SwitchMusic"/>'s
+    /// <c>music</c> param: the pack's own tracks from the Music tab, then the
+    /// game's from <see cref="VanillaMusic"/>. <c>IsEditable</c> stays on — the
+    /// catalogue is a snapshot of one build and a newer track has to remain
+    /// reachable by typing it.
     /// </summary>
     public ObservableCollection<string> MusicKeyOptions { get; } = new();
 
@@ -3641,16 +3642,28 @@ public sealed class MainViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Rebuilds <see cref="MusicKeyOptions"/> from the Music tab. Called
-    /// after rebind, add and remove operations so the SwitchMusic
-    /// dropdown stays current.
+    /// Rebuilds <see cref="MusicKeyOptions"/> and
+    /// <see cref="MusicKeyOptionsWithDefault"/>. Called after rebind, add and
+    /// remove operations so the music dropdowns stay current.
     /// </summary>
     public void RebuildMusicKeyOptions()
     {
         // In-place sync, never Clear — see SyncOptions.
         var keys = Music.OrderBy(m => m.Key, System.StringComparer.OrdinalIgnoreCase)
                         .Select(m => m.Key).ToList();
-        SyncOptions(MusicKeyOptions, keys);
+
+        // The pack's own tracks, then the game's. Every one of these fields
+        // resolves a name against the children of 12_AudioPlayer, and the
+        // game's tracks live there beside the pack's, so naming one is
+        // ordinary authoring — it is how a button or a scene puts the normal
+        // music back. Listing them spares the author having to know the
+        // spelling of something they never wrote. See VanillaMusic for where
+        // the names come from and what they do not cover.
+        var all = new System.Collections.Generic.List<string>(keys);
+        foreach (var track in VanillaMusic.All)
+            if (!keys.Contains(track, System.StringComparer.OrdinalIgnoreCase))
+                all.Add(track);
+        SyncOptions(MusicKeyOptions, all);
 
         // The button fields get one extra entry at the top. A button with no
         // music leaves whatever is playing alone, which is a decision worth
@@ -3659,27 +3672,55 @@ public sealed class MainViewModel : ObservableObject
         // a mistake rather than a choice.
         var choices = new System.Collections.Generic.List<string>
             { View.Converters.DefaultMusicConverter.Label };
-        // The game's own default track. It is a child of 12_AudioPlayer like
-        // any pack track, so a button can name it to put the ordinary music
-        // back - which is what a button leaving a themed area wants. Offered
-        // by name because there is no catalog of the game's audio objects to
-        // list; this is the one that is known.
-        if (!keys.Contains(VanillaDefaultTrack, System.StringComparer.OrdinalIgnoreCase))
-            choices.Add(VanillaDefaultTrack);
-        choices.AddRange(keys);
+        choices.AddRange(all);
         SyncOptions(MusicKeyOptionsWithDefault, choices);
     }
 
-    /// <summary>The pack's tracks, preceded by the "leave it alone" entry.
-    /// Bound by the navigator and map button Music pickers; see
-    /// <see cref="View.Converters.DefaultMusicConverter"/> for how that entry
-    /// round-trips to an empty value.</summary>
+    /// <summary>The same list as <see cref="MusicKeyOptions"/>, preceded by the
+    /// "leave it alone" entry. Bound by the navigator and map button Music
+    /// pickers; see <see cref="View.Converters.DefaultMusicConverter"/> for how
+    /// that entry round-trips to an empty value.</summary>
     public ObservableCollection<string> MusicKeyOptionsWithDefault { get; } = new();
 
-    /// <summary>The game's own music object under 12_AudioPlayer. Not a pack
-    /// track, and not something the editor can enumerate — it is offered by
-    /// name so a button can switch back to the ordinary music.</summary>
-    public const string VanillaDefaultTrack = "Music";
+    /// <summary>
+    /// <see cref="MusicKeyOptions"/> under "This pack" / "The game's own"
+    /// headings, for the SwitchMusic picker.
+    /// </summary>
+    /// <remarks>
+    /// Built once and held. The view sits on top of the live collection, so the
+    /// in-place edits SyncOptions makes reach it and an item that changes side
+    /// lands under the other heading on its own — nothing here needs a Refresh,
+    /// which matters because a Reset would take the editable box's text down
+    /// with it.
+    /// <para/>
+    /// Every picker binds this one view, so they would otherwise share its
+    /// current item: the bindings set IsSynchronizedWithCurrentItem to False,
+    /// which is only the default while ItemsSource is a plain list.
+    /// </remarks>
+    public System.ComponentModel.ICollectionView MusicKeyOptionsGrouped =>
+        _musicKeyOptionsGrouped ??= GroupByOrigin(MusicKeyOptions);
+    private System.ComponentModel.ICollectionView? _musicKeyOptionsGrouped;
+
+    /// <summary>
+    /// <see cref="MusicKeyOptionsWithDefault"/> under the same headings, for the
+    /// button pickers. The "leave unchanged" entry groups to a blank heading the
+    /// template collapses, so it sits at the top on its own.
+    /// </summary>
+    public System.ComponentModel.ICollectionView MusicKeyOptionsWithDefaultGrouped =>
+        _musicKeyOptionsWithDefaultGrouped ??= GroupByOrigin(MusicKeyOptionsWithDefault);
+    private System.ComponentModel.ICollectionView? _musicKeyOptionsWithDefaultGrouped;
+
+    /// <summary>A grouped view over a music name list. The group description
+    /// takes a null property name, which hands the converter the string itself
+    /// rather than a property of it.</summary>
+    private static System.ComponentModel.ICollectionView GroupByOrigin(
+        ObservableCollection<string> source)
+    {
+        var src = new System.Windows.Data.CollectionViewSource { Source = source };
+        src.GroupDescriptions.Add(new System.Windows.Data.PropertyGroupDescription(
+            null, View.Converters.MusicOriginConverter.Instance));
+        return src.View;
+    }
 
     /// <summary>Rebuilds <see cref="SfxKeyOptions"/> from the SFX tab.</summary>
     public void RebuildSfxKeyOptions()
