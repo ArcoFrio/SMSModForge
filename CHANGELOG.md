@@ -32,9 +32,11 @@
   you had to know how it was spelled. The fields stay typable: the list comes
   from a dump of an older build, so anything added since can still be entered
   by hand.
-- Button Music boxes also offer **(leave unchanged)** for the button that should
-  not touch the music; that is what an empty field always did, and picking it
-  still stores nothing.
+- **A new button starts on `Music`**, the game’s ordinary track, rather than
+  empty. An empty box tells the game not to touch the music at all — still true,
+  and still what clearing the box does — but it is also what an unfilled field
+  looks like, so it made a poor default. Buttons already saved with an empty
+  Music are left exactly as they are.
 - Renaming a track refreshes the music dropdowns. SFX already did this; music
   did not, so a renamed track went on being offered under its old key until the
   app restarted.

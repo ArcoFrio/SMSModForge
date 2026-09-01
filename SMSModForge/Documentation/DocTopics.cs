@@ -435,7 +435,7 @@ public static class DocTopics
                     new DocBullet("Target place", "Where the button takes the player."),
                     new DocBullet("District", "Which of the world map's radial menus the button appears under: Seaside, The Line, Neon Row, Shopside or Foundry."),
                     new DocBullet("Label", "The button's text. It accepts [PV:name] tokens, so a dialogue or rule can rename the button while the game is running."),
-                    new DocBullet("Music (optional)", "A track to switch to when the button is used — one of yours from the Music tab, or one of the game's own, which is how a button puts the ordinary music back. Leave unchanged means the button does not touch what is playing."),
+                    new DocBullet("Music (optional)", "A track to switch to when the button is used — one of yours from the Music tab, or one of the game's own, which is how a button puts the ordinary music back. New buttons start on Music, the game's ordinary track; clear the box and the button leaves whatever is playing alone."),
                     new DocBullet("Conditions", "Gate the button so it only appears once the player has earned it. Leave the list empty and it is always there. See Condition and action lists."),
                     new DocBullet("− Remove selected", "Delete the selected map button."))),
 

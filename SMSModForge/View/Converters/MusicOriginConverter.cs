@@ -31,11 +31,6 @@ public sealed class MusicOriginConverter : IValueConverter
     {
         var s = value as string ?? "";
 
-        // The "leave unchanged" row is neither, and gets a blank heading the
-        // template collapses — it sits alone at the top with no label.
-        if (string.Equals(s, DefaultMusicConverter.Label, StringComparison.Ordinal))
-            return "";
-
         // A pack track sharing a vanilla name is filed under the game. Two
         // objects under one parent then answer to that name and which one a
         // lookup reaches is not something the editor can promise, so the

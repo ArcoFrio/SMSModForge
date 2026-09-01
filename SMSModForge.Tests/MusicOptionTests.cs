@@ -86,18 +86,50 @@ public class MusicOptionTests
     }
 
     [Fact]
-    public void Button_picker_puts_leave_unchanged_alone_under_a_blank_heading()
+    public void Button_pickers_offer_the_same_list_as_the_action()
     {
+        // One list, no extra row on the front of it. The button fields used to
+        // carry a "(leave unchanged)" sentinel for the empty state; they now
+        // start on a real track instead.
         var vm = WithTracks("neonRain");
-        var groups = Groups(vm.MusicKeyOptionsWithDefaultGrouped);
+        var groups = Groups(vm.MusicKeyOptionsGrouped);
 
-        Assert.Equal(3, groups.Count);
-        // Blank, so the header template collapses it: the row belongs to
-        // neither side and a heading over one item would only be noise.
-        Assert.Equal("", groups[0].Key);
-        Assert.Equal(new[] { DefaultMusicConverter.Label }, groups[0].Value);
-        Assert.Equal(MusicOriginConverter.PackHeading, groups[1].Key);
-        Assert.Equal(MusicOriginConverter.GameHeading, groups[2].Key);
+        Assert.Equal(2, groups.Count);
+        Assert.Equal(MusicOriginConverter.PackHeading, groups[0].Key);
+        Assert.Equal(MusicOriginConverter.GameHeading, groups[1].Key);
+        Assert.DoesNotContain(vm.MusicKeyOptions, o => o.StartsWith("("));
+    }
+
+    [Fact]
+    public void A_new_button_starts_on_the_games_ordinary_track()
+    {
+        var vm = new MainViewModel();
+
+        vm.AddMapButtonCommand.Execute(null);
+        Assert.Equal(VanillaMusic.Default, vm.MapButtons.Single().Music);
+
+        vm.AddPlaceCommand.Execute(null);
+        var button = vm.Places.Single().AddNavigatorButton();
+        Assert.Equal(VanillaMusic.Default, button!.Music);
+    }
+
+    [Fact]
+    public void A_button_saved_with_no_music_keeps_none()
+    {
+        // The default is what a NEW button starts on, not what an empty field
+        // means. Empty tells the runtime to skip the switch outright, so a door
+        // that deliberately lets the area’s track keep playing has to survive a
+        // round trip through the editor. Nothing may fill it in on the way.
+        Assert.Equal("", new NavigatorButtonDef().Music);
+        Assert.Equal("", new MapButtonDef().Music);
+
+        var pack = PackRepository.CreateEmpty("t");
+        var place = new PlaceDef { Key = "lab" };
+        place.NavigatorButtons.Add(new NavigatorButtonDef { Label = "Out" });
+        pack.Places.Add(place);
+
+        var back = PackRepository.Deserialize(PackRepository.SerializeAsSaved(pack))!;
+        Assert.Equal("", back.Places.Single().NavigatorButtons.Single().Music);
     }
 
     [Fact]

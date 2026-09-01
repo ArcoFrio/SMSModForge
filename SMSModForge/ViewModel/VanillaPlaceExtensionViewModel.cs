@@ -1,4 +1,4 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
 
@@ -312,7 +312,11 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
 
     public NavigatorButtonViewModel AddNavigatorButton()
     {
-        var def = new NavigatorButtonDef();
+        // Starts on the game’s ordinary track rather than empty. Empty means
+        // the button does not touch the music, which is a real answer but a bad
+        // default: it is also what an unfilled box looks like. Clearing it says
+        // so on purpose. Nothing rewrites a button already saved as empty.
+        var def = new NavigatorButtonDef { Music = VanillaMusic.Default };
         Model.NavigatorButtons.Add(def);
         var vm = new NavigatorButtonViewModel(def, removeCallback: RemoveNavigatorButton,
                                                    moveCallback: MoveNavigatorButton);

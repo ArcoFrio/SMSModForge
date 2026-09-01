@@ -2371,6 +2371,11 @@ public sealed class MainViewModel : ObservableObject
         var def = new MapButtonDef
         {
             District = WorldMapDistricts.All[4].GoName, // Foundry
+            // A map button crosses the world map into somewhere new, so it
+            // almost always wants to say what plays there. Starting on the
+            // game’s ordinary track means the box is answered rather than
+            // half-filled; clearing it is how an author says "leave it alone".
+            Music = VanillaMusic.Default,
         };
         Pack.MapButtons.Add(def);
         var vm = new MapButtonViewModel(def, RemoveMapButtonVm);
@@ -3642,8 +3647,7 @@ public sealed class MainViewModel : ObservableObject
     }
 
     /// <summary>
-    /// Rebuilds <see cref="MusicKeyOptions"/> and
-    /// <see cref="MusicKeyOptionsWithDefault"/>. Called after rebind, add and
+    /// Rebuilds <see cref="MusicKeyOptions"/>. Called after rebind, add and
     /// remove operations so the music dropdowns stay current.
     /// </summary>
     public void RebuildMusicKeyOptions()
@@ -3664,23 +3668,7 @@ public sealed class MainViewModel : ObservableObject
             if (!keys.Contains(track, System.StringComparer.OrdinalIgnoreCase))
                 all.Add(track);
         SyncOptions(MusicKeyOptions, all);
-
-        // The button fields get one extra entry at the top. A button with no
-        // music leaves whatever is playing alone, which is a decision worth
-        // being able to SEE and pick — a blank row reads as an unfinished
-        // field. The action's own music param does not get it: empty there is
-        // a mistake rather than a choice.
-        var choices = new System.Collections.Generic.List<string>
-            { View.Converters.DefaultMusicConverter.Label };
-        choices.AddRange(all);
-        SyncOptions(MusicKeyOptionsWithDefault, choices);
     }
-
-    /// <summary>The same list as <see cref="MusicKeyOptions"/>, preceded by the
-    /// "leave it alone" entry. Bound by the navigator and map button Music
-    /// pickers; see <see cref="View.Converters.DefaultMusicConverter"/> for how
-    /// that entry round-trips to an empty value.</summary>
-    public ObservableCollection<string> MusicKeyOptionsWithDefault { get; } = new();
 
     /// <summary>
     /// <see cref="MusicKeyOptions"/> under "This pack" / "The game's own"
@@ -3701,14 +3689,6 @@ public sealed class MainViewModel : ObservableObject
         _musicKeyOptionsGrouped ??= GroupByOrigin(MusicKeyOptions);
     private System.ComponentModel.ICollectionView? _musicKeyOptionsGrouped;
 
-    /// <summary>
-    /// <see cref="MusicKeyOptionsWithDefault"/> under the same headings, for the
-    /// button pickers. The "leave unchanged" entry groups to a blank heading the
-    /// template collapses, so it sits at the top on its own.
-    /// </summary>
-    public System.ComponentModel.ICollectionView MusicKeyOptionsWithDefaultGrouped =>
-        _musicKeyOptionsWithDefaultGrouped ??= GroupByOrigin(MusicKeyOptionsWithDefault);
-    private System.ComponentModel.ICollectionView? _musicKeyOptionsWithDefaultGrouped;
 
     /// <summary>A grouped view over a music name list. The group description
     /// takes a null property name, which hands the converter the string itself

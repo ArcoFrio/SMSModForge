@@ -34,10 +34,6 @@
             of the same object and either is a legal value - so the list is
             grouped under "This pack" and "The game's own" instead.
 
-            The blank heading is deliberate: the button pickers' "(leave
-            unchanged)" row belongs to neither side, and the trigger drops the
-            header entirely rather than leaving a labelled group of one.
-
             Declared before the templates that use it: a StaticResource is
             resolved in the order the dictionary is parsed.
         -->
@@ -45,17 +41,7 @@
             <GroupStyle.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding Name}" FontWeight="SemiBold"
-                               Opacity="0.75" FontSize="10" Margin="0,4,0,1">
-                        <TextBlock.Style>
-                            <Style TargetType="TextBlock">
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding Name}" Value="">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TextBlock.Style>
-                    </TextBlock>
+                               Opacity="0.75" FontSize="10" Margin="0,4,0,1"/>
                 </DataTemplate>
             </GroupStyle.HeaderTemplate>
         </GroupStyle>
@@ -1625,19 +1611,20 @@
                     <TextBox Text="{Binding Label, UpdateSourceTrigger=PropertyChanged}"
                              Grid.Row="1" Grid.Column="1"
                              ToolTip="Button text. Supports [PV:variableName] tokens that re-resolve live from String pack variables — change the variable via a dialogue action or Integration rule and the button renames in place."/>
-                    <!-- The pack's own tracks and the game's, grouped. Editable rather
-                         than a closed list: the field names a child under 12_AudioPlayer,
-                         and the catalogued names come from a dump of an older build, so a
-                         track added since has to remain typable. -->
+                    <!-- The pack's own tracks and the game's, grouped - the same list the
+                         SwitchMusic action offers. Editable rather than a closed list: the
+                         field names a child under 12_AudioPlayer, and the catalogued names
+                         come from a dump of an older build, so a track added since has to
+                         remain typable. Cleared, the button leaves the music alone; that is
+                         what an empty field has always meant to the runtime. -->
                     <TextBlock Text="Music (optional):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="2" Grid.Column="1"
                               IsSynchronizedWithCurrentItem="False"
                               IsEditable="True"
-                              ItemsSource="{Binding DataContext.MusicKeyOptionsWithDefaultGrouped,
+                              ItemsSource="{Binding DataContext.MusicKeyOptionsGrouped,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
-                              Text="{Binding Music, UpdateSourceTrigger=PropertyChanged,
-                                     Converter={x:Static conv:DefaultMusicConverter.Instance}}"
-                              ToolTip="Track to switch to when this button is pressed - this pack's own, by their runtime names on the Music tab, or one of the game's. (leave unchanged) means the button does not touch the music at all. Editable, so a track neither list knows can still be typed in.">
+                              Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
+                              ToolTip="Track to switch to when this button is pressed - one of this pack's, by its runtime name on the Music tab, or one of the game's. New buttons start on Music, the game's ordinary track. Clear the box and the button leaves whatever is playing alone. Editable, so a track neither list knows can still be typed in.">
                         <ComboBox.GroupStyle>
                             <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                         </ComboBox.GroupStyle>
@@ -4106,11 +4093,10 @@
                                             <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2"
                                                       IsSynchronizedWithCurrentItem="False"
                                                       IsEditable="True"
-                                                      ItemsSource="{Binding DataContext.MusicKeyOptionsWithDefaultGrouped,
+                                                      ItemsSource="{Binding DataContext.MusicKeyOptionsGrouped,
                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
-                                                      Text="{Binding Music, UpdateSourceTrigger=PropertyChanged,
-                                                             Converter={x:Static conv:DefaultMusicConverter.Instance}}"
-                                                      ToolTip="Track to switch to when this button is pressed - this pack's own, by their runtime names on the Music tab, or one of the game's. (leave unchanged) means the button does not touch the music at all. Editable, so a track neither list knows can still be typed in.">
+                                                      Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
+                                                      ToolTip="Track to switch to when this button is pressed - one of this pack's, by its runtime name on the Music tab, or one of the game's. New buttons start on Music, the game's ordinary track. Clear the box and the button leaves whatever is playing alone. Editable, so a track neither list knows can still be typed in.">
                                                 <ComboBox.GroupStyle>
                                                     <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                                                 </ComboBox.GroupStyle>
