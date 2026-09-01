@@ -315,6 +315,117 @@ public static class PackValidator
         { n++; i += needle.Length; }
         return n;
     }
+    /// <summary>
+    /// References that name one of the pack's own units — a track, an effect,
+    /// a scene — and no longer find it.
+    /// <para/>
+    /// These were checked for being PRESENT and never for pointing at
+    /// anything. That was survivable while an author typed keys by hand and
+    /// rarely changed them; it is not now that a runtime name follows the
+    /// display name, because renaming a track silently orphans every
+    /// reference to it. Place references were already covered — a navigator
+    /// target reports as unreachable — which is why renaming a place was loud
+    /// and renaming a track was not.
+    /// <para/>
+    /// Warnings, not errors. A rule can carry a templated value that resolves
+    /// to a real key at runtime, and the music fields also accept the names of
+    /// the game's own tracks, which this pack knows nothing about.
+    /// </summary>
+    private static void CheckUnitReferences(List<ValidationIssue> issues, ModPack pack)
+    {
+        var music = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+        foreach (var m in pack.Music) music.Add(m.Key);
+        var sfx = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+        foreach (var f in pack.Sfx) sfx.Add(f.Key);
+        var scenes = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
+        foreach (var sc in pack.Scenes) scenes.Add(sc.Key);
+
+        // A value the runtime resolves for itself cannot be checked here.
+        static bool Deferred(string v) =>
+            string.IsNullOrWhiteSpace(v) || v.StartsWith("$") || IsTemplated(v);
+
+        void Ref(string value, HashSet<string> known, string what, string code, string where,
+                 string extra = "")
+        {
+            if (Deferred(value) || known.Contains(value.Trim())) return;
+            issues.Add(new(Severity.Warning, where,
+                $"'{value}' is not {what} in this pack. A runtime name follows its display " +
+                "name, so renaming one leaves references behind." + extra, code));
+        }
+
+        void Action(NodeActionDef a, string where)
+        {
+            if (a == null) return;
+            string aw = $"{where}.{a.Type}";
+
+            if (a.Type == NodeActionTypes.SwitchMusic &&
+                a.Params.TryGetValue("music", out var track))
+                Ref(track, music, "a track", "action.unknownMusic", aw,
+                    " This field also takes one of the game's own track names, which is fine.");
+
+            if (a.Type == NodeActionTypes.PlaySFX &&
+                a.Params.TryGetValue("clip", out var clip))
+                Ref(clip, sfx, "an effect", "action.unknownSfx", aw);
+
+            // Scene is a category on the targeting row rather than a type of
+            // its own, so the kind decides whether target names a scene.
+            if (a.Params.TryGetValue("kind", out var kind) &&
+                string.Equals(kind, "Scene", System.StringComparison.OrdinalIgnoreCase) &&
+                a.Params.TryGetValue("target", out var scene))
+                Ref(scene, scenes, "a scene", "action.unknownScene", aw);
+
+            if (a.Branches != null)
+                for (int i = 0; i < a.Branches.Count; i++)
+                    Action(a.Branches[i].Action, $"{aw}.branch[{i}]");
+        }
+
+        foreach (var d in pack.Dialogues)
+            foreach (var n in d.Nodes)
+            {
+                string nw = $"dialogues[{d.Key}].nodes[{n.Id}]";
+                for (int i = 0; i < n.ActionsOnStart.Count; i++)
+                    Action(n.ActionsOnStart[i], $"{nw}.actionsOnStart[{i}]");
+                for (int i = 0; i < n.ActionsOnFinish.Count; i++)
+                    Action(n.ActionsOnFinish[i], $"{nw}.actionsOnFinish[{i}]");
+            }
+
+        foreach (var r in pack.IntegrationRules)
+        {
+            string rw = $"integrationRules.{r.Key}";
+            for (int i = 0; i < r.Actions.Count; i++) Action(r.Actions[i], $"{rw}.actions[{i}]");
+            for (int b = 0; b < r.Branches.Count; b++)
+                for (int i = 0; i < r.Branches[b].Actions.Count; i++)
+                    Action(r.Branches[b].Actions[i], $"{rw}.branches[{b}].actions[{i}]");
+        }
+
+        // Level hooks run the same action vocabulary on a place's edges.
+        foreach (var pl in pack.Places)
+        {
+            for (int h = 0; h < pl.OnEnter.Count; h++)
+                for (int i = 0; i < pl.OnEnter[h].Actions.Count; i++)
+                    Action(pl.OnEnter[h].Actions[i], $"places[{pl.Key}].onEnter[{h}].actions[{i}]");
+            for (int h = 0; h < pl.OnExit.Count; h++)
+                for (int i = 0; i < pl.OnExit[h].Actions.Count; i++)
+                    Action(pl.OnExit[h].Actions[i], $"places[{pl.Key}].onExit[{h}].actions[{i}]");
+        }
+
+        // And the buttons, whose Music box is a dropdown of these same keys.
+        const string VanillaToo = " This field also takes one of the game's own track " +
+                                  "names, which is fine.";
+        foreach (var pl in pack.Places)
+            for (int i = 0; i < pl.NavigatorButtons.Count; i++)
+                Ref(pl.NavigatorButtons[i].Music, music, "a track", "nav.unknownMusic",
+                    $"places[{pl.Key}].navigatorButtons[{i}].music", VanillaToo);
+
+        foreach (var e in pack.VanillaExtensions)
+            for (int i = 0; i < e.NavigatorButtons.Count; i++)
+                Ref(e.NavigatorButtons[i].Music, music, "a track", "nav.unknownMusic",
+                    $"vanillaExtensions[{e.Source}].navigatorButtons[{i}].music", VanillaToo);
+
+        for (int i = 0; i < pack.MapButtons.Count; i++)
+            Ref(pack.MapButtons[i].Music, music, "a track", "map.unknownMusic",
+                $"mapButtons[{pack.MapButtons[i].Target}].music", VanillaToo);
+    }
     public static bool IsIgnored(ModPack pack, ValidationIssue issue)
         => pack.IgnoredIssues.Contains(issue.Key) ||
            (issue.Code.Length > 0 && pack.IgnoredIssues.Contains(issue.Code));
@@ -333,6 +444,7 @@ public static class PackValidator
         CheckChoicesWithoutOptions(issues, pack);
         CheckKinWordsInText(issues, pack);
         CheckTextTokens(issues, pack);
+        CheckUnitReferences(issues, pack);
 
         if (string.IsNullOrWhiteSpace(pack.PackId))
             issues.Add(new(Severity.Error, "$.packId", "packId is required", "pack.idMissing"));

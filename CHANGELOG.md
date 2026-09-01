@@ -19,9 +19,16 @@
   state, so a parent hidden around it does not count as off.
 - **Runtime names derive from display names** for NPCs, places, scenes, music,
   SFX, wallpapers and integration rules, the way characters and dialogues
-  already did. Type a key of your own and it stops following; a unit loaded
-  from disk never re-derives, since its key is what everything else refers to
-  it by.
+  already did. A unit loaded from disk never re-derives, since its key is what
+  everything else refers to it by.
+- The runtime name is now a **read-only display** rather than a field to fill
+  in. It stays selectable, because the runtime names units by key in its log,
+  validation messages are keyed on it, and a cross-pack reference is written as
+  pack.key — so it is worth reading even though there is nothing to type.
+- Validate reports a reference that names **a track, effect or scene this pack
+  does not have** — from SwitchMusic, PlaySFX, a Set-Active aimed at a scene, or
+  a button's Music box. Renaming a place was already loud, because a navigator
+  target that resolves to nothing is an error; renaming a track was silent.
 
 ### Fixed
 

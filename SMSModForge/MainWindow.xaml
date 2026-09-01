@@ -3275,7 +3275,15 @@
                                     <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable key placements reference this NPC by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established NPC is never renamed underneath whatever already points at it."/>
-                                    <TextBox ToolTip="Stable key placements reference this NPC by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established NPC is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                 </Grid>
                             </GroupBox>
 
@@ -3746,7 +3754,15 @@
                                                Grid.Row="1" Grid.Column="1" Foreground="Gray" FontSize="10"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;). Filled in from the display name while you have not set one yourself; type here and it stops following, so an established place is never renamed underneath whatever already points at it."/>
-                                    <TextBox ToolTip="What conditions/actions and navigator targets reference this place by (place:&lt;name&gt;). Filled in from the display name while you have not set one yourself; type here and it stops following, so an established place is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1"/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                     <TextBlock Text="Internal GO name:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox  view:IssueTarget.Field="internalName" Text="{Binding InternalName, UpdateSourceTrigger=PropertyChanged}" ToolTip="The object the level is built as in game." Grid.Row="3" Grid.Column="1"/>
                                 </Grid>
@@ -4221,7 +4237,15 @@
                                     <TextBox ToolTip="What this dialogue is called in the editor&apos;s own lists. The only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established dialogue is never renamed underneath whatever already points at it."/>
-                                    <TextBox ToolTip="Stable identifier — what jumps, logs and other packs reference this dialogue by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established dialogue is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                     <!-- The roomtalk picker is gone: dialogues are hosted on a
                                          per-pack always-active container, and the only remaining
                                          use for a roomtalk — taking priority over vanilla — is
@@ -4735,7 +4759,15 @@
                                     <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."/>
-                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                 </Grid>
                             </GroupBox>
 
@@ -4857,8 +4889,15 @@
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
-                                              ToolTip="GameObject name under 12_AudioPlayer — also what SwitchMusic references in its `music` param. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established track is never renamed underneath whatever already points at it."/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                 </Grid>
                             </GroupBox>
 
@@ -4963,8 +5002,15 @@
                                     <TextBlock Text="Display name:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"/>
                                     <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"/>
-                                    <TextBox  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"
-                                              ToolTip="Referenced by PlaySFX node actions as `clip`. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established effect is never renamed underneath whatever already points at it."/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                 </Grid>
                             </GroupBox>
 
@@ -5083,7 +5129,15 @@
                                     <TextBox ToolTip="What this is called in the editor&apos;s own lists, and the only name you need to write — the runtime name beside it follows along until you set one yourself."  Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" Grid.Row="0" Grid.Column="1"/>
                                     <TextBlock Text="Runtime name:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."/>
-                                    <TextBox ToolTip="Stable identifier actions/conditions reference this by. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established entry is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
                                 </Grid>
                             </GroupBox>
 
@@ -5443,7 +5497,15 @@
 
                                     <TextBlock Text="Runtime name:"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
                                                ToolTip="Stable identifier — used in logs and for the rule's edge tracking. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established rule is never renamed underneath whatever already points at it."/>
-                                    <TextBox ToolTip="Stable identifier — used in logs and for the rule's edge tracking. Filled in from the display name while you have not set one yourself; type here and it stops following, so an established rule is never renamed underneath whatever already points at it."  Text="{Binding Key, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1"/>
+                                    <!-- Read-only: the runtime name is written from the display name, so
+                                         there is nothing to type. Still a TextBox rather than a TextBlock
+                                         because it has to be selectable - the log, the validation messages
+                                         and cross-pack references all quote this string back at you. -->
+                                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Key, Mode=OneWay}"
+                                             IsReadOnly="True" IsReadOnlyCaretVisible="False"
+                                             BorderThickness="0" Background="Transparent" Padding="0"
+                                             Foreground="Gray" Cursor="Arrow"
+                                             ToolTip="The name the pack itself uses — what the runtime calls this in its log, what validation messages name, and what another pack would reference it by. It is written for you from the display name, so there is nothing to fill in; it is shown because those three places quote it back at you. Select it to copy."/>
 
                                     <TextBlock Text="Description:"   Grid.Row="2" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                                     <TextBox  Text="{Binding Description, UpdateSourceTrigger=PropertyChanged}" Grid.Row="2" Grid.Column="1" Margin="0,4,0,0"
