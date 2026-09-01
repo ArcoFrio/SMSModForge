@@ -25,6 +25,12 @@
   in. It stays selectable, because the runtime names units by key in its log,
   validation messages are keyed on it, and a cross-pack reference is written as
   pack.key — so it is worth reading even though there is nothing to type.
+- A button's Music box offers **Default** — the entry meaning "leave whatever is
+  playing alone", which is what an empty field always did. Nothing is written to
+  the pack, so a button with no music set simply shows Default.
+- Renaming a track refreshes the music dropdowns. SFX already did this; music
+  did not, so a renamed track went on being offered under its old key until the
+  app restarted.
 - Validate reports a reference that names **a track, effect or scene this pack
   does not have** — from SwitchMusic, PlaySFX, a Set-Active aimed at a scene, or
   a button's Music box. Renaming a place was already loud, because a navigator

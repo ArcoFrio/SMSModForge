@@ -3648,9 +3648,26 @@ public sealed class MainViewModel : ObservableObject
     public void RebuildMusicKeyOptions()
     {
         // In-place sync, never Clear — see SyncOptions.
-        SyncOptions(MusicKeyOptions,
-            Music.OrderBy(m => m.Key, System.StringComparer.OrdinalIgnoreCase).Select(m => m.Key).ToList());
+        var keys = Music.OrderBy(m => m.Key, System.StringComparer.OrdinalIgnoreCase)
+                        .Select(m => m.Key).ToList();
+        SyncOptions(MusicKeyOptions, keys);
+
+        // The button fields get one extra entry at the top. A button with no
+        // music leaves whatever is playing alone, which is a decision worth
+        // being able to SEE and pick — a blank row reads as an unfinished
+        // field. The action's own music param does not get it: empty there is
+        // a mistake rather than a choice.
+        var withDefault = new System.Collections.Generic.List<string>
+            { View.Converters.DefaultMusicConverter.Label };
+        withDefault.AddRange(keys);
+        SyncOptions(MusicKeyOptionsWithDefault, withDefault);
     }
+
+    /// <summary>The pack's tracks, preceded by the "leave it alone" entry.
+    /// Bound by the navigator and map button Music pickers; see
+    /// <see cref="View.Converters.DefaultMusicConverter"/> for how that entry
+    /// round-trips to an empty value.</summary>
+    public ObservableCollection<string> MusicKeyOptionsWithDefault { get; } = new();
 
     /// <summary>Rebuilds <see cref="SfxKeyOptions"/> from the SFX tab.</summary>
     public void RebuildSfxKeyOptions()
@@ -3911,11 +3928,31 @@ public sealed class MainViewModel : ObservableObject
 
     private void RebindMusic()
     {
+        foreach (var m in Music) m.PropertyChanged -= OnMusicChanged;
         Music.Clear();
-        foreach (var m in Pack.Music) Music.Add(new MusicViewModel(m));
+        foreach (var m in Pack.Music)
+        {
+            var vm = new MusicViewModel(m);
+            vm.PropertyChanged += OnMusicChanged;
+            Music.Add(vm);
+        }
         MusicTree.Build(Music);
         SelectedMusic = Music.FirstOrDefault();
         RebuildMusicKeyOptions();
+    }
+
+    /// <summary>
+    /// Keep the music dropdowns current when a track's key changes.
+    /// <para/>
+    /// SFX has had this; music did not, so a renamed track went on being
+    /// offered under its old key until the app restarted - and picking that
+    /// stale key wrote a reference to a track that no longer exists. It matters
+    /// more now that a key follows the display name, because renaming is how a
+    /// key changes at all.
+    /// </summary>
+    private void OnMusicChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(MusicViewModel.Key)) RebuildMusicKeyOptions();
     }
 
     private void AddMusic()
@@ -3927,6 +3964,7 @@ public sealed class MainViewModel : ObservableObject
         };
         Pack.Music.Add(def);
         var vm = new MusicViewModel(def);
+        vm.PropertyChanged += OnMusicChanged;
         Music.Add(vm);
         // A unit the author just added follows its display name until they
         // type a key of their own — see DerivedKey.
