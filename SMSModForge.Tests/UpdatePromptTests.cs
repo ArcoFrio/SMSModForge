@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using SMSModForge.Services;
 using SMSModForge.View;
@@ -88,5 +88,39 @@ public class UpdatePromptTests : IDisposable
 
         // And still not, even with a perfectly good folder set.
         Assert.False(UpdateWindow.PluginLine(Release(withPlugin: false), _temp).OfferFolder);
+    }
+
+    [Fact]
+    public void The_version_line_reports_the_version_the_check_compared()
+    {
+        // Reported from a real test run: the prompt said "you are running
+        // 1.1.0" over an offer of 1.1.0, because the line read the assembly
+        // while the comparison read the override. A sentence that contradicts
+        // the window it is in.
+        Environment.SetEnvironmentVariable(UpdateFeed.VersionOverrideVariable, "1.0.0");
+        try
+        {
+            string line = UpdateWindow.VersionLine(Release(withPlugin: true));
+
+            Assert.Contains("Version 1.2.0", line);
+            Assert.Contains("running 1.0.0", line);
+            Assert.Contains("76 MB", line);
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable(UpdateFeed.VersionOverrideVariable, null);
+        }
+
+        // And with nothing overridden it is the real one, not a leftover.
+        Assert.Contains(UpdateFeed.RunningVersion.ToString(3),
+                        UpdateWindow.VersionLine(Release(withPlugin: true)));
+    }
+
+    [Fact]
+    public void A_release_with_no_size_does_not_offer_to_download_zero_MB()
+    {
+        var sizeless = new ReleaseInfo(new Version(1, 2, 0), "n", "notes",
+                                       "https://x/Editor.zip", null, 0);
+        Assert.DoesNotContain("MB", UpdateWindow.VersionLine(sizeless));
     }
 }

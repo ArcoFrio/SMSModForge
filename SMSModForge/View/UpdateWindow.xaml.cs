@@ -20,15 +20,13 @@ public partial class UpdateWindow : Window
     /// start, which is what the checkbox shows. Out: what it should do now. The
     /// window reports rather than storing it, so the setting is written in one
     /// place and the Options menu hears about it — see MainWindow.WireUpdates.</param>
-    public static bool Ask(Window owner, ReleaseInfo release, string runningVersion,
-                           ref bool checkOnStart)
+    public static bool Ask(Window owner, ReleaseInfo release, ref bool checkOnStart)
     {
         var win = new UpdateWindow { Owner = owner };
         win.StopChecking.IsChecked = !checkOnStart;
 
         win.HeadlineText.Text = release.Name;
-        win.VersionText.Text = $"Version {release.VersionText} — you are running {runningVersion}."
-                             + SizeSuffix(release.EditorZipBytes);
+        win.VersionText.Text = VersionLine(release);
 
         win.NotesView.Document = MarkdownFlow.ToDocument(
             string.IsNullOrWhiteSpace(release.Notes)
@@ -47,8 +45,22 @@ public partial class UpdateWindow : Window
         return install;
     }
 
-    private static string SizeSuffix(long bytes)
-        => bytes > 0 ? $" The download is about {bytes / 1024 / 1024} MB." : "";
+    /// <summary>
+    /// "Version 1.2.0 — you are running 1.1.0."
+    /// <para/>
+    /// The running version comes from <see cref="UpdateFeed.RunningVersion"/>,
+    /// which is the number the comparison was made against — not the one in the
+    /// title bar. They agree in an ordinary build and disagree the moment the
+    /// version is overridden for testing, and then this sentence was reading
+    /// "Version 1.1.0 — you are running 1.1.0" over a prompt that had only
+    /// appeared because the editor was pretending to be 1.0.0.
+    /// </summary>
+    public static string VersionLine(ReleaseInfo release)
+        => $"Version {release.VersionText} — you are running "
+         + $"{UpdateFeed.RunningVersion.ToString(3)}."
+         + (release.EditorZipBytes > 0
+                ? $" The download is about {release.EditorZipBytes / 1024 / 1024} MB."
+                : "");
 
     /// <summary>
     /// What the update will do about the plugin, and — when it cannot do

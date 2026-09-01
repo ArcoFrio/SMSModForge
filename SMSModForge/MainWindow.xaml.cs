@@ -124,8 +124,7 @@ public partial class MainWindow : Window
             // same preference, but only this one tells the Options menu, whose
             // tick would otherwise still say the editor was checking.
             bool checkOnStart = vm.CheckForUpdatesOnStart;
-            bool install = View.UpdateWindow.Ask(
-                this, release, MainViewModel.AppVersion, ref checkOnStart);
+            bool install = View.UpdateWindow.Ask(this, release, ref checkOnStart);
 
             if (checkOnStart != vm.CheckForUpdatesOnStart)
                 vm.CheckForUpdatesOnStart = checkOnStart;
