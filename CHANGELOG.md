@@ -20,7 +20,9 @@
   downloads, closes (asking about an unsaved pack exactly as the X does),
   puts the new build in place and starts it again.
 - **Options ▸ Check for updates on start** — on by default. Off means no
-  request is made at all, not one whose answer is ignored.
+  request is made at all, not one whose answer is ignored. The prompt carries
+  the same setting as a checkbox, so you can turn it off from the window that
+  prompted you — however you then close that window.
 - **Options ▸ Install updates without asking** — off by default. On, an update
   installs itself and says so in a line at the top of the window rather than
   opening anything.

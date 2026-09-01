@@ -119,7 +119,18 @@ public partial class MainWindow : Window
         _updates.Done = HideUpdateToast;
 
         _updates.Ask = release =>
-            View.UpdateWindow.Ask(this, release, MainViewModel.AppVersion);
+        {
+            // Through the view model rather than the setting: both write the
+            // same preference, but only this one tells the Options menu, whose
+            // tick would otherwise still say the editor was checking.
+            bool checkOnStart = vm.CheckForUpdatesOnStart;
+            bool install = View.UpdateWindow.Ask(
+                this, release, MainViewModel.AppVersion, ref checkOnStart);
+
+            if (checkOnStart != vm.CheckForUpdatesOnStart)
+                vm.CheckForUpdatesOnStart = checkOnStart;
+            return install;
+        };
 
         // Ordinary Close, guard and all: an update is not a reason to lose
         // somebody’s unsaved pack, and cancelling it abandons the update.

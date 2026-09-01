@@ -16,9 +16,15 @@ public partial class UpdateWindow : Window
     /// Offer <paramref name="release"/>. Returns true when the author asked for
     /// it to be installed.
     /// </summary>
-    public static bool Ask(Window owner, ReleaseInfo release, string runningVersion)
+    /// <param name="checkOnStart">In: whether the editor currently checks on
+    /// start, which is what the checkbox shows. Out: what it should do now. The
+    /// window reports rather than storing it, so the setting is written in one
+    /// place and the Options menu hears about it — see MainWindow.WireUpdates.</param>
+    public static bool Ask(Window owner, ReleaseInfo release, string runningVersion,
+                           ref bool checkOnStart)
     {
         var win = new UpdateWindow { Owner = owner };
+        win.StopChecking.IsChecked = !checkOnStart;
 
         win.HeadlineText.Text = release.Name;
         win.VersionText.Text = $"Version {release.VersionText} — you are running {runningVersion}."
@@ -32,7 +38,13 @@ public partial class UpdateWindow : Window
         win._release = release;
         win.ShowPluginLine();
 
-        return win.ShowDialog() == true;
+        bool install = win.ShowDialog() == true;
+
+        // Read after the window has gone, so it counts however it was closed:
+        // Update now, Not now, Escape, or the X. A tick that only took effect
+        // on one of those would be a tick that sometimes did nothing.
+        checkOnStart = win.StopChecking.IsChecked != true;
+        return install;
     }
 
     private static string SizeSuffix(long bytes)
