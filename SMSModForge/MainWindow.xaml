@@ -1615,8 +1615,10 @@
                          SwitchMusic action offers. Editable rather than a closed list: the
                          field names a child under 12_AudioPlayer, and the catalogued names
                          come from a dump of an older build, so a track added since has to
-                         remain typable. Cleared, the button leaves the music alone; that is
-                         what an empty field has always meant to the runtime. -->
+                         remain typable.
+
+                         Starts empty, unlike a map button: a door within an area should
+                         let the area keep its music. See PlaceViewModel.AddNavigatorButton. -->
                     <TextBlock Text="Music (optional):" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"/>
                     <ComboBox Grid.Row="2" Grid.Column="1"
                               IsSynchronizedWithCurrentItem="False"
@@ -1624,7 +1626,7 @@
                               ItemsSource="{Binding DataContext.MusicKeyOptionsGrouped,
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                               Text="{Binding Music, UpdateSourceTrigger=PropertyChanged}"
-                              ToolTip="Track to switch to when this button is pressed - one of this pack's, by its runtime name on the Music tab, or one of the game's. New buttons start on Music, the game's ordinary track. Clear the box and the button leaves whatever is playing alone. Editable, so a track neither list knows can still be typed in.">
+                              ToolTip="Track to switch to when this button is pressed - one of this pack's, by its runtime name on the Music tab, or one of the game's. Left empty, and it starts empty, the button does not touch the music at all, so the music of the area carries through the door. Fill it in for a door that should change what is playing. Editable, so a track neither list knows can still be typed in.">
                         <ComboBox.GroupStyle>
                             <StaticResource ResourceKey="MusicOriginGroupStyle"/>
                         </ComboBox.GroupStyle>

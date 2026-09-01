@@ -32,11 +32,12 @@
   you had to know how it was spelled. The fields stay typable: the list comes
   from a dump of an older build, so anything added since can still be entered
   by hand.
-- **A new button starts on `Music`**, the game’s ordinary track, rather than
-  empty. An empty box tells the game not to touch the music at all — still true,
-  and still what clearing the box does — but it is also what an unfilled field
-  looks like, so it made a poor default. Buttons already saved with an empty
-  Music are left exactly as they are.
+- **A new map button starts on `Music`**, the game’s ordinary track: it crosses
+  the world map into somewhere new, so it should say what plays there. **A new
+  navigator button still starts empty** — it is a door within one area, and the
+  area’s music should carry across it. An empty box means the game does not
+  touch the music at all, which is also what clearing either box does. Buttons
+  already saved with an empty Music are left exactly as they are.
 - Renaming a track refreshes the music dropdowns. SFX already did this; music
   did not, so a renamed track went on being offered under its old key until the
   app restarted.

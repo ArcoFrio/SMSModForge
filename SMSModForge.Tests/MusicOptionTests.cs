@@ -101,16 +101,27 @@ public class MusicOptionTests
     }
 
     [Fact]
-    public void A_new_button_starts_on_the_games_ordinary_track()
+    public void The_two_kinds_of_button_default_opposite_ways()
     {
         var vm = new MainViewModel();
 
+        // A map button crosses into somewhere new and should say what plays
+        // there.
         vm.AddMapButtonCommand.Execute(null);
         Assert.Equal(VanillaMusic.Default, vm.MapButtons.Single().Music);
 
+        // A navigator button is a door within an area, and the area’s music
+        // should carry across it. This is the control on the line above: if the
+        // default were being applied by the model or the serializer rather than
+        // by the two Add paths, both of these would read the same.
         vm.AddPlaceCommand.Execute(null);
-        var button = vm.Places.Single().AddNavigatorButton();
-        Assert.Equal(VanillaMusic.Default, button!.Music);
+        var inPlace = vm.Places.Single().AddNavigatorButton();
+        Assert.Equal("", inPlace!.Music);
+
+        // Both Add paths, because a vanilla extension has its own.
+        vm.AddVanillaExtensionCommand.Execute(null);
+        var inExtension = vm.VanillaExtensions.Single().AddNavigatorButton();
+        Assert.Equal("", inExtension.Music);
     }
 
     [Fact]

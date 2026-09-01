@@ -312,11 +312,13 @@ public sealed class VanillaPlaceExtensionViewModel : ObservableObject
 
     public NavigatorButtonViewModel AddNavigatorButton()
     {
-        // Starts on the game’s ordinary track rather than empty. Empty means
-        // the button does not touch the music, which is a real answer but a bad
-        // default: it is also what an unfilled box looks like. Clearing it says
-        // so on purpose. Nothing rewrites a button already saved as empty.
-        var def = new NavigatorButtonDef { Music = VanillaMusic.Default };
+        // Music starts EMPTY, which tells the runtime not to touch what is
+        // playing. A navigator button is a door within one area - room to room,
+        // or back the way you came - and the area’s track should carry across
+        // it. Defaulting these to a track would make every internal door cut the
+        // music. The map buttons, which cross into somewhere new, default the
+        // other way; see MainViewModel.AddMapButton.
+        var def = new NavigatorButtonDef();
         Model.NavigatorButtons.Add(def);
         var vm = new NavigatorButtonViewModel(def, removeCallback: RemoveNavigatorButton,
                                                    moveCallback: MoveNavigatorButton);

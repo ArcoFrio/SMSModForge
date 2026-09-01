@@ -2372,9 +2372,13 @@ public sealed class MainViewModel : ObservableObject
         {
             District = WorldMapDistricts.All[4].GoName, // Foundry
             // A map button crosses the world map into somewhere new, so it
-            // almost always wants to say what plays there. Starting on the
-            // game’s ordinary track means the box is answered rather than
-            // half-filled; clearing it is how an author says "leave it alone".
+            // almost always wants to say what plays there - and the everyday
+            // track is the right guess more often than silence about it.
+            // Clearing the box is how an author says "leave it alone".
+            //
+            // Navigator buttons default the other way, to empty: those are
+            // doors WITHIN an area, and the area’s music should carry across
+            // them. See PlaceViewModel.AddNavigatorButton.
             Music = VanillaMusic.Default,
         };
         Pack.MapButtons.Add(def);
