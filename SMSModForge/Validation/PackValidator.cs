@@ -333,8 +333,7 @@ public static class PackValidator
     /// </summary>
     private static void CheckUnitReferences(List<ValidationIssue> issues, ModPack pack)
     {
-        var music = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
-        foreach (var m in pack.Music) music.Add(m.Key);
+
         var sfx = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
         foreach (var f in pack.Sfx) sfx.Add(f.Key);
         var scenes = new HashSet<string>(System.StringComparer.OrdinalIgnoreCase);
@@ -358,10 +357,12 @@ public static class PackValidator
             if (a == null) return;
             string aw = $"{where}.{a.Type}";
 
-            if (a.Type == NodeActionTypes.SwitchMusic &&
-                a.Params.TryGetValue("music", out var track))
-                Ref(track, music, "a track", "action.unknownMusic", aw,
-                    " This field also takes one of the game's own track names, which is fine.");
+            // No check on SwitchMusic's music. It resolves ANY child of
+            // 12_AudioPlayer by name, and the game's own tracks live there
+            // beside the pack's, so a name this pack does not declare is
+            // ordinary authoring rather than a mistake. Warning on it flagged
+            // correct work, which is worse than not checking: the editor has
+            // no catalog of the game's audio objects to check against.
 
             if (a.Type == NodeActionTypes.PlaySFX &&
                 a.Params.TryGetValue("clip", out var clip))
@@ -409,22 +410,9 @@ public static class PackValidator
                     Action(pl.OnExit[h].Actions[i], $"places[{pl.Key}].onExit[{h}].actions[{i}]");
         }
 
-        // And the buttons, whose Music box is a dropdown of these same keys.
-        const string VanillaToo = " This field also takes one of the game's own track " +
-                                  "names, which is fine.";
-        foreach (var pl in pack.Places)
-            for (int i = 0; i < pl.NavigatorButtons.Count; i++)
-                Ref(pl.NavigatorButtons[i].Music, music, "a track", "nav.unknownMusic",
-                    $"places[{pl.Key}].navigatorButtons[{i}].music", VanillaToo);
-
-        foreach (var e in pack.VanillaExtensions)
-            for (int i = 0; i < e.NavigatorButtons.Count; i++)
-                Ref(e.NavigatorButtons[i].Music, music, "a track", "nav.unknownMusic",
-                    $"vanillaExtensions[{e.Source}].navigatorButtons[{i}].music", VanillaToo);
-
-        for (int i = 0; i < pack.MapButtons.Count; i++)
-            Ref(pack.MapButtons[i].Music, music, "a track", "map.unknownMusic",
-                $"mapButtons[{pack.MapButtons[i].Target}].music", VanillaToo);
+        // The buttons' Music boxes are not checked either, for the same
+        // reason: they name a child of 12_AudioPlayer, which may be one of
+        // the game's.
     }
     public static bool IsIgnored(ModPack pack, ValidationIssue issue)
         => pack.IgnoredIssues.Contains(issue.Key) ||

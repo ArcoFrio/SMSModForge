@@ -3657,10 +3657,17 @@ public sealed class MainViewModel : ObservableObject
         // being able to SEE and pick — a blank row reads as an unfinished
         // field. The action's own music param does not get it: empty there is
         // a mistake rather than a choice.
-        var withDefault = new System.Collections.Generic.List<string>
+        var choices = new System.Collections.Generic.List<string>
             { View.Converters.DefaultMusicConverter.Label };
-        withDefault.AddRange(keys);
-        SyncOptions(MusicKeyOptionsWithDefault, withDefault);
+        // The game's own default track. It is a child of 12_AudioPlayer like
+        // any pack track, so a button can name it to put the ordinary music
+        // back - which is what a button leaving a themed area wants. Offered
+        // by name because there is no catalog of the game's audio objects to
+        // list; this is the one that is known.
+        if (!keys.Contains(VanillaDefaultTrack, System.StringComparer.OrdinalIgnoreCase))
+            choices.Add(VanillaDefaultTrack);
+        choices.AddRange(keys);
+        SyncOptions(MusicKeyOptionsWithDefault, choices);
     }
 
     /// <summary>The pack's tracks, preceded by the "leave it alone" entry.
@@ -3668,6 +3675,11 @@ public sealed class MainViewModel : ObservableObject
     /// <see cref="View.Converters.DefaultMusicConverter"/> for how that entry
     /// round-trips to an empty value.</summary>
     public ObservableCollection<string> MusicKeyOptionsWithDefault { get; } = new();
+
+    /// <summary>The game's own music object under 12_AudioPlayer. Not a pack
+    /// track, and not something the editor can enumerate — it is offered by
+    /// name so a button can switch back to the ordinary music.</summary>
+    public const string VanillaDefaultTrack = "Music";
 
     /// <summary>Rebuilds <see cref="SfxKeyOptions"/> from the SFX tab.</summary>
     public void RebuildSfxKeyOptions()

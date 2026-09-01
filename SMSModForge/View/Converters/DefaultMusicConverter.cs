@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Data;
 
@@ -22,9 +22,18 @@ public sealed class DefaultMusicConverter : IValueConverter
 {
     public static readonly DefaultMusicConverter Instance = new();
 
-    /// <summary>What the "no change" row reads as, and the entry the pickers
-    /// put at the top of their list.</summary>
-    public const string Label = "Default";
+    /// <summary>
+    /// What the "no change" row reads as, and the entry the pickers put at the
+    /// top of their list.
+    /// <para/>
+    /// Called "leave unchanged" rather than "Default", which was the first
+    /// wording and a bad one: the game's own default track is a real object
+    /// called Music, so an entry labelled Default sitting above it in the same
+    /// list read as naming that track while doing the opposite. The brackets
+    /// are load-bearing too - they say this is an instruction rather than
+    /// something with that name.
+    /// </summary>
+    public const string Label = "(leave unchanged)";
 
     public object Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
         => string.IsNullOrWhiteSpace(value as string) ? Label : (string)value!;
@@ -32,8 +41,9 @@ public sealed class DefaultMusicConverter : IValueConverter
     public object ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
         var s = (value as string)?.Trim() ?? "";
-        // A track genuinely called Default would be indistinguishable, so the
-        // label is only treated as the sentinel when it is exactly that word.
+        // Matched exactly: a track could not be called this - the brackets are
+        // not a legal part of a GameObject name anybody would author - but an
+        // exact match is still the honest test.
         return string.Equals(s, Label, StringComparison.Ordinal) ? "" : s;
     }
 }

@@ -1600,7 +1600,7 @@
                                             RelativeSource={RelativeSource AncestorType=Window}}"
                               Text="{Binding Music, UpdateSourceTrigger=PropertyChanged,
                                      Converter={x:Static conv:DefaultMusicConverter.Instance}}"
-                              ToolTip="Track to switch to when this button is pressed, by its runtime name on the Music tab. Default leaves whatever is playing alone. Editable, so a vanilla track already under 12_AudioPlayer can be named too."/>
+                              ToolTip="Track to switch to when this button is pressed. Music is the game's own default track; below it are this pack's, by their runtime names. (leave unchanged) means the button does not touch the music at all. Editable, so any other track under 12_AudioPlayer can be named too."/>
                     <!-- Conditions -->
                     <TextBlock Text="Conditions:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Top" Margin="0,4,0,0"/>
                     <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Margin="0,2,0,0">
@@ -4068,7 +4068,7 @@
                                                                     RelativeSource={RelativeSource AncestorType=Window}}"
                                                       Text="{Binding Music, UpdateSourceTrigger=PropertyChanged,
                                                              Converter={x:Static conv:DefaultMusicConverter.Instance}}"
-                                                      ToolTip="Track to switch to when this button is pressed, by its runtime name on the Music tab. Default leaves whatever is playing alone. Editable, so a vanilla track already under 12_AudioPlayer can be named too."/>
+                                                      ToolTip="Track to switch to when this button is pressed. Music is the game's own default track; below it are this pack's, by their runtime names. (leave unchanged) means the button does not touch the music at all. Editable, so any other track under 12_AudioPlayer can be named too."/>
 
                                             <!-- Visibility conditions — same row shape the
                                                  navigator buttons use. All must pass for the
