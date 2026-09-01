@@ -33,7 +33,11 @@ public partial class MainWindow : Window
             if (DataContext is ViewModel.MainViewModel vm)
             {
                 Tutorial.Flash = FlashElement;
-                Tutorial.SwitchTab = i => MainTabs.SelectedIndex = i;
+                Tutorial.SwitchTab = i =>
+                {
+                    ExpectTabChange("tutorial step");
+                    MainTabs.SelectedIndex = i;
+                };
                 Tutorial.Attach(vm.TutorialRunner);
             }
         };
@@ -58,10 +62,20 @@ public partial class MainWindow : Window
             // and SelectionChanged is the backstop for keyboard / programmatic
             // switches. CommitPendingEdits is idempotent, so double-firing is
             // harmless.
-            MainTabs.PreviewMouseLeftButtonDown += (_, __) => CommitPendingEdits();
+            MainTabs.PreviewMouseLeftButtonDown += (_, e) =>
+            {
+                // A click that lands on a TabItem is a click on the tab STRIP:
+                // a tab’s content is hosted by the TabControl’s own presenter,
+                // not inside the TabItem, so nothing in the page can match.
+                if (Ancestor<System.Windows.Controls.TabItem>(e.OriginalSource) != null)
+                    ExpectTabChange("clicked the tab strip");
+                CommitPendingEdits();
+            };
+            _lastTabIndex = MainTabs.SelectedIndex;
             MainTabs.SelectionChanged += (s, e) =>
             {
                 if (!ReferenceEquals(e.OriginalSource, MainTabs)) return;   // ignore inner selectors
+                NoteTabChange();
                 CommitPendingEdits();
             };
 
@@ -552,6 +566,75 @@ public partial class MainWindow : Window
             add => CommandManager.RequerySuggested += value;
             remove => CommandManager.RequerySuggested -= value;
         }
+    }
+
+    // ── Where did that tab change come from? ─────────────────────────────
+    //
+    // Chasing a reported jump to Characters after + Rule on the Integration
+    // tab. The view model is ruled out - SelectedTabIndex does not move, and a
+    // test drives the whole sequence against the real pack to say so - which
+    // leaves something in the view writing SelectedIndex. Deliberate switches
+    // call ExpectTabChange first; whatever is left gets logged with its stack.
+    // See Services.TabChangeWatch.
+
+    private string? _expectedTabChange;
+    private int _lastTabIndex = -1;
+
+    /// <summary>Announce a tab switch that is somebody’s decision, so the
+    /// watch below stays quiet about it.</summary>
+    private void ExpectTabChange(string why)
+    {
+        _expectedTabChange = why;
+        // Single-shot. A click on the tab already showing announces a switch
+        // that never happens, and an expectation left lying around would go on
+        // to excuse the next one - which is the one we are trying to catch.
+        // Input priority runs once the click has been handled through, by
+        // which time a real switch has already been noted.
+        Dispatcher.BeginInvoke(new Action(() => _expectedTabChange = null),
+                               System.Windows.Threading.DispatcherPriority.Input);
+    }
+
+    private void NoteTabChange()
+    {
+        int now = MainTabs.SelectedIndex;
+        if (now != _lastTabIndex && _expectedTabChange == null)
+        {
+            var focused = Keyboard.FocusedElement;
+            string focus = focused?.GetType().Name ?? "<none>";
+            if (focused is DependencyObject d &&
+                Ancestor<System.Windows.Controls.TabItem>(d) is { } owner)
+                focus += " inside tab " + (owner.Header?.ToString() ?? "?");
+            if (focused is System.Windows.FrameworkElement { Name.Length: > 0 } named)
+                focus += " named " + named.Name;
+
+            Services.TabChangeWatch.Unexplained(
+                TabLabel(_lastTabIndex), TabLabel(now), focus, Environment.StackTrace);
+        }
+        _lastTabIndex = now;
+        _expectedTabChange = null;
+    }
+
+    private string TabLabel(int index)
+    {
+        if (index < 0 || index >= MainTabs.Items.Count) return index.ToString();
+        var header = (MainTabs.Items[index] as System.Windows.Controls.TabItem)?.Header;
+        return $"[{index}] {header}";
+    }
+
+    /// <summary>Nearest ancestor of the given type, walking the visual tree and
+    /// stepping across to the logical one where the visual one runs out (a
+    /// popup’s contents, a template’s host).</summary>
+    private static T? Ancestor<T>(object? from) where T : DependencyObject
+    {
+        for (DependencyObject? d = from as DependencyObject; d != null;)
+        {
+            if (d is T hit) return hit;
+            d = d is System.Windows.Media.Visual or System.Windows.Media.Media3D.Visual3D
+                ? System.Windows.Media.VisualTreeHelper.GetParent(d)
+                  ?? System.Windows.LogicalTreeHelper.GetParent(d)
+                : System.Windows.LogicalTreeHelper.GetParent(d);
+        }
+        return null;
     }
 
     private static void CommitPendingEdits()
@@ -1353,6 +1436,7 @@ public partial class MainWindow : Window
     private void NavigateToIssue(ValidationIssue issue)
     {
         if (DataContext is not MainViewModel vm) return;
+        ExpectTabChange("jumped to a validation issue");
         var where = issue.Where ?? "";
         var head = Regex.Match(where, @"^(?<g>[A-Za-z]+)\[(?<inner>[^\]]*)\]");
         if (!head.Success) return;   // "$.packId" and the like: no per-item target
