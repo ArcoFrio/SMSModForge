@@ -680,6 +680,13 @@ public partial class MainWindow : Window
     /// </summary>
     protected override void OnClosing(CancelEventArgs e)
     {
+        // Under the harness, close and touch nothing. Both of the things below
+        // reach out of the window and onto the machine of whoever is running
+        // the tests: the layout write replaced their pane proportions with the
+        // harness’s untouched ones, and the guard put a modal prompt on their
+        // screen for a pack a test had edited. See Services.TestMode.
+        if (Services.TestMode.Active) { base.OnClosing(e); return; }
+
         // Commit any field being edited first, so the dirty-check sees it and a
         // subsequent save persists it (the X / Alt+F4 don't move focus).
         CommitPendingEdits();

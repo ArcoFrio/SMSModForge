@@ -35,14 +35,16 @@ internal static class WindowHarness
                 var ready = new ManualResetEventSlim();
                 var thread = new Thread(() =>
                 {
-                    // Resources first: MainWindow's DynamicResource theme brushes
+                    // Before anything else, and before any window exists: this
+                    // is what keeps the harness from writing over the pane
+                    // layout, prompting about unsaved changes, and filling the
+                    // tab-change log with its own noise, on the machine of
+                    // whoever ran the tests.
+                    SMSModForge.Services.TestMode.Active = true;
+
+                    // Resources next: MainWindow's DynamicResource theme brushes
                     // and every StaticResource style live in App.xaml, and a
                     // window built without them throws on the first lookup.
-                    // The harness selects tabs directly, which the editor is
-                    // right to call unexplained - but writing that to the real
-                    // log on every run buries the reports it exists for.
-                    SMSModForge.Services.TabChangeWatch.Enabled = false;
-
                     var app = new SMSModForge.App();
                     app.InitializeComponent();
 

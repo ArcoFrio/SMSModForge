@@ -49,6 +49,60 @@ public static class EditorPrefs
         set => SetBool(KeySpellCheckNodeText, value);
     }
 
+    private const string KeyCheckUpdates = "checkForUpdatesOnStart";
+    private const string KeyAutoInstall = "installUpdatesWithoutAsking";
+    private const string KeyGameFolder = "gameFolder";
+
+    /// <summary>
+    /// Whether the editor looks for a newer version when it starts. On by
+    /// default: an author who never hears about a release goes on writing packs
+    /// against an editor that has since been fixed, and the only channel before
+    /// this was somebody happening to read a Discord post.
+    /// <para/>
+    /// Off means no request is made at all, not a request whose answer is
+    /// ignored - this is read before the check, so turning it off is a real
+    /// opt-out of the network for people who want one.
+    /// </summary>
+    public static bool CheckForUpdatesOnStart
+    {
+        get => GetBool(KeyCheckUpdates, defaultValue: true);
+        set => SetBool(KeyCheckUpdates, value);
+    }
+
+    /// <summary>
+    /// Whether a found update installs itself instead of asking. Off by
+    /// default: replacing the files somebody is working in, and restarting the
+    /// editor to do it, is not something to decide on their behalf until they
+    /// have said so once.
+    /// <para/>
+    /// On, the editor says what it is doing in a toast rather than a window,
+    /// because a dialog that appears and acts without being asked is the thing
+    /// this setting exists to avoid.
+    /// </summary>
+    public static bool InstallUpdatesWithoutAsking
+    {
+        get => GetBool(KeyAutoInstall, defaultValue: false);
+        set => SetBool(KeyAutoInstall, value);
+    }
+
+    /// <summary>
+    /// Where Starmaker Story is installed - the folder holding the game exe,
+    /// with BepInEx beside it.
+    /// <para/>
+    /// The editor does not otherwise need to know: it writes packs wherever it
+    /// is told to export them. It is here for the update, which has to put the
+    /// new plugin next to the game or leave the pair mismatched - the plugin and
+    /// the editor are versioned together, and a pack written against one and run
+    /// against the other can fail without saying so.
+    /// <para/>
+    /// Empty until somebody sets it, and an update simply skips the plugin then,
+    /// saying so rather than guessing at a path.
+    /// </summary>
+    public static string GameFolder
+    {
+        get => GetString(KeyGameFolder, "");
+        set => SetString(KeyGameFolder, value ?? "");
+    }
     private const string KeyTutorialsDone = "tutorialsCompleted";
 
     /// <summary>

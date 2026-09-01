@@ -27,13 +27,6 @@ public static class TabChangeWatch
         Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
         "SMSModForge", "tab-changes.log");
 
-    /// <summary>
-    /// Off for the window harness in the tests. Those drive tab changes nobody
-    /// announced by design, and left on they wrote a page of false alarms into
-    /// this file for every run - which had to be filtered back out of a real
-    /// report by hand.
-    /// </summary>
-    public static bool Enabled { get; set; } = true;
 
     /// <summary>
     /// Append one unexplained change. Never throws: a diagnostic that can take
@@ -41,7 +34,10 @@ public static class TabChangeWatch
     /// </summary>
     public static void Unexplained(string from, string to, string focus, string stack)
     {
-        if (!Enabled) return;
+        // The harness drives tab changes nobody announced by design, and
+        // left on it wrote a page of false alarms into this file per run -
+        // which then had to be filtered back out of a real report by hand.
+        if (TestMode.Active) return;
         try
         {
             var sb = new StringBuilder();
