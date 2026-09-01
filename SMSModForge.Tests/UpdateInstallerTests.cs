@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -103,7 +103,8 @@ public class UpdateInstallerTests : IDisposable
             Entry("BepInEx/plugins/SMSModForge/ModPacks/", "");
         }
 
-        var written = UpdateInstaller.ApplyPluginZip(zip, game);
+        var result = UpdateInstaller.ApplyPluginZip(zip, game);
+        Assert.True(result.Complete, "nothing here should have failed");
 
         Assert.Equal("new plugin",
             File.ReadAllText(Path.Combine(game, "BepInEx", "plugins", "SMSModForge.PackPlugin.dll")));
@@ -114,7 +115,7 @@ public class UpdateInstallerTests : IDisposable
         Assert.Equal("the loader, installed",
             File.ReadAllText(Path.Combine(game, "BepInEx", "core", "BepInEx.dll")));
         Assert.False(File.Exists(Path.Combine(game, "winhttp.dll")));
-        Assert.Equal(3, written.Count);
+        Assert.Equal(3, result.Written.Count);
     }
 
     [Fact]
@@ -253,5 +254,70 @@ public class UpdateInstallerTests : IDisposable
         // Their file survives: the install folder is somebody's folder, and a
         // wholesale replace would be the one thing here nobody could undo.
         Assert.Equal("not the editor's", File.ReadAllText(theirs));
+    }
+
+    [Fact]
+    public void One_file_held_open_does_not_take_the_rest_of_the_update_with_it()
+    {
+        // What went wrong in the field: the plugin DLL could not be replaced -
+        // something had it open - and the loop stopped where it stood. The
+        // files after it were never tried, the folder was left half replaced,
+        // and the exception said nothing about how far it had got.
+        string game = Dir("game");
+        Directory.CreateDirectory(Path.Combine(game, "BepInEx", "plugins"));
+        string locked = WriteFile(
+            Path.Combine(game, "BepInEx", "plugins", "SMSModForge.PackPlugin.dll"), "old plugin");
+
+        string zip = Path.Combine(_temp, "plugin.zip");
+        using (var z = ZipFile.Open(zip, ZipArchiveMode.Create))
+        {
+            void Entry(string name, string text)
+            {
+                using var w = new StreamWriter(z.CreateEntry(name).Open());
+                w.Write(text);
+            }
+            // The DLL first, so anything written after it proves the loop
+            // carried on past the failure.
+            Entry("BepInEx/plugins/SMSModForge.PackPlugin.dll", "new plugin");
+            Entry("BepInEx/plugins/Newtonsoft.Json.dll", "json");
+            Entry("BepInEx/plugins/VanillaFrames/PhotoFrame.png", "frame");
+        }
+
+        UpdateInstaller.PluginUpdate result;
+        using (File.Open(locked, FileMode.Open, FileAccess.Read, FileShare.None))
+            result = UpdateInstaller.ApplyPluginZip(zip, game);
+
+        Assert.False(result.Complete);
+        var (file, why) = Assert.Single(result.Failed);
+        Assert.Contains("SMSModForge.PackPlugin.dll", file);
+        Assert.NotEmpty(why);
+
+        // The rest went in, and the one that did not is still what it was.
+        Assert.Equal(2, result.Written.Count);
+        Assert.Equal("json",
+            File.ReadAllText(Path.Combine(game, "BepInEx", "plugins", "Newtonsoft.Json.dll")));
+        Assert.Equal("old plugin", File.ReadAllText(locked));
+    }
+
+    [Fact]
+    public void A_write_that_lands_the_wrong_length_counts_as_a_failure()
+    {
+        // The check that turns "it silently did nothing" into "it said so".
+        // Everything the update knows about a file it just wrote is its length,
+        // and a length that disagrees with the download means the file on disk
+        // is not the file that was shipped.
+        string game = Dir("game2");
+        Directory.CreateDirectory(Path.Combine(game, "BepInEx", "plugins"));
+
+        string zip = Path.Combine(_temp, "plugin2.zip");
+        using (var z = ZipFile.Open(zip, ZipArchiveMode.Create))
+        using (var w = new StreamWriter(z.CreateEntry("BepInEx/plugins/x.dll").Open()))
+            w.Write("some content");
+
+        var result = UpdateInstaller.ApplyPluginZip(zip, game);
+
+        Assert.True(result.Complete);
+        Assert.Equal(new FileInfo(Path.Combine(game, "BepInEx", "plugins", "x.dll")).Length,
+                     "some content".Length);
     }
 }

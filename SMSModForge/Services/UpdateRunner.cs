@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -28,9 +29,16 @@ public sealed class UpdateRunner
     /// nothing can be asked, so nothing is installed.</summary>
     public Func<ReleaseInfo, bool>? Ask { get; set; }
 
-    /// <summary>Something went wrong in a way the author asked to hear about.
-    /// Only the manual check sets this.</summary>
+    /// <summary>An answer somebody is waiting for. How it is shown depends on
+    /// who asked: a dialog for the manual check, a line at the top of the
+    /// window for the check the editor made on its own.</summary>
     public Action<string>? Report { get; set; }
+
+    /// <summary>Something went wrong. Always shown, always waited for, and never
+    /// through the progress line — that gets overwritten by whatever the update
+    /// says next, which is how a plugin that failed to install managed to say so
+    /// for a fraction of a second and then not at all.</summary>
+    public Action<string>? Problem { get; set; }
 
     /// <summary>Close the editor so the staged build can replace it. Returns
     /// false if the author cancelled — an unsaved pack, most likely — in which
@@ -154,23 +162,35 @@ public sealed class UpdateRunner
             if (release.PluginZipUrl != null && UpdateInstaller.IsGameFolder(EditorPrefs.GameFolder))
             {
                 Say?.Invoke("Updating the plugin…");
+                string trouble = "";
                 try
                 {
                     string pluginZip = Path.Combine(folder, "plugin.zip");
                     await UpdateInstaller.DownloadAsync(Http, release.PluginZipUrl, pluginZip, null, cancel)
                                          .ConfigureAwait(true);
-                    UpdateInstaller.ApplyPluginZip(pluginZip, EditorPrefs.GameFolder);
+
+                    var plugin = UpdateInstaller.ApplyPluginZip(pluginZip, EditorPrefs.GameFolder);
+                    if (!plugin.Complete)
+                        trouble = string.Join("\n", plugin.Failed.Select(f => $"  {f.File} — {f.Why}"));
                 }
                 catch (Exception ex)
                 {
-                    // Not fatal: an editor newer than its plugin is a mismatch
-                    // worth warning about, but it is not worth throwing away an
-                    // editor update that is already downloaded and unpacked.
-                    Report?.Invoke("The editor will still be updated, but the plugin in "
-                                 + "your game folder could not be replaced: " + ex.Message
-                                 + "\n\nUnpack the plugin zip over your game folder by hand "
-                                 + "to keep the two in step.");
+                    trouble = "  " + ex.Message;
                 }
+
+                // Not fatal: an editor newer than its plugin is a mismatch worth
+                // stopping to say, but it is not worth throwing away an editor
+                // update that is already downloaded and unpacked. Said BEFORE the
+                // hand-over, while there is still an editor on screen to say it.
+                if (trouble.Length > 0)
+                    Problem?.Invoke(
+                        "The editor will still be updated, but the plugin in your game "
+                      + "folder could not be replaced:\n\n" + trouble
+                      + "\n\nThe usual reason is something holding the file open — the "
+                      + "game, or a build that put it there. Close it and run "
+                      + "Options ▸ Check for updates now again, or unpack the plugin zip "
+                      + "over your game folder by hand. Until then the two are out of "
+                      + "step, and a pack written against one can fail against the other.");
             }
 
             // ── Hand over ─────────────────────────────────────────────
@@ -200,6 +220,8 @@ public sealed class UpdateRunner
     private void Fail(string message)
     {
         Done?.Invoke();
-        Report?.Invoke(message);
+        // Through Problem where there is one: this ends the update, and ending
+        // it in a line the next thing overwrites is how nothing gets said.
+        (Problem ?? Report)?.Invoke(message);
     }
 }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -80,13 +80,30 @@ public static class UpdateInstaller
         return !rest.StartsWith("SMSModForge/", StringComparison.OrdinalIgnoreCase);
     }
 
+    /// <summary>What an attempt to replace the plugin managed.</summary>
+    /// <param name="Written">Relative paths replaced, in the order written.</param>
+    /// <param name="Failed">Relative path and reason, for each file that could
+    /// not be replaced.</param>
+    public sealed record PluginUpdate(
+        IReadOnlyList<string> Written,
+        IReadOnlyList<(string File, string Why)> Failed)
+    {
+        public bool Complete => Failed.Count == 0;
+    }
+
     /// <summary>
     /// Unpack the ModForge part of a plugin zip into a game folder.
+    /// <para/>
+    /// One file failing does not abandon the rest, and does not throw. A DLL
+    /// held open by something — the game, a debugger, a build that put it there
+    /// — used to stop the loop where it stood, leaving the folder half replaced
+    /// and the caller with an exception that said nothing about how far it got.
+    /// Every file is now tried, and what did not work is reported by name.
     /// </summary>
-    /// <returns>The relative paths written, in the order written.</returns>
-    public static IReadOnlyList<string> ApplyPluginZip(string zipPath, string gameFolder)
+    public static PluginUpdate ApplyPluginZip(string zipPath, string gameFolder)
     {
         var written = new List<string>();
+        var failed = new List<(string, string)>();
         using var zip = ZipFile.OpenRead(zipPath);
 
         foreach (var entry in zip.Entries)
@@ -101,11 +118,28 @@ public static class UpdateInstaller
             if (!target.StartsWith(Path.GetFullPath(gameFolder), StringComparison.OrdinalIgnoreCase))
                 continue;
 
-            Directory.CreateDirectory(Path.GetDirectoryName(target)!);
-            entry.ExtractToFile(target, overwrite: true);
-            written.Add(relative);
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(target)!);
+                entry.ExtractToFile(target, overwrite: true);
+
+                // Written is not the same as written CORRECTLY. Checking the
+                // length turns a write that quietly did nothing into one that
+                // says so, which is the difference between a plugin that is
+                // out of step and an author who knows it is.
+                long onDisk = new FileInfo(target).Length;
+                if (onDisk != entry.Length)
+                    throw new IOException(
+                        $"wrote {onDisk} bytes where the download has {entry.Length}");
+
+                written.Add(relative);
+            }
+            catch (Exception ex)
+            {
+                failed.Add((relative, ex.Message));
+            }
         }
-        return written;
+        return new PluginUpdate(written, failed);
     }
 
     // ── Downloading ───────────────────────────────────────────────────

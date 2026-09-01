@@ -118,6 +118,15 @@ public partial class MainWindow : Window
         _updates.Say  = text => ShowUpdateToast(text);
         _updates.Done = HideUpdateToast;
 
+        // A window, always — even when the author asked for updates to install
+        // without one. That setting is about the update happening quietly; it
+        // was never about the update failing quietly.
+        _updates.Problem = message =>
+        {
+            HideUpdateToast();
+            MessageBox.Show(this, message, "Update", MessageBoxButton.OK, MessageBoxImage.Warning);
+        };
+
         _updates.Ask = release =>
         {
             // Through the view model rather than the setting: both write the
