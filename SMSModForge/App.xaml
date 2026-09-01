@@ -462,7 +462,33 @@
             <Setter Property="Background" Value="{DynamicResource Theme.Chrome}"/>
             <Setter Property="Foreground" Value="{DynamicResource Theme.ChromeText}"/>
         </Style>
+        <!--
+            IsFocusScope="False" is the load-bearing setter here, not the colours.
+
+            A ToolBar is a focus scope by default, and a focus scope hands focus
+            BACK when you are done with it: at the end of a click on a toolbar
+            button, WPF returns keyboard focus to whatever the enclosing scope
+            last remembered, so a toolbar never keeps focus away from the
+            document. That is the right behaviour for a word processor. Here the
+            enclosing scope is the window, and what the window remembers after
+            you click a tab header is the TabItem - so the click ended by
+            focusing a tab header, and a TabItem that receives focus SELECTS
+                itself.
+
+            The result was the editor jumping to another tab when you pressed
+            + Rule, + Variable, or any other list toolbar button: not the tab
+            you were on, but whichever one the window still remembered. It only
+            happened when that memory had gone stale against the tab actually
+            showing, which is why it came and went.
+
+            Every one of these toolbars sits above a unit list inside a tab.
+            None of them wants to give focus back anywhere - the buttons carry
+            ordinary bound commands, not RoutedCommands that need a target - so
+            the scope buys nothing and costs that. Without it a click leaves
+            focus on the button it landed on, like any other button.
+        -->
         <Style TargetType="ToolBar" BasedOn="{StaticResource {x:Type ToolBar}}">
+            <Setter Property="FocusManager.IsFocusScope" Value="False"/>
             <Setter Property="Background" Value="{DynamicResource Theme.Chrome}"/>
             <Setter Property="Foreground" Value="{DynamicResource Theme.ChromeText}"/>
         </Style>

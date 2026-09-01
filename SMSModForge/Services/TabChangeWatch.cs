@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Text;
 
@@ -7,21 +7,19 @@ namespace SMSModForge.Services;
 /// <summary>
 /// Records tab changes nobody asked for.
 /// <para/>
-/// The editor has been reported switching tabs on its own after adding a unit
-/// — most recently jumping to Characters after + Rule on the Integration tab.
-/// It is not the view model: <c>SelectedTabIndex</c> does not move when the
-/// command runs, and there is a test that drives the whole sequence against the
-/// real pack to say so. So the write is happening somewhere in the view, and
-/// the only thing that will name it is a stack trace taken while it happens.
+/// Written to catch the editor switching tabs on its own, and it did: the
+/// stack it captured showed a toolbar button, at the end of its click, handing
+/// keyboard focus back to a tab header, which selected that tab. The cause is
+/// fixed — see the ToolBar style in App.xaml — but the watch stays, because it
+/// took three attempts to find and a stack trace ended it in one.
 /// <para/>
 /// Every deliberate switch — a click on the tab strip, jumping to a validation
 /// issue, a tutorial step — announces itself first. Anything left over is
 /// written here with the stack, what had keyboard focus at the time, and where
 /// it went. One file, appended to, next to the editor's other settings.
 /// <para/>
-/// This is diagnostic scaffolding for a live bug, not a permanent feature. It
-/// costs a file append per unexplained tab change, which is zero in normal use
-/// because in normal use there are none.
+/// It costs a file append per unexplained tab change, which is nothing at all
+/// in normal use, because in normal use there are none.
 /// </summary>
 public static class TabChangeWatch
 {

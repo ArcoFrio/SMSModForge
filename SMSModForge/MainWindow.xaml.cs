@@ -570,12 +570,12 @@ public partial class MainWindow : Window
 
     // ── Where did that tab change come from? ─────────────────────────────
     //
-    // Chasing a reported jump to Characters after + Rule on the Integration
-    // tab. The view model is ruled out - SelectedTabIndex does not move, and a
-    // test drives the whole sequence against the real pack to say so - which
-    // leaves something in the view writing SelectedIndex. Deliberate switches
-    // call ExpectTabChange first; whatever is left gets logged with its stack.
-    // See Services.TabChangeWatch.
+    // Written to catch the editor switching tabs on its own, and it caught it:
+    // a toolbar button handing focus back to a tab header at the end of its
+    // click (fixed in App.xaml, on the ToolBar style). Kept as a guard, since
+    // nothing else about the editor makes a stray tab change visible.
+    // Deliberate switches call ExpectTabChange first; whatever is left gets
+    // logged with its stack. See Services.TabChangeWatch.
 
     private string? _expectedTabChange;
     private int _lastTabIndex = -1;

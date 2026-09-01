@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Windows;
 using System.Windows.Automation.Peers;
 using System.Windows.Automation.Provider;
 using System.Windows.Controls;
+using System.Windows.Input;
 using SMSModForge.Model;
 using SMSModForge.View;
 using SMSModForge.ViewModel;
@@ -15,17 +17,15 @@ namespace SMSModForge.Tests;
 /// <summary>
 /// The tab you are on stays the tab you are on.
 /// <para/>
-/// Chasing a report that the editor switches tabs by itself after adding a
-/// unit: open a pack from the recent list, click through Characters, NPCs and
-/// Places to Integration, press + Rule, and it jumps to Characters.
+/// From a report that the editor switched tabs by itself after + Rule on the
+/// Integration tab.
 /// <para/>
-/// Neither of these reproduces it, which is worth as much as a failing test
-/// would have been — between them they rule out the view model, the command,
-/// the button, and the TabControl's own reaction to a unit being added to the
-/// tab you are looking at. What they do not cover is a real mouse: the tabs
-/// here are selected directly rather than clicked, and no test can hand WPF the
-/// input queue of somebody's actual session. The instrumentation in
-/// <see cref="SMSModForge.Services.TabChangeWatch"/> covers that half.
+/// The first two here never reproduced it, and that was the useful part:
+/// between them they ruled out the view model, the command, the button, and the
+/// TabControl's own reaction to a unit landing in the list it is showing, which
+/// left the click itself. The third reproduces it, and it needed the half of a
+/// click no automation peer performs — the mouse capture, and the release that
+/// gives it up.
 /// </summary>
 public class TabSelectionTests
 {
@@ -130,5 +130,67 @@ public class TabSelectionTests
             Assert.Single(vm.IntegrationRules);   // the click really landed
             Assert.Equal(TabIntegration, tabs.SelectedIndex);
         });
+    }
+
+    // ── The reported jump ────────────────────────────────────────────
+    //
+    // Every left-hand unit list sits under a ToolBar, and a ToolBar is a
+    // FOCUS SCOPE. The point of one is that a toolbar never keeps focus:
+    // you click a button on it and focus goes back to what you were working
+    // in, which WPF does on the button’s LostMouseCapture, at the end of the
+    // click.
+    //
+    // "What you were working in" is the enclosing scope’s remembered element,
+    // and clicking a tab header leaves that a TabItem. Focus arriving at a
+    // TabItem makes it select itself. So a click on + Rule could end by
+    // selecting a different tab - whichever one the window scope still
+    // remembered - and that is what the editor was seen doing.
+
+    [Fact]
+    public void A_toolbar_click_leaves_focus_on_the_button()
+    {
+        // The mechanism, with no contrived state: press and release + Rule
+        // and see where focus ends up. Before the fix it came back as a
+        // TabItem - harmless only because that TabItem happened to be the tab
+        // already showing.
+        Assert.NotNull(PackRepository.Load(PackDir));
+
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            vm.OpenRecentCommand.Execute(PackDir);
+            WindowHarness.Pump();
+
+            var integration = (TabItem)tabs.Items[TabIntegration];
+            integration.IsSelected = true;
+            WindowHarness.Pump();
+            integration.Focus();          // what a click on the header does
+            WindowHarness.Pump();
+
+            ClickToolbarButton(window, "btn:addRule");
+
+            _out.WriteLine("focus after the click: " +
+                           Keyboard.FocusedElement?.GetType().Name);
+            Assert.IsType<Button>(Keyboard.FocusedElement);
+        });
+    }
+
+    /// <summary>Press and release a toolbar button the way a mouse does it.
+    /// The release is the half that moves focus, and it needs real mouse
+    /// capture - an automation peer on its own invokes the command without any
+    /// of this, which is why the first tests here saw nothing.</summary>
+    private static void ClickToolbarButton(MainWindow window, string anchorId)
+    {
+        window.UpdateLayout();
+        var button = TutorialAnchor.Find(window, anchorId) as Button;
+        Assert.True(button != null, anchorId + " is not in the tree");
+        button!.Focus();
+        Mouse.Capture(button);
+        WindowHarness.Pump();
+        ((IInvokeProvider)new ButtonAutomationPeer(button)
+            .GetPattern(PatternInterface.Invoke)!).Invoke();
+        Mouse.Capture(null);
+        WindowHarness.Pump();
     }
 }

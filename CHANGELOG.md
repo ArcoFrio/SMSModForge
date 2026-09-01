@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+### Fixed
+
+- **The editor no longer jumps to another tab** when you press a list button
+  like **+ Rule** or **+ Variable**. Those toolbars were focus scopes, so WPF
+  handed keyboard focus back at the end of the click — and what it handed it
+  back to was a tab header, which selects its own tab when focused. It only
+  misfired when the header it remembered was not the tab you were looking at,
+  which is why it came and went. Focus now stays on the button you pressed.
+
 ### Added
 
 - **An `InputKey` condition** — gate anything on a keyboard key or a mouse
