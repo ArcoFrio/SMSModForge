@@ -38,6 +38,11 @@ internal static class WindowHarness
                     // Resources first: MainWindow's DynamicResource theme brushes
                     // and every StaticResource style live in App.xaml, and a
                     // window built without them throws on the first lookup.
+                    // The harness selects tabs directly, which the editor is
+                    // right to call unexplained - but writing that to the real
+                    // log on every run buries the reports it exists for.
+                    SMSModForge.Services.TabChangeWatch.Enabled = false;
+
                     var app = new SMSModForge.App();
                     app.InitializeComponent();
 
