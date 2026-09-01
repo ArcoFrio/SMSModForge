@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading;
@@ -24,11 +24,35 @@ public static class UpdateApplier
     /// <summary>The argument that turns a normal start into this.</summary>
     public const string Switch = "--apply-update";
 
+    /// <summary>
+    /// Passed to the editor this starts afterwards, with the version it is
+    /// replacing.
+    /// <para/>
+    /// An updated editor otherwise comes up knowing nothing: it runs its
+    /// ordinary check, finds it is already the latest, and says nothing at all
+    /// - so the last thing anybody saw was the old editor closing itself, and
+    /// whether that worked was left to be inferred from the title bar.
+    /// </summary>
+    public const string UpdatedSwitch = "--updated";
+
     /// <summary>How long to wait for the old editor to let go of its files. It
     /// has been asked to close and has nothing to do but close; well past this
     /// and something is wrong, and the copy is attempted anyway rather than
     /// leaving the author with neither version running.</summary>
     private static readonly TimeSpan ExitWait = TimeSpan.FromSeconds(30);
+
+    /// <summary>
+    /// Whether this editor is the one an update just put in place, and which
+    /// version it replaced (empty when that could not be read).
+    /// </summary>
+    public static bool WasJustUpdated(string[] args, out string fromVersion)
+    {
+        fromVersion = "";
+        int at = Array.IndexOf(args, UpdatedSwitch);
+        if (at < 0) return false;
+        if (at + 1 < args.Length) fromVersion = args[at + 1];
+        return true;
+    }
 
     /// <summary>
     /// Whether this process was started to apply an update, and what it was
@@ -57,6 +81,11 @@ public static class UpdateApplier
         WaitForExit(oldProcessId);
 
         string from = AppContext.BaseDirectory.TrimEnd(Path.DirectorySeparatorChar);
+
+        // Before the copy, because after it the folder holds this build and
+        // the version being replaced is gone.
+        string replaced = VersionOf(Path.Combine(installFolder, "SMSModForge.dll"));
+
         try
         {
             CopyOver(from, installFolder);
@@ -77,12 +106,15 @@ public static class UpdateApplier
 
         try
         {
-            Process.Start(new ProcessStartInfo
+            var start = new ProcessStartInfo
             {
                 FileName = Path.Combine(installFolder, "SMSModForge.exe"),
                 WorkingDirectory = installFolder,
                 UseShellExecute = false,
-            });
+            };
+            start.ArgumentList.Add(UpdatedSwitch);
+            start.ArgumentList.Add(replaced);
+            Process.Start(start);
         }
         catch (Exception ex)
         {
@@ -93,6 +125,22 @@ public static class UpdateApplier
             return false;
         }
         return true;
+    }
+
+    /// <summary>The file version of a build, or empty if it cannot be read —
+    /// which is not worth failing an update over, only worth saying less
+    /// afterwards.</summary>
+    private static string VersionOf(string assembly)
+    {
+        try
+        {
+            var info = FileVersionInfo.GetVersionInfo(assembly);
+            // No version is not version zero: an editor that says it updated
+            // "from 0.0.0" has invented a fact. Say less instead.
+            if (string.IsNullOrWhiteSpace(info.FileVersion)) return "";
+            return new Version(info.FileVersion).ToString(3);
+        }
+        catch { return ""; }
     }
 
     private static void WaitForExit(int processId)

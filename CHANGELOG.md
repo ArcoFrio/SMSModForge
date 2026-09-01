@@ -18,7 +18,9 @@
   headings instead of hashes: the version, what changed, how big the
   download is, and whether the plugin will be updated too. Say yes and it
   downloads, closes (asking about an unsaved pack exactly as the X does),
-  puts the new build in place and starts it again.
+  puts the new build in place, starts it again — and the editor that comes back
+  says which version it updated from, so the restart is confirmation rather
+  than something to infer from the title bar.
 - **Options ▸ Check for updates on start** — on by default. Off means no
   request is made at all, not one whose answer is ignored. The prompt carries
   the same setting as a checkbox, so you can turn it off from the window that

@@ -232,6 +232,30 @@ public class UpdateInstallerTests : IDisposable
     }
 
     [Fact]
+    public void The_editor_an_update_just_installed_knows_it()
+    {
+        // Without this an updated editor comes up knowing nothing: it checks,
+        // finds it is already the latest, and says nothing - leaving the last
+        // thing anybody saw as the old editor closing itself.
+        Assert.True(UpdateApplier.WasJustUpdated(
+            new[] { @"C:\Editor\SMSModForge.exe", UpdateApplier.UpdatedSwitch, "1.1.0" },
+            out var from));
+        Assert.Equal("1.1.0", from);
+
+        // The version it replaced could not always be read, and the switch on
+        // its own still means an update happened.
+        Assert.True(UpdateApplier.WasJustUpdated(new[] { UpdateApplier.UpdatedSwitch }, out var none));
+        Assert.Equal("", none);
+
+        // The control: every ordinary start, including the one that applies an
+        // update, must not claim to be the editor that came out of one.
+        Assert.False(UpdateApplier.WasJustUpdated(Array.Empty<string>(), out _));
+        Assert.False(UpdateApplier.WasJustUpdated(new[] { @"C:\Editor\SMSModForge.exe" }, out _));
+        Assert.False(UpdateApplier.WasJustUpdated(
+            new[] { UpdateApplier.Switch, @"C:\Editor", "42" }, out _));
+    }
+
+    [Fact]
     public void Copying_over_replaces_what_it_brings_and_keeps_what_it_does_not()
     {
         string from = Dir("new");

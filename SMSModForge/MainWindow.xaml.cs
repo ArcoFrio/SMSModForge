@@ -153,6 +153,16 @@ public partial class MainWindow : Window
         Loaded += async (_, _) =>
         {
             _updates.Report = ToastReport;
+
+            // The other end of the update: this editor is the one that was just
+            // put in place, and saying so is the only confirmation there is that
+            // any of it worked.
+            if (Services.UpdateApplier.WasJustUpdated(
+                    Environment.GetCommandLineArgs(), out string from))
+                ToastReport(from.Length > 0 && from != MainViewModel.AppVersion
+                    ? $"Updated from {from} to {MainViewModel.AppVersion}."
+                    : $"Updated to {MainViewModel.AppVersion}.");
+
             await _updates.OnStartupAsync();
         };
     }
