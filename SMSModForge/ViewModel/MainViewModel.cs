@@ -1302,6 +1302,21 @@ public sealed class MainViewModel : ObservableObject
     public RelayCommand ValidateCommand { get; }
     public RelayCommand OpenRecentCommand { get; }
 
+    /// <summary>Bound by Options ▸ Check for updates on start. Two-way, and
+    /// written straight through to the stored preference — there is no in-memory
+    /// copy to fall out of step with it.</summary>
+    public bool CheckForUpdatesOnStart
+    {
+        get => Services.EditorPrefs.CheckForUpdatesOnStart;
+        set { Services.EditorPrefs.CheckForUpdatesOnStart = value; OnPropertyChanged(); }
+    }
+
+    /// <summary>Bound by Options ▸ Install updates without asking.</summary>
+    public bool InstallUpdatesWithoutAsking
+    {
+        get => Services.EditorPrefs.InstallUpdatesWithoutAsking;
+        set { Services.EditorPrefs.InstallUpdatesWithoutAsking = value; OnPropertyChanged(); }
+    }
     /// <summary>Bound by the Themes menu. Switching applies + persists the
     /// chosen colour palette (see <see cref="Services.ThemeManager"/>).</summary>
     public IReadOnlyList<Services.ThemeDef> Themes => Services.ThemeManager.All;

@@ -1,0 +1,257 @@
+using System;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using SMSModForge.Services;
+using Xunit;
+
+namespace SMSModForge.Tests;
+
+/// <summary>
+/// Putting a release in place, over folders in the temp directory rather than
+/// over anybody's editor.
+/// <para/>
+/// The two things worth being sure of are both about damage: what an update is
+/// allowed to write into a game folder, and what it refuses to unpack over a
+/// working install. Everything else about an update is recoverable by running
+/// it again.
+/// </summary>
+public class UpdateInstallerTests : IDisposable
+{
+    private readonly string _temp;
+    private readonly string _stagingWas;
+
+    public UpdateInstallerTests()
+    {
+        _temp = Path.Combine(Path.GetTempPath(), "smsmf-update-" + Guid.NewGuid().ToString("N"));
+        Directory.CreateDirectory(_temp);
+
+        // Never the real one: that is a folder in the author's own settings.
+        _stagingWas = UpdateInstaller.StagingRoot;
+        UpdateInstaller.StagingRoot = Path.Combine(_temp, "staging");
+    }
+
+    public void Dispose()
+    {
+        UpdateInstaller.StagingRoot = _stagingWas;
+        try { Directory.Delete(_temp, recursive: true); } catch { /* temp */ }
+    }
+
+    private string Dir(params string[] parts)
+    {
+        string p = Path.Combine(new[] { _temp }.Concat(parts).ToArray());
+        Directory.CreateDirectory(p);
+        return p;
+    }
+
+    private string WriteFile(string path, string content)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllText(path, content);
+        return path;
+    }
+
+    // ── What may be written into a game folder ────────────────────────
+
+    [Theory]
+    // Ours: the plugin and what it needs, directly under plugins.
+    [InlineData("BepInEx/plugins/SMSModForge.PackPlugin.dll", true)]
+    [InlineData("BepInEx/plugins/Newtonsoft.Json.dll", true)]
+    [InlineData("BepInEx/plugins/VanillaFrames/PhotoFrame.png", true)]
+    // The loader. Already installed, possibly updated by hand, and other mods
+    // are running on it - replacing it is well past what this was asked to do.
+    [InlineData("BepInEx/core/BepInEx.dll", false)]
+    [InlineData("BepInEx/core/0Harmony.dll", false)]
+    [InlineData("winhttp.dll", false)]
+    [InlineData("doorstop_config.ini", false)]
+    [InlineData(".doorstop_version", false)]
+    // The author's own work. The zip carries an empty ModPacks folder, and
+    // unpacking that over a real one is the one unrecoverable mistake here.
+    [InlineData("BepInEx/plugins/SMSModForge/ModPacks/MyPack/modpack.json", false)]
+    [InlineData("BepInEx/plugins/SMSModForge/anything.txt", false)]
+    // Directory entries carry no content.
+    [InlineData("BepInEx/plugins/", false)]
+    [InlineData("BepInEx/plugins/VanillaFrames/", false)]
+    public void Only_the_plugin_and_what_it_needs_is_ours(string entry, bool ours)
+        => Assert.Equal(ours, UpdateInstaller.IsOursInPluginZip(entry));
+
+    [Fact]
+    public void Applying_a_plugin_zip_replaces_the_plugin_and_leaves_packs_alone()
+    {
+        string game = Dir("game");
+        // A game folder as it really is: BepInEx installed, the old plugin in
+        // place, and the author's packs underneath it.
+        WriteFile(Path.Combine(game, "BepInEx", "core", "BepInEx.dll"), "the loader, installed");
+        WriteFile(Path.Combine(game, "BepInEx", "plugins", "SMSModForge.PackPlugin.dll"), "old plugin");
+        string pack = WriteFile(
+            Path.Combine(game, "BepInEx", "plugins", "SMSModForge", "ModPacks", "MyPack", "modpack.json"),
+            "a whole pack somebody wrote");
+
+        string zip = Path.Combine(_temp, "plugin.zip");
+        using (var z = ZipFile.Open(zip, ZipArchiveMode.Create))
+        {
+            void Entry(string name, string text)
+            {
+                using var w = new StreamWriter(z.CreateEntry(name).Open());
+                w.Write(text);
+            }
+            Entry("winhttp.dll", "loader shim");
+            Entry("BepInEx/core/BepInEx.dll", "a DIFFERENT loader");
+            Entry("BepInEx/plugins/SMSModForge.PackPlugin.dll", "new plugin");
+            Entry("BepInEx/plugins/Newtonsoft.Json.dll", "json");
+            Entry("BepInEx/plugins/VanillaFrames/PhotoFrame.png", "frame");
+            Entry("BepInEx/plugins/SMSModForge/ModPacks/", "");
+        }
+
+        var written = UpdateInstaller.ApplyPluginZip(zip, game);
+
+        Assert.Equal("new plugin",
+            File.ReadAllText(Path.Combine(game, "BepInEx", "plugins", "SMSModForge.PackPlugin.dll")));
+        Assert.True(File.Exists(Path.Combine(game, "BepInEx", "plugins", "VanillaFrames", "PhotoFrame.png")));
+
+        // The controls, and the reason this test exists.
+        Assert.Equal("a whole pack somebody wrote", File.ReadAllText(pack));
+        Assert.Equal("the loader, installed",
+            File.ReadAllText(Path.Combine(game, "BepInEx", "core", "BepInEx.dll")));
+        Assert.False(File.Exists(Path.Combine(game, "winhttp.dll")));
+        Assert.Equal(3, written.Count);
+    }
+
+    [Fact]
+    public void A_folder_without_BepInEx_is_not_a_game_folder()
+    {
+        Assert.False(UpdateInstaller.IsGameFolder(null));
+        Assert.False(UpdateInstaller.IsGameFolder(""));
+        Assert.False(UpdateInstaller.IsGameFolder(Dir("empty")));
+        Assert.False(UpdateInstaller.IsGameFolder(Path.Combine(_temp, "does-not-exist")));
+
+        string game = Dir("real-game", "BepInEx", "plugins");
+        Assert.True(UpdateInstaller.IsGameFolder(Path.Combine(_temp, "real-game")));
+        Assert.True(Directory.Exists(game));
+    }
+
+    // ── What may be unpacked over an install ──────────────────────────
+
+    private string EditorZip(string name, bool complete, string? insideFolder = null)
+    {
+        string zip = Path.Combine(_temp, name);
+        using var z = ZipFile.Open(zip, ZipArchiveMode.Create);
+        string prefix = insideFolder == null ? "" : insideFolder + "/";
+        void Entry(string entry, string text)
+        {
+            using var w = new StreamWriter(z.CreateEntry(prefix + entry).Open());
+            w.Write(text);
+        }
+        Entry("SMSModForge.exe", "MZ...");
+        if (complete)
+        {
+            Entry("SMSModForge.dll", "il");
+            Entry("SMSModForge.runtimeconfig.json", "{}");
+            Entry("Resources/TutorialAssets/note.txt", "art");
+        }
+        return zip;
+    }
+
+    [Fact]
+    public void A_good_download_stages_and_reports_no_problem()
+    {
+        string? staged = UpdateInstaller.StageEditorZip(EditorZip("ok.zip", complete: true), "9.9.9", out var problem);
+
+        Assert.Null(problem);
+        Assert.NotNull(staged);
+        Assert.True(UpdateInstaller.LooksLikeAnEditorBuild(staged!));
+        Assert.True(File.Exists(Path.Combine(staged!, "Resources", "TutorialAssets", "note.txt")));
+    }
+
+    [Fact]
+    public void A_zip_wrapped_in_one_folder_is_stepped_into()
+    {
+        // The published zip is flat, but a release packed differently should
+        // not be a failed update.
+        string? staged = UpdateInstaller.StageEditorZip(
+            EditorZip("wrapped.zip", complete: true, insideFolder: "Editor"), "9.9.8", out var problem);
+
+        Assert.Null(problem);
+        Assert.EndsWith("Editor", staged);
+        Assert.True(UpdateInstaller.LooksLikeAnEditorBuild(staged!));
+    }
+
+    [Fact]
+    public void A_download_that_is_not_an_editor_is_refused_before_anything_is_replaced()
+    {
+        // The expensive failure: a truncated download, an error page saved as a
+        // zip, an asset that was still uploading. Each unpacks to SOMETHING, and
+        // unpacking that over a working install leaves no editor at all.
+        string? staged = UpdateInstaller.StageEditorZip(EditorZip("half.zip", complete: false), "9.9.7", out var problem);
+
+        Assert.Null(staged);
+        Assert.NotNull(problem);
+        Assert.Contains("nothing was replaced", problem);
+    }
+
+    [Fact]
+    public void Staging_the_same_version_twice_does_not_mix_the_two()
+    {
+        // A retried download must not leave a file from the abandoned one.
+        UpdateInstaller.StageEditorZip(EditorZip("first.zip", complete: true), "9.9.6", out _);
+        string leftover = Path.Combine(UpdateInstaller.StagingFor("9.9.6"), "editor", "stale.dll");
+        File.WriteAllText(leftover, "from the run before");
+
+        UpdateInstaller.StageEditorZip(EditorZip("second.zip", complete: true), "9.9.6", out _);
+
+        Assert.False(File.Exists(leftover));
+    }
+
+    [Fact]
+    public void Cleaning_staging_keeps_the_one_it_is_told_to()
+    {
+        UpdateInstaller.StageEditorZip(EditorZip("a.zip", complete: true), "1.0.0", out _);
+        UpdateInstaller.StageEditorZip(EditorZip("b.zip", complete: true), "2.0.0", out _);
+
+        UpdateInstaller.CleanStaging(keepVersion: "2.0.0");
+
+        Assert.False(Directory.Exists(UpdateInstaller.StagingFor("1.0.0")));
+        Assert.True(Directory.Exists(UpdateInstaller.StagingFor("2.0.0")));
+    }
+
+    // ── The swap ──────────────────────────────────────────────────────
+
+    [Fact]
+    public void The_applier_reads_its_arguments()
+    {
+        Assert.True(UpdateApplier.WasAskedToApply(
+            new[] { UpdateApplier.Switch, @"C:\Editor", "4242" }, out var folder, out int pid));
+        Assert.Equal(@"C:\Editor", folder);
+        Assert.Equal(4242, pid);
+
+        // The controls: an ordinary start must not be mistaken for one of these.
+        Assert.False(UpdateApplier.WasAskedToApply(Array.Empty<string>(), out _, out _));
+        Assert.False(UpdateApplier.WasAskedToApply(new[] { @"C:\SomePack" }, out _, out _));
+        Assert.False(UpdateApplier.WasAskedToApply(new[] { UpdateApplier.Switch }, out _, out _));
+    }
+
+    [Fact]
+    public void Copying_over_replaces_what_it_brings_and_keeps_what_it_does_not()
+    {
+        string from = Dir("new");
+        WriteFile(Path.Combine(from, "SMSModForge.dll"), "new build");
+        WriteFile(Path.Combine(from, "Resources", "art.png"), "new art");
+
+        string to = Dir("installed");
+        WriteFile(Path.Combine(to, "SMSModForge.dll"), "old build");
+        string theirs = WriteFile(Path.Combine(to, "notes to self.txt"), "not the editor's");
+
+        // Read-only happens: some unpackers set it, and one stale flag should
+        // not stop an update.
+        string locked = WriteFile(Path.Combine(to, "Resources", "art.png"), "old art");
+        File.SetAttributes(locked, FileAttributes.ReadOnly);
+
+        UpdateApplier.CopyOver(from, to);
+
+        Assert.Equal("new build", File.ReadAllText(Path.Combine(to, "SMSModForge.dll")));
+        Assert.Equal("new art", File.ReadAllText(locked));
+        // Their file survives: the install folder is somebody's folder, and a
+        // wholesale replace would be the one thing here nobody could undo.
+        Assert.Equal("not the editor's", File.ReadAllText(theirs));
+    }
+}

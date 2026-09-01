@@ -2273,6 +2273,17 @@
                           Click="AddPackNamesToDictionary_Click"
                           ToolTip="Put every character, actor, place and NPC name this pack invents into your Windows dictionary in one go, so they stop being flagged as misspellings. Shows you the list first."/>
                 <Separator/>
+                <MenuItem Header="Check for _updates on start" IsCheckable="True"
+                          IsChecked="{Binding CheckForUpdatesOnStart, Mode=TwoWay}"
+                          ToolTip="Ask the releases page whether a newer version has been published, once, when the editor starts. Off means no request is made at all. Your choice is remembered between sessions."/>
+                <MenuItem Header="_Install updates without asking" IsCheckable="True"
+                          IsChecked="{Binding InstallUpdatesWithoutAsking, Mode=TwoWay}"
+                          ToolTip="Skip the what-changed window: a found update downloads and installs itself, saying so in a line at the top of the window rather than opening anything. The editor still restarts to finish, and still asks about an unsaved pack first."/>
+                <MenuItem Header="_Starmaker Story folder…" Click="SetGameFolder_Click"
+                          ToolTip="Where the game is installed, with BepInEx beside it. Only used by the updater, so it can replace the plugin at the same time as the editor - the two are versioned together and a mismatched pair can fail without saying why."/>
+                <MenuItem Header="Check for updates _now" Click="CheckForUpdates_Click"
+                          ToolTip="Ask right now, and answer either way."/>
+                <Separator/>
                 <MenuItem Header="_Preview quality" ItemsSource="{Binding PreviewQualities}"
                           ToolTip="Trade live-preview smoothness for CPU. Your choice is remembered between sessions.">
                     <MenuItem.ItemContainerStyle>
@@ -5723,6 +5734,23 @@
              Collapsed until a tutorial runs. -->
         <ctl:TutorialOverlay x:Name="Tutorial"/>
 
+        <!-- The update line. Same shape and place as the Saved toast, in blue
+             rather than green: this one is not the result of anything the
+             author just did, so it should not read as their action having
+             succeeded. It also STAYS - a download is not an event, it is a
+             thing in progress - and is taken down when it finishes. -->
+        <Border x:Name="UpdateToast"
+                HorizontalAlignment="Right" VerticalAlignment="Top"
+                Margin="0,30,16,0" Padding="10,5"
+                CornerRadius="4"
+                Background="#E22B6CB0" BorderBrush="#40FFFFFF" BorderThickness="1"
+                Opacity="0" IsHitTestVisible="False" Panel.ZIndex="100">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="⭳" VerticalAlignment="Center" Margin="0,0,6,0"/>
+                <TextBlock x:Name="UpdateToastText" Foreground="White" FontWeight="SemiBold"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
         <Border x:Name="SaveToast"
                 HorizontalAlignment="Right" VerticalAlignment="Top"
                 Margin="0,30,16,0" Padding="10,5"

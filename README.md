@@ -53,6 +53,24 @@ that use a vanilla border will quietly lose it.
 The editor itself can live anywhere; it does not need to be inside the game
 folder.
 
+### Keeping it current
+
+The editor looks for a newer release when it starts, and offers it with the
+release notes so you can see what you would be getting. Saying yes downloads it,
+closes the editor, puts the new build in place and starts it again.
+
+Under **Options**:
+
+- **Check for updates on start** — on by default. Turning it off means the
+  editor makes no request at all.
+- **Install updates without asking** — off by default. On, an update installs
+  itself and says so in a line at the top of the window instead of opening one.
+- **Starmaker Story folder** — point this at your game folder and updates will
+  replace the plugin there too, so it cannot fall out of step with the editor.
+  Only the plugin and the files it needs are written: BepInEx itself is left
+  alone, and so are your packs.
+- **Check for updates now** — asks straight away, and tells you either way.
+
 ### Learning it
 
 The editor teaches itself. On the **⚒ ModForge** tab you will find:

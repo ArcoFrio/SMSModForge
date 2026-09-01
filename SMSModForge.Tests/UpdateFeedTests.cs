@@ -153,4 +153,33 @@ public class UpdateFeedTests
         }
         Assert.Equal(real, UpdateFeed.RunningVersion);
     }
+
+    [Fact]
+    public async System.Threading.Tasks.Task The_feed_can_be_pointed_at_a_local_file()
+    {
+        // The seam the end-to-end test runs through, checked here so a typo in
+        // it is not something you find out about while watching an editor try
+        // to replace itself.
+        string file = System.IO.Path.GetTempFileName();
+        await System.IO.File.WriteAllTextAsync(file, LatestJson);
+        Environment.SetEnvironmentVariable(UpdateFeed.FeedOverrideVariable, file);
+        Environment.SetEnvironmentVariable(UpdateFeed.VersionOverrideVariable, "0.0.1");
+        try
+        {
+            var release = await UpdateFeed.CheckAsync();
+            Assert.NotNull(release);
+            Assert.Equal("1.2.0", release!.VersionText);
+
+            // The control: the same feed, read by an editor that is already
+            // newer, has to come back with nothing.
+            Environment.SetEnvironmentVariable(UpdateFeed.VersionOverrideVariable, "2.0.0");
+            Assert.Null(await UpdateFeed.CheckAsync());
+        }
+        finally
+        {
+            Environment.SetEnvironmentVariable(UpdateFeed.FeedOverrideVariable, null);
+            Environment.SetEnvironmentVariable(UpdateFeed.VersionOverrideVariable, null);
+            System.IO.File.Delete(file);
+        }
+    }
 }

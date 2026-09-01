@@ -13,6 +13,22 @@
 
 ### Added
 
+- **The editor checks for a new version when it starts**, and offers it with
+  the release notes in a window: the version, what changed, how big the
+  download is, and whether the plugin will be updated too. Say yes and it
+  downloads, closes (asking about an unsaved pack exactly as the X does),
+  puts the new build in place and starts it again.
+- **Options ▸ Check for updates on start** — on by default. Off means no
+  request is made at all, not one whose answer is ignored.
+- **Options ▸ Install updates without asking** — off by default. On, an update
+  installs itself and says so in a line at the top of the window rather than
+  opening anything.
+- **Options ▸ Starmaker Story folder** lets the updater replace the plugin in
+  your game folder at the same time, so the pair cannot drift apart. It writes
+  only the plugin and what it needs — never BepInEx itself, and never
+  ModPacks.
+- **Options ▸ Check for updates now**, which answers either way.
+
 - **An `InputKey` condition** — gate anything on a keyboard key or a mouse
   button. Four phases: **Pressed** and **Released** are moments, true once per
   press; **Down** and **Up** are states, true for as long as they hold.

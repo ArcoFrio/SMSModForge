@@ -1,0 +1,48 @@
+﻿<!--
+    Shown when a check finds a newer release and the author has not asked for
+    updates to install themselves. Deliberately a window rather than a toast:
+    this one asks for a decision, and the notes are the reason to say yes.
+-->
+<Window x:Class="SMSModForge.View.UpdateWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Update available" Width="620" Height="520"
+        MinWidth="460" MinHeight="320"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <DockPanel Margin="12">
+
+        <StackPanel DockPanel.Dock="Top" Margin="0,0,0,8">
+            <TextBlock x:Name="HeadlineText" FontWeight="Bold" FontSize="15" TextWrapping="Wrap"/>
+            <TextBlock x:Name="VersionText" Foreground="Gray" TextWrapping="Wrap" Margin="0,2,0,0"/>
+        </StackPanel>
+
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
+            <!-- What the update will touch besides the editor. Grey, and on the
+                 far side from the buttons: it is something to know, not
+                 something to answer. -->
+            <TextBlock x:Name="PluginText" Foreground="Gray" TextWrapping="Wrap"
+                       VerticalAlignment="Center" MaxWidth="330"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="Update now" Width="110" IsDefault="True" Click="Update_Click"
+                        Margin="0,0,8,0"
+                        ToolTip="Download the new version, close the editor, put it in place and start it again. Anything unsaved is asked about first, the same as closing normally."/>
+                <Button Content="Not now" Width="90" IsCancel="True"
+                        ToolTip="Carry on with this version. You will be told again next time the editor starts; turn the check off under Options if you would rather not be."/>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- The release notes, as written on the release.
+             A TextBox rather than a TextBlock so the text can be selected and
+             copied, and read-only so it cannot be edited. The notes are
+             markdown and are shown as markdown: rendering them would mean a
+             markdown renderer in the editor for one box, and "### Added" over a
+             list of dashes is legible enough as it stands. -->
+        <TextBox x:Name="NotesText"
+                 IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True"
+                 VerticalScrollBarVisibility="Auto"
+                 FontFamily="Consolas" Padding="6"
+                 Background="{DynamicResource Theme.Control}"
+                 Foreground="{DynamicResource Theme.Text}"
+                 BorderBrush="{DynamicResource Theme.Accent}"/>
+    </DockPanel>
+</Window>

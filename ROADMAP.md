@@ -22,26 +22,21 @@ and conditions, closer to the Places tab's GameObject tree).
 Worth settling before any of it is designed, because the two answers share
 almost no code.
 
-### Auto-update, from the GitHub releases
+### ~~Auto-update, from the GitHub releases~~ — done
 
-The editor should notice when a newer version has been published and offer it,
-rather than relying on someone seeing a Discord post.
+Shipped. The three points this entry raised were settled like this:
 
-Most of what this needs is already in place: releases are tagged `vMAJOR.MINOR.PATCH`
-on `ArcoFrio/SMSModForge`, and the running version is stamped in
-`SMSModForge.csproj` and in `Plugin.pluginVersion`, so a check is a comparison
-between the assembly version and the latest tag from the releases API.
+- **Notify, or install.** Install. The editor stages the new build beside its
+  settings, and a copy of that build started from there does the swap once the
+  editor has exited — Windows will not let a running exe be overwritten. The
+  plugin is replaced in the game folder first, while the editor is still up to
+  say so if it fails, and only the files ModForge owns are touched.
+- **Offline and rate limits.** The check is started and not awaited, and every
+  way it can fail — no network, no releases, a rate limit, a repository that is
+  not public — comes back as "no update" without a word. Only the manual check
+  answers either way, because somebody asked it.
+- **Opt out.** Read before the request, so off means no request.
 
-Points to decide:
-
-- **Notify, or install.** Telling the author there is an update and linking to
-  it is a small feature. Downloading and swapping the files underneath a running
-  editor is a much larger one, and it has to leave the BepInEx plugin in step
-  with the editor — the two are versioned together and 1.1.0 already has a
-  case where a mismatch breaks packs silently.
-- **Offline and rate limits.** The check must never block startup or complain at
-  someone working without a network; the unauthenticated API allows 60 requests
-  an hour per address.
-- **Opt out.** Some authors will not want an editor that talks to the network at
-  all, so this wants a setting, and the setting wants to be honoured before the
-  first request rather than after it.
+One thing this depends on that is not code: **the repository has to be public**
+for the releases API to answer. Until it is, every check finds nothing, exactly
+as it does offline.

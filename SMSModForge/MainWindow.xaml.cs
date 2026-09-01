@@ -99,10 +99,112 @@ public partial class MainWindow : Window
             // we snapshot the undo history in response (one step per drag).
             AddHandler(PlacePreview.EditCommittedEvent,
                 new RoutedEventHandler((_, _) => vm.Undo.Checkpoint()), handledEventsToo: true);
+
+            WireUpdates(vm);
         }
         RestoreUiLayout();
     }
 
+
+    // ── Updates ──────────────────────────────────────────────────────────
+
+    /// <summary>Holds the callbacks; see Services.UpdateRunner for what each
+    /// one is for. One instance, because a second check running over the top of
+    /// an install would be two things writing the same folder.</summary>
+    private readonly SMSModForge.Services.UpdateRunner _updates = new();
+
+    private void WireUpdates(MainViewModel vm)
+    {
+        _updates.Say  = text => ShowUpdateToast(text);
+        _updates.Done = HideUpdateToast;
+
+        _updates.Ask = release =>
+            View.UpdateWindow.Ask(this, release, MainViewModel.AppVersion);
+
+        // Ordinary Close, guard and all: an update is not a reason to lose
+        // somebody’s unsaved pack, and cancelling it abandons the update.
+        // Close() runs the ordinary guard, so an unsaved pack is asked about
+        // exactly as it would be on the X. Cancelling leaves the window up,
+        // which is the answer: no close, no swap, nothing replaced.
+        _updates.CloseForUpdate = () => { Close(); return !IsVisible; };
+
+        // Started, not awaited: the check is not something the editor should
+        // wait on before letting somebody work, and nothing downstream of it
+        // needs to happen in any particular order relative to the window.
+        Loaded += async (_, _) =>
+        {
+            _updates.Report = ToastReport;
+            await _updates.OnStartupAsync();
+        };
+    }
+
+
+    private async void CheckForUpdates_Click(object sender, RoutedEventArgs e)
+    {
+        // A check somebody asked for answers in a dialog, because they are
+        // waiting for the answer. The automatic one uses the toast.
+        _updates.Report = message => MessageBox.Show(this, message, "Updates",
+            MessageBoxButton.OK, MessageBoxImage.Information);
+        try { await _updates.OnDemandAsync(); }
+        finally { _updates.Report = ToastReport; }
+    }
+
+    /// <summary>How the automatic path says something went wrong: the same
+    /// line the progress uses, left up long enough to read. A window would
+    /// undo the point of the setting that got us here.</summary>
+    private void ToastReport(string message)
+    {
+        ShowUpdateToast(message);
+        var hide = new System.Windows.Threading.DispatcherTimer
+        {
+            Interval = TimeSpan.FromSeconds(8),
+        };
+        hide.Tick += (_, _) => { hide.Stop(); HideUpdateToast(); };
+        hide.Start();
+    }
+
+    private void SetGameFolder_Click(object sender, RoutedEventArgs e)
+    {
+        var dialog = new System.Windows.Forms.FolderBrowserDialog
+        {
+            Description = "Where Starmaker Story is installed — the folder with the game "
+                        + "exe and BepInEx in it.",
+            UseDescriptionForTitle = true,
+            SelectedPath = SMSModForge.Services.EditorPrefs.GameFolder,
+        };
+        if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
+
+        string picked = dialog.SelectedPath;
+        if (!SMSModForge.Services.UpdateInstaller.IsGameFolder(picked))
+        {
+            // Saying yes to a folder with no BepInEx in it would store a path
+            // that quietly does nothing at the one moment it matters.
+            MessageBox.Show(this,
+                "There is no BepInEx\\plugins folder in:\n" + picked +
+                "\n\nPick the folder the game exe is in, with BepInEx beside it. " +
+                "If BepInEx is not installed yet, the README covers it.",
+                "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        SMSModForge.Services.EditorPrefs.GameFolder = picked;
+        MessageBox.Show(this, "Saved. Updates will replace the plugin there too.",
+            "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Information);
+    }
+
+    private void ShowUpdateToast(string text)
+    {
+        UpdateToastText.Text = text;
+        if (UpdateToast.Opacity < 1)
+            UpdateToast.BeginAnimation(OpacityProperty,
+                new System.Windows.Media.Animation.DoubleAnimation(
+                    1, TimeSpan.FromSeconds(0.15)));
+    }
+
+    private void HideUpdateToast()
+        => UpdateToast.BeginAnimation(OpacityProperty,
+               new System.Windows.Media.Animation.DoubleAnimation(
+                   0, TimeSpan.FromSeconds(0.3)));
     // ── Spell check on the node Text box ─────────────────────────────────
 
     /// <summary>
