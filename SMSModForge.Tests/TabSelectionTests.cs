@@ -176,6 +176,64 @@ public class TabSelectionTests
         });
     }
 
+    [Fact]
+    public void No_list_toolbar_hands_focus_to_a_tab_header()
+    {
+        // The fix is one setter on the shared ToolBar style, so it is not about
+        // + Rule: every left-hand list in the editor has a toolbar over it, and
+        // every one of them had the same ending to a click. This walks the lot.
+        //
+        // Each tab is selected and its HEADER focused first, which is what a
+        // click on the tab strip does and what leaves the window scope
+        // remembering a TabItem - the thing the toolbar used to hand focus back
+        // to. Focus has to still be on the button afterwards.
+        Assert.NotNull(PackRepository.Load(PackDir));
+
+        // tab index -> the first button on each toolbar the tab carries. Places
+        // has two lists, so it has two.
+        var toolbars = new (int Tab, string Anchor)[]
+        {
+            (1,  "btn:addCharacter"),
+            (2,  "btn:addNpc"),
+            (3,  "btn:addPlace"),
+            (3,  "btn:addVanillaSource"),
+            (4,  "btn:addMapButton"),
+            (5,  "btn:addDialogue"),
+            (6,  "btn:addScene"),
+            (7,  "btn:addMusic"),
+            (8,  "btn:addSfx"),
+            (9,  "btn:addWallpaper"),
+            (10, "btn:addVariable"),
+            (11, "btn:addRule"),
+        };
+
+        WindowHarness.Run(window =>
+        {
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            vm.OpenRecentCommand.Execute(PackDir);
+            WindowHarness.Pump();
+
+            foreach (var (tab, anchor) in toolbars)
+            {
+                var header = (TabItem)tabs.Items[tab];
+                header.IsSelected = true;
+                WindowHarness.Pump();
+                header.Focus();
+                WindowHarness.Pump();
+                Assert.Same(header, FocusManager.GetFocusedElement(window));
+
+                ClickToolbarButton(window, anchor);
+
+                var focused = Keyboard.FocusedElement;
+                _out.WriteLine($"{anchor,-22} tab stayed {tabs.SelectedIndex == tab,-5} " +
+                               $"focus {focused?.GetType().Name}");
+                Assert.True(focused is Button,
+                    $"{anchor} handed focus to {focused?.GetType().Name}");
+                Assert.Equal(tab, tabs.SelectedIndex);
+            }
+        });
+    }
     /// <summary>Press and release a toolbar button the way a mouse does it.
     /// The release is the half that moves focus, and it needs real mouse
     /// capture - an automation peer on its own invokes the command without any
