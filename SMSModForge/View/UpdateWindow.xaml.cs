@@ -24,9 +24,10 @@ public partial class UpdateWindow : Window
         win.VersionText.Text = $"Version {release.VersionText} — you are running {runningVersion}."
                              + SizeSuffix(release.EditorZipBytes);
 
-        win.NotesText.Text = string.IsNullOrWhiteSpace(release.Notes)
-            ? "This release was published without notes."
-            : release.Notes;
+        win.NotesView.Document = MarkdownFlow.ToDocument(
+            string.IsNullOrWhiteSpace(release.Notes)
+                ? "This release was published without notes."
+                : release.Notes);
 
         win._release = release;
         win.ShowPluginLine();

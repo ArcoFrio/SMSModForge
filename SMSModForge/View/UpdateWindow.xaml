@@ -41,18 +41,21 @@
             </StackPanel>
         </DockPanel>
 
-        <!-- The release notes, as written on the release.
-             A TextBox rather than a TextBlock so the text can be selected and
-             copied, and read-only so it cannot be edited. The notes are
-             markdown and are shown as markdown: rendering them would mean a
-             markdown renderer in the editor for one box, and "### Added" over a
-             list of dashes is legible enough as it stands. -->
-        <TextBox x:Name="NotesText"
-                 IsReadOnly="True" TextWrapping="Wrap" AcceptsReturn="True"
-                 VerticalScrollBarVisibility="Auto"
-                 FontFamily="Consolas" Padding="6"
-                 Background="{DynamicResource Theme.Control}"
-                 Foreground="{DynamicResource Theme.Text}"
-                 BorderBrush="{DynamicResource Theme.Accent}"/>
+        <!-- The release notes, rendered. They are written as markdown, and shown
+             raw they are mostly punctuation - the headings arrive as hashes and
+             the emphasis as asterisks, leaving the reader to do the rendering
+             in their head while deciding whether to install something.
+
+             A FlowDocumentScrollViewer rather than a TextBlock because the text
+             stays selectable, and IsToolBarVisible is off because its toolbar is
+             a find bar and a zoom slider nobody needs over four paragraphs. See
+             MarkdownFlow for what is and is not understood. -->
+        <FlowDocumentScrollViewer x:Name="NotesView"
+                                  VerticalScrollBarVisibility="Auto"
+                                  IsToolBarVisible="False"
+                                  IsSelectionEnabled="True"
+                                  Background="{DynamicResource Theme.Control}"
+                                  BorderBrush="{DynamicResource Theme.Accent}"
+                                  BorderThickness="1"/>
     </DockPanel>
 </Window>

@@ -14,7 +14,8 @@
 ### Added
 
 - **The editor checks for a new version when it starts**, and offers it with
-  the release notes in a window: the version, what changed, how big the
+  the release notes in a window — rendered, not raw, so headings read as
+  headings instead of hashes: the version, what changed, how big the
   download is, and whether the plugin will be updated too. Say yes and it
   downloads, closes (asking about an unsaved pack exactly as the X does),
   puts the new build in place and starts it again.
