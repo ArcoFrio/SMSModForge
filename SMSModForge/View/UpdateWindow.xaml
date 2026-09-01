@@ -18,10 +18,20 @@
 
         <DockPanel DockPanel.Dock="Bottom" Margin="0,10,0,0">
             <!-- What the update will touch besides the editor. Grey, and on the
-                 far side from the buttons: it is something to know, not
-                 something to answer. -->
-            <TextBlock x:Name="PluginText" Foreground="Gray" TextWrapping="Wrap"
-                       VerticalAlignment="Center" MaxWidth="330"/>
+                 far side from the buttons: it is something to know, not the
+                 question being asked.
+
+                 The button appears only when the folder has never been set and
+                 this release has a plugin to install. Telling somebody a menu
+                 to go and find, in a window they would have to dismiss first,
+                 is a dead end - so the offer is here, where the fact is. -->
+            <StackPanel DockPanel.Dock="Left" MaxWidth="340" VerticalAlignment="Center">
+                <TextBlock x:Name="PluginText" Foreground="Gray" TextWrapping="Wrap"/>
+                <Button x:Name="SetFolderButton" Content="Set Starmaker Story folder…"
+                        HorizontalAlignment="Left" Margin="0,5,0,0" Padding="8,2"
+                        Visibility="Collapsed" Click="SetFolder_Click"
+                        ToolTip="Point at your game folder and this update will replace the plugin there too, so the pair cannot drift apart. Only the plugin and what it needs is written - not BepInEx, and not your packs."/>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="Update now" Width="110" IsDefault="True" Click="Update_Click"
                         Margin="0,0,8,0"

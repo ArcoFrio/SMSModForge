@@ -165,31 +165,12 @@ public partial class MainWindow : Window
 
     private void SetGameFolder_Click(object sender, RoutedEventArgs e)
     {
-        var dialog = new System.Windows.Forms.FolderBrowserDialog
-        {
-            Description = "Where Starmaker Story is installed — the folder with the game "
-                        + "exe and BepInEx in it.",
-            UseDescriptionForTitle = true,
-            SelectedPath = SMSModForge.Services.EditorPrefs.GameFolder,
-        };
-        if (dialog.ShowDialog() != System.Windows.Forms.DialogResult.OK) return;
-
-        string picked = dialog.SelectedPath;
-        if (!SMSModForge.Services.UpdateInstaller.IsGameFolder(picked))
-        {
-            // Saying yes to a folder with no BepInEx in it would store a path
-            // that quietly does nothing at the one moment it matters.
-            MessageBox.Show(this,
-                "There is no BepInEx\\plugins folder in:\n" + picked +
-                "\n\nPick the folder the game exe is in, with BepInEx beside it. " +
-                "If BepInEx is not installed yet, the README covers it.",
-                "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Warning);
-            return;
-        }
-
-        SMSModForge.Services.EditorPrefs.GameFolder = picked;
-        MessageBox.Show(this, "Saved. Updates will replace the plugin there too.",
-            "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Information);
+        // Shared with the update prompt, which offers the same thing when it
+        // notices the folder has never been set. Both have to agree about what
+        // counts as a game folder - see View.GameFolderPrompt.
+        if (View.GameFolderPrompt.Ask(this))
+            MessageBox.Show(this, "Saved. Updates will replace the plugin there too.",
+                "Starmaker Story folder", MessageBoxButton.OK, MessageBoxImage.Information);
     }
 
     private void ShowUpdateToast(string text)

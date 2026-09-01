@@ -26,7 +26,9 @@
 - **Options ▸ Starmaker Story folder** lets the updater replace the plugin in
   your game folder at the same time, so the pair cannot drift apart. It writes
   only the plugin and what it needs — never BepInEx itself, and never
-  ModPacks.
+  ModPacks. If it has never been set, the update prompt offers to set it there
+  and then, rather than naming a menu you would have to close the prompt to
+  reach.
 - **Options ▸ Check for updates now**, which answers either way.
 
 - **An `InputKey` condition** — gate anything on a keyboard key or a mouse
