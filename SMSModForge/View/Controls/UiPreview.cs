@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -55,6 +55,13 @@ public sealed class UiPreview : Grid
         // themes.
         _message.SetResourceReference(TextBlock.ForegroundProperty, "Theme.Muted");
         SetResourceReference(BackgroundProperty, "Theme.Control");
+
+        // Draw once on the way in. Refresh otherwise only runs when BaseToken
+        // CHANGES, and its default is the empty string - so a control that is
+        // never given one sat there as a blank pane with not even the message
+        // saying nothing was selected, which reads as the feature being broken
+        // rather than as nothing being chosen.
+        Loaded += (_, _) => Refresh();
     }
 
     // ── What to draw ─────────────────────────────────────────────────

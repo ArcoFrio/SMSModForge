@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Windows.Controls;
 using SMSModForge.Model;
@@ -103,14 +103,24 @@ public class UiTabTests
             vm.AddUiExtensionCommand.Execute(null);
             Assert.Equal("", vm.SelectedUiPreviewToken);
 
+            // With nothing chosen the pane says so rather than sitting empty:
+            // no report, because there was nothing to draw, but a message.
+            WindowHarness.Pump();
+            Assert.Null(preview.Report);
+
             if (!VanillaUiLibrary.IsAvailable) return;
 
             vm.UiExtensions[0].Source = "vanillaui:9_MainCanvas/Quitagme";
             Assert.Equal("vanillaui:9_MainCanvas/Quitagme", vm.SelectedUiPreviewToken);
 
+            // Through the binding, NOT by assigning BaseToken here. Setting it
+            // by hand is what the first version of this test did, and it hid a
+            // real bug: the token only notified when the SELECTION changed, so
+            // choosing a screen on a freshly added row left the pane blank
+            // while every assertion passed.
             WindowHarness.Pump();
-            preview.BaseToken = vm.SelectedUiPreviewToken;
 
+            Assert.Equal(vm.SelectedUiPreviewToken, preview.BaseToken);
             Assert.NotNull(preview.Report);
             Assert.True(preview.Report!.Drawn > 0, "the preview drew nothing");
             _out.WriteLine($"drew {preview.Report.Drawn}; {preview.Trouble()}");

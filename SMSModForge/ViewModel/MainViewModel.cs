@@ -528,11 +528,28 @@ public sealed class MainViewModel : ObservableObject
         set
         {
             if (ReferenceEquals(_selectedUiExtension, value)) return;
+
+            // Follow the chosen screen, not just the choice of extension.
+            // Without this the preview only updated when the selection moved
+            // between rows, so picking a screen on a freshly added row left the
+            // pane blank - the token never changed as far as the binding could
+            // tell.
+            if (_selectedUiExtension != null)
+                _selectedUiExtension.PropertyChanged -= UiExtensionChanged;
             _selectedUiExtension = value;
+            if (_selectedUiExtension != null)
+                _selectedUiExtension.PropertyChanged += UiExtensionChanged;
+
             OnPropertyChanged();
             OnPropertyChanged(nameof(SelectedUiPreviewToken));
             RemoveUiExtensionCommand?.Raise();
         }
+    }
+
+    private void UiExtensionChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(VanillaUiExtensionViewModel.Source))
+            OnPropertyChanged(nameof(SelectedUiPreviewToken));
     }
 
     /// <summary>What the UI tab's preview should draw. Empty when nothing is
