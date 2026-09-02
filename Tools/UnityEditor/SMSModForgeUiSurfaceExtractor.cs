@@ -279,6 +279,15 @@ namespace SMSModForge.EditorTools
             bool live = canvas.gameObject.activeInHierarchy;
             var restore = (ActivationScope)null;
 
+            // Before anything is switched on. Resolving a dormant surface makes
+            // its whole subtree read as active, so asking the GameObject later
+            // returns the state this extractor created rather than the one the
+            // game loads with - and a field that quietly means something else is
+            // worse than a missing one.
+            var atLoad = new Dictionary<Transform, bool>();
+            foreach (var tr in canvas.GetComponentsInChildren<Transform>(true))
+                atLoad[tr] = tr.gameObject.activeInHierarchy;
+
             try
             {
                 if (!live && resolveDormant)
@@ -300,7 +309,7 @@ namespace SMSModForge.EditorTools
                 WriteCanvasSettings(json, canvas);
                 json.Key("root");
                 WriteNode(json, canvas.transform, canvas, sprites, fonts, log,
-                          resolvedHere: live || restore != null);
+                          resolvedHere: live || restore != null, atLoad: atLoad);
                 json.EndObject();
 
                 string file = SafeFileName(path) + ".json";
@@ -360,15 +369,18 @@ namespace SMSModForge.EditorTools
 
         private static void WriteNode(Json json, Transform t, Canvas canvas,
                                       SpriteLibrary sprites, FontLedger fonts,
-                                      Report log, bool resolvedHere)
+                                      Report log, bool resolvedHere,
+                                      Dictionary<Transform, bool> atLoad)
         {
+            bool liveAtLoad = atLoad.TryGetValue(t, out bool known)
+                ? known : t.gameObject.activeInHierarchy;
             json.Object();
             json.Key("name").Value(t.name);
             json.Key("siblingIndex").Value(t.GetSiblingIndex());
             json.Key("activeSelf").Value(t.gameObject.activeSelf);
-            json.Key("activeInHierarchy").Value(t.gameObject.activeInHierarchy);
+            json.Key("activeInHierarchy").Value(liveAtLoad);
 
-            WriteRect(json, t, canvas, resolvedHere);
+            WriteRect(json, t, canvas, resolvedHere, liveAtLoad);
 
             json.Key("components").Array();
             foreach (var c in t.GetComponents<Component>())
@@ -384,7 +396,8 @@ namespace SMSModForge.EditorTools
 
             json.Key("children").Array();
             for (int i = 0; i < t.childCount; i++)
-                WriteNode(json, t.GetChild(i), canvas, sprites, fonts, log, resolvedHere);
+                WriteNode(json, t.GetChild(i), canvas, sprites, fonts, log,
+                          resolvedHere, atLoad);
             json.EndArray();
 
             json.EndObject();
@@ -398,7 +411,8 @@ namespace SMSModForge.EditorTools
         /// LayoutGroup is a number Unity computed and the authored one does not
         /// predict. The preview needs the second to draw vanilla correctly and
         /// the first to author anything new.</summary>
-        private static void WriteRect(Json json, Transform t, Canvas canvas, bool resolvedHere)
+        private static void WriteRect(Json json, Transform t, Canvas canvas,
+                                      bool resolvedHere, bool liveAtLoad)
         {
             var rt = t as RectTransform;
             if (rt == null)
@@ -440,7 +454,7 @@ namespace SMSModForge.EditorTools
                 json.Key("min").Vector2(new Vector2(bl.x, bl.y));
                 json.Key("max").Vector2(new Vector2(tr.x, tr.y));
                 json.Key("size").Vector2(new Vector2(tr.x - bl.x, tr.y - bl.y));
-                json.Key("trust").Value(TrustOf(rt, resolvedHere));
+                json.Key("trust").Value(TrustOf(rt, resolvedHere, liveAtLoad));
                 json.EndObject();
             }
             json.EndObject();
@@ -450,20 +464,33 @@ namespace SMSModForge.EditorTools
         /// <para/>
         /// "direct" - anchors and sizeDelta fully determine it, so it is right
         /// whether or not this object has ever been switched on.
-        /// "rebuilt" - driven by a layout group, and a rebuild has just run.
-        /// "unverified" - driven by a layout group that has never run, because
-        /// the object is switched off. The number is whatever was last left
-        /// there, and is not to be drawn.</summary>
-        private static string TrustOf(RectTransform rt, bool resolvedHere)
+        /// "rebuilt" - driven by a layout group or fitter that has just run.
+        /// "unverified" - driven, but not by anything that ran. Do not draw it.
+        /// <para/>
+        /// The inactive case is the one worth spelling out. Unity's layout groups
+        /// filter their children by activeInHierarchy before they position any of
+        /// them, so a switched-off child is not laid out at all: its rectangle is
+        /// the authored one, sitting untouched. That is emphatically NOT where the
+        /// game will draw it - the moment the game switches it on, the group
+        /// places it somewhere else. In this scene 1728 of the 1864 children of
+        /// layout groups are switched off, so calling those "rebuilt" would have
+        /// been a confident claim about the wrong number in almost every case.
+        /// <para/>
+        /// Resolving them would mean switching on each one individually, deep
+        /// inside the tree, running whatever OnEnable the game has put there.
+        /// That is a bigger intrusion than this tool should make by itself.</summary>
+        private static string TrustOf(RectTransform rt, bool resolvedHere, bool liveAtLoad)
         {
-            bool driven = rt.GetComponent<ContentSizeFitter>() != null;
-            if (!driven)
-            {
-                var parent = rt.parent != null
-                    ? rt.parent.GetComponent<LayoutGroup>() : null;
-                driven = parent != null;
-            }
+            // Explicitly opted out of layout: the group skips it, so the authored
+            // rectangle is the true one.
+            var element = rt.GetComponent<LayoutElement>();
+            if (element != null && element.ignoreLayout) return "direct";
+
+            bool driven = rt.GetComponent<ContentSizeFitter>() != null ||
+                          (rt.parent != null && rt.parent.GetComponent<LayoutGroup>() != null);
             if (!driven) return "direct";
+
+            if (!liveAtLoad) return "unverified";
             return resolvedHere ? "rebuilt" : "unverified";
         }
 
@@ -914,19 +941,33 @@ namespace SMSModForge.EditorTools
                 foreach (var candidate in canvas.GetComponentsInChildren<LayoutGroup>(true))
                 {
                     var rt = candidate.transform as RectTransform;
-                    if (rt == null || rt.childCount == 0) continue;
-                    var child = rt.GetChild(0) as RectTransform;
-                    if (child == null) continue;
-                    group = rt; victim = child; host = canvas;
-                    break;
+                    if (rt == null || !candidate.gameObject.activeInHierarchy) continue;
+
+                    // It has to be a child the group actually manages. A layout
+                    // group ignores inactive children and ones that opt out, so
+                    // displacing either proves nothing: it stays where it was put
+                    // because that is correct, and the control reads as a failure.
+                    // Choosing badly here is how this reported a broken rebuild
+                    // twice over a scene that was fine.
+                    for (int i = 0; i < rt.childCount; i++)
+                    {
+                        var child = rt.GetChild(i) as RectTransform;
+                        if (child == null || !child.gameObject.activeInHierarchy) continue;
+                        var opt = child.GetComponent<LayoutElement>();
+                        if (opt != null && opt.ignoreLayout) continue;
+                        group = rt; victim = child; host = canvas;
+                        break;
+                    }
+                    if (victim != null) break;
                 }
                 if (victim != null) break;
             }
 
             if (victim == null)
             {
-                log.Warn("Control 2 skipped: no layout group with a child was found, " +
-                         "so there was no way to test whether a rebuild does anything.");
+                log.Warn("Control 2 skipped: no active layout group with an active, " +
+                         "non-opted-out child was found, so there was no way to test " +
+                         "whether a rebuild does anything.");
                 return;
             }
 
