@@ -888,6 +888,16 @@ public partial class MainWindow : Window
             if (item is UIElement el) el.InvalidateMeasure();
     }
 
+    /// <summary>The UI tab's tree. TreeView.SelectedItem is read-only, so the
+    /// selection has to be pushed to the view model from here - it is what the
+    /// property panel edits and what the preview outlines.</summary>
+    private void UiTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+    {
+        if (DataContext is not MainViewModel vm) return;
+        if (vm.SelectedUi != null)
+            vm.SelectedUi.SelectedNode = e.NewValue as UiNodeViewModel;
+    }
+
     private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
     {
         if (DataContext is not MainViewModel vm) return;

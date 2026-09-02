@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Diagnostics;
 using SMSModForge.Rendering;
+using SMSModForge.View.Controls;
 using SMSModForge.ViewModel;
 using Xunit;
 using Xunit.Abstractions;
@@ -147,6 +148,101 @@ public class UiBindingTests
             vm.RemoveUiCommand.Execute(null);
             WindowHarness.Pump();
             Assert.Single(list.Items);
+        });
+    }
+
+    [Fact]
+    public void Selecting_a_row_and_editing_it_reaches_the_picture()
+    {
+        // The loop an author actually works in: click an object, change a
+        // number, see it move. Every part of it has been broken separately at
+        // some point in this tab, so it is asserted end to end rather than in
+        // pieces.
+        WindowHarness.Run(window =>
+        {
+            if (!VanillaUiLibrary.IsAvailable) { _out.WriteLine("no extraction - skipping"); return; }
+
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            var preview = (UiPreview)window.FindName("UiScreenPreview");
+
+            tabs.SelectedIndex = tabs.Items.Count - 1;
+            WindowHarness.Pump();
+
+            vm.AddVanillaUiCommand.Execute(null);
+            vm.Uis[0].Source = "vanillaui:9_MainCanvas/Quitagme";
+            WindowHarness.Pump();
+
+            // The preview is drawing the AUTHORED tree, not the vanilla screen.
+            Assert.NotNull(preview.AuthoredRoot);
+            Assert.Same(vm.Uis[0].RootNode, preview.AuthoredRoot);
+            var before = (System.Windows.Media.Imaging.BitmapSource?)
+                ((Image)preview.Children[0]).Source;
+            Assert.NotNull(before);
+
+            // Select something, as clicking the tree does.
+            var target = vm.Uis[0].Nodes[0].Children.First(c => c.HasImage);
+            vm.Uis[0].SelectedNode = target;
+            WindowHarness.Pump();
+
+            Assert.Same(target.Model, preview.Highlight);
+            Assert.True(vm.Uis[0].HasSelection);
+
+            // Move it, as typing in the position box does.
+            target.PositionX += 150;
+            WindowHarness.Pump();
+            preview.Refresh();
+
+            var after = (System.Windows.Media.Imaging.BitmapSource?)
+                ((Image)preview.Children[0]).Source;
+            Assert.NotNull(after);
+            Assert.NotSame(before, after);
+
+            // And the row is now marked as changed, by the same rule that
+            // decides what gets saved.
+            Assert.Equal("changed", target.Status);
+            _out.WriteLine($"moved {target.Name}; status now '{target.Status}', " +
+                           $"summary '{vm.Uis[0].Summary}'");
+        });
+    }
+
+    [Fact]
+    public void Adding_an_object_puts_it_in_the_tree_and_on_the_picture()
+    {
+        WindowHarness.Run(window =>
+        {
+            if (!VanillaUiLibrary.IsAvailable) return;
+
+            var vm = (MainViewModel)window.DataContext;
+            var tabs = (TabControl)window.FindName("MainTabs");
+            var tree = (TreeView)window.FindName("UiTree");
+
+            tabs.SelectedIndex = tabs.Items.Count - 1;
+            WindowHarness.Pump();
+
+            vm.AddVanillaUiCommand.Execute(null);
+            vm.Uis[0].Source = "vanillaui:9_MainCanvas/Quitagme";
+            WindowHarness.Pump();
+
+            var ui = vm.Uis[0];
+            int before = ui.Nodes[0].Children.Count;
+
+            Assert.True(ui.AddChildCommand.CanExecute(null));
+            ui.AddChildCommand.Execute(null);
+            WindowHarness.Pump();
+
+            Assert.Equal(before + 1, ui.Nodes[0].Children.Count);
+            Assert.NotNull(ui.SelectedNode);
+            Assert.Equal("new", ui.SelectedNode!.Status);
+
+            // And it can be taken out again, which a vanilla object cannot.
+            Assert.True(ui.RemoveNodeCommand.CanExecute(null));
+            ui.RemoveNodeCommand.Execute(null);
+            WindowHarness.Pump();
+            Assert.Equal(before, ui.Nodes[0].Children.Count);
+
+            ui.SelectedNode = ui.Nodes[0].Children.First(c => c.IsVanilla);
+            Assert.False(ui.RemoveNodeCommand.CanExecute(null));
         });
     }
 

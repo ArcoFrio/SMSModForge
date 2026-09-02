@@ -78,6 +78,60 @@ public sealed class UiPreview : Grid
         set => SetValue(BaseTokenProperty, value);
     }
 
+    public static readonly DependencyProperty AuthoredRootProperty =
+        DependencyProperty.Register(nameof(AuthoredRoot), typeof(UiNodeDef), typeof(UiPreview),
+            new PropertyMetadata(null, OnInputChanged));
+
+    /// <summary>
+    /// The tree to draw. When set, this is what appears — what the PACK will
+    /// produce, rather than what the game currently has.
+    /// <para/>
+    /// That distinction is the whole point of the pane. Drawing the vanilla
+    /// screen would show an author what they started from however much they
+    /// edited, which is a picture that gets less true the more work goes into
+    /// it. With nothing set the control falls back to the vanilla screen named
+    /// by <see cref="BaseToken"/>, which is right before anything is authored.
+    /// </summary>
+    public UiNodeDef? AuthoredRoot
+    {
+        get => (UiNodeDef?)GetValue(AuthoredRootProperty);
+        set => SetValue(AuthoredRootProperty, value);
+    }
+
+    public static readonly DependencyProperty HighlightProperty =
+        DependencyProperty.Register(nameof(Highlight), typeof(UiNodeDef), typeof(UiPreview),
+            new PropertyMetadata(null, OnInputChanged));
+
+    /// <summary>The object to outline, so a tree selection can be seen on the
+    /// picture. A UI is a pile of overlapping rectangles and a name in a tree
+    /// says nothing about which one.</summary>
+    public UiNodeDef? Highlight
+    {
+        get => (UiNodeDef?)GetValue(HighlightProperty);
+        set => SetValue(HighlightProperty, value);
+    }
+
+    public static readonly DependencyProperty CanvasWidthProperty =
+        DependencyProperty.Register(nameof(CanvasWidth), typeof(double), typeof(UiPreview),
+            new PropertyMetadata(1920.0, OnInputChanged));
+
+    /// <summary>The canvas an authored tree's anchors are fractions of.</summary>
+    public double CanvasWidth
+    {
+        get => (double)GetValue(CanvasWidthProperty);
+        set => SetValue(CanvasWidthProperty, value);
+    }
+
+    public static readonly DependencyProperty CanvasHeightProperty =
+        DependencyProperty.Register(nameof(CanvasHeight), typeof(double), typeof(UiPreview),
+            new PropertyMetadata(1080.0, OnInputChanged));
+
+    public double CanvasHeight
+    {
+        get => (double)GetValue(CanvasHeightProperty);
+        set => SetValue(CanvasHeightProperty, value);
+    }
+
     public static readonly DependencyProperty ShowWholeSurfaceProperty =
         DependencyProperty.Register(nameof(ShowWholeSurface), typeof(bool), typeof(UiPreview),
             new PropertyMetadata(false, OnInputChanged));
@@ -116,6 +170,14 @@ public sealed class UiPreview : Grid
     /// cost is the composition itself.</summary>
     public void Refresh()
     {
+        // An authored tree is drawn whatever else is set, because it is the
+        // thing the author is working on.
+        if (AuthoredRoot != null)
+        {
+            DrawAuthored(AuthoredRoot);
+            return;
+        }
+
         if (!VanillaUiLibrary.IsAvailable)
         {
             Say("The vanilla UI has not been extracted yet.\n\n" +
@@ -181,6 +243,32 @@ public sealed class UiPreview : Grid
         var bitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Pbgra32, null,
                                          pixels, w * 4);
         bitmap.Freeze();      // so it can be handed about without a dispatcher
+
+        _image.Source = bitmap;
+        _image.Visibility = Visibility.Visible;
+        _message.Visibility = Visibility.Collapsed;
+    }
+
+    private void DrawAuthored(UiNodeDef root)
+    {
+        if (!VanillaUiLibrary.IsAvailable)
+        {
+            Say("The vanilla UI has not been extracted yet, so there are no " +
+                "sprites or fonts to draw with.");
+            return;
+        }
+
+        var report = new UiRenderReport();
+        var pixels = UiAuthoredRenderer.Render(root, CanvasWidth, CanvasHeight,
+                                               VanillaUiLibrary.Assets, report, Highlight);
+        Report = report;
+
+        if (pixels.Length == 0) { Say("Nothing to draw yet."); return; }
+
+        int w = (int)Math.Round(CanvasWidth), h = (int)Math.Round(CanvasHeight);
+        var bitmap = BitmapSource.Create(w, h, 96, 96, PixelFormats.Pbgra32, null,
+                                         pixels, w * 4);
+        bitmap.Freeze();
 
         _image.Source = bitmap;
         _image.Visibility = Visibility.Visible;

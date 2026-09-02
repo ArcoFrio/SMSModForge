@@ -1,5 +1,6 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using SMSModForge.Model;
 
@@ -33,6 +34,42 @@ public static class VanillaUiLibrary
     /// every other symptom of it looks like a broken preview.</summary>
     public static bool IsAvailable
         => File.Exists(Path.Combine(Root, "index.json")) && Assets.IsAvailable;
+
+    /// <summary>Every sprite an author can pick, in order. Empty without an
+    /// extraction, which leaves the picker empty rather than throwing.</summary>
+    public static IEnumerable<string> SpriteNames
+        => IsAvailable ? Assets.SpriteNames.OrderBy(n => n, StringComparer.OrdinalIgnoreCase)
+                       : Enumerable.Empty<string>();
+
+    /// <summary>Every TextMeshPro font asset the extraction exported. Named
+    /// assets rather than typefaces: the same face appears more than once with
+    /// different outlines and shadows, and they are not interchangeable.</summary>
+    public static IEnumerable<string> FontNames
+    {
+        get
+        {
+            lock (Gate)
+            {
+                if (_fontNames != null) return _fontNames;
+                var found = new List<string>();
+                try
+                {
+                    string dir = Path.Combine(Root, "Fonts");
+                    if (Directory.Exists(dir))
+                        foreach (string file in Directory.EnumerateFiles(dir, "*.json"))
+                        {
+                            string name = Path.GetFileNameWithoutExtension(file);
+                            if (name != "report") found.Add(name);
+                        }
+                }
+                catch { /* an unreadable folder leaves an empty picker, not a crash */ }
+                found.Sort(StringComparer.OrdinalIgnoreCase);
+                return _fontNames = found;
+            }
+        }
+    }
+
+    private static List<string>? _fontNames;
 
     public static VanillaUiAssets Assets
     {
@@ -94,6 +131,7 @@ public static class VanillaUiLibrary
         {
             Surfaces.Clear();
             _assets = null;
+            _fontNames = null;
         }
     }
 }

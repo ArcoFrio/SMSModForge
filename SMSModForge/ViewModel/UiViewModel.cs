@@ -108,6 +108,67 @@ public sealed class UiViewModel : ObservableObject
 
     public bool IsVanillaBased => Model.IsVanillaBased;
 
+    /// <summary>The tree's root, for the preview to draw. Null for a UI with
+    /// nothing in it yet.</summary>
+    public UiNodeDef? RootNode => Model.Nodes.Count > 0 ? Model.Nodes[0] : null;
+
+    /// <summary>The object whose properties are being edited, and which the
+    /// preview outlines.</summary>
+    public UiNodeViewModel? SelectedNode
+    {
+        get => _selectedNode;
+        set
+        {
+            if (ReferenceEquals(_selectedNode, value)) return;
+            _selectedNode = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(HasSelection));
+            OnPropertyChanged(nameof(SelectedModel));
+            Changed?.Invoke();
+        }
+    }
+
+    private UiNodeViewModel? _selectedNode;
+
+    public bool HasSelection => _selectedNode != null;
+    public UiNodeDef? SelectedModel => _selectedNode?.Model;
+
+    /// <summary>
+    /// The canvas this UI is drawn on, in the coordinates its anchors are
+    /// fractions of.
+    /// <para/>
+    /// Taken from the vanilla screen when there is one, because an object
+    /// anchored to the top-right of a 2500-wide canvas is somewhere else on a
+    /// 1920-wide one. A UI of the pack's own gets the size almost every canvas
+    /// in the game uses.
+    /// </summary>
+    public double CanvasWidth => Surface?.Width > 0 ? Surface.Width : 1920;
+    public double CanvasHeight => Surface?.Height > 0 ? Surface.Height : 1080;
+
+    private VanillaUiSurface? Surface => VanillaUiLibrary.SurfaceFor(Catalog);
+
+    /// <summary>Add an object inside whatever is selected, or at the top when
+    /// nothing is.</summary>
+    public RelayCommand AddChildCommand => _addChild ??= new RelayCommand(() =>
+    {
+        var parent = SelectedNode ?? Nodes.FirstOrDefault();
+        if (parent == null) return;
+        SelectedNode = parent.AddChild();
+    }, () => Nodes.Count > 0);
+
+    private RelayCommand? _addChild;
+
+    /// <summary>Remove the selected object, when it is the pack's to remove.</summary>
+    public RelayCommand RemoveNodeCommand => _removeNode ??= new RelayCommand(() =>
+    {
+        var chosen = SelectedNode;
+        if (chosen == null || !chosen.IsMine) return;
+        chosen.RemoveCommand.Execute(null);
+        SelectedNode = null;
+    }, () => SelectedNode?.IsMine == true);
+
+    private RelayCommand? _removeNode;
+
     /// <summary>
     /// Set when this row was started from "+ Vanilla" but no screen has been
     /// chosen yet.
@@ -223,9 +284,16 @@ public sealed class UiViewModel : ObservableObject
         vm.Changed += Bubble;
         Nodes.Add(vm);
 
+        _selectedNode = null;
         OnPropertyChanged(nameof(Summary));
         OnPropertyChanged(nameof(Stranded));
         OnPropertyChanged(nameof(Warning));
+        OnPropertyChanged(nameof(RootNode));
+        OnPropertyChanged(nameof(SelectedNode));
+        OnPropertyChanged(nameof(HasSelection));
+        OnPropertyChanged(nameof(SelectedModel));
+        OnPropertyChanged(nameof(CanvasWidth));
+        OnPropertyChanged(nameof(CanvasHeight));
         Bubble();
     }
 
@@ -262,6 +330,7 @@ public sealed class UiViewModel : ObservableObject
     private void Bubble()
     {
         OnPropertyChanged(nameof(Summary));
+        OnPropertyChanged(nameof(RootNode));
         Changed?.Invoke();
     }
 }

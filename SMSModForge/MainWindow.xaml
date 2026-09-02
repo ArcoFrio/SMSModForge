@@ -15,6 +15,7 @@
         xmlns:conv="clr-namespace:SMSModForge.View.Converters"
         xmlns:view="clr-namespace:SMSModForge.View"
         xmlns:model="clr-namespace:SMSModForge.Model"
+        xmlns:rend="clr-namespace:SMSModForge.Rendering"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
         Title="{Binding Title}"
@@ -5853,7 +5854,15 @@
                             </TextBlock>
                         </StackPanel>
 
-                        <TreeView x:Name="UiTree" ItemsSource="{Binding Nodes}" Margin="0,4,0,0">
+                        <ToolBar DockPanel.Dock="Top" Margin="0,4,0,0">
+                            <Button Content="+ Object" Command="{Binding AddChildCommand}"
+                                    ToolTip="Add an object of your own, inside whatever is selected."/>
+                            <Button Content="Remove" Command="{Binding RemoveNodeCommand}"
+                                    ToolTip="Remove an object you added. Objects the game owns cannot be removed - a pack can change them, but not delete them out of the game's screen."/>
+                        </ToolBar>
+
+                        <TreeView x:Name="UiTree" ItemsSource="{Binding Nodes}" Margin="0,4,0,0"
+                                  SelectedItemChanged="UiTree_SelectedItemChanged">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal" Margin="0,1">
@@ -5915,9 +5924,109 @@
                     <DockPanel Grid.Column="4">
                         <TextBlock DockPanel.Dock="Top" Text="Preview"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
+
+                        <!-- Under the picture rather than beside it, so the
+                             preview keeps the width. Every box here writes
+                             straight through to the model and the picture
+                             redraws, which is the whole point of having them
+                             next to each other. -->
+                        <Border DockPanel.Dock="Bottom" BorderThickness="0,1,0,0"
+                                BorderBrush="{DynamicResource Theme.Accent}"
+                                Padding="8,6" DataContext="{Binding SelectedUi}">
+                            <Grid>
+                                <TextBlock Text="Select an object in the tree to change it."
+                                           Opacity="0.6" Margin="0,8">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Visible"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding HasSelection}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+
+                                <!-- Shown by the OWNER's HasSelection rather than by
+                                     testing SelectedNode against null, which needs a
+                                     converter that does not exist and would be the
+                                     same fact spelled twice. -->
+                                <StackPanel DataContext="{Binding SelectedNode}"
+                                            Visibility="{Binding DataContext.HasSelection,
+                                                RelativeSource={RelativeSource AncestorType=Border},
+                                                Converter={StaticResource BoolToVisibility}}">
+
+                                    <!-- Name. Read-only on an object the game
+                                         owns: the name is what its binding is
+                                         built from, so renaming would quietly
+                                         unhook the change from the object. -->
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Name" Width="66" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                                 IsReadOnly="{Binding IsVanilla}"
+                                                 ToolTip="Objects the game owns keep their own names - that is how a change stays attached to the right object."/>
+                                    </DockPanel>
+
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Position" Width="66" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding PositionX, UpdateSourceTrigger=LostFocus}"
+                                                 Width="70" Margin="0,0,4,0"/>
+                                        <TextBox Text="{Binding PositionY, UpdateSourceTrigger=LostFocus}"
+                                                 Width="70" Margin="0,0,4,0"/>
+                                        <TextBlock Text="from its anchors, in canvas pixels"
+                                                   Opacity="0.6" VerticalAlignment="Center"/>
+                                    </DockPanel>
+
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Size" Width="66" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Width, UpdateSourceTrigger=LostFocus}"
+                                                 Width="70" Margin="0,0,4,0"/>
+                                        <TextBox Text="{Binding Height, UpdateSourceTrigger=LostFocus}"
+                                                 Width="70" Margin="0,0,4,0"/>
+                                        <CheckBox IsChecked="{Binding StartActive}" VerticalAlignment="Center"
+                                                  Content="Visible at start"
+                                                  ToolTip="Most of a vanilla screen starts hidden and is switched on by the game when its moment arrives."/>
+                                    </DockPanel>
+
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Sprite" Width="66" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding Tint, UpdateSourceTrigger=LostFocus}"
+                                                 Width="90" DockPanel.Dock="Right" Margin="4,0,0,0"
+                                                 ToolTip="Tint as #RRGGBB or #RRGGBBAA. Most of this game's UI is a white shape recoloured here."/>
+                                        <ComboBox IsEditable="True"
+                                                  Text="{Binding Sprite, UpdateSourceTrigger=LostFocus}"
+                                                  ItemsSource="{Binding Source={x:Static rend:VanillaUiLibrary.SpriteNames}}"
+                                                  ToolTip="Any sprite the game has. Clearing this removes the picture entirely rather than leaving an empty one behind."/>
+                                    </DockPanel>
+
+                                    <DockPanel Margin="0,0,0,4">
+                                        <TextBlock Text="Text" Width="66" VerticalAlignment="Center"/>
+                                        <TextBox Text="{Binding FontSize, UpdateSourceTrigger=LostFocus}"
+                                                 Width="50" DockPanel.Dock="Right" Margin="4,0,0,0"
+                                                 ToolTip="Font size"/>
+                                        <TextBox Text="{Binding Text, UpdateSourceTrigger=LostFocus}"
+                                                 ToolTip="What this object says. Clearing it removes the text rather than leaving an empty label."/>
+                                    </DockPanel>
+
+                                    <DockPanel Margin="0,0,0,2"
+                                               Visibility="{Binding HasText, Converter={StaticResource BoolToVisibility}}">
+                                        <TextBlock Text="Font" Width="66" VerticalAlignment="Center"/>
+                                        <ComboBox IsEditable="True"
+                                                  Text="{Binding Font, UpdateSourceTrigger=LostFocus}"
+                                                  ItemsSource="{Binding Source={x:Static rend:VanillaUiLibrary.FontNames}}"
+                                                  ToolTip="A TextMeshPro font asset, not a font file. The same typeface appears more than once with different outlines and shadows, and they are not interchangeable."/>
+                                    </DockPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
                         <ctl:UiPreview x:Name="UiScreenPreview"
-                                            BaseToken="{Binding SelectedUiPreviewToken}"
-                                            Margin="4"/>
+                                       BaseToken="{Binding SelectedUiPreviewToken}"
+                                       AuthoredRoot="{Binding SelectedUi.RootNode}"
+                                       Highlight="{Binding SelectedUi.SelectedModel}"
+                                       CanvasWidth="{Binding SelectedUi.CanvasWidth}"
+                                       CanvasHeight="{Binding SelectedUi.CanvasHeight}"
+                                       Margin="4"/>
                     </DockPanel>
                 </Grid>
             </TabItem>
