@@ -121,10 +121,12 @@ public sealed class MainViewModel : ObservableObject
     public ObservableCollection<PlaceViewModel> Places { get; } = new();
     public ObservableCollection<VanillaPlaceExtensionViewModel> VanillaExtensions { get; } = new();
 
-    /// <summary>Vanilla UI screens this pack changes. The same arrangement as
-    /// <see cref="VanillaExtensions"/>: each holds the whole screen so it can be
-    /// edited, and stores only the difference.</summary>
-    public ObservableCollection<VanillaUiExtensionViewModel> UiExtensions { get; } = new();
+    /// <summary>The pack's UI — screens of its own and changes to the game's,
+    /// in ONE list, because they are the same thing to author and most real ones
+    /// are a bit of both. One built on a vanilla screen holds the whole screen
+    /// so it can be edited and stores only the difference; one of the pack's own
+    /// stores all of itself.</summary>
+    public ObservableCollection<UiViewModel> Uis { get; } = new();
     public ObservableCollection<MapButtonViewModel> MapButtons { get; } = new();
     public ObservableCollection<DialogueViewModel> Dialogues { get; } = new();
     public ObservableCollection<ActorViewModel> Actors { get; } = new();
@@ -519,76 +521,114 @@ public sealed class MainViewModel : ObservableObject
         set { _selectedMapButton = value; OnPropertyChanged(); }
     }
 
-    private VanillaUiExtensionViewModel? _selectedUiExtension;
+    private UiViewModel? _selectedUi;
 
     /// <summary>Which UI screen is open in the UI tab.</summary>
-    public VanillaUiExtensionViewModel? SelectedUiExtension
+    public UiViewModel? SelectedUi
     {
-        get => _selectedUiExtension;
+        get => _selectedUi;
         set
         {
-            if (ReferenceEquals(_selectedUiExtension, value)) return;
+            if (ReferenceEquals(_selectedUi, value)) return;
 
             // Follow the chosen screen, not just the choice of extension.
             // Without this the preview only updated when the selection moved
             // between rows, so picking a screen on a freshly added row left the
             // pane blank - the token never changed as far as the binding could
             // tell.
-            if (_selectedUiExtension != null)
-                _selectedUiExtension.PropertyChanged -= UiExtensionChanged;
-            _selectedUiExtension = value;
-            if (_selectedUiExtension != null)
-                _selectedUiExtension.PropertyChanged += UiExtensionChanged;
+            if (_selectedUi != null)
+                _selectedUi.PropertyChanged -= UiExtensionChanged;
+            _selectedUi = value;
+            if (_selectedUi != null)
+                _selectedUi.PropertyChanged += UiExtensionChanged;
 
             OnPropertyChanged();
             OnPropertyChanged(nameof(SelectedUiPreviewToken));
-            RemoveUiExtensionCommand?.Raise();
+            RemoveUiCommand?.Raise();
         }
     }
 
     private void UiExtensionChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(VanillaUiExtensionViewModel.Source))
+        if (e.PropertyName == nameof(UiViewModel.Source))
             OnPropertyChanged(nameof(SelectedUiPreviewToken));
     }
 
     /// <summary>What the UI tab's preview should draw. Empty when nothing is
     /// selected, which the control turns into a message rather than a blank.</summary>
-    public string SelectedUiPreviewToken => SelectedUiExtension?.Source ?? "";
+    public string SelectedUiPreviewToken => SelectedUi?.Source ?? "";
 
-    public RelayCommand AddUiExtensionCommand { get; private set; } = null!;
-    public RelayCommand RemoveUiExtensionCommand { get; private set; } = null!;
+    public RelayCommand AddVanillaUiCommand { get; private set; } = null!;
+    public RelayCommand AddOwnUiCommand { get; private set; } = null!;
+    public RelayCommand RemoveUiCommand { get; private set; } = null!;
 
-    private void AddUiExtension()
+    /// <summary>A change to a screen the game already has. Starts with none
+    /// chosen: guessing would seed thousands of objects for a decision the
+    /// author has not made, and every vanilla screen is as plausible a starting
+    /// point as any other.</summary>
+    private void AddVanillaUi()
     {
-        // No default screen. Guessing one would seed thousands of objects for a
-        // choice the author has not made yet, and every vanilla screen is as
-        // plausible a starting point as any other.
-        var def = new VanillaUiExtensionDef();
-        Pack.VanillaUiExtensions.Add(def);
-        var vm = new VanillaUiExtensionViewModel(def);
-        UiExtensions.Add(vm);
-        SelectedUiExtension = vm;
+        var vm = AddUi(new UiDef());
+        vm.WantsVanilla = true;
     }
 
-    private void RemoveUiExtension()
+    /// <summary>A screen of the pack's own. Starts with one panel, because an
+    /// empty tree gives an author nothing to click and nothing to see.</summary>
+    private void AddOwnUi()
     {
-        var chosen = SelectedUiExtension;
+        var def = new UiDef
+        {
+            Name = UniqueUiName("New UI"),
+            Id = Guid.NewGuid().ToString("N")[..8],
+        };
+        def.Nodes.Add(new UiNodeDef
+        {
+            Name = "Panel",
+            Rect = new UiRectDef { Size = new[] { 600f, 400f } },
+            Image = new UiImageDef { Sprite = "Semi Rounded", Type = "Sliced", Tint = "#FFFFFFFF" },
+        });
+        AddUi(def);
+    }
+
+    private UiViewModel AddUi(UiDef def)
+    {
+        Pack.Uis.Add(def);
+        var vm = new UiViewModel(def);
+        Uis.Add(vm);
+        SelectedUi = vm;
+        return vm;
+    }
+
+    private string UniqueUiName(string wanted)
+    {
+        var taken = Uis.Select(u => u.Model.Name)
+                       .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        if (!taken.Contains(wanted)) return wanted;
+        for (int n = 2; ; n++)
+            if (!taken.Contains($"{wanted} {n}")) return $"{wanted} {n}";
+    }
+
+    private void RemoveUi()
+    {
+        var chosen = SelectedUi;
         if (chosen == null) return;
-        Pack.VanillaUiExtensions.Remove(chosen.Model);
-        UiExtensions.Remove(chosen);
-        SelectedUiExtension = UiExtensions.FirstOrDefault();
+        Pack.Uis.Remove(chosen.Model);
+        Uis.Remove(chosen);
+        SelectedUi = Uis.FirstOrDefault();
     }
 
-    private void RebindUiExtensions()
+    private void RebindUis()
     {
-        UiExtensions.Clear();
+        // Packs written while UI extensions were a list of their own fold in
+        // here, before anything reads Pack.Uis.
+        Pack.MigrateUi();
+        Uis.Clear();
         // Each seeds itself from the shipped vanilla UI on construction, so an
         // extension that holds three nodes on disk opens as the whole screen.
         // The delta pass prunes it back on save, so this cannot grow a manifest.
-        foreach (var u in Pack.VanillaUiExtensions)
-            UiExtensions.Add(new VanillaUiExtensionViewModel(u));
-        SelectedUiExtension = null;
+        foreach (var u in Pack.Uis)
+            Uis.Add(new UiViewModel(u));
+        SelectedUi = null;
     }
 
     private VanillaPlaceExtensionViewModel? _selectedVanillaExtension;
@@ -1605,8 +1645,9 @@ public sealed class MainViewModel : ObservableObject
             () => SelectedPlace != null);
         AddVanillaExtensionCommand    = new RelayCommand(AddVanillaExtension);
         RemoveVanillaExtensionCommand = new RelayCommand(RemoveVanillaExtension, () => SelectedVanillaExtension != null);
-        AddUiExtensionCommand = new RelayCommand(AddUiExtension);
-        RemoveUiExtensionCommand = new RelayCommand(RemoveUiExtension, () => SelectedUiExtension != null);
+        AddVanillaUiCommand = new RelayCommand(AddVanillaUi);
+        AddOwnUiCommand = new RelayCommand(AddOwnUi);
+        RemoveUiCommand = new RelayCommand(RemoveUi, () => SelectedUi != null);
         AddVanillaExtensionButtonCommand = new RelayCommand(AddVanillaExtensionButton, () => SelectedVanillaExtension != null);
         AddVanillaExtensionGameObjectCommand = new RelayCommand(
             () => SelectedVanillaExtension?.AddGameObject(), () => SelectedVanillaExtension != null);
@@ -1801,7 +1842,7 @@ public sealed class MainViewModel : ObservableObject
         foreach (var v in Pack.VanillaExtensions)
             VanillaExtensions.Add(new VanillaPlaceExtensionViewModel(v));
         SelectedVanillaExtension = null;
-        RebindUiExtensions();
+        RebindUis();
     }
 
     private void RebindMapButtons()

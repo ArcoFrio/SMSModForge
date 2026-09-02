@@ -263,23 +263,34 @@ public sealed class ModPack
     public bool ShouldSerializeNpcFolders() => NpcFolders != null && NpcFolders.Count > 0;
 
     /// <summary>
-    /// UI the pack adds of its own — windows, panels, HUD elements.
+    /// The pack's UI: screens of its own, and changes to screens the game
+    /// already has. One list, because from the author's side they are the same
+    /// thing and most real ones are a bit of both — see <see cref="UiDef"/>.
     /// </summary>
     [JsonProperty("uis", Order = 26)]
     public List<UiDef> Uis { get; set; } = new();
     public bool ShouldSerializeUis() => Uis != null && Uis.Count > 0;
 
     /// <summary>
-    /// Changes to UI the game already has, one entry per vanilla base. Kept
-    /// apart from <see cref="Uis"/> for the same reason vanilla place
-    /// extensions are kept apart from places: one describes something the pack
-    /// owns outright, the other a delta against something it does not, and a
-    /// pack that muddles them cannot be told which parts survive a game update.
+    /// Read-only migration for packs written while UI extensions were a list of
+    /// their own. They are the same thing now - a UI with a source - so anything
+    /// found here is folded into <see cref="Uis"/> on load and never written
+    /// back. Nothing has shipped with the old key, but a locally saved pack may
+    /// carry it, and losing an author's work to a rename is not a trade worth
+    /// making to save ten lines.
     /// </summary>
     [JsonProperty("vanillaUiExtensions", Order = 27)]
-    public List<VanillaUiExtensionDef> VanillaUiExtensions { get; set; } = new();
-    public bool ShouldSerializeVanillaUiExtensions()
-        => VanillaUiExtensions != null && VanillaUiExtensions.Count > 0;
+    public List<UiDef>? LegacyVanillaUiExtensions { get; set; }
+    public bool ShouldSerializeLegacyVanillaUiExtensions() => false;
+
+    /// <summary>Fold the old list into the new one. Called after load.</summary>
+    public void MigrateUi()
+    {
+        if (LegacyVanillaUiExtensions == null) return;
+        foreach (var old in LegacyVanillaUiExtensions)
+            if (old != null && !Uis.Contains(old)) Uis.Add(old);
+        LegacyVanillaUiExtensions = null;
+    }
 
     [JsonProperty("uiFolders", Order = 28)]
     public List<UnitFolderDef> UiFolders { get; set; } = new();

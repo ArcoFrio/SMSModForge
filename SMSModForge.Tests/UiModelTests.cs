@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
@@ -216,7 +216,7 @@ public class UiModelTests
                                                                Type = "Sliced",
                                                                Tint = "#302F46FF" } } },
         });
-        pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
+        pack.Uis.Add(new UiDef
         {
             Source = "vanillaui:9_MainCanvas/Payout",
             Nodes = { new UiNodeDef { Name = "Extra", Bind = "Line" } },
@@ -225,13 +225,17 @@ public class UiModelTests
         string json = JsonConvert.SerializeObject(pack, Formatting.Indented);
         var back = JsonConvert.DeserializeObject<ModPack>(json)!;
 
-        var ui = Assert.Single(back.Uis);
+        // ONE list holding both kinds, told apart by whether they name a
+        // vanilla screen rather than by which list they are in.
+        Assert.Equal(2, back.Uis.Count);
+
+        var ui = back.Uis.Single(u => !u.IsVanillaBased);
         Assert.Equal("shop", ui.Id);
         Assert.False(ui.HidesWithGameplayUi);
         Assert.Equal(30, ui.SortingOrder);
         Assert.Equal("Sliced", Assert.Single(ui.Nodes).Image!.Type);
 
-        var ext = Assert.Single(back.VanillaUiExtensions);
+        var ext = back.Uis.Single(u => u.IsVanillaBased);
         Assert.Equal("vanillaui:9_MainCanvas/Payout", ext.Source);
         Assert.NotNull(VanillaUiCatalog.Find(ext.Source));
     }

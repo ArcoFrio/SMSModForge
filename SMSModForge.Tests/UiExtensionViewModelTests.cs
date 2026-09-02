@@ -22,10 +22,10 @@ public class UiExtensionViewModelTests
 
     private const string Quit = "vanillaui:9_MainCanvas/Quitagme";
 
-    private VanillaUiExtensionViewModel? Open(string source = Quit)
+    private UiViewModel? Open(string source = Quit)
     {
         if (!VanillaUiLibrary.IsAvailable) { _out.WriteLine("no extraction - skipping"); return null; }
-        var vm = new VanillaUiExtensionViewModel(new VanillaUiExtensionDef { Source = source });
+        var vm = new UiViewModel(new UiDef { Source = source });
         if (!vm.CanSeed) { _out.WriteLine("cannot seed " + source + " - skipping"); return null; }
         return vm;
     }
@@ -115,7 +115,7 @@ public class UiExtensionViewModelTests
         if (vm == null) return;
 
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(vm.Model);
+        pack.Uis.Add(vm.Model);
 
         int seeded = vm.Model.Nodes.Sum(Count);
         var restore = VanillaUiDelta.PrepareForSave(pack);
@@ -142,7 +142,7 @@ public class UiExtensionViewModelTests
         label.Text = "Totally Different";
 
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(vm.Model);
+        pack.Uis.Add(vm.Model);
 
         var restore = VanillaUiDelta.PrepareForSave(pack);
         try
@@ -207,7 +207,7 @@ public class UiExtensionViewModelTests
         label.Text = "Changed";
 
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(vm.Model);
+        pack.Uis.Add(vm.Model);
 
         // Save, take the pruned form, and reopen from it as loading would.
         var restore = VanillaUiDelta.PrepareForSave(pack);
@@ -215,10 +215,10 @@ public class UiExtensionViewModelTests
         restore();
 
         var reloaded = Newtonsoft.Json.JsonConvert
-            .DeserializeObject<VanillaUiExtensionDef>(onDisk)!;
+            .DeserializeObject<UiDef>(onDisk)!;
         int stored = reloaded.Nodes.Sum(Count);
 
-        var reopened = new VanillaUiExtensionViewModel(reloaded);
+        var reopened = new UiViewModel(reloaded);
         int shown = reopened.Model.Nodes.Sum(Count);
 
         _out.WriteLine($"{stored} on disk -> {shown} on screen");
@@ -236,7 +236,7 @@ public class UiExtensionViewModelTests
 
         // Saving again stores the same small delta rather than growing.
         var second = new ModPack { PackId = "test" };
-        second.VanillaUiExtensions.Add(reopened.Model);
+        second.Uis.Add(reopened.Model);
         var restoreAgain = VanillaUiDelta.PrepareForSave(second);
         try
         {
@@ -252,14 +252,123 @@ public class UiExtensionViewModelTests
     {
         // A pack written against a newer game. Refusing to open it, or quietly
         // clearing the source, would lose the author's work.
-        var vm = new VanillaUiExtensionViewModel(
-            new VanillaUiExtensionDef { Source = "vanillaui:Future/Screen" });
+        var vm = new UiViewModel(
+            new UiDef { Source = "vanillaui:Future/Screen" });
 
         Assert.False(vm.IsKnown);
         Assert.False(vm.CanSeed);
         Assert.Equal("vanillaui:Future/Screen", vm.Source);
         Assert.Empty(vm.Nodes);
         Assert.Equal("", vm.Summary);
+    }
+
+    // ── Telling one row from another ─────────────────────────────────
+
+    [Fact]
+    public void An_untouched_vanilla_object_carries_no_marker()
+    {
+        // The default state of almost every row. A screen can hold 1434 of
+        // them, so anything that marked them all would mark nothing.
+        var vm = Open();
+        if (vm == null) return;
+
+        var root = vm.Nodes[0];
+        Assert.Equal("", root.Status);
+        Assert.True(root.IsUntouched);
+        Assert.All(root.Children.Where(c => c.IsVanilla),
+                   c => Assert.Equal("", c.Status));
+    }
+
+    [Fact]
+    public void Changing_a_vanilla_object_marks_it_changed()
+    {
+        var vm = Open();
+        if (vm == null) return;
+
+        var label = vm.Nodes[0].Children.FirstOrDefault(c => c.HasText);
+        if (label == null) { _out.WriteLine("no text here - skipping"); return; }
+
+        Assert.Equal("", label.Status);
+        label.Text = "Something Else";
+        Assert.Equal("changed", label.Status);
+        Assert.True(label.IsChanged);
+        _out.WriteLine($"{label.Name}: {label.Status}");
+    }
+
+    [Fact]
+    public void Putting_a_changed_value_back_clears_the_marker()
+    {
+        // The marker follows the comparison rather than a "touched" flag, so
+        // undoing an edit by hand un-marks the row - and matches what would
+        // actually be saved, which is nothing.
+        var vm = Open();
+        if (vm == null) return;
+
+        var label = vm.Nodes[0].Children.FirstOrDefault(c => c.HasText);
+        if (label == null) return;
+
+        string was = label.Text;
+        label.Text = "Something Else";
+        Assert.Equal("changed", label.Status);
+
+        label.Text = was;
+        Assert.Equal("", label.Status);
+    }
+
+    [Fact]
+    public void An_object_the_pack_added_is_marked_new()
+    {
+        var vm = Open();
+        if (vm == null) return;
+        var added = vm.Nodes[0].AddChild("Mine");
+        Assert.Equal("new", added.Status);
+        Assert.False(added.IsUntouched);
+    }
+
+    [Fact]
+    public void The_marker_agrees_with_what_would_be_saved()
+    {
+        // Two implementations of "has this been touched" would drift, and the
+        // one on screen drifting from the one on disk is the bad version: an
+        // author would see no marker and still ship a change. So the marked
+        // rows and the stored rows are compared directly.
+        var vm = Open();
+        if (vm == null) return;
+
+        var label = vm.Nodes[0].Children.FirstOrDefault(c => c.HasText);
+        if (label == null) return;
+        label.Text = "Marked";
+        vm.Nodes[0].AddChild("Added");
+
+        var marked = new System.Collections.Generic.List<string>();
+        void Walk(UiNodeViewModel n)
+        {
+            if (!n.IsUntouched) marked.Add(n.Name);
+            foreach (var c in n.Children) Walk(c);
+        }
+        Walk(vm.Nodes[0]);
+
+        var pack = new ModPack { PackId = "test" };
+        pack.Uis.Add(vm.Model);
+        var restore = VanillaUiDelta.PrepareForSave(pack);
+        try
+        {
+            var stored = new System.Collections.Generic.List<string>();
+            void Collect(UiNodeDef n)
+            {
+                stored.Add(n.Name);
+                foreach (var c in n.Children) Collect(c);
+            }
+            foreach (var n in vm.Model.Nodes) Collect(n);
+
+            _out.WriteLine("marked: " + string.Join(", ", marked));
+            _out.WriteLine("stored: " + string.Join(", ", stored));
+
+            // Every marked row survives the prune. The reverse does not hold:
+            // an unmarked parent is kept as the path down to a marked child.
+            foreach (string name in marked) Assert.Contains(name, stored);
+        }
+        finally { restore(); }
     }
 
     [Fact]

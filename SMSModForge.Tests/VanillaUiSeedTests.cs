@@ -133,7 +133,7 @@ public class VanillaUiSeedTests
         // this is what catches it.
         var vanilla = Sample();
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
+        pack.Uis.Add(new UiDef
         {
             Source = "vanillaui:X/Panel",
             Nodes = { VanillaUiSeed.FromBase(vanilla) },
@@ -143,7 +143,7 @@ public class VanillaUiSeedTests
             pack, (_, path) => VanillaUiDelta.NodeAt(vanilla, path));
         try
         {
-            Assert.Empty(pack.VanillaUiExtensions[0].Nodes);
+            Assert.Empty(pack.Uis[0].Nodes);
         }
         finally { restore(); }
     }
@@ -156,7 +156,7 @@ public class VanillaUiSeedTests
         seeded.Children[0].Text!.Value = "Money";
 
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
+        pack.Uis.Add(new UiDef
         {
             Source = "vanillaui:X/Panel",
             Nodes = { seeded },
@@ -166,7 +166,7 @@ public class VanillaUiSeedTests
             pack, (_, path) => VanillaUiDelta.NodeAt(vanilla, path));
         try
         {
-            var panel = Assert.Single(pack.VanillaUiExtensions[0].Nodes);
+            var panel = Assert.Single(pack.Uis[0].Nodes);
             var label = Assert.Single(panel.Children);
             Assert.Equal("Label", label.Name);
             Assert.True(label.OverrideText);
@@ -230,7 +230,7 @@ public class VanillaUiSeedTests
         if (quit == null) { _out.WriteLine("no Quitagme - skipping"); return; }
 
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
+        pack.Uis.Add(new UiDef
         {
             Source = "vanillaui:9_MainCanvas/Quitagme",
             // With the resolver, as the editor seeds. Nine sprite names in the
@@ -240,12 +240,12 @@ public class VanillaUiSeedTests
             Nodes = { VanillaUiSeed.FromBase(quit, VanillaUiLibrary.Assets.NameForKey) },
         });
 
-        int before = pack.VanillaUiExtensions[0].Nodes.Sum(CountDef);
+        int before = pack.Uis[0].Nodes.Sum(CountDef);
         var restore = VanillaUiDelta.PrepareForSave(
             pack, (_, path) => VanillaUiDelta.NodeAt(quit, path));
         try
         {
-            int after = pack.VanillaUiExtensions[0].Nodes.Sum(CountDef);
+            int after = pack.Uis[0].Nodes.Sum(CountDef);
             _out.WriteLine($"Quitagme: {before} nodes seeded, {after} stored");
             Assert.Equal(0, after);
         }

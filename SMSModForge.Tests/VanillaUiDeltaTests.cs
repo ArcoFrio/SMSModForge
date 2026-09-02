@@ -109,7 +109,7 @@ public class VanillaUiDeltaTests
     private static ModPack PackWith(params UiNodeDef[] nodes)
     {
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
+        pack.Uis.Add(new UiDef
         {
             Source = "vanillaui:9_MainCanvas/Shop",
             Nodes = nodes.ToList(),
@@ -162,7 +162,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            Assert.Empty(pack.VanillaUiExtensions[0].Nodes);
+            Assert.Empty(pack.Uis[0].Nodes);
         }
         finally { restore(); }
     }
@@ -173,14 +173,14 @@ public class VanillaUiDeltaTests
         // Saving must not rewrite what is on screen. The author's tree is still
         // their tree afterwards.
         var pack = PackWith(Seeded());
-        string before = JsonConvert.SerializeObject(pack.VanillaUiExtensions[0].Nodes);
+        string before = JsonConvert.SerializeObject(pack.Uis[0].Nodes);
 
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
-        Assert.Empty(pack.VanillaUiExtensions[0].Nodes);
+        Assert.Empty(pack.Uis[0].Nodes);
         restore();
 
-        Assert.Equal(before, JsonConvert.SerializeObject(pack.VanillaUiExtensions[0].Nodes));
-        Assert.Equal(2, pack.VanillaUiExtensions[0].Nodes[0].Children.Count + 1);
+        Assert.Equal(before, JsonConvert.SerializeObject(pack.Uis[0].Nodes));
+        Assert.Equal(2, pack.Uis[0].Nodes[0].Children.Count + 1);
     }
 
     [Fact]
@@ -193,7 +193,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            var stored = pack.VanillaUiExtensions[0].Nodes;
+            var stored = pack.Uis[0].Nodes;
             var panel = Assert.Single(stored);
 
             // The panel itself changed nothing, but it is kept because it is the
@@ -224,7 +224,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            var title = pack.VanillaUiExtensions[0].Nodes[0].Children[0];
+            var title = pack.Uis[0].Nodes[0].Children[0];
             Assert.True(title.OverrideText);
             Assert.False(title.OverrideRect);
             Assert.Equal("Emporium", title.Text!.Value);
@@ -247,7 +247,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            var panel = pack.VanillaUiExtensions[0].Nodes[0];
+            var panel = pack.Uis[0].Nodes[0];
             Assert.False(panel.OverrideImage);
             Assert.True(panel.Children[0].OverrideText);
         }
@@ -265,7 +265,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            Assert.Empty(pack.VanillaUiExtensions[0].Nodes);
+            Assert.Empty(pack.Uis[0].Nodes);
         }
         finally { restore(); }
     }
@@ -280,7 +280,7 @@ public class VanillaUiDeltaTests
 
         var pack = PackWith(tree);
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
-        try { Assert.Empty(pack.VanillaUiExtensions[0].Nodes); }
+        try { Assert.Empty(pack.Uis[0].Nodes); }
         finally { restore(); }
     }
 
@@ -294,7 +294,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            var title = pack.VanillaUiExtensions[0].Nodes[0].Children[0];
+            var title = pack.Uis[0].Nodes[0].Children[0];
             Assert.True(title.OverrideActive);
             Assert.False(title.StartActive);
         }
@@ -311,7 +311,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            var panel = Assert.Single(pack.VanillaUiExtensions[0].Nodes);
+            var panel = Assert.Single(pack.Uis[0].Nodes);
             var added = Assert.Single(panel.Children);
             Assert.Equal("My Button", added.Name);
             Assert.False(added.IsBound);
@@ -332,7 +332,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
         try
         {
-            var title = Assert.Single(pack.VanillaUiExtensions[0].Nodes[0].Children);
+            var title = Assert.Single(pack.Uis[0].Nodes[0].Children);
             Assert.Equal("Title", title.Name);
             Assert.Single(title.Components);
         }
@@ -351,7 +351,7 @@ public class VanillaUiDeltaTests
         var restore = VanillaUiDelta.PrepareForSave(pack, (_, _) => null);
         try
         {
-            var panel = Assert.Single(pack.VanillaUiExtensions[0].Nodes);
+            var panel = Assert.Single(pack.Uis[0].Nodes);
             Assert.True(panel.OverrideRect);
             Assert.Single(panel.Children);
         }
@@ -364,7 +364,7 @@ public class VanillaUiDeltaTests
         var tree = Seeded();
         tree.Children[0].Rect.Position = new[] { 12f, -20f };
 
-        var extension = new VanillaUiExtensionDef
+        var extension = new UiDef
         {
             Source = "vanillaui:9_MainCanvas/Shop",
             Nodes = { tree },
@@ -374,7 +374,7 @@ public class VanillaUiDeltaTests
         Assert.Equal(2, before);
         Assert.Equal(2, after);       // the path to the change is kept
 
-        var untouched = new VanillaUiExtensionDef
+        var untouched = new UiDef
         {
             Source = "vanillaui:9_MainCanvas/Shop",
             Nodes = { Seeded() },
@@ -390,7 +390,7 @@ public class VanillaUiDeltaTests
     {
         var pack = new ModPack { PackId = "test" };
         var restore = VanillaUiDelta.PrepareForSave(pack, Lookup());
-        Assert.Empty(pack.VanillaUiExtensions);
+        Assert.Empty(pack.Uis);
         restore();
     }
 }

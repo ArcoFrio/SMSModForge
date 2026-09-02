@@ -7,7 +7,8 @@ using SMSModForge.Rendering;
 namespace SMSModForge.ViewModel;
 
 /// <summary>
-/// One vanilla UI the pack changes, for the UI tab.
+/// One of the pack's UIs, for the UI tab — a screen of its own, or a change to
+/// one the game already has. Both, because they are the same thing to author.
 /// <para/>
 /// Choosing a source seeds the whole screen from the game so the author can
 /// see and edit what is there. That tree can be thousands of objects; what the
@@ -19,9 +20,9 @@ namespace SMSModForge.ViewModel;
 /// The same shape as <see cref="VanillaPlaceExtensionViewModel"/>, which does
 /// this for levels.
 /// </summary>
-public sealed class VanillaUiExtensionViewModel : ObservableObject
+public sealed class UiViewModel : ObservableObject
 {
-    public VanillaUiExtensionDef Model { get; }
+    public UiDef Model { get; }
     public ObservableCollection<UiNodeViewModel> Nodes { get; }
 
     /// <summary>Raised when anything in the tree changes, so the preview can
@@ -29,11 +30,11 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
     /// row, since the preview redraws the whole screen anyway.</summary>
     public event Action? Changed;
 
-    public VanillaUiExtensionViewModel(VanillaUiExtensionDef model)
+    public UiViewModel(UiDef model)
     {
         Model = model;
         Nodes = new ObservableCollection<UiNodeViewModel>(
-            model.Nodes.Select(n => new UiNodeViewModel(n)));
+            model.Nodes.Select(n => new UiNodeViewModel(n, null, HasChanges)));
         foreach (var node in Nodes) node.Changed += Bubble;
 
         SeedCommand = new RelayCommand(Seed, () => CanSeed);
@@ -58,6 +59,9 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
             OnPropertyChanged(nameof(Summary));
             OnPropertyChanged(nameof(CanSeed));
             OnPropertyChanged(nameof(IsKnown));
+            OnPropertyChanged(nameof(IsVanillaBased));
+            OnPropertyChanged(nameof(ShowsScreenPicker));
+            OnPropertyChanged(nameof(ShowsOwnSettings));
             SeedCommand.Raise();
 
             // A different screen entirely, so the old tree is not a delta
@@ -82,8 +86,91 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
         {
             var entry = Catalog;
             if (entry != null) return entry.Name + "  —  " + entry.Surface.Path;
-            return string.IsNullOrEmpty(Model.Source) ? "(nothing chosen)" : Model.Source;
+            if (Model.IsVanillaBased) return Model.Source;        // named, but unknown here
+            if (WantsVanilla) return "(no screen chosen)";
+            return string.IsNullOrWhiteSpace(Model.Name) ? "(new UI)" : Model.Name;
         }
+    }
+
+    /// <summary>What the author calls it. Only meaningful for a UI of the
+    /// pack's own — one built on a vanilla screen is named by that screen.</summary>
+    public string Name
+    {
+        get => Model.Name;
+        set
+        {
+            if (Model.Name == value) return;
+            Model.Name = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    public bool IsVanillaBased => Model.IsVanillaBased;
+
+    /// <summary>
+    /// Set when this row was started from "+ Vanilla" but no screen has been
+    /// chosen yet.
+    /// <para/>
+    /// Deliberately NOT on the model. An entry with no source IS a UI of the
+    /// pack's own as far as the manifest is concerned, and if the author never
+    /// picks a screen that is exactly what they get. This only decides which
+    /// half of the header to show while they are deciding, and being wrong
+    /// about it costs a wrong label rather than a wrong pack.
+    /// </summary>
+    public bool WantsVanilla
+    {
+        get => _wantsVanilla;
+        set
+        {
+            if (_wantsVanilla == value) return;
+            _wantsVanilla = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(ShowsScreenPicker));
+            OnPropertyChanged(nameof(ShowsOwnSettings));
+            OnPropertyChanged(nameof(Display));
+        }
+    }
+
+    private bool _wantsVanilla;
+
+    /// <summary>Whether the header offers a vanilla screen to build on.</summary>
+    public bool ShowsScreenPicker => IsVanillaBased || WantsVanilla;
+
+    /// <summary>Whether the header offers a name and a parenting choice, which
+    /// belong to a UI of the pack's own.</summary>
+    public bool ShowsOwnSettings => !ShowsScreenPicker;
+
+    /// <summary>Whether this UI hides when the game hides the rest of the
+    /// interface. Only its own to decide when it is a screen of the pack's own:
+    /// a change to a vanilla screen inherits whatever that screen already
+    /// does.</summary>
+    public bool HidesWithGameplayUi
+    {
+        get => Model.IsVanillaBased
+            ? VanillaUiCatalog.DimsWithGameplayUi(Model.Source)
+            : Model.HidesWithGameplayUi;
+        set
+        {
+            if (Model.IsVanillaBased || Model.HidesWithGameplayUi == value) return;
+            Model.HidesWithGameplayUi = value;
+            OnPropertyChanged();
+        }
+    }
+
+    public bool CanChooseHiding => !Model.IsVanillaBased;
+
+    /// <summary>Whether a node asserts anything against the game. Handed to
+    /// every row so a tree can mark what has actually been touched — an author
+    /// looking at 1434 objects needs to see the three they changed.</summary>
+    public bool HasChanges(UiNodeDef node)
+    {
+        if (node == null) return false;
+        if (!node.IsBound) return true;                     // the pack made it
+        if (!Model.IsVanillaBased) return true;             // nothing to compare to
+        var vanilla = VanillaUiLibrary.Node(Catalog);
+        var against = vanilla == null ? null : VanillaUiDelta.NodeAt(vanilla, node.Bind);
+        return against != null && VanillaUiDelta.Asserts(node, against);
     }
 
     /// <summary>What this extension is doing, in a line: how much of the screen
@@ -93,6 +180,11 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
     {
         get
         {
+            if (!Model.IsVanillaBased)
+            {
+                int mine = Model.Nodes.Sum(CountNodes);
+                return mine == 0 ? "empty" : $"{mine} object(s)";
+            }
             if (Catalog == null) return "";
             var (before, after) = VanillaUiDelta.Measure(Model);
             return after == 0
@@ -127,7 +219,7 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
         Nodes.Clear();
 
         Model.Nodes.Add(merged);
-        var vm = new UiNodeViewModel(merged);
+        var vm = new UiNodeViewModel(merged, null, HasChanges);
         vm.Changed += Bubble;
         Nodes.Add(vm);
 
@@ -164,6 +256,8 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
         Stranded = 0;
         if (CanSeed) Seed();
     }
+
+    private static int CountNodes(UiNodeDef n) => 1 + n.Children.Sum(CountNodes);
 
     private void Bubble()
     {

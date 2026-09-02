@@ -49,17 +49,19 @@ public class UiTabTests
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
-            Assert.Empty(vm.UiExtensions);
+            Assert.Empty(vm.Uis);
 
-            vm.AddUiExtensionCommand.Execute(null);
-            var added = Assert.Single(vm.UiExtensions);
-            Assert.Same(added, vm.SelectedUiExtension);
+            vm.AddVanillaUiCommand.Execute(null);
+            var added = Assert.Single(vm.Uis);
+            Assert.Same(added, vm.SelectedUi);
 
             // Nothing is chosen for the author. Guessing a screen would seed
             // thousands of objects for a decision they have not made.
             Assert.Equal("", added.Source);
             Assert.Empty(added.Nodes);
-            Assert.Equal("(nothing chosen)", added.Display);
+            Assert.True(added.WantsVanilla);
+            Assert.True(added.ShowsScreenPicker);
+            Assert.Equal("(no screen chosen)", added.Display);
 
             if (!VanillaUiLibrary.IsAvailable)
             {
@@ -81,13 +83,13 @@ public class UiTabTests
         WindowHarness.Run(window =>
         {
             var vm = (MainViewModel)window.DataContext;
-            vm.AddUiExtensionCommand.Execute(null);
-            Assert.Single(vm.Pack.VanillaUiExtensions);
+            vm.AddVanillaUiCommand.Execute(null);
+            Assert.Single(vm.Pack.Uis);
 
-            vm.RemoveUiExtensionCommand.Execute(null);
-            Assert.Empty(vm.UiExtensions);
-            Assert.Empty(vm.Pack.VanillaUiExtensions);
-            Assert.Null(vm.SelectedUiExtension);
+            vm.RemoveUiCommand.Execute(null);
+            Assert.Empty(vm.Uis);
+            Assert.Empty(vm.Pack.Uis);
+            Assert.Null(vm.SelectedUi);
         });
     }
 
@@ -100,7 +102,7 @@ public class UiTabTests
             var preview = (UiPreview)window.FindName("UiScreenPreview");
             Assert.NotNull(preview);
 
-            vm.AddUiExtensionCommand.Execute(null);
+            vm.AddVanillaUiCommand.Execute(null);
             Assert.Equal("", vm.SelectedUiPreviewToken);
 
             // With nothing chosen the pane says so rather than sitting empty:
@@ -110,7 +112,7 @@ public class UiTabTests
 
             if (!VanillaUiLibrary.IsAvailable) return;
 
-            vm.UiExtensions[0].Source = "vanillaui:9_MainCanvas/Quitagme";
+            vm.Uis[0].Source = "vanillaui:9_MainCanvas/Quitagme";
             Assert.Equal("vanillaui:9_MainCanvas/Quitagme", vm.SelectedUiPreviewToken);
 
             // Through the binding, NOT by assigning BaseToken here. Setting it
@@ -137,13 +139,13 @@ public class UiTabTests
         if (!VanillaUiLibrary.IsAvailable) { _out.WriteLine("no extraction - skipping"); return; }
 
         var pack = new ModPack { PackId = "test" };
-        pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
+        pack.Uis.Add(new UiDef
         {
             Source = "vanillaui:9_MainCanvas/Quitagme",
         });
 
         // As loading does: build the view model, which seeds the whole screen.
-        var seeded = new VanillaUiExtensionViewModel(pack.VanillaUiExtensions[0]);
+        var seeded = new UiViewModel(pack.Uis[0]);
         Assert.NotEmpty(seeded.Nodes);
         Assert.True(seeded.Model.Nodes.Sum(Count) > 20, "the screen is in memory");
 

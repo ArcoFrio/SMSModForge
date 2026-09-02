@@ -48,12 +48,17 @@ public static class VanillaUiDelta
     public static Action PrepareForSave(ModPack pack, BaselineLookup? lookup = null)
     {
         var restores = new List<Action>();
-        if (pack?.VanillaUiExtensions == null) return () => { };
+        if (pack?.Uis == null) return () => { };
 
         lookup ??= DefaultLookup;
 
-        foreach (var extension in pack.VanillaUiExtensions)
+        foreach (var extension in pack.Uis)
         {
+            // A UI of the pack's own has nothing to be a delta against: every
+            // object in it is the pack's assertion, and pruning would compare
+            // it to a screen that does not exist.
+            if (!extension.IsVanillaBased) continue;
+
             var original = extension.Nodes;
             var pruned = Prune(original, extension.Source, lookup);
             if (ReferenceEquals(pruned, original)) continue;
@@ -69,10 +74,11 @@ public static class VanillaUiDelta
     /// <summary>How many nodes an extension would store before and after
     /// pruning. For telling an author that their edit is three properties
     /// rather than four hundred objects.</summary>
-    public static (int Before, int After) Measure(VanillaUiExtensionDef extension,
+    public static (int Before, int After) Measure(UiDef extension,
                                                   BaselineLookup? lookup = null)
     {
         if (extension == null) return (0, 0);
+        if (!extension.IsVanillaBased) return (Count(extension.Nodes), Count(extension.Nodes));
         var pruned = Prune(extension.Nodes, extension.Source, lookup ?? DefaultLookup);
         return (Count(extension.Nodes), Count(pruned));
     }
@@ -204,6 +210,30 @@ public static class VanillaUiDelta
         if (!shadowDiffers) made.Shadow = null;
         if (!outlineDiffers) made.Outline = null;
         return made;
+    }
+
+    /// <summary>
+    /// Whether a node asserts anything against the vanilla object it is bound
+    /// to — the same question the pruning pass asks, exposed so the editor can
+    /// mark a changed row using the rule that actually decides what is saved.
+    /// <para/>
+    /// Two implementations of "has this been touched" would drift, and the one
+    /// on screen drifting from the one on disk is the worst version of that: an
+    /// author would see no marker and still ship a change, or see a marker for
+    /// something that never reaches the pack.
+    /// </summary>
+    public static bool Asserts(UiNodeDef node, VanillaUiSurface.Node vanilla)
+    {
+        if (node == null || vanilla == null) return false;
+        return RectDiffers(node.Rect, vanilla.Rect)
+            || ImageDiffers(node.Image, vanilla.Image)
+            || TextDiffers(node.Text, vanilla.Text)
+            || node.StartActive != vanilla.ActiveSelf
+            || AlphaDiffers(node.Alpha, vanilla.CanvasGroup)
+            || EffectDiffers(node.Shadow, vanilla.Shadow)
+            || EffectDiffers(node.Outline, vanilla.Outline)
+            || node.ActiveConditions.Count > 0
+            || node.Components.Count > 0;
     }
 
     // ── Comparisons ──────────────────────────────────────────────────

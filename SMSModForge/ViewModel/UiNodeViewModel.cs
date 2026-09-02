@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using SMSModForge.Model;
@@ -20,6 +20,7 @@ namespace SMSModForge.ViewModel;
 public sealed class UiNodeViewModel : ObservableObject
 {
     private readonly Action<UiNodeViewModel>? _remove;
+    private readonly Func<UiNodeDef, bool>? _hasChanges;
 
     public UiNodeDef Model { get; }
     public ObservableCollection<UiNodeViewModel> Children { get; }
@@ -30,13 +31,15 @@ public sealed class UiNodeViewModel : ObservableObject
     /// can redraw without every property having to remember to say so.</summary>
     public event Action? Changed;
 
-    public UiNodeViewModel(UiNodeDef model, Action<UiNodeViewModel>? remove = null)
+    public UiNodeViewModel(UiNodeDef model, Action<UiNodeViewModel>? remove = null,
+                           Func<UiNodeDef, bool>? hasChanges = null)
     {
         Model = model;
         _remove = remove;
+        _hasChanges = hasChanges;
 
         Children = new ObservableCollection<UiNodeViewModel>(
-            model.Children.Select(c => new UiNodeViewModel(c, RemoveChild)));
+            model.Children.Select(c => new UiNodeViewModel(c, RemoveChild, hasChanges)));
         foreach (var child in Children) child.Changed += Bubble;
 
         RemoveCommand = new RelayCommand(() => _remove?.Invoke(this),
@@ -77,13 +80,23 @@ public sealed class UiNodeViewModel : ObservableObject
     }
 
     public string Display
-    {
-        get
-        {
-            string name = string.IsNullOrWhiteSpace(Model.Name) ? "(unnamed)" : Model.Name;
-            return IsMine ? name + "  +" : name;
-        }
-    }
+        => string.IsNullOrWhiteSpace(Model.Name) ? "(unnamed)" : Model.Name;
+
+    /// <summary>
+    /// What has happened to this object, in one word for the tree.
+    /// <para/>
+    /// The distinction the whole tab turns on, and the reason it is worth a
+    /// marker: a screen can hold 1434 objects and an author needs to see the
+    /// three they touched. "changed" uses exactly the rule that decides what
+    /// gets saved, so a marked row and a stored row are the same rows.
+    /// </summary>
+    public string Status
+        => IsMine ? "new"
+           : _hasChanges?.Invoke(Model) == true ? "changed"
+           : "";
+
+    public bool IsChanged => Status == "changed";
+    public bool IsUntouched => Status.Length == 0;
 
     /// <summary>A short line saying what this object is made of, for a tree row
     /// that would otherwise be a name and nothing else.</summary>
@@ -251,7 +264,7 @@ public sealed class UiNodeViewModel : ObservableObject
     {
         var def = new UiNodeDef { Name = Unique(name) };
         Model.Children.Add(def);
-        var vm = new UiNodeViewModel(def, RemoveChild);
+        var vm = new UiNodeViewModel(def, RemoveChild, _hasChanges);
         vm.Changed += Bubble;
         Children.Add(vm);
         Bubble();
@@ -283,7 +296,16 @@ public sealed class UiNodeViewModel : ObservableObject
         Bubble();
     }
 
-    private void Bubble() => Changed?.Invoke();
+    private void Bubble()
+    {
+        // The marker is derived from the model, so it has to be re-asked after
+        // anything that could change the answer.
+        OnPropertyChanged(nameof(Status));
+        OnPropertyChanged(nameof(IsChanged));
+        OnPropertyChanged(nameof(IsUntouched));
+        OnPropertyChanged(nameof(Summary));
+        Changed?.Invoke();
+    }
 
     private static float At(float[]? pair, int i)
         => pair != null && pair.Length > i ? pair[i] : 0f;

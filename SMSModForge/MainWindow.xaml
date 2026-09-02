@@ -5750,21 +5750,36 @@
 
                     <!-- Which screens this pack changes -->
                     <DockPanel Grid.Column="0">
-                        <TextBlock DockPanel.Dock="Top" Text="Vanilla UI"
+                        <TextBlock DockPanel.Dock="Top" Text="UI"
                                    FontWeight="Bold" Margin="6,4,0,2"/>
                         <ToolBar DockPanel.Dock="Top">
                             <Button view:TutorialAnchor.Id="btn:addUiExtension"
-                                    Content="+ Screen" Command="{Binding AddUiExtensionCommand}"
-                                    ToolTip="Change a UI screen the game already has."/>
-                            <Button Content="Remove" Command="{Binding RemoveUiExtensionCommand}"/>
+                                    Content="+ UI" Command="{Binding AddOwnUiCommand}"
+                                    ToolTip="A screen of your own: a window, a panel, a HUD element."/>
+                            <Button Content="+ Vanilla" Command="{Binding AddVanillaUiCommand}"
+                                    ToolTip="Start from a screen the game already has. Change what is there, add to it, and only the differences are saved."/>
+                            <Button Content="Remove" Command="{Binding RemoveUiCommand}"/>
                         </ToolBar>
                         <ListBox ItemsSource="{Binding UiExtensions}"
-                                 SelectedItem="{Binding SelectedUiExtension, Mode=TwoWay}"
+                                 SelectedItem="{Binding SelectedUi, Mode=TwoWay}"
                                  HorizontalContentAlignment="Stretch">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Margin="0,2">
-                                        <TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis"/>
+                                        <!-- Which kind, said once here so every row
+                                             in the tree below can be about the
+                                             objects rather than about the kind. -->
+                                        <TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsVanillaBased}" Value="True">
+                                                            <Setter Property="FontStyle" Value="Italic"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
                                         <TextBlock Text="{Binding Summary}" FontSize="11" Opacity="0.7"
                                                    TextTrimming="CharacterEllipsis"/>
                                     </StackPanel>
@@ -5776,9 +5791,48 @@
                     <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
 
                     <!-- The screen's objects -->
-                    <DockPanel Grid.Column="2" DataContext="{Binding SelectedUiExtension}">
+                    <DockPanel Grid.Column="2" DataContext="{Binding SelectedUi}">
                         <StackPanel DockPanel.Dock="Top" Margin="6,4">
-                            <TextBlock Text="Which screen" FontWeight="Bold"/>
+                            <!-- A name and a parenting choice belong to a UI of the
+                                 pack's own. One built on a vanilla screen is named
+                                 by that screen and inherits its place in the
+                                 hierarchy, so these are hidden rather than shown
+                                 disabled: a disabled box invites an author to
+                                 wonder what would happen if they could use it. -->
+                            <StackPanel>
+                                <StackPanel.Style>
+                                    <Style TargetType="StackPanel">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ShowsScreenPicker}" Value="True">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </StackPanel.Style>
+                                <TextBlock Text="Name" FontWeight="Bold"/>
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}"
+                                         Margin="0,2,0,6"/>
+                                <CheckBox IsChecked="{Binding HidesWithGameplayUi, Mode=TwoWay}"
+                                          Margin="0,0,0,6"
+                                          ToolTip="Cutscenes and transitions dim the game's interface. Tick this to be dimmed with it, which is right for anything belonging to normal play. Leave it clear for something that must stay up during a cutscene.">
+                                    <TextBlock Text="Hide this with the rest of the game's UI"
+                                               TextWrapping="Wrap"/>
+                                </CheckBox>
+                            </StackPanel>
+
+                            <TextBlock Text="Which screen" FontWeight="Bold">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ShowsScreenPicker}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                             <ComboBox ItemsSource="{Binding Source={x:Static model:VanillaUiCatalog.UsableBases}}"
                                       SelectedValue="{Binding Source, Mode=TwoWay}"
                                       SelectedValuePath="Token" DisplayMemberPath="Id"
@@ -5806,12 +5860,41 @@
                                         <!-- The pack's own objects are marked, because
                                              what may be done to a row depends entirely
                                              on whether the game owns it. -->
+                                        <!-- An untouched vanilla row is deliberately
+                                             quiet: a screen can hold 1434 of them and
+                                             the two or three that were touched are
+                                             what an author is looking for. The marker
+                                             uses the same rule that decides what gets
+                                             saved, so a marked row and a stored row
+                                             are the same rows. -->
+                                        <Border CornerRadius="2" Padding="4,0" Margin="0,0,6,0"
+                                                VerticalAlignment="Center">
+                                            <Border.Style>
+                                                <Style TargetType="Border">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Status}" Value="new">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Setter Property="Background" Value="#2E7D32"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Status}" Value="changed">
+                                                            <Setter Property="Visibility" Value="Visible"/>
+                                                            <Setter Property="Background" Value="#B26A00"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Border.Style>
+                                            <TextBlock Text="{Binding Status}" FontSize="10"
+                                                       Foreground="White"/>
+                                        </Border>
                                         <TextBlock Text="{Binding Display}">
                                             <TextBlock.Style>
                                                 <Style TargetType="TextBlock">
+                                                    <Setter Property="Opacity" Value="0.55"/>
                                                     <Style.Triggers>
-                                                        <DataTrigger Binding="{Binding IsMine}" Value="True">
-                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                        <DataTrigger Binding="{Binding IsUntouched}" Value="False">
+                                                            <Setter Property="Opacity" Value="1"/>
+                                                            <Setter Property="FontWeight" Value="SemiBold"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
