@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -29,6 +29,83 @@ public static class VanillaUiSeed
     {
         if (vanilla == null) throw new ArgumentNullException(nameof(vanilla));
         return Build(vanilla, ".");
+    }
+
+    /// <summary>
+    /// The full screen from the game, with an already-stored delta laid back
+    /// over it.
+    /// <para/>
+    /// This is what reopening a saved pack needs, and it is not the same as
+    /// seeding. A pack on disk holds only what it changed — two or three nodes
+    /// where the screen has thirty — so seeding alone would show the author
+    /// their edit floating in nothing, and seeding that DISCARDED the delta
+    /// would quietly throw the edit away. Both are worse than either being
+    /// slow.
+    /// <para/>
+    /// A stored node that no longer matches anything in the game is kept rather
+    /// than dropped: the screen may have moved on between game versions, and
+    /// losing an author's work is a bigger failure than showing it in an odd
+    /// place. <paramref name="stranded"/> counts those so the editor can say so.
+    /// </summary>
+    public static UiNodeDef Merge(VanillaUiSurface.Node vanilla,
+                                  IEnumerable<UiNodeDef>? stored,
+                                  out int stranded)
+    {
+        var seeded = FromBase(vanilla);
+        stranded = 0;
+        if (stored == null) return seeded;
+
+        var byPath = new Dictionary<string, UiNodeDef>(StringComparer.Ordinal);
+        Index(seeded, byPath);
+
+        foreach (var node in stored)
+            stranded += Apply(node, seeded, byPath);
+        return seeded;
+    }
+
+    private static void Index(UiNodeDef node, Dictionary<string, UiNodeDef> into)
+    {
+        if (node.IsBound) into[node.Bind] = node;
+        foreach (var child in node.Children) Index(child, into);
+    }
+
+    private static int Apply(UiNodeDef stored, UiNodeDef seededRoot,
+                             Dictionary<string, UiNodeDef> byPath)
+    {
+        if (!stored.IsBound)
+        {
+            // Something the pack added, with nowhere obvious to go — its parent
+            // was a bound node that resolved, and that call site attaches it.
+            // Reaching here means the top level, so the base is its home.
+            seededRoot.Children.Add(stored);
+            return 0;
+        }
+
+        if (!byPath.TryGetValue(stored.Bind, out var target))
+        {
+            // The object it was written against is gone. Kept where it can be
+            // seen and re-saved rather than silently dropped.
+            seededRoot.Children.Add(stored);
+            return 1;
+        }
+
+        if (stored.OverrideRect) target.Rect = stored.Rect;
+        if (stored.OverrideImage) target.Image = stored.Image;
+        if (stored.OverrideText) target.Text = stored.Text;
+        if (stored.OverrideActive) target.StartActive = stored.StartActive;
+        if (stored.Alpha.HasValue) target.Alpha = stored.Alpha;
+        if (stored.Shadow != null) target.Shadow = stored.Shadow;
+        if (stored.Outline != null) target.Outline = stored.Outline;
+        if (stored.Components.Count > 0) target.Components = stored.Components;
+        if (stored.ActiveConditions.Count > 0) target.ActiveConditions = stored.ActiveConditions;
+
+        int stranded = 0;
+        foreach (var child in stored.Children)
+        {
+            if (child.IsBound) { stranded += Apply(child, seededRoot, byPath); continue; }
+            target.Children.Add(child);          // an addition, in its right place
+        }
+        return stranded;
     }
 
     /// <summary>The bind paths a tree uses, in order. For checking that a seed
