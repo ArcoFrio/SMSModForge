@@ -261,4 +261,27 @@ public sealed class ModPack
     [JsonProperty("npcFolders", Order = 25)]
     public List<UnitFolderDef> NpcFolders { get; set; } = new();
     public bool ShouldSerializeNpcFolders() => NpcFolders != null && NpcFolders.Count > 0;
+
+    /// <summary>
+    /// UI the pack adds of its own — windows, panels, HUD elements.
+    /// </summary>
+    [JsonProperty("uis", Order = 26)]
+    public List<UiDef> Uis { get; set; } = new();
+    public bool ShouldSerializeUis() => Uis != null && Uis.Count > 0;
+
+    /// <summary>
+    /// Changes to UI the game already has, one entry per vanilla base. Kept
+    /// apart from <see cref="Uis"/> for the same reason vanilla place
+    /// extensions are kept apart from places: one describes something the pack
+    /// owns outright, the other a delta against something it does not, and a
+    /// pack that muddles them cannot be told which parts survive a game update.
+    /// </summary>
+    [JsonProperty("vanillaUiExtensions", Order = 27)]
+    public List<VanillaUiExtensionDef> VanillaUiExtensions { get; set; } = new();
+    public bool ShouldSerializeVanillaUiExtensions()
+        => VanillaUiExtensions != null && VanillaUiExtensions.Count > 0;
+
+    [JsonProperty("uiFolders", Order = 28)]
+    public List<UnitFolderDef> UiFolders { get; set; } = new();
+    public bool ShouldSerializeUiFolders() => UiFolders != null && UiFolders.Count > 0;
 }

@@ -1,0 +1,3776 @@
+{
+ "$schema": "smsmodforge/vanillaui/v1",
+ "gameplayCanvas": "9_MainCanvas",
+ "surfaces": [
+  {
+   "id": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas",
+   "path": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    2500,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 90,
+   "bases": [
+    {
+     "name": "Layout",
+     "objects": 50,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 22,
+      "TextMeshProUGUI": 14,
+      "Trigger": 29
+     },
+     "id": "10_Gameplay/Raise_Stats/Stat_Increase_Canvas/Layout",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "15_EventUI",
+   "path": "15_EventUI",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "BPC",
+     "objects": 116,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 76,
+      "TextMeshProUGUI": 33,
+      "Trigger": 44
+     },
+     "id": "15_EventUI/BPC",
+     "ambiguousName": false
+    },
+    {
+     "name": "BPC_New",
+     "objects": 221,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 123,
+      "TextMeshProUGUI": 83,
+      "Trigger": 11,
+      "ScrollRect": 1
+     },
+     "id": "15_EventUI/BPC_New",
+     "ambiguousName": false
+    },
+    {
+     "name": "DPC_New",
+     "objects": 205,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 115,
+      "TextMeshProUGUI": 74,
+      "Trigger": 8,
+      "ScrollRect": 1
+     },
+     "id": "15_EventUI/DPC_New",
+     "ambiguousName": false
+    },
+    {
+     "name": "Intro",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "15_EventUI/Intro",
+     "ambiguousName": false
+    },
+    {
+     "name": "MarioNote",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "15_EventUI/MarioNote",
+     "ambiguousName": false
+    },
+    {
+     "name": "PrismeMagazine1",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "15_EventUI/PrismeMagazine1",
+     "ambiguousName": false
+    },
+    {
+     "name": "SpawnText_Center",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 6,
+     "contents": {},
+     "id": "15_EventUI/SpawnText_Center",
+     "ambiguousName": false
+    },
+    {
+     "name": "XP_Spawn",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 1
+     },
+     "id": "15_EventUI/XP_Spawn",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "16_Minigames",
+   "path": "16_Minigames",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0.5,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Hit_it",
+     "objects": 24,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 13,
+      "TextMeshProUGUI": 1,
+      "Trigger": 15
+     },
+     "id": "16_Minigames/Hit_it",
+     "ambiguousName": false
+    },
+    {
+     "name": "Guess_it",
+     "objects": 28,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 16,
+      "TextMeshProUGUI": 3,
+      "Trigger": 15
+     },
+     "id": "16_Minigames/Guess_it",
+     "ambiguousName": false
+    },
+    {
+     "name": "Safe",
+     "objects": 7,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 3,
+      "TextMeshProUGUI": 2,
+      "Trigger": 1
+     },
+     "id": "16_Minigames/Safe",
+     "ambiguousName": false
+    },
+    {
+     "name": "Compareit",
+     "objects": 52,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 32,
+      "TextMeshProUGUI": 2,
+      "Trigger": 7
+     },
+     "id": "16_Minigames/Compareit",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "18_CreditsUI",
+   "path": "18_CreditsUI",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 250,
+   "bases": [
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "18_CreditsUI/Image",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "18_CreditsUI/Text (TMP)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP) (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "18_CreditsUI/Text (TMP) (1)",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "5_Levels/125_BarnBackInterior/MilkCanvas",
+   "path": "5_Levels/125_BarnBackInterior/MilkCanvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "BarnButtonCanvasGroup",
+     "objects": 21,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 11,
+      "TextMeshProUGUI": 9,
+      "Trigger": 5
+     },
+     "id": "5_Levels/125_BarnBackInterior/MilkCanvas/BarnButtonCanvasGroup",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "5_Levels/22_InsideCar/Canvas#1",
+   "path": "5_Levels/22_InsideCar/Canvas",
+   "ambiguousPath": true,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Button",
+     "objects": 3,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 4
+     },
+     "id": "5_Levels/22_InsideCar/Canvas#1/Button",
+     "ambiguousName": true
+    }
+   ]
+  },
+  {
+   "id": "5_Levels/22_InsideCar/Canvas#2",
+   "path": "5_Levels/22_InsideCar/Canvas",
+   "ambiguousPath": true,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Button",
+     "objects": 3,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 4
+     },
+     "id": "5_Levels/22_InsideCar/Canvas#2/Button",
+     "ambiguousName": true
+    }
+   ]
+  },
+  {
+   "id": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas",
+   "path": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": -3,
+   "bases": [
+    {
+     "name": "Player_Room_Buttons",
+     "objects": 12,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 8,
+      "TextMeshProUGUI": 4,
+      "Trigger": 15
+     },
+     "id": "5_Levels/5_MyRoom/PlayerRoom_ButtonCanvas/Player_Room_Buttons",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "5_Levels/80_Shrine/Canvas",
+   "path": "5_Levels/80_Shrine/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Shrine_Buttons",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 4
+     },
+     "id": "5_Levels/80_Shrine/Canvas/Shrine_Buttons",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "5_Levels/95_JapaneseSubwaytrain/Canvas",
+   "path": "5_Levels/95_JapaneseSubwaytrain/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": -25,
+   "bases": [
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "5_Levels/95_JapaneseSubwaytrain/Canvas/Image",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "6_Effects/BehindBustUI_Effect_Canvas",
+   "path": "6_Effects/BehindBustUI_Effect_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": -3,
+   "bases": [
+    {
+     "name": "BehindUI_Black",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "6_Effects/BehindBustUI_Effect_Canvas/BehindUI_Black",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "6_Effects/Effect_Canvas",
+   "path": "6_Effects/Effect_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 5,
+   "bases": [
+    {
+     "name": "White",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "6_Effects/Effect_Canvas/White",
+     "ambiguousName": false
+    },
+    {
+     "name": "Pink",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "6_Effects/Effect_Canvas/Pink",
+     "ambiguousName": false
+    },
+    {
+     "name": "Black",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "6_Effects/Effect_Canvas/Black",
+     "ambiguousName": false
+    },
+    {
+     "name": "SpecialDecision",
+     "objects": 2,
+     "onAtLoad": true,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 2,
+      "Trigger": 6
+     },
+     "id": "6_Effects/Effect_Canvas/SpecialDecision",
+     "ambiguousName": false
+    },
+    {
+     "name": "ItemReceived",
+     "objects": 1,
+     "onAtLoad": true,
+     "siblingIndex": 4,
+     "contents": {
+      "Trigger": 2
+     },
+     "id": "6_Effects/Effect_Canvas/ItemReceived",
+     "ambiguousName": false
+    },
+    {
+     "name": "NewTrait",
+     "objects": 1,
+     "onAtLoad": true,
+     "siblingIndex": 5,
+     "contents": {
+      "Trigger": 2
+     },
+     "id": "6_Effects/Effect_Canvas/NewTrait",
+     "ambiguousName": false
+    },
+    {
+     "name": "Hospitalfee",
+     "objects": 3,
+     "onAtLoad": true,
+     "siblingIndex": 6,
+     "contents": {
+      "Trigger": 2
+     },
+     "id": "6_Effects/Effect_Canvas/Hospitalfee",
+     "ambiguousName": false
+    },
+    {
+     "name": "NewAchievement",
+     "objects": 4,
+     "onAtLoad": true,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 2,
+      "Trigger": 3
+     },
+     "id": "6_Effects/Effect_Canvas/NewAchievement",
+     "ambiguousName": false
+    },
+    {
+     "name": "AnnaVarChange",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Image": 3,
+      "Trigger": 4
+     },
+     "id": "6_Effects/Effect_Canvas/AnnaVarChange",
+     "ambiguousName": false
+    },
+    {
+     "name": "Game_Saved",
+     "objects": 3,
+     "onAtLoad": true,
+     "siblingIndex": 9,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 2
+     },
+     "id": "6_Effects/Effect_Canvas/Game_Saved",
+     "ambiguousName": false
+    },
+    {
+     "name": "SpawnFollower",
+     "objects": 4,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 1,
+      "Trigger": 2
+     },
+     "id": "6_Effects/Effect_Canvas/SpawnFollower",
+     "ambiguousName": false
+    },
+    {
+     "name": "SpawnSubscriber",
+     "objects": 4,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {
+      "Image": 1,
+      "Trigger": 2
+     },
+     "id": "6_Effects/Effect_Canvas/SpawnSubscriber",
+     "ambiguousName": false
+    },
+    {
+     "name": "WhiteFlashOnEnable",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/WhiteFlashOnEnable",
+     "ambiguousName": false
+    },
+    {
+     "name": "NewSkillPointUI",
+     "objects": 1,
+     "onAtLoad": true,
+     "siblingIndex": 13,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/NewSkillPointUI",
+     "ambiguousName": false
+    },
+    {
+     "name": "BlackScreenOfDeath",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 14,
+     "contents": {
+      "Image": 1
+     },
+     "id": "6_Effects/Effect_Canvas/BlackScreenOfDeath",
+     "ambiguousName": false
+    },
+    {
+     "name": "AFewMinutesLater",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 15,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/AFewMinutesLater",
+     "ambiguousName": false
+    },
+    {
+     "name": "AWhileLater",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 16,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/AWhileLater",
+     "ambiguousName": false
+    },
+    {
+     "name": "BlackDriveToDestination",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 17,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/BlackDriveToDestination",
+     "ambiguousName": false
+    },
+    {
+     "name": "VacationBlackscreen",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 18,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/VacationBlackscreen",
+     "ambiguousName": false
+    },
+    {
+     "name": "CustomBlackscreen",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 19,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/CustomBlackscreen",
+     "ambiguousName": false
+    },
+    {
+     "name": "MeanwhileSomewhereElse",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 20,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "6_Effects/Effect_Canvas/MeanwhileSomewhereElse",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "8_Core_Events/Intro/Canvas",
+   "path": "8_Core_Events/Intro/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    800,
+    600
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ConstantPixelSize",
+   "sortingOrder": 500,
+   "bases": [
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "8_Core_Events/Intro/Canvas/Image",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "9_MainCanvas",
+   "path": "9_MainCanvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": true,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Payout",
+     "objects": 83,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 24,
+      "TextMeshProUGUI": 25,
+      "Trigger": 22
+     },
+     "id": "9_MainCanvas/Payout",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tooltip_Finances",
+     "objects": 35,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 12,
+      "TextMeshProUGUI": 14
+     },
+     "id": "9_MainCanvas/Tooltip_Finances",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tooltip_AnnaStatus",
+     "objects": 20,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 12,
+      "TextMeshProUGUI": 8,
+      "Trigger": 6
+     },
+     "id": "9_MainCanvas/Tooltip_AnnaStatus",
+     "ambiguousName": false
+    },
+    {
+     "name": "OtherHud",
+     "objects": 92,
+     "onAtLoad": true,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 59,
+      "TextMeshProUGUI": 16,
+      "Trigger": 14
+     },
+     "id": "9_MainCanvas/OtherHud",
+     "ambiguousName": false
+    },
+    {
+     "name": "Navigator",
+     "objects": 499,
+     "onAtLoad": true,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 304,
+      "TextMeshProUGUI": 186,
+      "Trigger": 49
+     },
+     "id": "9_MainCanvas/Navigator",
+     "ambiguousName": false
+    },
+    {
+     "name": "SaveLoadSystem",
+     "objects": 89,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 37,
+      "TextMeshProUGUI": 27,
+      "Text": 24,
+      "Trigger": 1,
+      "InputField": 8
+     },
+     "id": "9_MainCanvas/SaveLoadSystem",
+     "ambiguousName": false
+    },
+    {
+     "name": "Desktop",
+     "objects": 315,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 218,
+      "TextMeshProUGUI": 37,
+      "Trigger": 69
+     },
+     "id": "9_MainCanvas/Desktop",
+     "ambiguousName": false
+    },
+    {
+     "name": "Starmaker",
+     "objects": 1433,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 826,
+      "TextMeshProUGUI": 469,
+      "Trigger": 478,
+      "Toggle": 1,
+      "ScrollRect": 13
+     },
+     "id": "9_MainCanvas/Starmaker",
+     "ambiguousName": false
+    },
+    {
+     "name": "AfterSleepEvents",
+     "objects": 24,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Image": 15,
+      "TextMeshProUGUI": 8,
+      "Trigger": 8
+     },
+     "id": "9_MainCanvas/AfterSleepEvents",
+     "ambiguousName": false
+    },
+    {
+     "name": "TalkButton",
+     "objects": 1,
+     "onAtLoad": true,
+     "siblingIndex": 9,
+     "contents": {
+      "Image": 1,
+      "Trigger": 5
+     },
+     "id": "9_MainCanvas/TalkButton",
+     "ambiguousName": false
+    },
+    {
+     "name": "Calendar",
+     "objects": 272,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 125,
+      "TextMeshProUGUI": 137,
+      "Trigger": 32
+     },
+     "id": "9_MainCanvas/Calendar",
+     "ambiguousName": false
+    },
+    {
+     "name": "HelpScreen2025",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {
+      "Image": 3,
+      "Trigger": 1
+     },
+     "id": "9_MainCanvas/HelpScreen2025",
+     "ambiguousName": false
+    },
+    {
+     "name": "Inventory",
+     "objects": 215,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {
+      "Image": 143,
+      "TextMeshProUGUI": 69,
+      "Trigger": 65,
+      "ScrollRect": 1
+     },
+     "id": "9_MainCanvas/Inventory",
+     "ambiguousName": false
+    },
+    {
+     "name": "Traits",
+     "objects": 197,
+     "onAtLoad": false,
+     "siblingIndex": 13,
+     "contents": {
+      "Image": 172,
+      "TextMeshProUGUI": 24,
+      "Trigger": 29
+     },
+     "id": "9_MainCanvas/Traits",
+     "ambiguousName": false
+    },
+    {
+     "name": "ShopCore",
+     "objects": 681,
+     "onAtLoad": false,
+     "siblingIndex": 14,
+     "contents": {
+      "Image": 368,
+      "TextMeshProUGUI": 285,
+      "Trigger": 99
+     },
+     "id": "9_MainCanvas/ShopCore",
+     "ambiguousName": false
+    },
+    {
+     "name": "Quitagme",
+     "objects": 26,
+     "onAtLoad": false,
+     "siblingIndex": 15,
+     "contents": {
+      "Image": 15,
+      "TextMeshProUGUI": 7,
+      "Text": 1,
+      "Trigger": 2
+     },
+     "id": "9_MainCanvas/Quitagme",
+     "ambiguousName": false
+    },
+    {
+     "name": "Menu_Buttons",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 16,
+     "contents": {
+      "Trigger": 2
+     },
+     "id": "9_MainCanvas/Menu_Buttons",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tor_Browser",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 17,
+     "contents": {},
+     "id": "9_MainCanvas/Tor_Browser",
+     "ambiguousName": false
+    },
+    {
+     "name": "Desktop_Services",
+     "objects": 46,
+     "onAtLoad": false,
+     "siblingIndex": 18,
+     "contents": {
+      "Image": 20,
+      "TextMeshProUGUI": 20,
+      "Trigger": 8
+     },
+     "id": "9_MainCanvas/Desktop_Services",
+     "ambiguousName": false
+    },
+    {
+     "name": "Wallpaperselection",
+     "objects": 36,
+     "onAtLoad": false,
+     "siblingIndex": 19,
+     "contents": {
+      "Image": 33,
+      "TextMeshProUGUI": 1,
+      "Trigger": 12
+     },
+     "id": "9_MainCanvas/Wallpaperselection",
+     "ambiguousName": false
+    },
+    {
+     "name": "2025_TravelLogic",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 20,
+     "contents": {
+      "Trigger": 2
+     },
+     "id": "9_MainCanvas/2025_TravelLogic",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "9_QuestJournal",
+   "path": "9_QuestJournal",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 125,
+   "bases": [
+    {
+     "name": "Background",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "9_QuestJournal/Background",
+     "ambiguousName": false
+    },
+    {
+     "name": "Background (2)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "9_QuestJournal/Background (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Background (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "9_QuestJournal/Background (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "9_QuestJournal/Text (TMP)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Core",
+     "objects": 32,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 20,
+      "TextMeshProUGUI": 5,
+      "Text": 1,
+      "ScrollRect": 2
+     },
+     "id": "9_QuestJournal/Core",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 2,
+      "Trigger": 1
+     },
+     "id": "9_QuestJournal/Button",
+     "ambiguousName": false
+    },
+    {
+     "name": "NanoSave_Volume",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {},
+     "id": "9_QuestJournal/NanoSave_Volume",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Airplane_Animation_Canvas",
+   "path": "Airplane_Animation_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 1,
+   "bases": [
+    {
+     "name": "Background",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Airplane_Animation_Canvas/Background",
+     "ambiguousName": false
+    },
+    {
+     "name": "Background (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Airplane_Animation_Canvas/Background (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Background (2)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Airplane_Animation_Canvas/Background (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Plane",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Airplane_Animation_Canvas/Plane",
+     "ambiguousName": false
+    },
+    {
+     "name": "Background (3)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Airplane_Animation_Canvas/Background (3)",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "AssetBundleConfirm/Canvas",
+   "path": "AssetBundleConfirm/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    800,
+    600
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ConstantPixelSize",
+   "sortingOrder": 125,
+   "bases": [
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "AssetBundleConfirm/Canvas/Image",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Attractor_Canvas",
+   "path": "Attractor_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 10,
+   "bases": [
+    {
+     "name": "Attractor_Follower",
+     "objects": 2,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 2
+     },
+     "id": "Attractor_Canvas/Attractor_Follower",
+     "ambiguousName": false
+    },
+    {
+     "name": "Attractor_Subscriber",
+     "objects": 2,
+     "onAtLoad": true,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 2
+     },
+     "id": "Attractor_Canvas/Attractor_Subscriber",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Avoid it",
+   "path": "Avoid it",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ConstantPixelSize",
+   "sortingOrder": 75,
+   "bases": [
+    {
+     "name": "Core",
+     "objects": 39,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 22,
+      "TextMeshProUGUI": 1,
+      "Trigger": 3
+     },
+     "id": "Avoid it/Core",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Barista_Game/Canvas",
+   "path": "Barista_Game/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Continue",
+     "objects": 216,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 116,
+      "TextMeshProUGUI": 84,
+      "Trigger": 15
+     },
+     "id": "Barista_Game/Canvas/Continue",
+     "ambiguousName": false
+    },
+    {
+     "name": "FreePerk",
+     "objects": 972,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 621,
+      "TextMeshProUGUI": 261,
+      "Trigger": 175
+     },
+     "id": "Barista_Game/Canvas/FreePerk",
+     "ambiguousName": false
+    },
+    {
+     "name": "health",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {},
+     "id": "Barista_Game/Canvas/health",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Barista_Game/Canvas/Image",
+     "ambiguousName": false
+    },
+    {
+     "name": "coins",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {},
+     "id": "Barista_Game/Canvas/coins",
+     "ambiguousName": false
+    },
+    {
+     "name": "TimerUI",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {},
+     "id": "Barista_Game/Canvas/TimerUI",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Barista_Game/Canvas/Image (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Top Bar",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {},
+     "id": "Barista_Game/Canvas/Top Bar",
+     "ambiguousName": false
+    },
+    {
+     "name": "timescale",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Barista_Game/Canvas/timescale",
+     "ambiguousName": false
+    },
+    {
+     "name": "timescale (1)",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Barista_Game/Canvas/timescale (1)",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Blackjack_Minigame/Canvas",
+   "path": "Blackjack_Minigame/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 25,
+   "bases": [
+    {
+     "name": "Background_Green",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/Background_Green",
+     "ambiguousName": false
+    },
+    {
+     "name": "DealerArea",
+     "objects": 3,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 2
+     },
+     "id": "Blackjack_Minigame/Canvas/DealerArea",
+     "ambiguousName": false
+    },
+    {
+     "name": "PlayerArea",
+     "objects": 5,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 4,
+      "TextMeshProUGUI": 2
+     },
+     "id": "Blackjack_Minigame/Canvas/PlayerArea",
+     "ambiguousName": false
+    },
+    {
+     "name": "NPCArea_1",
+     "objects": 5,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 4,
+      "TextMeshProUGUI": 2
+     },
+     "id": "Blackjack_Minigame/Canvas/NPCArea_1",
+     "ambiguousName": false
+    },
+    {
+     "name": "NPCArea_1 (1)",
+     "objects": 5,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 4,
+      "TextMeshProUGUI": 2
+     },
+     "id": "Blackjack_Minigame/Canvas/NPCArea_1 (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Controls_Background",
+     "objects": 10,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5
+     },
+     "id": "Blackjack_Minigame/Canvas/Controls_Background",
+     "ambiguousName": false
+    },
+    {
+     "name": "Controls",
+     "objects": 10,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Button": 5
+     },
+     "id": "Blackjack_Minigame/Canvas/Controls",
+     "ambiguousName": false
+    },
+    {
+     "name": "RoundText",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/RoundText",
+     "ambiguousName": false
+    },
+    {
+     "name": "StatusText",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/StatusText",
+     "ambiguousName": false
+    },
+    {
+     "name": "WinnerName",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/WinnerName",
+     "ambiguousName": false
+    },
+    {
+     "name": "WinScreen",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {},
+     "id": "Blackjack_Minigame/Canvas/WinScreen",
+     "ambiguousName": false
+    },
+    {
+     "name": "LoseScreen",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {},
+     "id": "Blackjack_Minigame/Canvas/LoseScreen",
+     "ambiguousName": false
+    },
+    {
+     "name": "DeckPosition",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/DeckPosition",
+     "ambiguousName": false
+    },
+    {
+     "name": "Start",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 13,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Button": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/Start",
+     "ambiguousName": false
+    },
+    {
+     "name": "Pot",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 14,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/Pot",
+     "ambiguousName": false
+    },
+    {
+     "name": "BetText",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 15,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Blackjack_Minigame/Canvas/BetText",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Camcorder_Minigame/Camcorder_Canvas",
+   "path": "Camcorder_Minigame/Camcorder_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 100,
+   "bases": [
+    {
+     "name": "Camcorder_Core",
+     "objects": 13,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 4,
+      "Trigger": 1
+     },
+     "id": "Camcorder_Minigame/Camcorder_Canvas/Camcorder_Core",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Canvas_Gallery_Core",
+   "path": "Canvas_Gallery_Core",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 5,
+   "bases": [
+    {
+     "name": "Background",
+     "objects": 3,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Canvas_Gallery_Core/Background",
+     "ambiguousName": false
+    },
+    {
+     "name": "Galleries",
+     "objects": 30,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 18,
+      "TextMeshProUGUI": 8,
+      "Trigger": 8,
+      "ScrollRect": 1
+     },
+     "id": "Canvas_Gallery_Core/Galleries",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 2,
+      "Trigger": 1
+     },
+     "id": "Canvas_Gallery_Core/Button",
+     "ambiguousName": false
+    },
+    {
+     "name": "Selection",
+     "objects": 3,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 2
+     },
+     "id": "Canvas_Gallery_Core/Selection",
+     "ambiguousName": false
+    },
+    {
+     "name": "DisableAllActiveButtons",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {},
+     "id": "Canvas_Gallery_Core/DisableAllActiveButtons",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Choose_Blade_UI",
+   "path": "Choose_Blade_UI",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 5,
+   "bases": [
+    {
+     "name": "Blades",
+     "objects": 28,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 24,
+      "TextMeshProUGUI": 4,
+      "Trigger": 19
+     },
+     "id": "Choose_Blade_UI/Blades",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Choose_Blade_UI/Text (TMP)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Choose_Blade_UI/Image",
+     "ambiguousName": false
+    },
+    {
+     "name": "tooltip",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Choose_Blade_UI/tooltip",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Choose_Blade_UI/Button",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button (1)",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Choose_Blade_UI/Button (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Sword_TraitBoni",
+     "objects": 24,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 22,
+      "TextMeshProUGUI": 3,
+      "Trigger": 3
+     },
+     "id": "Choose_Blade_UI/Sword_TraitBoni",
+     "ambiguousName": false
+    },
+    {
+     "name": "Kate_Locked",
+     "objects": 6,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 6,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Choose_Blade_UI/Kate_Locked",
+     "ambiguousName": false
+    },
+    {
+     "name": "Kate_Unlocked",
+     "objects": 6,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Image": 6,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Choose_Blade_UI/Kate_Unlocked",
+     "ambiguousName": false
+    },
+    {
+     "name": "Himari_Locked",
+     "objects": 6,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {
+      "Image": 6,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Choose_Blade_UI/Himari_Locked",
+     "ambiguousName": false
+    },
+    {
+     "name": "Himari_Unlocked",
+     "objects": 6,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 6,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Choose_Blade_UI/Himari_Unlocked",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "GAMEDEV_UI_HELP",
+   "path": "GAMEDEV_UI_HELP",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    800,
+    600
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ConstantPixelSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Text (TMP)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "GAMEDEV_UI_HELP/Text (TMP)",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Ghost_Minigame/Ghost_Minigame_Active/Canvas",
+   "path": "Ghost_Minigame/Ghost_Minigame_Active/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Camcorder_Progress (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Ghost_Minigame/Ghost_Minigame_Active/Canvas/Camcorder_Progress (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Camcorder_Progress",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Ghost_Minigame/Ghost_Minigame_Active/Canvas/Camcorder_Progress",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Ghost_Minigame/Ghost_Minigame_Active/Canvas/Image",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button (Legacy)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Ghost_Minigame/Ghost_Minigame_Active/Canvas/Button (Legacy)",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Livestream_Active/Livestream_Canvas",
+   "path": "Livestream_Active/Livestream_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Swipe",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 2,
+      "Trigger": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Swipe",
+     "ambiguousName": false
+    },
+    {
+     "name": "Phone",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Phone",
+     "ambiguousName": false
+    },
+    {
+     "name": "Chat",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Trigger": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Chat",
+     "ambiguousName": false
+    },
+    {
+     "name": "Reflection",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Reflection",
+     "ambiguousName": false
+    },
+    {
+     "name": "Battery",
+     "objects": 10,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 10,
+      "Trigger": 5
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Battery",
+     "ambiguousName": false
+    },
+    {
+     "name": "Reflection (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Reflection (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "LightButtons",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 8
+     },
+     "id": "Livestream_Active/Livestream_Canvas/LightButtons",
+     "ambiguousName": false
+    },
+    {
+     "name": "Livestream_Actions",
+     "objects": 13,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 7,
+      "TextMeshProUGUI": 6,
+      "Trigger": 13
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Livestream_Actions",
+     "ambiguousName": false
+    },
+    {
+     "name": "Live_Viewer_Number_Random",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Trigger": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Live_Viewer_Number_Random",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (Legacy)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {},
+     "id": "Livestream_Active/Livestream_Canvas/Text (Legacy)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Image",
+     "ambiguousName": false
+    },
+    {
+     "name": "Live_Anna_Comments",
+     "objects": 7,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 2,
+      "Trigger": 2
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Live_Anna_Comments",
+     "ambiguousName": false
+    },
+    {
+     "name": "Donations",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {
+      "Trigger": 1
+     },
+     "id": "Livestream_Active/Livestream_Canvas/Donations",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Main_Phone",
+   "path": "Main_Phone",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": -1,
+   "bases": [
+    {
+     "name": "Core",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 2
+     },
+     "id": "Main_Phone/Core",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "MilkingMinigame/Canvas",
+   "path": "MilkingMinigame/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Attribute UI (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "MilkingMinigame/Canvas/Attribute UI (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Attribute UI",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "MilkingMinigame/Canvas/Attribute UI",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP) (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "MilkingMinigame/Canvas/Text (TMP) (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "CommentType_Cond",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {},
+     "id": "MilkingMinigame/Canvas/CommentType_Cond",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "MilkingMinigame/Canvas/Button",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "NanoSave",
+   "path": "NanoSave",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 125,
+   "bases": [
+    {
+     "name": "Content",
+     "objects": 20,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 8,
+      "TextMeshProUGUI": 5,
+      "Trigger": 1,
+      "ScrollRect": 1
+     },
+     "id": "NanoSave/Content",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 2
+     },
+     "id": "NanoSave/Button",
+     "ambiguousName": false
+    },
+    {
+     "name": "NanoSave_Volume",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {},
+     "id": "NanoSave/NanoSave_Volume",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "PeakCity2069_Machine/Canvas",
+   "path": "PeakCity2069_Machine/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 25,
+   "bases": [
+    {
+     "name": "Image (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Image (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image (2)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Image (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Image",
+     "ambiguousName": false
+    },
+    {
+     "name": "Spin",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Button": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Spin",
+     "ambiguousName": false
+    },
+    {
+     "name": "Spin (1)",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Button": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Spin (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Balance",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Balance",
+     "ambiguousName": false
+    },
+    {
+     "name": "Logo",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Text": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Logo",
+     "ambiguousName": false
+    },
+    {
+     "name": "BalancePrefix",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/BalancePrefix",
+     "ambiguousName": false
+    },
+    {
+     "name": "Bet",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Bet",
+     "ambiguousName": false
+    },
+    {
+     "name": "Win",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Win",
+     "ambiguousName": false
+    },
+    {
+     "name": "ChangeBetButton",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 1,
+      "Button": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/ChangeBetButton#1",
+     "ambiguousName": true
+    },
+    {
+     "name": "ChangeBetButton",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {
+      "Image": 1,
+      "Button": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/ChangeBetButton#2",
+     "ambiguousName": true
+    },
+    {
+     "name": "Leave",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "PeakCity2069_Machine/Canvas/Leave",
+     "ambiguousName": false
+    },
+    {
+     "name": "FreespinPanel",
+     "objects": 4,
+     "onAtLoad": false,
+     "siblingIndex": 13,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 3
+     },
+     "id": "PeakCity2069_Machine/Canvas/FreespinPanel",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Racing_Minigame/Racing_Canvas",
+   "path": "Racing_Minigame/Racing_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Background (2)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Background (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Attribute UI (2)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Attribute UI (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Attribute UI (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Attribute UI (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Attribute UI",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Attribute UI",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Text (TMP)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Racing_Timer",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Racing_Timer",
+     "ambiguousName": false
+    },
+    {
+     "name": "Racing_TimerNumberAnchor",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Racing_TimerNumberAnchor",
+     "ambiguousName": false
+    },
+    {
+     "name": "Racing_CumbarNumberAnchor",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Racing_Minigame/Racing_Canvas/Racing_CumbarNumberAnchor",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Select_Weekend_UI",
+   "path": "Select_Weekend_UI",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": -1,
+   "bases": [
+    {
+     "name": "Background",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Select_Weekend_UI/Background",
+     "ambiguousName": false
+    },
+    {
+     "name": "Unlock_1 (4)",
+     "objects": 9,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 3
+     },
+     "id": "Select_Weekend_UI/Unlock_1 (4)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Lock_1",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Select_Weekend_UI/Lock_1",
+     "ambiguousName": false
+    },
+    {
+     "name": "Unlock_1",
+     "objects": 22,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 14,
+      "TextMeshProUGUI": 8,
+      "Trigger": 6
+     },
+     "id": "Select_Weekend_UI/Unlock_1",
+     "ambiguousName": false
+    },
+    {
+     "name": "Lock_1 (1)",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Select_Weekend_UI/Lock_1 (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Unlock_1 (1)",
+     "objects": 22,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 14,
+      "TextMeshProUGUI": 8,
+      "Trigger": 6
+     },
+     "id": "Select_Weekend_UI/Unlock_1 (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Lock_1 (2)",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Select_Weekend_UI/Lock_1 (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Unlock_1 (2)",
+     "objects": 22,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 14,
+      "TextMeshProUGUI": 8,
+      "Trigger": 6
+     },
+     "id": "Select_Weekend_UI/Unlock_1 (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Lock_1 (3)",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Select_Weekend_UI/Lock_1 (3)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Unlock_1 (3)",
+     "objects": 9,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 3
+     },
+     "id": "Select_Weekend_UI/Unlock_1 (3)",
+     "ambiguousName": false
+    },
+    {
+     "name": "BlackFront",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "Select_Weekend_UI/BlackFront",
+     "ambiguousName": false
+    },
+    {
+     "name": "BlackFront (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {
+      "Image": 1,
+      "Trigger": 1
+     },
+     "id": "Select_Weekend_UI/BlackFront (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "CheckSilverDress",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {},
+     "id": "Select_Weekend_UI/CheckSilverDress",
+     "ambiguousName": false
+    },
+    {
+     "name": "Disable_Weekend_Switches",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 13,
+     "contents": {},
+     "id": "Select_Weekend_UI/Disable_Weekend_Switches",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Studio_Canvas",
+   "path": "Studio_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Selection",
+     "objects": 20,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 16,
+      "TextMeshProUGUI": 5,
+      "Trigger": 9
+     },
+     "id": "Studio_Canvas/Selection",
+     "ambiguousName": false
+    },
+    {
+     "name": "Disable_Actives",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {},
+     "id": "Studio_Canvas/Disable_Actives",
+     "ambiguousName": false
+    },
+    {
+     "name": "Outfits",
+     "objects": 66,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 45,
+      "TextMeshProUGUI": 22,
+      "Trigger": 65
+     },
+     "id": "Studio_Canvas/Outfits",
+     "ambiguousName": false
+    },
+    {
+     "name": "Porn",
+     "objects": 56,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 43,
+      "TextMeshProUGUI": 14,
+      "Trigger": 50
+     },
+     "id": "Studio_Canvas/Porn",
+     "ambiguousName": false
+    },
+    {
+     "name": "Porn (Josef)",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 7,
+      "TextMeshProUGUI": 2,
+      "Trigger": 6
+     },
+     "id": "Studio_Canvas/Porn (Josef)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Invite",
+     "objects": 9,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 7,
+      "TextMeshProUGUI": 3,
+      "Trigger": 10
+     },
+     "id": "Studio_Canvas/Invite",
+     "ambiguousName": false
+    },
+    {
+     "name": "LiveStream",
+     "objects": 9,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 7,
+      "TextMeshProUGUI": 3,
+      "Trigger": 9
+     },
+     "id": "Studio_Canvas/LiveStream",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Sword_Minigame/Canvas",
+   "path": "Sword_Minigame/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 5,
+   "bases": [
+    {
+     "name": "Background",
+     "objects": 5,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 2
+     },
+     "id": "Sword_Minigame/Canvas/Background",
+     "ambiguousName": false
+    },
+    {
+     "name": "DamageEffect",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Sword_Minigame/Canvas/DamageEffect",
+     "ambiguousName": false
+    },
+    {
+     "name": "BlockEffect",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Sword_Minigame/Canvas/BlockEffect",
+     "ambiguousName": false
+    },
+    {
+     "name": "Dialoguebox",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 2,
+      "Trigger": 1
+     },
+     "id": "Sword_Minigame/Canvas/Dialoguebox",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Sword_Tutorial",
+   "path": "Sword_Tutorial",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 5,
+   "bases": [
+    {
+     "name": "Image (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Sword_Tutorial/Image (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Image",
+     "objects": 4,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 5
+     },
+     "id": "Sword_Tutorial/Image#1",
+     "ambiguousName": true
+    },
+    {
+     "name": "Image",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Sword_Tutorial/Image#2",
+     "ambiguousName": true
+    },
+    {
+     "name": "Text (TMP)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Sword_Tutorial/Text (TMP)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP) (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Sword_Tutorial/Text (TMP) (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Text (TMP) (2)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "Sword_Tutorial/Text (TMP) (2)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 2
+     },
+     "id": "Sword_Tutorial/Button",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Tabletop_Minigame/Tabletop Start Canvas",
+   "path": "Tabletop_Minigame/Tabletop Start Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 25,
+   "bases": [
+    {
+     "name": "Step_1",
+     "objects": 109,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 92,
+      "TextMeshProUGUI": 2,
+      "Trigger": 4
+     },
+     "id": "Tabletop_Minigame/Tabletop Start Canvas/Step_1",
+     "ambiguousName": false
+    },
+    {
+     "name": "Step_2",
+     "objects": 212,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 157,
+      "TextMeshProUGUI": 24,
+      "Trigger": 23
+     },
+     "id": "Tabletop_Minigame/Tabletop Start Canvas/Step_2",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Tabletop_Minigame/Tabletop_Canvas",
+   "path": "Tabletop_Minigame/Tabletop_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 20,
+   "bases": [
+    {
+     "name": "ManaRecoveryUIIndicator",
+     "objects": 3,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "TextMeshProUGUI": 3
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/ManaRecoveryUIIndicator",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Party Mana",
+     "objects": 24,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 25,
+      "Trigger": 14
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Party Mana",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Start Combat Button",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Start Combat Button",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Ally Fighters",
+     "objects": 476,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 398,
+      "Trigger": 51
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Ally Fighters",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Enemy Fighters",
+     "objects": 148,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 129,
+      "Trigger": 33
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Enemy Fighters",
+     "ambiguousName": false
+    },
+    {
+     "name": "TotalDiceRollen UI",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/TotalDiceRollen UI",
+     "ambiguousName": false
+    },
+    {
+     "name": "UI_RacastTargetGraphic",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/UI_RacastTargetGraphic",
+     "ambiguousName": false
+    },
+    {
+     "name": "BattleBlackFade",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 7,
+     "contents": {
+      "Image": 1
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/BattleBlackFade",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Party Health",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 8,
+     "contents": {
+      "Image": 4,
+      "TextMeshProUGUI": 4
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Party Health",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Enemy Health",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 9,
+     "contents": {
+      "Image": 4,
+      "TextMeshProUGUI": 4
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Enemy Health",
+     "ambiguousName": false
+    },
+    {
+     "name": "Enemy_Stats",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 10,
+     "contents": {
+      "Image": 3,
+      "TextMeshProUGUI": 3,
+      "Trigger": 3
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Enemy_Stats",
+     "ambiguousName": false
+    },
+    {
+     "name": "Party_Stats",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 11,
+     "contents": {
+      "Image": 3,
+      "TextMeshProUGUI": 3,
+      "Trigger": 3
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Party_Stats",
+     "ambiguousName": false
+    },
+    {
+     "name": "TopUIBar",
+     "objects": 35,
+     "onAtLoad": false,
+     "siblingIndex": 12,
+     "contents": {
+      "Image": 17,
+      "TextMeshProUGUI": 18,
+      "Trigger": 2
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/TopUIBar",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop_Levelup",
+     "objects": 14,
+     "onAtLoad": false,
+     "siblingIndex": 13,
+     "contents": {
+      "Image": 13,
+      "TextMeshProUGUI": 1,
+      "Trigger": 1
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop_Levelup",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tabletop Progress Circle",
+     "objects": 8,
+     "onAtLoad": false,
+     "siblingIndex": 14,
+     "contents": {
+      "Image": 6
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/Tabletop Progress Circle",
+     "ambiguousName": false
+    },
+    {
+     "name": "giveup_button",
+     "objects": 1,
+     "onAtLoad": false,
+     "siblingIndex": 15,
+     "contents": {
+      "Image": 1,
+      "TextMeshProUGUI": 1
+     },
+     "id": "Tabletop_Minigame/Tabletop_Canvas/giveup_button",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Transition_Blink/Transition Root",
+   "path": "Transition_Blink/Transition Root",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": false,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 100,
+   "bases": [
+    {
+     "name": "Screen",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {},
+     "id": "Transition_Blink/Transition Root/Screen",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Transition_ComputerStart/Transition Root",
+   "path": "Transition_ComputerStart/Transition Root",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": false,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 100,
+   "bases": [
+    {
+     "name": "Screen",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {},
+     "id": "Transition_ComputerStart/Transition Root/Screen",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Transition_FadeBlackDefault/Transition Root",
+   "path": "Transition_FadeBlackDefault/Transition Root",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": false,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 100,
+   "bases": [
+    {
+     "name": "Screen",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {},
+     "id": "Transition_FadeBlackDefault/Transition Root/Screen",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Transition_TV/Transition Root",
+   "path": "Transition_TV/Transition Root",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": false,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 100,
+   "bases": [
+    {
+     "name": "Screen",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {},
+     "id": "Transition_TV/Transition Root/Screen",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Transition_TravelNew/Transition Root",
+   "path": "Transition_TravelNew/Transition Root",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": false,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": -1,
+   "bases": [
+    {
+     "name": "Screen",
+     "objects": 0,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {},
+     "id": "Transition_TravelNew/Transition Root/Screen",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Tutorials/Tutorial Canvas",
+   "path": "Tutorials/Tutorial Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    800,
+    600
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ConstantPixelSize",
+   "sortingOrder": 250,
+   "bases": [
+    {
+     "name": "Tutorial_FirstStep",
+     "objects": 15,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 7,
+      "TextMeshProUGUI": 7,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_FirstStep",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tutorial_Worldmap",
+     "objects": 11,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_Worldmap",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tutorial_Payout",
+     "objects": 11,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_Payout",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tutorial_Perk",
+     "objects": 11,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_Perk",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tutorial_Mood",
+     "objects": 11,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_Mood",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tutorial_Status",
+     "objects": 11,
+     "onAtLoad": false,
+     "siblingIndex": 5,
+     "contents": {
+      "Image": 5,
+      "TextMeshProUGUI": 5,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_Status",
+     "ambiguousName": false
+    },
+    {
+     "name": "Tutorial_TheMenuBar",
+     "objects": 14,
+     "onAtLoad": false,
+     "siblingIndex": 6,
+     "contents": {
+      "Image": 9,
+      "TextMeshProUGUI": 4,
+      "Trigger": 2
+     },
+     "id": "Tutorials/Tutorial Canvas/Tutorial_TheMenuBar",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "UI_GiftItem_Canvas",
+   "path": "UI_GiftItem_Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 35,
+   "bases": [
+    {
+     "name": "gift_list",
+     "objects": 28,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 19,
+      "TextMeshProUGUI": 9,
+      "Trigger": 12
+     },
+     "id": "UI_GiftItem_Canvas/gift_list",
+     "ambiguousName": false
+    },
+    {
+     "name": "gift_list (1)",
+     "objects": 20,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 13,
+      "TextMeshProUGUI": 6,
+      "Trigger": 8
+     },
+     "id": "UI_GiftItem_Canvas/gift_list (1)",
+     "ambiguousName": false
+    },
+    {
+     "name": "Close_GiftUI",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 2,
+     "contents": {},
+     "id": "UI_GiftItem_Canvas/Close_GiftUI",
+     "ambiguousName": false
+    },
+    {
+     "name": "Gift_Dialogue",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 3,
+     "contents": {},
+     "id": "UI_GiftItem_Canvas/Gift_Dialogue",
+     "ambiguousName": false
+    },
+    {
+     "name": "Button",
+     "objects": 2,
+     "onAtLoad": false,
+     "siblingIndex": 4,
+     "contents": {
+      "Image": 2,
+      "TextMeshProUGUI": 1,
+      "Trigger": 2
+     },
+     "id": "UI_GiftItem_Canvas/Button",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "Upgrade_Motorbike/Canvas",
+   "path": "Upgrade_Motorbike/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Image",
+     "objects": 59,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 35,
+      "TextMeshProUGUI": 15,
+      "Trigger": 11
+     },
+     "id": "Upgrade_Motorbike/Canvas/Image",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "WindowCleaning_Minigame/Canvas",
+   "path": "WindowCleaning_Minigame/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 0,
+   "bases": [
+    {
+     "name": "Text (TMP) (1)",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "WindowCleaning_Minigame/Canvas/Text (TMP) (1)",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "World_Map/Canvas",
+   "path": "World_Map/Canvas",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": false,
+   "usable": true,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 1,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 65,
+   "bases": [
+    {
+     "name": "CityName",
+     "objects": 0,
+     "onAtLoad": false,
+     "siblingIndex": 0,
+     "contents": {
+      "TextMeshProUGUI": 1
+     },
+     "id": "World_Map/Canvas/CityName",
+     "ambiguousName": false
+    },
+    {
+     "name": "Core",
+     "objects": 124,
+     "onAtLoad": false,
+     "siblingIndex": 1,
+     "contents": {
+      "Image": 60,
+      "TextMeshProUGUI": 49,
+      "Trigger": 53
+     },
+     "id": "World_Map/Canvas/Core",
+     "ambiguousName": false
+    }
+   ]
+  },
+  {
+   "id": "[Graphy]",
+   "path": "[Graphy]",
+   "ambiguousPath": false,
+   "scene": "CoreGameScene",
+   "liveAtLoad": true,
+   "usable": false,
+   "dimsWithGameplayUi": false,
+   "referenceResolution": [
+    1920,
+    1080
+   ],
+   "matchWidthOrHeight": 0.5,
+   "uiScaleMode": "ScaleWithScreenSize",
+   "sortingOrder": 30000,
+   "bases": [
+    {
+     "name": "SafeArea",
+     "objects": 51,
+     "onAtLoad": true,
+     "siblingIndex": 0,
+     "contents": {
+      "Image": 14,
+      "Text": 33
+     },
+     "id": "[Graphy]/SafeArea",
+     "ambiguousName": false
+    }
+   ]
+  }
+ ]
+}
