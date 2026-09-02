@@ -380,7 +380,7 @@ namespace SMSModForge.EditorTools
             json.Key("activeSelf").Value(t.gameObject.activeSelf);
             json.Key("activeInHierarchy").Value(liveAtLoad);
 
-            WriteRect(json, t, canvas, resolvedHere, liveAtLoad);
+            WriteRect(json, t, canvas, resolvedHere);
 
             json.Key("components").Array();
             foreach (var c in t.GetComponents<Component>())
@@ -412,7 +412,7 @@ namespace SMSModForge.EditorTools
         /// predict. The preview needs the second to draw vanilla correctly and
         /// the first to author anything new.</summary>
         private static void WriteRect(Json json, Transform t, Canvas canvas,
-                                      bool resolvedHere, bool liveAtLoad)
+                                      bool resolvedHere)
         {
             var rt = t as RectTransform;
             if (rt == null)
@@ -454,7 +454,9 @@ namespace SMSModForge.EditorTools
                 json.Key("min").Vector2(new Vector2(bl.x, bl.y));
                 json.Key("max").Vector2(new Vector2(tr.x, tr.y));
                 json.Key("size").Vector2(new Vector2(tr.x - bl.x, tr.y - bl.y));
-                json.Key("trust").Value(TrustOf(rt, resolvedHere, liveAtLoad));
+                // Read live, NOT from the at-load snapshot: see TrustOf.
+                json.Key("trust").Value(
+                    TrustOf(rt, resolvedHere, rt.gameObject.activeInHierarchy));
                 json.EndObject();
             }
             json.EndObject();
@@ -473,13 +475,24 @@ namespace SMSModForge.EditorTools
         /// the authored one, sitting untouched. That is emphatically NOT where the
         /// game will draw it - the moment the game switches it on, the group
         /// places it somewhere else. In this scene 1728 of the 1864 children of
-        /// layout groups are switched off, so calling those "rebuilt" would have
-        /// been a confident claim about the wrong number in almost every case.
+        /// layout groups are dark even with their surface switched on, so calling
+        /// those "rebuilt" would have been a confident claim about the wrong
+        /// number in almost every case.
         /// <para/>
         /// Resolving them would mean switching on each one individually, deep
         /// inside the tree, running whatever OnEnable the game has put there.
-        /// That is a bigger intrusion than this tool should make by itself.</summary>
-        private static string TrustOf(RectTransform rt, bool resolvedHere, bool liveAtLoad)
+        /// That is a bigger intrusion than this tool should make by itself.
+        /// <para/>
+        /// The state that decides this is whether layout ran WHILE THE RECTANGLE
+        /// WAS BEING READ - not whether the object is on when the game loads.
+        /// Those are different questions, and the answers differ for 129 objects
+        /// here: everything inside a dormant surface this tool switched on was
+        /// genuinely laid out and its rectangle is real, even though the player
+        /// does not see it until later. Using the at-load answer marked all 129
+        /// unverified; using neither marked 1728 rebuilt. Both facts are in the
+        /// JSON - activeInHierarchy is the at-load one - so a reader can tell
+        /// "measured, shown later" from "never measured".</summary>
+        private static string TrustOf(RectTransform rt, bool resolvedHere, bool activeWhenRead)
         {
             // Explicitly opted out of layout: the group skips it, so the authored
             // rectangle is the true one.
@@ -490,7 +503,7 @@ namespace SMSModForge.EditorTools
                           (rt.parent != null && rt.parent.GetComponent<LayoutGroup>() != null);
             if (!driven) return "direct";
 
-            if (!liveAtLoad) return "unverified";
+            if (!activeWhenRead) return "unverified";
             return resolvedHere ? "rebuilt" : "unverified";
         }
 
