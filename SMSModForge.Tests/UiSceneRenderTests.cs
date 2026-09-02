@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using SMSModForge.Model;
@@ -184,6 +184,7 @@ public class UiSceneRenderTests
     private sealed class NoAssets : IUiAssets
     {
         public UiSprite? Sprite(string key) => null;
+        public UiSprite? SpriteByName(string name) => null;
         public UiFontSet? Font(string name) => null;
     }
 

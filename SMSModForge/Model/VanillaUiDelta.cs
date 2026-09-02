@@ -243,11 +243,18 @@ public static class VanillaUiDelta
     {
         if (authored == null) return false;              // not asserting one
         if (vanilla == null) return true;                // adding one where there was none
-        return !string.Equals(authored.Sprite, vanilla.Sprite, StringComparison.Ordinal)
+        // Compared against the same disambiguated form the seed produced, or
+        // the nine shared names would each read as an edit for ever.
+        string vanillaName = Rendering.VanillaUiLibrary.Assets.NameForKey(vanilla.SpriteKey);
+        if (vanillaName.Length == 0) vanillaName = vanilla.Sprite;
+
+        return !string.Equals(authored.Sprite, vanillaName, StringComparison.Ordinal)
             || !string.Equals(authored.Type, vanilla.Type, StringComparison.OrdinalIgnoreCase)
             || !SameColor(authored.Tint, vanilla.Color)
             || authored.FillCenter != vanilla.FillCenter
-            || authored.PreserveAspect != vanilla.PreserveAspect;
+            || authored.PreserveAspect != vanilla.PreserveAspect
+            || Math.Abs(authored.PixelsPerUnitMultiplier
+                        - vanilla.PixelsPerUnitMultiplier) > Epsilon;
     }
 
     private static bool TextDiffers(UiTextDef? authored, VanillaUiSurface.Text? vanilla)
@@ -260,7 +267,10 @@ public static class VanillaUiDelta
             || !SameColor(authored.Color, vanilla.Color)
             || !string.Equals(authored.Alignment, vanilla.Alignment,
                               StringComparison.OrdinalIgnoreCase)
-            || authored.Wrap != vanilla.Wraps;
+            || authored.Wrap != vanilla.Wraps
+            || Math.Abs(authored.LineSpacing - (vanilla.Number(vanilla.LineSpacing) ?? 0)) > Epsilon
+            || Math.Abs(authored.CharacterSpacing
+                        - (vanilla.Number(vanilla.CharacterSpacing) ?? 0)) > Epsilon;
     }
 
     /// <summary>Colours compare by value rather than by spelling, so "#ffffff"

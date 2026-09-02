@@ -118,7 +118,8 @@ public sealed class VanillaUiExtensionViewModel : ObservableObject
         var vanilla = VanillaUiLibrary.Node(Catalog);
         if (vanilla == null) return;
 
-        var merged = VanillaUiSeed.Merge(vanilla, Model.Nodes, out int stranded);
+        var merged = VanillaUiSeed.Merge(vanilla, Model.Nodes, out int stranded,
+                                         VanillaUiLibrary.Assets.NameForKey);
         Stranded = stranded;
 
         Model.Nodes.Clear();

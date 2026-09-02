@@ -25,10 +25,16 @@ public static class VanillaUiSeed
     /// A tree for the base itself, with every descendant. The root binds to
     /// <c>"."</c>; everything below binds to its path from the base.
     /// </summary>
-    public static UiNodeDef FromBase(VanillaUiSurface.Node vanilla)
+    /// <param name="nameForKey">Turns the extraction's sprite key into the
+    /// name an authored image should carry. Needed because nine sprite names in
+    /// the game belong to more than one crop, so the raw name does not identify
+    /// a picture — see VanillaUiAssets. Null falls back to the raw name, which
+    /// is right for a caller with no assets and wrong only for those nine.</param>
+    public static UiNodeDef FromBase(VanillaUiSurface.Node vanilla,
+                                     Func<string, string>? nameForKey = null)
     {
         if (vanilla == null) throw new ArgumentNullException(nameof(vanilla));
-        return Build(vanilla, ".");
+        return Build(vanilla, ".", nameForKey);
     }
 
     /// <summary>
@@ -49,9 +55,10 @@ public static class VanillaUiSeed
     /// </summary>
     public static UiNodeDef Merge(VanillaUiSurface.Node vanilla,
                                   IEnumerable<UiNodeDef>? stored,
-                                  out int stranded)
+                                  out int stranded,
+                                  Func<string, string>? nameForKey = null)
     {
-        var seeded = FromBase(vanilla);
+        var seeded = FromBase(vanilla, nameForKey);
         stranded = 0;
         if (stored == null) return seeded;
 
@@ -118,7 +125,8 @@ public static class VanillaUiSeed
                 yield return path;
     }
 
-    private static UiNodeDef Build(VanillaUiSurface.Node vanilla, string path)
+    private static UiNodeDef Build(VanillaUiSurface.Node vanilla, string path,
+                                   Func<string, string>? nameForKey)
     {
         var node = new UiNodeDef
         {
@@ -126,7 +134,7 @@ public static class VanillaUiSeed
             Bind = path,
             StartActive = vanilla.ActiveSelf,
             Rect = RectOf(vanilla.Rect),
-            Image = ImageOf(vanilla.Image),
+            Image = ImageOf(vanilla.Image, nameForKey),
             Text = TextOf(vanilla.Text),
             Alpha = vanilla.CanvasGroup?.Alpha,
             Shadow = EffectOf(vanilla.Shadow),
@@ -149,7 +157,7 @@ public static class VanillaUiSeed
 
             string segment = counts[child.Name] > 1 ? child.Name + "#" + nth : child.Name;
             string childPath = path == "." ? segment : path + "/" + segment;
-            node.Children.Add(Build(child, childPath));
+            node.Children.Add(Build(child, childPath, nameForKey));
         }
         return node;
     }
@@ -170,15 +178,24 @@ public static class VanillaUiSeed
         return made;
     }
 
-    private static UiImageDef? ImageOf(VanillaUiSurface.Image? from)
-        => from == null || string.IsNullOrEmpty(from.Sprite) ? null : new UiImageDef
+    private static UiImageDef? ImageOf(VanillaUiSurface.Image? from,
+                                      Func<string, string>? nameForKey)
+    {
+        if (from == null || string.IsNullOrEmpty(from.Sprite)) return null;
+
+        // The name that identifies this exact picture, which for nine sprites in
+        // the game is not the bare one.
+        string named = nameForKey?.Invoke(from.SpriteKey) ?? "";
+        return new UiImageDef
         {
-            Sprite = from.Sprite,
+            Sprite = named.Length > 0 ? named : from.Sprite,
             Type = from.Type,
             Tint = from.Color,
             FillCenter = from.FillCenter,
             PreserveAspect = from.PreserveAspect,
+            PixelsPerUnitMultiplier = from.PixelsPerUnitMultiplier,
         };
+    }
 
     private static UiTextDef? TextOf(VanillaUiSurface.Text? from)
         => from == null || string.IsNullOrEmpty(from.Value) ? null : new UiTextDef
@@ -189,6 +206,8 @@ public static class VanillaUiSeed
             Color = from.Color,
             Alignment = from.Alignment,
             Wrap = from.Wraps,
+            LineSpacing = (float)(from.Number(from.LineSpacing) ?? 0),
+            CharacterSpacing = (float)(from.Number(from.CharacterSpacing) ?? 0),
         };
 
     private static UiEffectDef? EffectOf(VanillaUiSurface.Effect? from)

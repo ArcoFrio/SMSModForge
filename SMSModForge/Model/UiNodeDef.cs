@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -89,6 +90,21 @@ public sealed class UiImageDef
     [JsonProperty("preserveAspect", Order = 5)]
     public bool PreserveAspect { get; set; }
 
+    /// <summary>
+    /// Scales the nine-slice border before it is fitted, so the same sprite can
+    /// keep chunkier or finer corners on different objects.
+    /// <para/>
+    /// Not a detail. About 390 of the game's sliced images use something other
+    /// than 1, from 0.5 to 5, and leaving it out of the authored form made a
+    /// freshly seeded Quitagme draw 3% of its pixels differently from the game
+    /// while every other value matched.
+    /// </summary>
+    [JsonProperty("pixelsPerUnitMultiplier", Order = 7)]
+    public float PixelsPerUnitMultiplier { get; set; } = 1f;
+
+    public bool ShouldSerializePixelsPerUnitMultiplier()
+        => Math.Abs(PixelsPerUnitMultiplier - 1f) > 0.0001f;
+
     /// <summary>Whether this image is clickable. Off makes it decoration that
     /// the mouse passes straight through, which matters when it sits over a
     /// button.</summary>
@@ -130,6 +146,20 @@ public sealed class UiTextDef
 
     [JsonProperty("wrap", Order = 6)]
     public bool Wrap { get; set; } = true;
+
+    /// <summary>Extra space between lines, in TextMeshPro's own units — a
+    /// percentage of the point size, not pixels. Carried because the game uses
+    /// it: leaving it out shifted every multi-line label on Quitagme by a
+    /// fraction of a line, which is 415 pixels of quiet disagreement.</summary>
+    [JsonProperty("lineSpacing", Order = 10)]
+    public float LineSpacing { get; set; }
+
+    /// <summary>Extra space between characters, same units.</summary>
+    [JsonProperty("characterSpacing", Order = 11)]
+    public float CharacterSpacing { get; set; }
+
+    public bool ShouldSerializeLineSpacing() => LineSpacing != 0f;
+    public bool ShouldSerializeCharacterSpacing() => CharacterSpacing != 0f;
 
     /// <summary>Shrink the text to fit its rectangle rather than overflow it.
     /// Vanilla uses this heavily for labels whose content is a variable.</summary>

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using SMSModForge.Model;
 
@@ -16,6 +16,12 @@ public sealed record UiFontSet(TmpFont Font, byte[] Alpha, int Width, int Height
 public interface IUiAssets
 {
     UiSprite? Sprite(string key);
+
+    /// <summary>The sprite an AUTHORED image names. Authored trees carry a
+    /// sprite's name, not the extraction's texture-and-crop key, because a name
+    /// is what an author picks and what survives a re-extraction.</summary>
+    UiSprite? SpriteByName(string name);
+
     UiFontSet? Font(string name);
 }
 

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Linq;
 using SMSModForge.Model;
@@ -233,7 +233,11 @@ public class VanillaUiSeedTests
         pack.VanillaUiExtensions.Add(new VanillaUiExtensionDef
         {
             Source = "vanillaui:9_MainCanvas/Quitagme",
-            Nodes = { VanillaUiSeed.FromBase(quit) },
+            // With the resolver, as the editor seeds. Nine sprite names in the
+            // game belong to more than one crop, so a bare name is not the same
+            // name the delta compares against - and four objects on this screen
+            // would read as edited for ever.
+            Nodes = { VanillaUiSeed.FromBase(quit, VanillaUiLibrary.Assets.NameForKey) },
         });
 
         int before = pack.VanillaUiExtensions[0].Nodes.Sum(CountDef);

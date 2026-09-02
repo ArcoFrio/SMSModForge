@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Media;
@@ -22,10 +22,18 @@ public sealed class VanillaUiAssets : IUiAssets
         [JsonProperty("key")] public string Key { get; set; } = "";
         [JsonProperty("sprite")] public string Sprite { get; set; } = "";
         [JsonProperty("file")] public string File { get; set; } = "";
+        [JsonProperty("border")] public float[] Border { get; set; } = new float[4];
+        [JsonProperty("pixelsPerUnit")] public float PixelsPerUnit { get; set; } = 100f;
+        [JsonProperty("texture")] public string Texture { get; set; } = "";
+        [JsonProperty("textureRect")] public float[] TextureRect { get; set; } = new float[4];
     }
 
     private readonly string _root;
     private readonly Dictionary<string, string> _spriteFiles = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, string> _keysByName = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, SliceBorder> _bordersByName = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, float> _ppuByName = new(StringComparer.OrdinalIgnoreCase);
+    private readonly Dictionary<string, string> _nameByKey = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, UiSprite?> _sprites = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, UiFontSet?> _fonts = new(StringComparer.OrdinalIgnoreCase);
 
@@ -47,11 +55,103 @@ public sealed class VanillaUiAssets : IUiAssets
             if (!File.Exists(path)) return;
             var entries = JsonConvert.DeserializeObject<List<SpriteEntry>>(File.ReadAllText(path));
             if (entries == null) return;
+            // Nine sprite names in the game belong to more than one crop -
+            // icon_trophy has three, function_icon_check two. Letting the first
+            // win meant an authored image could name a sprite and get a
+            // different picture, which showed up as a seeded Quitagme drawing
+            // its toggle's checkmark 55 pixels' worth differently from the game.
+            //
+            // So the colliding ones get a #n suffix, ordered by texture and crop
+            // rather than by the order the file happens to list them in. That
+            // ordering is a fact about the art, so the same sprite keeps the same
+            // name across a re-extraction - which a manifest depends on, and
+            // which the extraction's own keys do NOT provide, since those are
+            // numbered by discovery order.
+            var byName = new Dictionary<string, List<SpriteEntry>>(StringComparer.Ordinal);
             foreach (var e in entries)
-                if (!string.IsNullOrEmpty(e.Key) && !string.IsNullOrEmpty(e.File))
-                    _spriteFiles[e.Key] = e.File;
+            {
+                if (string.IsNullOrEmpty(e.Key) || string.IsNullOrEmpty(e.File)) continue;
+                _spriteFiles[e.Key] = e.File;
+                if (!byName.TryGetValue(e.Sprite, out var sharing))
+                    byName[e.Sprite] = sharing = new List<SpriteEntry>();
+                sharing.Add(e);
+            }
+
+            foreach (var pair in byName)
+            {
+                var sharing = pair.Value;
+                if (sharing.Count > 1)
+                    sharing.Sort((a, b) =>
+                    {
+                        int by = string.CompareOrdinal(a.Texture, b.Texture);
+                        if (by != 0) return by;
+                        for (int i = 0; i < 4; i++)
+                        {
+                            by = At(a.TextureRect, i).CompareTo(At(b.TextureRect, i));
+                            if (by != 0) return by;
+                        }
+                        return string.CompareOrdinal(a.Key, b.Key);
+                    });
+
+                for (int i = 0; i < sharing.Count; i++)
+                {
+                    var e = sharing[i];
+                    string name = sharing.Count == 1 ? pair.Key : pair.Key + "#" + (i + 1);
+                    _keysByName[name] = e.Key;
+                    _nameByKey[e.Key] = name;
+                    _bordersByName[name] = e.Border is { Length: > 3 }
+                        ? new SliceBorder(e.Border[0], e.Border[1], e.Border[2], e.Border[3])
+                        : default;
+                    _ppuByName[name] = e.PixelsPerUnit;
+                }
+            }
+
+            static float At(float[]? a, int i) => a != null && a.Length > i ? a[i] : 0f;
         }
         catch { /* an unreadable index leaves nothing to draw, and says so via IsAvailable */ }
+    }
+
+    /// <summary>The name an authored image should carry for a sprite the
+    /// extraction keyed. Unambiguous, and stable across re-extraction, which the
+    /// key itself is not.</summary>
+    public string NameForKey(string key)
+        => !string.IsNullOrEmpty(key) && _nameByKey.TryGetValue(key, out string? n) ? n : "";
+
+    /// <summary>Every sprite an author can choose from, by name.</summary>
+    public IEnumerable<string> SpriteNames => _keysByName.Keys;
+
+    /// <summary>The crop a sprite NAME refers to. Authored images name a
+    /// sprite; the extraction keys them by texture and crop.</summary>
+    /// <summary>A sprite's nine-slice border, which is a property of the art
+    /// rather than of whoever used it. An author picking a sprite gets its
+    /// slicing without having to know the numbers.</summary>
+    public SliceBorder BorderByName(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return default;
+        if (_bordersByName.TryGetValue(name, out var b)) return b;
+        return _bordersByName.TryGetValue(name + "#1", out b) ? b : default;
+    }
+
+    /// <summary>How many texture pixels a sprite packs into a canvas unit.
+    /// Most are 100, but 55 of the game's sliced images use a 200.</summary>
+    public float PixelsPerUnitByName(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return 100f;
+        if (_ppuByName.TryGetValue(name, out float v) && v > 0) return v;
+        return _ppuByName.TryGetValue(name + "#1", out v) && v > 0 ? v : 100f;
+    }
+
+    public UiSprite? SpriteByName(string name) => Sprite(KeyFor(name));
+
+    /// <summary>The key a name refers to. A bare name that only exists in
+    /// suffixed form falls back to the first crop, so a manifest written before
+    /// the suffixes existed - or typed by hand - still finds a picture rather
+    /// than silently drawing nothing.</summary>
+    private string KeyFor(string name)
+    {
+        if (string.IsNullOrEmpty(name)) return "";
+        if (_keysByName.TryGetValue(name, out string? key)) return key;
+        return _keysByName.TryGetValue(name + "#1", out key) ? key : "";
     }
 
     public UiSprite? Sprite(string key)
