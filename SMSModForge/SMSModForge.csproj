@@ -169,6 +169,34 @@
       <Link>VanillaUi\%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+
+    <!--
+      The heavy half: the per-surface trees, every distinct sprite crop, and
+      the TextMeshPro font atlases with their metrics. About 93 MB, which is
+      most of what the editor ships — and it is what makes the UI preview show
+      the game rather than an impression of it. All four land under one
+      VanillaUi\ folder so the runtime has a single place to look.
+
+      Written by Tools/UnityEditor/SMSModForgeUiSurfaceExtractor.cs and
+      SMSModForgeTmpFontExporter.cs. Absent, the UI tab says the extraction
+      has not been run instead of drawing an empty rectangle.
+    -->
+    <Content Include="Resources\VanillaOverlays\index.json">
+      <Link>VanillaUi\index.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\VanillaOverlays\Surfaces\**\*.json">
+      <Link>VanillaUi\Surfaces\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\VanillaOverlays\Sprites\**\*.png;Resources\VanillaOverlays\Sprites\**\*.json">
+      <Link>VanillaUi\Sprites\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\VanillaOverlays\Fonts\**\*.png;Resources\VanillaOverlays\Fonts\**\*.json">
+      <Link>VanillaUi\Fonts\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
 </Project>
