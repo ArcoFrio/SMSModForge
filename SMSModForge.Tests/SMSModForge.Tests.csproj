@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <!--
@@ -22,6 +22,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SMSModForge\SMSModForge.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Real UI rectangles out of the game, with the answers Unity gave. -->
+    <None Include="Fixtures\**\*.json" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
