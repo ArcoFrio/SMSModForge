@@ -129,10 +129,9 @@ namespace SMSModForge.EditorTools
             var surfaces = FindSurfaces();
             log.Line("Surfaces found: " + surfaces.Count);
 
-            // The Game view check. Done once against the first scaled canvas -
-            // they all share a reference resolution in practice, and one clear
-            // warning beats fifty-five identical ones.
-            CheckGameViewMatchesReference(surfaces, log);
+            // What space the numbers are in, and whether any canvas is
+            // incapable of producing them at all.
+            DescribeCanvasSpace(surfaces, log);
 
             var index = new Json();
             index.Object();
@@ -160,7 +159,7 @@ namespace SMSModForge.EditorTools
                 index.EndArray();
                 index.EndObject();
 
-                RunControls(surfaces, log, resolveDormant);
+                RunControls(surfaces, log);
             }
             finally
             {
@@ -208,32 +207,65 @@ namespace SMSModForge.EditorTools
             return found.OrderBy(c => PathOf(c.transform), StringComparer.Ordinal).ToList();
         }
 
-        private static void CheckGameViewMatchesReference(List<Canvas> surfaces, Report log)
+        /// <summary>Describe the space every resolved rectangle is expressed in,
+        /// and complain only about what is actually wrong.
+        /// <para/>
+        /// This used to compare each canvas's rect against its reference
+        /// resolution and call any difference an error. That was wrong twice. It
+        /// bailed after the first canvas, so a single outlier was reported as if
+        /// it were universal - and the premise was false anyway: with
+        /// matchWidthOrHeight 0 the canvas locks its WIDTH to the reference and
+        /// takes its height from the aspect, so a canvas 1920 wide and 1406 tall
+        /// is not a mistake, it is what a player at that aspect actually gets.
+        /// <para/>
+        /// What IS worth stopping for is a canvas whose rect is zero. Everything
+        /// under one of those resolves to a point, and a file full of zeroes reads
+        /// as data rather than as the absence of it.</summary>
+        private static void DescribeCanvasSpace(List<Canvas> surfaces, Report log)
         {
+            log.Line("Game view: " + Screen.width + "x" + Screen.height);
+
+            var references = new Dictionary<string, int>();
+            var dead = new List<string>();
+
             foreach (var canvas in surfaces)
             {
-                var scaler = canvas.GetComponent<CanvasScaler>();
                 var rt = canvas.transform as RectTransform;
-                if (scaler == null || rt == null) continue;
-                if (scaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize) continue;
+                if (rt == null) continue;
 
-                Vector2 reference = scaler.referenceResolution;
-                Vector2 actual = rt.rect.size;
-                if (Mathf.Abs(actual.x - reference.x) > 0.5f ||
-                    Mathf.Abs(actual.y - reference.y) > 0.5f)
+                if (rt.rect.width <= 0f || rt.rect.height <= 0f)
                 {
-                    log.Warn(
-                        "The canvas rect is " + F(actual.x) + "x" + F(actual.y) +
-                        " but the reference resolution is " + F(reference.x) + "x" +
-                        F(reference.y) + " (first seen on '" + PathOf(canvas.transform) +
-                        "').\n" +
-                        "         With ScaleWithScreenSize the canvas takes the Game " +
-                        "view's size, so every resolved rectangle in this run is in " +
-                        "the wrong space.\n" +
-                        "         Set the Game view to " + F(reference.x) + "x" +
-                        F(reference.y) + " and run it again.");
+                    dead.Add(PathOf(canvas.transform) +
+                             (canvas.enabled ? "" : "  (Canvas component disabled)"));
+                    continue;
                 }
-                return;   // one warning is enough; they share a reference resolution
+
+                var scaler = canvas.GetComponent<CanvasScaler>();
+                if (scaler == null ||
+                    scaler.uiScaleMode != CanvasScaler.ScaleMode.ScaleWithScreenSize) continue;
+
+                string key = F(scaler.referenceResolution.x) + "x" +
+                             F(scaler.referenceResolution.y) +
+                             " (match " + F(scaler.matchWidthOrHeight) + ") -> rect " +
+                             F(rt.rect.width) + "x" + F(rt.rect.height);
+                references.TryGetValue(key, out int n);
+                references[key] = n + 1;
+            }
+
+            foreach (var pair in references.OrderByDescending(kv => kv.Value))
+                log.Line("  " + pair.Value + " canvas(es): reference " + pair.Key);
+
+            if (dead.Count > 0)
+            {
+                var sb = new StringBuilder();
+                sb.Append(dead.Count).Append(" canvas(es) have a zero-size rect, so every ")
+                  .Append("rectangle under them resolved to a point. Their geometry in ")
+                  .Append("this run is unusable - not wrong, absent:\n");
+                foreach (var d in dead) sb.Append("         ").Append(d).Append('\n');
+                sb.Append("         A Canvas whose component is disabled is never driven ")
+                  .Append("by Unity, so its RectTransform stays at zero. Enable it, or ")
+                  .Append("accept that these surfaces cannot be measured this way.");
+                log.Warn(sb.ToString());
             }
         }
 
@@ -281,6 +313,8 @@ namespace SMSModForge.EditorTools
                 index.Key("liveAtLoad").Value(live);
                 index.Key("resolved").Value(live || restore != null);
                 index.Key("objects").Value(CountBelow(canvas.transform));
+                var crt = canvas.transform as RectTransform;
+                index.Key("usable").Value(crt != null && crt.rect.width > 0f && crt.rect.height > 0f);
                 index.EndObject();
             }
             catch (Exception ex)
@@ -297,6 +331,9 @@ namespace SMSModForge.EditorTools
         {
             var rt = canvas.transform as RectTransform;
             json.Key("canvas").Object();
+            // Not the same question as activeSelf: a live GameObject with a
+            // disabled Canvas draws nothing and is never given a size.
+            json.Key("enabled").Value(canvas.enabled);
             json.Key("renderMode").Value(canvas.renderMode.ToString());
             json.Key("sortingOrder").Value(canvas.sortingOrder);
             json.Key("sortingLayer").Value(canvas.sortingLayerName);
@@ -439,6 +476,7 @@ namespace SMSModForge.EditorTools
             if (image != null)
             {
                 json.Key("image").Object();
+                json.Key("enabled").Value(image.enabled);
                 json.Key("color").Value(Hex(image.color));
                 json.Key("type").Value(image.type.ToString());
                 json.Key("fillCenter").Value(image.fillCenter);
@@ -477,6 +515,7 @@ namespace SMSModForge.EditorTools
             if (raw != null)
             {
                 json.Key("rawImage").Object();
+                json.Key("enabled").Value(raw.enabled);
                 json.Key("texture").Value(raw.texture != null ? raw.texture.name : "");
                 json.Key("uvRect").Vector4(new Vector4(
                     raw.uvRect.x, raw.uvRect.y, raw.uvRect.width, raw.uvRect.height));
@@ -489,6 +528,7 @@ namespace SMSModForge.EditorTools
             {
                 fonts.Note(text.font != null ? text.font.name : "(none)", "UI.Text", t);
                 json.Key("text").Object();
+                json.Key("enabled").Value(text.enabled);
                 json.Key("kind").Value("UI.Text");
                 json.Key("value").Value(text.text);
                 json.Key("font").Value(text.font != null ? text.font.name : "");
@@ -529,6 +569,7 @@ namespace SMSModForge.EditorTools
                 fonts.Note(fontName.Length > 0 ? fontName : "(none)", kind, t);
 
                 json.Key("text").Object();
+                json.Key("enabled").Value(c is Behaviour b && b.enabled);
                 json.Key("kind").Value(kind);
                 json.Key("value").Value(Str(c, type, "text"));
                 json.Key("font").Value(fontName);
@@ -825,7 +866,7 @@ namespace SMSModForge.EditorTools
 
         /// <summary>Two checks whose only job is to fail when the extraction is
         /// lying. See the header for why they are shaped this way.</summary>
-        private static void RunControls(List<Canvas> surfaces, Report log, bool resolveDormant)
+        private static void RunControls(List<Canvas> surfaces, Report log)
         {
             log.Line("");
             log.Line("── Controls ──");
@@ -856,44 +897,74 @@ namespace SMSModForge.EditorTools
                                 "run cannot be trusted until that is explained.");
             }
 
-            // 2. A dormant surface with layout groups must MOVE when resolved.
-            //    If it does not, the rebuild did nothing and every "rebuilt" label
-            //    in this run is really "unverified".
-            if (!resolveDormant)
+            // 2. Does a rebuild actually do anything?
+            //
+            //    The first version of this asked whether resolving a dormant
+            //    surface changed it, and called "no" a failure. That cannot tell a
+            //    broken rebuild from a scene whose layout results were already
+            //    serialised correctly - and this scene's are, so it reported a
+            //    problem that did not exist while proving nothing either way.
+            //
+            //    Displacing a child first makes the two distinguishable. A working
+            //    rebuild MUST put it back; a no-op leaves it where it was pushed.
+            RectTransform group = null, victim = null;
+            Canvas host = null;
+            foreach (var canvas in surfaces.OrderByDescending(c => c.gameObject.activeInHierarchy))
             {
-                log.Line("Control 2 skipped: dormant surfaces were not resolved in " +
-                         "this run, so nothing claims to be rebuilt.");
+                foreach (var candidate in canvas.GetComponentsInChildren<LayoutGroup>(true))
+                {
+                    var rt = candidate.transform as RectTransform;
+                    if (rt == null || rt.childCount == 0) continue;
+                    var child = rt.GetChild(0) as RectTransform;
+                    if (child == null) continue;
+                    group = rt; victim = child; host = canvas;
+                    break;
+                }
+                if (victim != null) break;
+            }
+
+            if (victim == null)
+            {
+                log.Warn("Control 2 skipped: no layout group with a child was found, " +
+                         "so there was no way to test whether a rebuild does anything.");
                 return;
             }
 
-            var dormantOne = surfaces.FirstOrDefault(
-                c => !c.gameObject.activeInHierarchy && HasLayoutGroup(c.transform));
-            if (dormantOne == null)
-            {
-                log.Warn("Control 2 skipped: no dormant surface with a layout group.");
-                return;
-            }
-
-            var cold = Snapshot(dormantOne.transform);
-            var scope = ActivationScope.Open(dormantOne.gameObject);
-            List<Vector2> warm;
+            Vector2 original = victim.anchoredPosition;
+            Vector2 nudged = original + new Vector2(137f, 91f);
+            var scope = host.gameObject.activeInHierarchy
+                ? null : ActivationScope.Open(host.gameObject);
+            Vector2 settled;
             try
             {
-                ForceLayout(dormantOne);
-                warm = Snapshot(dormantOne.transform);
+                victim.anchoredPosition = nudged;
+                LayoutRebuilder.ForceRebuildLayoutImmediate(group);
+                settled = victim.anchoredPosition;
             }
-            finally { scope.Close(); }
+            finally
+            {
+                // Back where it was, whatever happened above. A control that
+                // leaves the scene changed is not a control, it is damage.
+                victim.anchoredPosition = original;
+                if (scope != null) scope.Close();
+            }
 
-            int changed = CountDifferences(cold, warm);
-            if (changed > 0)
-                log.Line("Control 2 PASSED: resolving dormant '" +
-                         PathOf(dormantOne.transform) + "' moved " + changed +
-                         " object(s), so the rebuild is doing real work.");
+            string who = PathOf(victim);
+            if ((settled - original).sqrMagnitude < 0.0001f)
+                log.Line("Control 2 PASSED: '" + who + "' was displaced by (137, 91) " +
+                         "and the rebuild put it back, so layout is really running. " +
+                         "Where a rebuild changes nothing, the values were already right.");
+            else if ((settled - nudged).sqrMagnitude < 0.0001f)
+                log.Problem("Control 2 FAILED: '" + who + "' stayed where it was pushed. " +
+                            "The rebuild is a no-op, so every rect marked 'rebuilt' in " +
+                            "this run is really 'unverified'.");
             else
-                log.Problem("Control 2 FAILED: resolving dormant '" +
-                            PathOf(dormantOne.transform) + "' changed nothing. The " +
-                            "rebuild is a no-op here, so every rect marked 'rebuilt' " +
-                            "in this run is really 'unverified'.");
+                log.Problem("Control 2 INCONCLUSIVE: '" + who + "' was displaced to " +
+                            F(nudged.x) + "," + F(nudged.y) + " and settled at " +
+                            F(settled.x) + "," + F(settled.y) + ", which is neither " +
+                            "where it started nor where it was put. Something else is " +
+                            "moving it and the resolved geometry needs explaining " +
+                            "before it is used.");
         }
 
         private static bool HasLayoutGroup(Transform root)
