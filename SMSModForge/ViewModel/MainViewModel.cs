@@ -120,6 +120,11 @@ public sealed class MainViewModel : ObservableObject
     public ObservableCollection<CharacterViewModel> Characters { get; } = new();
     public ObservableCollection<PlaceViewModel> Places { get; } = new();
     public ObservableCollection<VanillaPlaceExtensionViewModel> VanillaExtensions { get; } = new();
+
+    /// <summary>Vanilla UI screens this pack changes. The same arrangement as
+    /// <see cref="VanillaExtensions"/>: each holds the whole screen so it can be
+    /// edited, and stores only the difference.</summary>
+    public ObservableCollection<VanillaUiExtensionViewModel> UiExtensions { get; } = new();
     public ObservableCollection<MapButtonViewModel> MapButtons { get; } = new();
     public ObservableCollection<DialogueViewModel> Dialogues { get; } = new();
     public ObservableCollection<ActorViewModel> Actors { get; } = new();
@@ -512,6 +517,61 @@ public sealed class MainViewModel : ObservableObject
     {
         get => _selectedMapButton;
         set { _selectedMapButton = value; OnPropertyChanged(); }
+    }
+
+    private VanillaUiExtensionViewModel? _selectedUiExtension;
+
+    /// <summary>Which UI screen is open in the UI tab.</summary>
+    public VanillaUiExtensionViewModel? SelectedUiExtension
+    {
+        get => _selectedUiExtension;
+        set
+        {
+            if (ReferenceEquals(_selectedUiExtension, value)) return;
+            _selectedUiExtension = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(SelectedUiPreviewToken));
+            RemoveUiExtensionCommand?.Raise();
+        }
+    }
+
+    /// <summary>What the UI tab's preview should draw. Empty when nothing is
+    /// selected, which the control turns into a message rather than a blank.</summary>
+    public string SelectedUiPreviewToken => SelectedUiExtension?.Source ?? "";
+
+    public RelayCommand AddUiExtensionCommand { get; private set; } = null!;
+    public RelayCommand RemoveUiExtensionCommand { get; private set; } = null!;
+
+    private void AddUiExtension()
+    {
+        // No default screen. Guessing one would seed thousands of objects for a
+        // choice the author has not made yet, and every vanilla screen is as
+        // plausible a starting point as any other.
+        var def = new VanillaUiExtensionDef();
+        Pack.VanillaUiExtensions.Add(def);
+        var vm = new VanillaUiExtensionViewModel(def);
+        UiExtensions.Add(vm);
+        SelectedUiExtension = vm;
+    }
+
+    private void RemoveUiExtension()
+    {
+        var chosen = SelectedUiExtension;
+        if (chosen == null) return;
+        Pack.VanillaUiExtensions.Remove(chosen.Model);
+        UiExtensions.Remove(chosen);
+        SelectedUiExtension = UiExtensions.FirstOrDefault();
+    }
+
+    private void RebindUiExtensions()
+    {
+        UiExtensions.Clear();
+        // Each seeds itself from the shipped vanilla UI on construction, so an
+        // extension that holds three nodes on disk opens as the whole screen.
+        // The delta pass prunes it back on save, so this cannot grow a manifest.
+        foreach (var u in Pack.VanillaUiExtensions)
+            UiExtensions.Add(new VanillaUiExtensionViewModel(u));
+        SelectedUiExtension = null;
     }
 
     private VanillaPlaceExtensionViewModel? _selectedVanillaExtension;
@@ -1528,6 +1588,8 @@ public sealed class MainViewModel : ObservableObject
             () => SelectedPlace != null);
         AddVanillaExtensionCommand    = new RelayCommand(AddVanillaExtension);
         RemoveVanillaExtensionCommand = new RelayCommand(RemoveVanillaExtension, () => SelectedVanillaExtension != null);
+        AddUiExtensionCommand = new RelayCommand(AddUiExtension);
+        RemoveUiExtensionCommand = new RelayCommand(RemoveUiExtension, () => SelectedUiExtension != null);
         AddVanillaExtensionButtonCommand = new RelayCommand(AddVanillaExtensionButton, () => SelectedVanillaExtension != null);
         AddVanillaExtensionGameObjectCommand = new RelayCommand(
             () => SelectedVanillaExtension?.AddGameObject(), () => SelectedVanillaExtension != null);
@@ -1722,6 +1784,7 @@ public sealed class MainViewModel : ObservableObject
         foreach (var v in Pack.VanillaExtensions)
             VanillaExtensions.Add(new VanillaPlaceExtensionViewModel(v));
         SelectedVanillaExtension = null;
+        RebindUiExtensions();
     }
 
     private void RebindMapButtons()

@@ -84,8 +84,11 @@ public static class PackRepository
         using (GameObjectDef.SaveScope())
         {
             var restore = VanillaDelta.PrepareForSave(pack);
+            // The same pass for UI extensions, which seed a whole vanilla
+            // screen so it can be edited and must store only what changed.
+            var restoreUi = VanillaUiDelta.PrepareForSave(pack);
             try { json = JsonConvert.SerializeObject(pack, JsonSettings); }
-            finally { restore(); }
+            finally { restoreUi(); restore(); }
         }
         // Atomic-ish write: write to temp, then move.
         var tmp = manifest + ".tmp";
@@ -118,8 +121,13 @@ public static class PackRepository
         using (GameObjectDef.SaveScope())
         {
             var restore = VanillaDelta.PrepareForSave(pack);
+            // UI extensions too, and for the reason spelled out above: a seeded
+            // screen is thousands of nodes that never reach disk, so comparing
+            // the raw form would report unsaved changes for merely opening a
+            // pack that has a UI extension in it.
+            var restoreUi = VanillaUiDelta.PrepareForSave(pack);
             try { return JsonConvert.SerializeObject(pack, JsonSettings); }
-            finally { restore(); }
+            finally { restoreUi(); restore(); }
         }
     }
 

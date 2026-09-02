@@ -5722,6 +5722,122 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
+
+            <!-- ════════════════════════════════════════════════════
+                 UI TAB (index 12 — deliberately last)
+                 Added after Integration rather than beside Places so
+                 every existing tab keeps its index. Several tests
+                 address tabs by number, and a silent renumbering
+                 would make them assert about the wrong screen while
+                 still passing.
+
+                 An extension holds the WHOLE vanilla screen so it can
+                 be edited in place; what reaches the manifest is only
+                 what changed, worked out at save time. So the tree on
+                 the left can be thousands of rows while the pack stays
+                 a few lines, and the "stored" count in the header is
+                 what tells an author which is which.
+                 ═══════════════════════════════════════════════════ -->
+            <TabItem Header="UI">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" MinWidth="180"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="4*" MinWidth="240"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="5*" MinWidth="240"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Which screens this pack changes -->
+                    <DockPanel Grid.Column="0">
+                        <TextBlock DockPanel.Dock="Top" Text="Vanilla UI"
+                                   FontWeight="Bold" Margin="6,4,0,2"/>
+                        <ToolBar DockPanel.Dock="Top">
+                            <Button view:TutorialAnchor.Id="btn:addUiExtension"
+                                    Content="+ Screen" Command="{Binding AddUiExtensionCommand}"
+                                    ToolTip="Change a UI screen the game already has."/>
+                            <Button Content="Remove" Command="{Binding RemoveUiExtensionCommand}"/>
+                        </ToolBar>
+                        <ListBox ItemsSource="{Binding UiExtensions}"
+                                 SelectedItem="{Binding SelectedUiExtension, Mode=TwoWay}"
+                                 HorizontalContentAlignment="Stretch">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Margin="0,2">
+                                        <TextBlock Text="{Binding Display}" TextTrimming="CharacterEllipsis"/>
+                                        <TextBlock Text="{Binding Summary}" FontSize="11" Opacity="0.7"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </DockPanel>
+
+                    <GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch"/>
+
+                    <!-- The screen's objects -->
+                    <DockPanel Grid.Column="2" DataContext="{Binding SelectedUiExtension}">
+                        <StackPanel DockPanel.Dock="Top" Margin="6,4">
+                            <TextBlock Text="Which screen" FontWeight="Bold"/>
+                            <ComboBox ItemsSource="{Binding Source={x:Static model:VanillaUiCatalog.UsableBases}}"
+                                      SelectedValue="{Binding Source, Mode=TwoWay}"
+                                      SelectedValuePath="Token" DisplayMemberPath="Id"
+                                      IsEditable="False" Margin="0,2,0,0"
+                                      ToolTip="Every UI the game has that can be drawn here. One entry per screen, not per canvas — the main canvas alone holds twenty-one of them."/>
+                            <TextBlock Text="{Binding Warning}" Foreground="#C08A2B" FontSize="11"
+                                       TextWrapping="Wrap" Margin="0,4,0,0">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Stranded}" Value="0">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <TreeView ItemsSource="{Binding Nodes}" Margin="0,4,0,0">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,1">
+                                        <!-- The pack's own objects are marked, because
+                                             what may be done to a row depends entirely
+                                             on whether the game owns it. -->
+                                        <TextBlock Text="{Binding Display}">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IsMine}" Value="True">
+                                                            <Setter Property="FontWeight" Value="Bold"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding Summary}" FontSize="11"
+                                                   Opacity="0.65" Margin="8,0,0,0"
+                                                   TextTrimming="CharacterEllipsis"/>
+                                    </StackPanel>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
+                    </DockPanel>
+
+                    <GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch"/>
+
+                    <!-- What it looks like -->
+                    <DockPanel Grid.Column="4">
+                        <TextBlock DockPanel.Dock="Top" Text="Preview"
+                                   FontWeight="Bold" Margin="6,4,0,2"/>
+                        <ctl:UiPreview x:Name="UiScreenPreview"
+                                            BaseToken="{Binding SelectedUiPreviewToken}"
+                                            Margin="4"/>
+                    </DockPanel>
+                </Grid>
+            </TabItem>
         </TabControl>
     </DockPanel>
 

@@ -205,6 +205,7 @@ public class TabSelectionTests
             (9,  "btn:addWallpaper"),
             (10, "btn:addVariable"),
             (11, "btn:addRule"),
+            (12, "btn:addUiExtension"),
         };
 
         WindowHarness.Run(window =>
