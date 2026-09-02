@@ -1266,67 +1266,6 @@ namespace SMSModForge.EditorTools
             }
         }
 
-        // ── A very small JSON writer ─────────────────────────────────────
-        //
-        // Hand-rolled because the trees here are arbitrary and Unity's
-        // JsonUtility only does fields on a serialisable class. It tracks
-        // whether a comma is needed, which is the only part of writing JSON by
-        // hand that is actually easy to get wrong.
-
-        private sealed class Json
-        {
-            private readonly StringBuilder _sb = new StringBuilder();
-            private readonly Stack<bool> _first = new Stack<bool>();
-            private bool _afterKey;
-
-            private void Separate()
-            {
-                if (_afterKey) { _afterKey = false; return; }
-                if (_first.Count == 0) return;
-                if (_first.Peek()) { _first.Pop(); _first.Push(false); }
-                else _sb.Append(',');
-            }
-
-            public Json Object() { Separate(); _sb.Append('{'); _first.Push(true); return this; }
-            public Json EndObject() { _sb.Append('}'); _first.Pop(); return this; }
-            public Json Array() { Separate(); _sb.Append('['); _first.Push(true); return this; }
-            public Json EndArray() { _sb.Append(']'); _first.Pop(); return this; }
-
-            public Json Key(string name)
-            {
-                Separate();
-                _sb.Append(Quote(name)).Append(':');
-                _afterKey = true;
-                return this;
-            }
-
-            public Json Value(string v) { Separate(); _sb.Append(Quote(v)); return this; }
-            public Json Value(bool v) { Separate(); _sb.Append(v ? "true" : "false"); return this; }
-            public Json Value(int v) { Separate(); _sb.Append(v.ToString(CultureInfo.InvariantCulture)); return this; }
-            public Json Value(float v) { Separate(); _sb.Append(F(v)); return this; }
-
-            public Json Vector2(Vector2 v)
-            { Separate(); _sb.Append('[').Append(F(v.x)).Append(',').Append(F(v.y)).Append(']'); return this; }
-
-            public Json Vector3(Vector3 v)
-            {
-                Separate();
-                _sb.Append('[').Append(F(v.x)).Append(',').Append(F(v.y)).Append(',')
-                   .Append(F(v.z)).Append(']');
-                return this;
-            }
-
-            public Json Vector4(Vector4 v)
-            {
-                Separate();
-                _sb.Append('[').Append(F(v.x)).Append(',').Append(F(v.y)).Append(',')
-                   .Append(F(v.z)).Append(',').Append(F(v.w)).Append(']');
-                return this;
-            }
-
-            public override string ToString() => _sb.ToString();
-        }
-
         // ── Reflection helpers (TMP without a hard reference) ────────────
 
         private static object Prop(object o, Type type, string name)
