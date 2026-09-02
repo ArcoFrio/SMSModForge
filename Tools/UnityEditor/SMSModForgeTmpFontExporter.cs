@@ -165,6 +165,17 @@ namespace SMSModForge.EditorTools
             // the atlas route does not save us the hunt.
             string population = Str(font, type, "atlasPopulationMode");
             json.Key("atlasPopulationMode").Value(population);
+
+            // Which fonts this one defers to when it lacks a glyph, in order.
+            // The collector already walks this to decide what to export and then
+            // used to throw it away - but resolving a missing glyph IS walking
+            // this list, so a preview without it can only fail where the game
+            // quietly succeeds.
+            json.Key("fallbacks").Array();
+            if (Prop(font, type, "fallbackFontAssetTable") is IEnumerable chain)
+                foreach (var fallback in chain)
+                    if (fallback is Object f && f != null) json.Value(f.name);
+            json.EndArray();
             bool dynamic = population.IndexOf("Dynamic", StringComparison.OrdinalIgnoreCase) >= 0;
             json.Key("needsSourceFont").Value(dynamic);
 
