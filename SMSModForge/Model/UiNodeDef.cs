@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace SMSModForge.Model;
@@ -219,8 +219,16 @@ public sealed class UiNodeDef
     // between game versions carries the extension along with it instead of
     // being frozen at the shape it had when the pack was written.
 
-    /// <summary>Path of the vanilla object this node adjusts, relative to the
-    /// base. Empty means this is a new object the pack is adding.</summary>
+    /// <summary>
+    /// Path of the vanilla object this node adjusts, relative to the base —
+    /// "Header/Title", or "." for the base itself.
+    /// <para/>
+    /// Empty means the opposite: an object the pack is ADDING, which is why the
+    /// base needs "." rather than the empty path it would naturally have. A
+    /// segment naming a repeated sibling carries the same #n suffix the catalog
+    /// uses, so binding to the second of two objects called Image keeps meaning
+    /// the second one.
+    /// </summary>
     [JsonProperty("bind", Order = 20)]
     public string Bind { get; set; } = "";
 
