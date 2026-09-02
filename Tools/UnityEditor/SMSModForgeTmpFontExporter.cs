@@ -158,6 +158,16 @@ namespace SMSModForge.EditorTools
             json.Key("name").Value(font.name);
             json.Key("sourceFontFile").Value(ObjName(font, type, "sourceFontFile"));
 
+            // Static means every glyph is baked into the atlas and the asset is
+            // self-contained. Dynamic means the atlas starts empty and TMP
+            // rasterises glyphs on demand from the source font - so a dynamic
+            // asset needs that font file after all, and is the one case where
+            // the atlas route does not save us the hunt.
+            string population = Str(font, type, "atlasPopulationMode");
+            json.Key("atlasPopulationMode").Value(population);
+            bool dynamic = population.IndexOf("Dynamic", StringComparison.OrdinalIgnoreCase) >= 0;
+            json.Key("needsSourceFont").Value(dynamic);
+
             // ── Atlas pages ──────────────────────────────────────────────
             var pages = new List<Texture2D>();
             if (Prop(font, type, "atlasTextures") is Array array)
@@ -167,15 +177,23 @@ namespace SMSModForge.EditorTools
 
             int atlasWidth = Int(font, type, "atlasWidth", missing);
             int atlasHeight = Int(font, type, "atlasHeight", missing);
-            if (pages.Count > 0)
-            {
-                if (atlasWidth <= 0) atlasWidth = pages[0].width;
-                if (atlasHeight <= 0) atlasHeight = pages[0].height;
-            }
+
+            // The configured size and the texture that exists are different
+            // questions: an unpopulated dynamic atlas declares 1024x1024 and
+            // holds a 1x1 texture. rectTopLeft is computed from a height, and
+            // computing it from the declared one would put every glyph of such
+            // a font somewhere it is not.
+            int textureWidth = pages.Count > 0 ? pages[0].width : 0;
+            int textureHeight = pages.Count > 0 ? pages[0].height : 0;
+            if (atlasWidth <= 0) atlasWidth = textureWidth;
+            if (atlasHeight <= 0) atlasHeight = textureHeight;
+            int flipHeight = textureHeight > 0 ? textureHeight : atlasHeight;
 
             json.Key("atlas").Object();
             json.Key("width").Value(atlasWidth);
             json.Key("height").Value(atlasHeight);
+            json.Key("textureWidth").Value(textureWidth);
+            json.Key("textureHeight").Value(textureHeight);
             json.Key("padding").Value(Int(font, type, "atlasPadding", missing));
             json.Key("renderMode").Value(Str(font, type, "atlasRenderMode"));
             json.Key("pages").Array();
@@ -212,13 +230,23 @@ namespace SMSModForge.EditorTools
             // glyphs are just a pile of pictures.
             AppendFace(json, font, type, missing);
 
-            int glyphs = AppendGlyphs(json, font, type, atlasHeight, missing);
-            if (glyphs == 0)
+            int glyphs = AppendGlyphs(json, font, type, flipHeight, missing);
+            if (glyphs == 0 && dynamic)
+            {
+                // Expected, not broken. A dynamic asset ships empty and fills
+                // itself from the source font as the game asks for characters,
+                // so this is the one kind of font that does still need its TTF.
+                log.Append("NEEDS FONT: ").Append(font.name)
+                   .Append(" — dynamic atlas, empty until runtime. Rendering it " +
+                           "needs the source font: ")
+                   .Append(ObjName(font, type, "sourceFontFile")).Append('\n');
+            }
+            else if (glyphs == 0)
             {
                 ok = false;
                 log.Append("PROBLEM: ").Append(font.name)
-                   .Append(" — the glyph table is empty, so nothing can be drawn " +
-                           "from this asset at all.\n");
+                   .Append(" — static atlas with an empty glyph table, so nothing " +
+                           "can be drawn from this asset at all.\n");
             }
 
             int characters = AppendCharacters(json, font, type, out var codes, missing);
@@ -232,12 +260,14 @@ namespace SMSModForge.EditorTools
             var absent = new List<int>();
             for (int c = 32; c <= 126; c++) if (!codes.Contains(c)) absent.Add(c);
 
-            log.Append(ok ? "OK      " : "PROBLEM ")
+            log.Append(!ok ? "PROBLEM " : dynamic ? "DYNAMIC " : "OK      ")
                .Append(font.name.PadRight(32))
                .Append(glyphs.ToString().PadLeft(5)).Append(" glyphs, ")
                .Append(characters.ToString().PadLeft(5)).Append(" chars, ")
                .Append(pages.Count).Append(" page(s), ");
-            if (absent.Count == 0) log.Append("printable ASCII complete");
+            if (dynamic && characters == 0)
+                log.Append("populated at runtime, coverage decided by the source font");
+            else if (absent.Count == 0) log.Append("printable ASCII complete");
             else
             {
                 log.Append(absent.Count).Append(" of 95 printable ASCII missing: ");
@@ -263,9 +293,16 @@ namespace SMSModForge.EditorTools
             json.Object();
             json.Key("familyName").Value(Str(face, ft, "familyName"));
             json.Key("styleName").Value(Str(face, ft, "styleName"));
+            // "unitsPerEm" is spelled unitsPerEM in TextCore's FaceInfo. All 32
+            // fonts reporting it unreadable was one wrong capital, not 32 broken
+            // assets - so the spellings worth trying are tried, and only a name
+            // matching none of them is reported as a gap.
+            AppendFirstOf(json, face, ft, "unitsPerEm",
+                          new[] { "unitsPerEM", "unitsPerEm" }, missing);
+
             string[] numbers =
             {
-                "pointSize", "scale", "unitsPerEm", "lineHeight", "ascentLine",
+                "pointSize", "scale", "lineHeight", "ascentLine",
                 "baseline", "descentLine", "capLine", "meanLine",
                 "superscriptOffset", "superscriptSize", "subscriptOffset",
                 "subscriptSize", "underlineOffset", "underlineThickness",
@@ -278,6 +315,24 @@ namespace SMSModForge.EditorTools
                 json.Key(name).Value(ToFloat(v));
             }
             json.EndObject();
+        }
+
+        /// <summary>Write the first of several spellings that resolves, under one
+        /// agreed key. Reflection turns a renamed property into silence, and
+        /// silence across every font reads like a broken export rather than the
+        /// typo it usually is.</summary>
+        private static void AppendFirstOf(Json json, object owner, Type type,
+                                          string key, string[] candidates,
+                                          List<string> missing)
+        {
+            foreach (var name in candidates)
+            {
+                object v = Prop(owner, type, name);
+                if (v == null) continue;
+                json.Key(key).Value(ToFloat(v));
+                return;
+            }
+            missing.Add("faceInfo." + string.Join("/", candidates));
         }
 
         private static int AppendGlyphs(Json json, Object font, Type type,
