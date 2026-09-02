@@ -174,12 +174,19 @@ public static class VanillaUiDelta
         made.OverrideText = TextDiffers(node.Text, vanilla.Text);
         made.OverrideActive = node.StartActive != vanilla.ActiveSelf;
 
+        // Alpha, shadow and outline are seeded from the game like everything
+        // else, so merely HAVING one is not an assertion - it is a copy. Left
+        // as "not null means the pack means it", every object carrying a
+        // CanvasGroup survived pruning forever, and 318 of them do.
+        bool alphaDiffers = AlphaDiffers(node.Alpha, vanilla.CanvasGroup);
+        bool shadowDiffers = EffectDiffers(node.Shadow, vanilla.Shadow);
+        bool outlineDiffers = EffectDiffers(node.Outline, vanilla.Outline);
+
         bool asserts = made.OverrideRect || made.OverrideImage || made.OverrideText
                        || made.OverrideActive
+                       || alphaDiffers || shadowDiffers || outlineDiffers
                        || made.ActiveConditions.Count > 0
-                       || made.Components.Count > 0
-                       || made.Alpha.HasValue
-                       || made.Shadow != null || made.Outline != null;
+                       || made.Components.Count > 0;
 
         if (!asserts && made.Children.Count == 0)
         {
@@ -193,14 +200,36 @@ public static class VanillaUiDelta
         if (!made.OverrideRect) made.Rect = new UiRectDef();
         if (!made.OverrideImage) made.Image = null;
         if (!made.OverrideText) made.Text = null;
+        if (!alphaDiffers) made.Alpha = null;
+        if (!shadowDiffers) made.Shadow = null;
+        if (!outlineDiffers) made.Outline = null;
         return made;
     }
 
     // ── Comparisons ──────────────────────────────────────────────────
 
+    private static bool AlphaDiffers(float? authored, VanillaUiSurface.Group? vanilla)
+    {
+        if (authored == null) return false;                     // asserting nothing
+        if (vanilla == null) return true;                       // adding a group
+        return Math.Abs(authored.Value - vanilla.Alpha) > Epsilon;
+    }
+
+    private static bool EffectDiffers(UiEffectDef? authored, VanillaUiSurface.Effect? vanilla)
+    {
+        if (authored == null) return false;
+        if (vanilla == null) return true;
+        return !SameColor(authored.Color, vanilla.Color)
+            || !Same(authored.Distance, vanilla.Distance);
+    }
+
     private static bool RectDiffers(UiRectDef? authored, VanillaUiSurface.Rect? vanilla)
     {
-        if (authored == null || vanilla == null) return authored != null;
+        // A vanilla object with no RectTransform recorded has nothing to be
+        // compared against and draws nothing either way, so treating the
+        // authored default as a change would keep the object for no reason.
+        if (vanilla == null) return false;
+        if (authored == null) return false;
         return !Same(authored.AnchorMin, vanilla.AnchorMin)
             || !Same(authored.AnchorMax, vanilla.AnchorMax)
             || !Same(authored.Pivot, vanilla.Pivot)
