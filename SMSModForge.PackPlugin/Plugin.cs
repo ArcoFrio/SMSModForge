@@ -1655,6 +1655,13 @@ namespace SMSModForge.PackPlugin
             try { SfxFactory.BuildAll(m, ctx.Sfx, this, Logger); }
             catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] SFX build failed in " + m.PackId + ": " + ex); }
 
+            // Build the pack's UI, after everything else it might refer to and
+            // before integration rules, which can switch a screen on. Patching
+            // a vanilla screen needs that screen to exist, and it does: this
+            // runs against the loaded scene rather than against a prefab.
+            try { UiFactory.BuildAll(m, Logger); }
+            catch (System.Exception ex) { Logger.LogError("[SMSModForge.PackPlugin] UI build failed in " + m.PackId + ": " + ex); }
+
             // Build integration rules (Integration tab in the editor).
             // Done after everything else so a rule that references a
             // pack variable / scene / actor finds the entity already

@@ -1,4 +1,4 @@
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 using Newtonsoft.Json.Linq;
 
 namespace SMSModForge.PackPlugin
@@ -30,6 +30,11 @@ namespace SMSModForge.PackPlugin
         public JArray Characters => Root["characters"] as JArray;
         public JArray Places => Root["places"] as JArray;
         public JArray MapButtons => Root["mapButtons"] as JArray;
+
+        /// <summary>The pack's UI: screens of its own, and changes to screens
+        /// the game already has, told apart by whether an entry names a
+        /// source.</summary>
+        public JArray Uis => Root["uis"] as JArray;
 
         /// <summary>Loose-file fallback constant kept only for the editor /
         /// exporter and external tools that want to refer to the same string;
