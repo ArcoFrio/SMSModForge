@@ -5,6 +5,13 @@
 // a comma is needed, which is the one part of writing JSON by hand that is
 // genuinely easy to get wrong.
 //
+// Public, not internal. Unity compiles anything under an Editor folder into
+// Assembly-CSharp-Editor and everything else into Assembly-CSharp, and this file
+// has no UnityEditor dependency, so it happily lands in either. Internal made
+// that placement load-bearing: put this one file in a different folder from the
+// extractors and they stop compiling, with an error about protection levels that
+// says nothing about folders. Public costs nothing and removes the trap.
+//
 // It lives in its own file because it was compiled and round-tripped standalone
 // before either extractor used it - including a run with the comma deliberately
 // removed, to confirm the test could fail - and a second hand-rolled copy in the
@@ -18,7 +25,7 @@ using UnityEngine;
 
 namespace SMSModForge.EditorTools
 {
-    internal sealed class Json
+    public sealed class Json
     {
         private readonly StringBuilder _sb = new StringBuilder();
         private readonly Stack<bool> _first = new Stack<bool>();
@@ -82,7 +89,7 @@ namespace SMSModForge.EditorTools
     /// extractors cannot drift apart on escaping or decimal separators - the
     /// invariant culture matters, since a machine set to a comma decimal would
     /// otherwise write coordinates that no parser accepts.</summary>
-    internal static class JsonText
+    public static class JsonText
     {
         public static string F(float v)
             => v.ToString("0.#####", CultureInfo.InvariantCulture);
