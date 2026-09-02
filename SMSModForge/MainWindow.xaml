@@ -5760,7 +5760,7 @@
                                     ToolTip="Start from a screen the game already has. Change what is there, add to it, and only the differences are saved."/>
                             <Button Content="Remove" Command="{Binding RemoveUiCommand}"/>
                         </ToolBar>
-                        <ListBox ItemsSource="{Binding UiExtensions}"
+                        <ListBox x:Name="UiList" ItemsSource="{Binding Uis}"
                                  SelectedItem="{Binding SelectedUi, Mode=TwoWay}"
                                  HorizontalContentAlignment="Stretch">
                             <ListBox.ItemTemplate>
@@ -5853,7 +5853,7 @@
                             </TextBlock>
                         </StackPanel>
 
-                        <TreeView ItemsSource="{Binding Nodes}" Margin="0,4,0,0">
+                        <TreeView x:Name="UiTree" ItemsSource="{Binding Nodes}" Margin="0,4,0,0">
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <StackPanel Orientation="Horizontal" Margin="0,1">
