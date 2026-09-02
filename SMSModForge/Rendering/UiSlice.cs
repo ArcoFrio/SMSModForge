@@ -178,27 +178,42 @@ public static class UiSlice
         if (px1 <= px0 || py1 <= py0) return;
 
         double sw = sx1 - sx0, sh = sy1 - sy0;
-        if (sw <= 0 || sh <= 0) return;
+
+        // A source cell can be zero-wide or zero-tall while its destination is
+        // not, and it is NOT nothing to draw. A sprite whose border consumes
+        // the whole sprite - "Rounded" is 256x256 bordered 128 on every side -
+        // has no middle column or row at all, and the game still draws it as a
+        // filled shape at any size. That is because sampling a zero-extent UV
+        // strip on a GPU returns the texel at that coordinate and stretches it;
+        // returning early here instead drew four disconnected corner arcs with
+        // nothing between them.
+        bool flatX = sw <= 0, flatY = sh <= 0;
 
         double spanX = px1 - px0, spanY = py1 - py0;
+
+        // A flat cell has no interior to clamp within, so it clamps to the
+        // whole sprite - which is what lets it read the boundary texels either
+        // side of the cut, exactly as bilinear filtering would.
+        int loX = flatX ? 0 : (int)sx0, hiX = flatX ? sourceWidth - 1 : (int)Math.Ceiling(sx1) - 1;
+        int loY = flatY ? 0 : (int)sy0, hiY = flatY ? sourceHeight - 1 : (int)Math.Ceiling(sy1) - 1;
 
         for (int y = py0; y < py1; y++)
         {
             double v = (y - py0 + 0.5) / spanY;
-            double fy = sy0 + v * sh - 0.5;
+            double fy = (flatY ? sy0 : sy0 + v * sh) - 0.5;
             int y0 = (int)Math.Floor(fy);
             double wy = fy - y0;
-            int y0c = Clamp(y0, (int)sy0, (int)Math.Ceiling(sy1) - 1, sourceHeight);
-            int y1c = Clamp(y0 + 1, (int)sy0, (int)Math.Ceiling(sy1) - 1, sourceHeight);
+            int y0c = Clamp(y0, loY, hiY, sourceHeight);
+            int y1c = Clamp(y0 + 1, loY, hiY, sourceHeight);
 
             for (int x = px0; x < px1; x++)
             {
                 double u = (x - px0 + 0.5) / spanX;
-                double fx = sx0 + u * sw - 0.5;
+                double fx = (flatX ? sx0 : sx0 + u * sw) - 0.5;
                 int x0 = (int)Math.Floor(fx);
                 double wx = fx - x0;
-                int x0c = Clamp(x0, (int)sx0, (int)Math.Ceiling(sx1) - 1, sourceWidth);
-                int x1c = Clamp(x0 + 1, (int)sx0, (int)Math.Ceiling(sx1) - 1, sourceWidth);
+                int x0c = Clamp(x0, loX, hiX, sourceWidth);
+                int x1c = Clamp(x0 + 1, loX, hiX, sourceWidth);
 
                 int a = (y0c * sourceWidth + x0c) * 4;
                 int b = (y0c * sourceWidth + x1c) * 4;
