@@ -1,4 +1,4 @@
-# Roadmap
+﻿# Roadmap
 
 What is planned but not built. Items move out of here into `CHANGELOG.md` when
 they ship.
@@ -7,20 +7,23 @@ they ship.
 
 ## Next (1.2.0)
 
-### A UI tab
+### ~~A UI tab~~ — done
 
-A tab for authoring the game's interface, alongside the existing content tabs.
+Shipped. The question this entry said had to be settled first — **which parts of
+the UI a pack should be able to touch** — was answered **both**, in one tab
+rather than two.
 
-Nothing is decided about it yet, and the shape of the tab follows from one
-question that has not been answered: **which parts of the UI a pack should be
-able to touch** — replacing art on existing elements, adding new elements of its
-own, or both. That decides whether this is a skinning tab (a list of vanilla UI
-objects, each with a sprite override, in the shape the vanilla-place extensions
-already use) or an authoring one (arbitrary elements with their own transforms
-and conditions, closer to the Places tab's GameObject tree).
+The reason they share a tab is that they are the same job from an author's side:
+a tree of objects, the properties of the selected one, and a picture of the
+result. Splitting them would have asked an author to decide up front which kind
+of thing they were making, when the honest answer is usually a bit of both — a
+screen anchored to the game's own holds vanilla objects the pack has changed and
+objects the pack invented, side by side, and both are equally the point.
 
-Worth settling before any of it is designed, because the two answers share
-almost no code.
+What that cost, and what made it affordable, was storing only the differences on
+a vanilla-based screen. An object nobody touches is not in the pack, so altering
+one label in the shop stays a pack that alters one label rather than a copy of
+the shop that breaks when the game is patched.
 
 ### ~~Auto-update, from the GitHub releases~~ — done
 

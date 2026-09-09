@@ -1,6 +1,188 @@
-# Changelog
+﻿# Changelog
 
-## Unreleased
+## 1.2.0
+
+Two things the roadmap named for this release, and a third that grew out of
+watching people install mods: **a UI tab**, **scenes that move**, and **a way to
+hand a pack to somebody that they cannot get wrong**.
+
+### Before you update
+
+**Packs now live in a `Mods` folder in the game folder**, beside the game's
+`.exe`. The old location — `BepInEx/plugins/SMSModForge/ModPacks/` — is still
+read and always will be, so nothing you have installed stops working. It is
+simply no longer the place anybody is sent: four levels inside BepInEx is a lot
+to ask of somebody who just wants to play, and getting it wrong produces a game
+that starts perfectly and does not have the mod in it.
+
+If a pack ends up in **both** folders, the `Mods` copy is the one loaded, and
+the menu says so in amber. That is worth reading rather than dismissing: editing
+the copy that lost is an evening spent wondering why nothing changes.
+
+**A pack's version now moves when you publish, and only when you publish.**
+Saving does not move it, and neither does exporting. A version says what players
+were given, and an afternoon of saving gives them nothing.
+
+**Opening a pack stamps it** with the ModForge version that will write it, so
+the game can tell you when a pack needs a newer runtime than you have. As with
+every change to a saved pack, it is reported when the pack loads and the
+original is kept beside the manifest the first time you save.
+
+### A UI tab
+
+**Screens the pack owns, and changes to the ones the game already has**, in one
+tab because from an author's side they are the same job.
+
+- **Start one from a shape** — a blank panel, a window with a title bar and a
+  close button, a dialog, a list, a tooltip. Or **+ Vanilla** to build on one of
+  the game's own screens, which fills the tree with what is actually in it.
+- **A tree of objects** with the properties of whichever is selected underneath:
+  name, position, size, art, text and font. Objects nest, and an object is
+  positioned against its parent, so moving a panel takes its contents along.
+- **A preview against the game's own canvas**, at the size the game uses, with
+  the selected object picked out. An object off the edge here is off the edge in
+  the game.
+- **Only your differences are stored** on a screen built from a vanilla one. An
+  object you never touch is not in your pack at all, which is why **Reset** on
+  an object makes it stop being a change — and why a pack that alters one label
+  in the shop stays a pack that alters one label, rather than a copy of the shop
+  that will not survive the game being patched.
+- **Switch one on** with the Set-Active action, category **UI**, the same way
+  you switch on a scene.
+
+### Scenes that move
+
+**A scene's art can now be a GIF or a video** — `.gif`, `.mp4`, `.m4v`, `.mov`
+or `.webm` — decided by the file's extension, because that is the thing an
+author controls. Rename something to `.png` and it stays a still.
+
+- **GIFs are decoded to frames when the pack is saved**, not in the game while a
+  scene is opening. Frames carry their own delays, so a title card held for a
+  second in front of a fast loop plays the way it was authored.
+- **Videos are played by the engine's own player**, and if one carries an audio
+  track the editor notices and offers a volume slider. No track, no slider.
+- **Animation is a Scenes feature**, and says so: point an animated file at a
+  bust or a level layer and validation explains why rather than letting it fail
+  quietly in the game.
+- **Art of any resolution is fitted to the scene square**, the same as the
+  runtime does. A 512×512 scene used to preview at twice the size of its
+  neighbours and then play at the same size as them.
+
+In the editor, **a GIF scene animates in the preview** — an animation you can
+only see by exporting and starting the game is one you cannot judge — while a
+video is held on its first frame, because that costs a decoder rather than a
+blit. **When Windows has no decoder for a format the game plays perfectly
+well**, a still is lifted out of the file directly so there is something to
+look at.
+
+The file picker on the Scenes tab now offers all of that, rather than PNGs only.
+
+### Publishing
+
+**File ▸ Publish for players** packages a release. It checks the pack over
+first, says so if anything is broken and lets you overrule it, moves the
+version, writes the archive, and opens the folder it wrote to.
+
+What it writes is not a pack file. It is a picture of the game folder with the
+pack already in the right place:
+
+    MyPack-1.2.0.zip
+      Mods/MyPack.smspack
+
+Extract that into the game folder and the install is finished. There is no step
+left to get wrong, because there is no step — and nothing else is in the
+archive, so installing a second pack never asks anybody to overwrite anything.
+The download carries the version so three of them can be told apart; the
+installed file does not, so an update replaces the pack rather than leaving two
+for the game to load.
+
+The runtime plugin is deliberately not included. Two packs shipping different
+builds of it would overwrite each other's runtime, and the breakage would land
+on a player who did nothing wrong.
+
+**Export is still there and unchanged** — it is the quick loop for trying your
+own work in the game, and it moves nothing.
+
+### The number on your pack
+
+**A version, shown beside the pack's name in the game's menu.** It moves by
+itself, by what actually changed since your last release: something new moves
+the middle number, a change to something that was already there moves the last
+one. The first is yours alone, typed in when you decide a release is a new thing
+rather than more of the old one — and a version you type is published exactly as
+typed.
+
+Packs written before this get **0.1.0** rather than 0.0.0. They have content in
+them, often a great deal, and calling that "nothing yet" would be wrong the
+moment an author looked at the field.
+
+**A warning if a version would go backwards**, which is the one version mistake
+a player actually notices.
+
+### What the game's menu tells you
+
+The banner now names the runtime doing the reading — **Mods · ModForge 1.2.0** —
+because every judgement below it is relative to that number. Each pack is listed
+with whatever is wrong with it:
+
+- **red** — it will not work as authored: an archive that will not open, one
+  built for a different build of the game, or one made with a **newer ModForge
+  than this runtime**, which may use things this runtime has never heard of.
+- **amber** — it works, but it is not what you think: built for an older
+  ModForge, no ModForge version recorded at all, or **installed twice**.
+
+Everything is loaded anyway. A pack that half-works is more use than one that
+refuses, and the row is what explains the difference.
+
+### Conditions and actions
+
+**Thirteen types became three.** The operator and the store used to be encoded
+in the type name, which is why there were ten ways to compare a variable; both
+are fields now.
+
+- **Variable** — one condition with a **Source** (Pack or Vanilla) and a
+  **Comparison** (equals, greater than, less than, exists), replacing
+  `VariableEquals`, `VariableGreaterThan` and the seven others like them.
+- **Set Active** — one action with a category, replacing the separate
+  `ActivateScene`.
+- **Emit Signal** — one action with an optional delay, replacing
+  `EmitSignalDelayed`.
+
+Existing packs are converted when they load, reported, and backed up the first
+time you save. Nothing needs doing by hand.
+
+**Checking a boolean is now two radio buttons**, True and False, instead of a
+comparison and a Negate box that had to be reasoned about together.
+
+### The editor
+
+- **The long dropdowns are grouped.** The game's 1,644 variables are filed under
+  the 60 lists that own them; levels split into this pack's and the game's; your
+  own variables follow the folders you put them in. A flat list of that length is
+  a scroll bar with no landmarks.
+- **The export size warning** now speaks up at 150 MB rather than 512, allows
+  twice as many files before it counts them as suspicious, and can be turned off
+  for a pack that is genuinely that large.
+
+### Vanilla bust art
+
+**The busts shipped with the editor were being mangled.** They travel to a
+smaller size for the build and back again for the screen, and both halves of
+that trip point-sampled at a non-integer ratio — which does not read as low
+resolution art, it deforms faces and gives a character one eye larger than the
+other. Both halves interpolate now, and the shipped copies are reduced by 1.25
+rather than 1.5. They are recognisably the art again.
+
+### Tutorials
+
+- **A screen of your own** — a new tutorial for the UI tab, which shipped
+  without one.
+- **First steps now ends with the release**: exporting to test, publishing to
+  hand it over, and what the version means.
+- **Two checks that no amount of following the tutorials could have caught**:
+  one that fails if any tab has no tutorial visiting it, and one that fails if a
+  tutorial names something the editor no longer offers. Both found real
+  problems, which is why they exist.
 
 ### Fixed
 
